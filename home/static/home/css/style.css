@@ -167,6 +167,45 @@ p {
 
 /* ======= Footer ====== */
 
+.footer {
+  margin-top: 50px;
+  height: 15%;
+  padding: 25px;
+  bottom: 0px;
+  width: 100%;
+  position: relative;
+  background-color: #686868;
+}
 .logo_footer {
-  
+  text-align: center;
+  height: 125px;
+}
+.logo_footer img{
+  height: 150px;
+  width: 150px;
+}
+.qa_links {
+  text-align: center;
+  height: 125px;
+  font-size: 14px;
+  font-family: 'Vazir_Light';
+  color: #fff;
+}
+.qa_links li{
+  list-style-type: none;
+}
+.about_us_footer {
+  height: 125px;
+  text-align: center;
+  font-size: 14px;
+  font-family: 'Vazir_Light';
+  color: #fff;
+}
+.social_media {
+  height: 25px;
+  text-align: center;
+}
+.social_media img{
+  height: 25px;
+  width: 25px;
 }
