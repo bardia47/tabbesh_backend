@@ -19,9 +19,6 @@ p {
   background-repeat: no-repeat;
   background-position: 50% 50%;
   background-size: cover;
-  -moz-background-size: cover;
-  -o-background-size: cover;
-  -webkit-background-size: cover;
 }
 /* Head Overlay
 .header-overlay {
@@ -167,6 +164,59 @@ p {
 
 /* ======= Footer ====== */
 
+.footer {
+  margin-top: 50px;
+  height: 15%;
+  padding: 25px;
+  bottom: 0px;
+  width: 100%;
+  position: relative;
+  background-color: #686868;
+}
 .logo_footer {
-  
+  text-align: center;
+  height: 125px;
+}
+.logo_footer img{
+  height: 150px;
+  width: 150px;
+}
+.qa_links {
+  text-align: center;
+  height: 125px;
+  font-size: 14px;
+  font-family: 'Vazir_Light';
+  color: #fff;
+}
+.qa_links li{
+  list-style-type: none;
+}
+.about_us_footer {
+  height: 125px;
+  text-align: center;
+  font-size: 14px;
+  font-family: 'Vazir_Light';
+  color: #fff;
+}
+.social_media {
+  height: 25px;
+  text-align: center;
+}
+.social_media img{
+  height: 25px;
+  width: 25px;
+}
+
+/* ===== Navbar ==== */
+.navbar-custom {
+  font-family: 'Vazir_Bold' ;
+  font-size: 18px;
+  background-color: rgba(0, 0, 0, 0);
+  z-index: 110;
+}
+.nav-item {
+  margin-left: 20px;
+}
+.color-me {
+  color: #fff;
 }
