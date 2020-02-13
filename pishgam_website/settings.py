@@ -121,6 +121,7 @@ USE_TZ = True
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'pishgam_website/static/'),
     os.path.join(BASE_DIR, 'home/static/'),
+    os.path.join(BASE_DIR, 'accounts/static/')
 ]
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')

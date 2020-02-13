@@ -2,7 +2,6 @@
   margin: 0;
   padding: 0;
 }
-
 body {
   font-family: "Vazir_Light" , sans-serif;
   overflow-x: hidden;
@@ -17,7 +16,7 @@ p {
   background-image: url('../images/home_background.jpg');
   background-attachment: fixed;
   background-repeat: no-repeat;
-  background-position: 50% 50%;
+  background-position: 100% 100%;
   background-size: cover;
 }
 /* Head Overlay
@@ -28,15 +27,17 @@ p {
   padding: 50px;
 }
 .header-text {
-  margin-top : 200px;
+  margin-top : 250px;
   text-align: center;
 }
 .header-text h1 {
   font-family: "Vazir_Bold";
+  color: #fff; 
   font-size : 50px;
 }
 .header-text p {
   font-family: "Vazir_Light";
+  color: #fff;
   font-size : 20px;
 }
 .header-btns {
@@ -50,7 +51,7 @@ p {
 .btn-signup:active,
 .btn-signup:visited
 {
-  background-color: #c0c0c0;
+  background-color: rgb(231, 228, 228);
   transition: all 1s;
   -webkit-transition: all 1s;
   -moz-transition: all 1s;
@@ -58,7 +59,7 @@ p {
    margin-left: 40px;
 }
 .btn-signup:hover {
-    background-color: #686868;
+    background-color: #000000;
     color : #fff;
 }
 .btn-login,
@@ -66,15 +67,15 @@ p {
 .btn-login:active,
 .btn-login:visited
 {
-  background-color: #c0c0c0;
+  background-color: rgb(231, 228, 228);
   transition: all 1s;
   -webkit-transition: all 1s;
   -moz-transition: all 1s;
    -o-transition: all 1s;
 }
 .btn-login:hover {
-    background-color: #686868;
-    color : #fff;
+  background-color: #000000;
+  color : #fff;
 }
 
 
