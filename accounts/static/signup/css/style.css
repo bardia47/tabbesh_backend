@@ -5,6 +5,8 @@
 }
 
 body {
+  font-family: 'Vazir_Light' , sans-serif;
+  font-size: 16px;
   background: #777;
   background: linear-gradient(to right, #777, #777);
 }
@@ -19,6 +21,8 @@ body {
 .card-signin .card-title {
   margin-bottom: 2rem;
   font-weight: 300;
+  font-family: 'Vazir_Bold' , sans-serif;
+  font-size: 20px;
   font-size: 1.5rem;
 }
 
@@ -108,12 +112,10 @@ body {
   color: #777;
 }
 
-.btn-google {
-  color: white;
-  background-color: #ea4335;
-}
-
-.btn-facebook {
-  color: white;
-  background-color: #3b5998;
+.sign-btn  {
+  margin: 0;
+  padding: 0;
+  text-align: center;
+  font-family: 'Vazir_Bold' , sans-serif;
+  font-size: 20px;
 }
