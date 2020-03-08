@@ -17,7 +17,7 @@ class Profile(models.Model):
     picture_id = models.URLField()
     gender = models.BooleanField ()
     biography = models.TextField()
-    role_id = models.ForeignKey('Roles',on_delete=models.DO_NOTHING)
+    role_id = models.ForeignKey('Role',on_delete=models.DO_NOTHING)
     national_code = models.CharField(max_length=10,)
     address = models.CharField(max_length=255)
 
@@ -32,31 +32,26 @@ class Grade(models.Model):
 class User_grade_relation(models.Model):
     id = models.IntegerField(primary_key = True)
     user_id = models.ForeignKey(User ,on_delete=models.DO_NOTHING)
-    grade_id = models.ForeignKey('Grades',on_delete=models.DO_NOTHING)
+    grade_id = models.ForeignKey('Grade',on_delete=models.DO_NOTHING)
     unique_together = [['user_id', 'grade_id']]
 
-# Grade Model
-class Grades(models.Model):
-    id = models.IntegerField(primary_key = True)
-    code = models.CharField(max_length= 10)
-    title = models.CharField(max_length= 30)
 
 # Lesson Model
-class Lessons(models.Model):
+class Lesson(models.Model):
     id = models.IntegerField(primary_key = True)
     code = models.CharField(max_length= 10)
     title = models.CharField(max_length= 30)
-    grade_id = models.ForeignKey('Grades' ,on_delete=models.DO_NOTHING)
-    lesson_id=models.ForeignKey('Lessons' ,on_delete=models.DO_NOTHING)
+    grade_id = models.ForeignKey('Grade' ,on_delete=models.DO_NOTHING)
+    lesson_id=models.ForeignKey('Lesson' ,on_delete=models.DO_NOTHING)
     unique_together = [['title', 'grade_id']]
 
 
 # Course Model
-class Courses(models.Model):
+class Course(models.Model):
     id = models.IntegerField(primary_key = True)
     code = models.CharField(max_length= 10)
     title = models.CharField(max_length= 30)
-    lesson_id=models.ForeignKey('Lessons' ,on_delete=models.DO_NOTHING)
+    lesson_id=models.ForeignKey('Lesson' ,on_delete=models.DO_NOTHING)
     teacher_id=models.ForeignKey(User ,on_delete=models.DO_NOTHING)
     start_date=models.DateField
     end_date=models.DateField
@@ -66,7 +61,7 @@ class Courses(models.Model):
 # Course_Calendar Model
 class Course_Calendar(models.Model):
     id = models.IntegerField(primary_key = True)
-    course_id=models.ForeignKey('Courses' ,on_delete=models.DO_NOTHING)
+    course_id=models.ForeignKey('Course' ,on_delete=models.DO_NOTHING)
     start_date=models.DateField
     end_date=models.DateField
 
@@ -74,9 +69,9 @@ class Course_Calendar(models.Model):
 
 
 # Peyments Model
-class Peyments(models.Model):
+class Peyment(models.Model):
     id = models.IntegerField(primary_key = True)
-    course_id = models.ForeignKey('Courses' ,on_delete=models.DO_NOTHING)
+    course_id = models.ForeignKey('Course' ,on_delete=models.DO_NOTHING)
     user_id=models.ForeignKey(User ,on_delete=models.DO_NOTHING)
     unique_together = [['course_id', 'user_id']]
 
