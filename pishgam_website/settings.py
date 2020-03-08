@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django_jalali',
 ]
 
 MIDDLEWARE = [
@@ -103,6 +104,7 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 
+
 # Internationalization
 # https://docs.djangoproject.com/en/2.2/topics/i18n/
 
@@ -122,8 +124,12 @@ USE_TZ = True
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'pishgam_website/static/'),
     os.path.join(BASE_DIR, 'home/static/'),
-    os.path.join(BASE_DIR, 'accounts/static/')
+    os.path.join(BASE_DIR, 'accounts/static/'),
+    os.path.join(BASE_DIR, 'dashboard/static/'),
 ]
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 STATIC_URL = '/static/'
+
+MEDIA_ROOT = os.path.join(BASE_DIR , 'media')
+MEDIA_URL = '/media/'

@@ -35,7 +35,7 @@ def signin(request):
     else:
         return render(request, 'accounts/signin.html')
 
-def logout(request):
+def signout(request):
     if request.method == 'POST':
         auth.logout(request)
         return redirect('home')
