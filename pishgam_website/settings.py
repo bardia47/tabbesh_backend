@@ -132,6 +132,9 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'dashboard/static/'),
 ]
 
+AUTH_USER_MODEL = 'accounts.User'
+
+
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 STATIC_URL = '/static/'
 
