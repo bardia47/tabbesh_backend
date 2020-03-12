@@ -1,5 +1,8 @@
 {
     "python.pythonPath": "C:\\Users\\Mahtab\\AppData\\Local\\Programs\\Python\\Python38-32\\python.exe",
     "python.linting.pylintEnabled": true,
-    "python.linting.enabled": true
+    "python.linting.enabled": true,
+    "python.linting.pylintArgs": [
+        "--load-plugins=pylint_django"
+    ]
 }
