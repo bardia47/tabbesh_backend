@@ -1,24 +1,30 @@
 from django.shortcuts import render , redirect
-from django.contrib.auth.models import User
+from .models import User
 from django.contrib import auth
+from accounts.forms import UserForm
+from accounts.models import City
+
 # Create your views here.
 
 def signup(request):
     if request.method == 'POST':
+        form = UserForm(request.POST)
         # User has info and wants an account now!
-        if request.POST['password1'] == request.POST['password2']:
+        if request.POST['password'] == request.POST['password2']:
             try:
                 user = User.objects.get(username=request.POST['username'])
-                return render(request, 'accounts/signup.html', {'error':'Username has already been taken'})
+                return render(request, 'accounts/signup.html', {'error':'Username has already been taken'},{'form': form})
             except User.DoesNotExist:
-                user = User.objects.create_user(request.POST['username'], password=request.POST['password1'])
-                auth.login(request,user)
+                city = City.objects.get(id=request.POST['city'])
+                user = User.objects.create_user(request.POST['username'],request.POST['email'], request.POST['password'],city=city)
+                auth.login( request ,user)
                 return redirect('home')
         else:
-            return render(request, 'accounts/signup.html', {'error':'Passwords must match'})
+            return render(request, 'accounts/signup.html', {'error':'Passwords must match'}, {'form': form})
     else:
         # User wants to enter info
-        return render(request, 'accounts/signup.html')
+        form = UserForm()
+        return render(request, 'accounts/signup.html', {'form': form})
 
 
 def signin(request):

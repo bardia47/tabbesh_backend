@@ -1,6 +1,5 @@
 from django.shortcuts import render , redirect
-from accounts.models import Profile
-from django.contrib.auth.models import User
+from accounts.models import User
 
 # Create your views here.
 
@@ -10,14 +9,14 @@ from django.contrib.auth.models import User
 def profile(request):
     if request.method == 'POST':
 
-        # Gender Check
-        if request.POST['gender_select'] == '1':
-            gender_check = True
-        else:
-            gender_check = False
+        # # Gender Check
+        # if request.POST['gender_select'] == '1':
+        #     gender_check = True
+        # else:
+        #     gender_check = False
 
-        profile = Profile(user = request.user , gender = gender_check)
-        profile.save()
+        user = request.user
+        user.save()
         return render(request , 'dashboard\profile_page.html')
 
     else:
