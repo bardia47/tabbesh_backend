@@ -12,7 +12,7 @@ from django.contrib.auth.models import PermissionsMixin
 
 class User(AbstractBaseUser, PermissionsMixin):
     username = models.CharField(max_length=30,unique=True)
-    password = models.CharField(max_length=30)
+    password = models.CharField(max_length=128)
     email = models.EmailField('email address', unique=True)
     first_name = models.CharField('first name', max_length=30, blank=True)
     last_name = models.CharField('last name', max_length=30, blank=True)
@@ -26,6 +26,8 @@ class User(AbstractBaseUser, PermissionsMixin):
     address = models.CharField(max_length=255)
     phone_number = models.IntegerField(blank=True, null=True)
     is_superuser = models.BooleanField()
+    is_staff = models.BooleanField('staff status',default=False)
+
     
     from accounts.managers import UserManager
     objects = UserManager()

@@ -1,6 +1,7 @@
 from django.contrib.auth.base_user import BaseUserManager
 from django.apps import apps
 from django.core.exceptions import ObjectDoesNotExist
+from django.contrib.auth.hashers import make_password
 
 class UserManager(BaseUserManager):
     use_in_migrations = True
@@ -15,6 +16,7 @@ class UserManager(BaseUserManager):
         email = self.normalize_email(email)
         user = self.model(email=email, **extra_fields)
         user.username=username
+        password = make_password(password)
         user.password=password
         if user.gender is None:
             user.gender = True
