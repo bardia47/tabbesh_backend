@@ -22,3 +22,24 @@
          url('../fonts/Vazir/Vazir-Medium.woff') format('woff'),
          url('../fonts/Vazir/Vazir-Medium.ttf') format('truetype');
 }
+
+@font-face {
+  font-family: 'Yekan';
+  src: url('../fonts/Yekan/Yekan.woff') format('woff'),
+         url('../fonts/Yekan/Yekan.ttf') format('ttf'),
+         url('../fonts/Yekan/Yekan.eot') format('eot');
+}
+
+@font-face {
+  font-family: 'Dana_Regular';
+  src: url('../fonts/Dana/dana-regular.woff') format('woff'),
+         url('../fonts/Dana/dana-regular.woff2') format('woff2'),
+         url('../fonts/Dana/dana-regular.eot') format('eot');
+}
+
+@font-face {
+  font-family: 'Dana_Bold';
+  src: url('../fonts/Dana/dana-bold.woff') format('woff'),
+         url('../fonts/Dana/dana-bold.woff2') format('woff2'),
+         url('../fonts/Dana/dana-regular.eot') format('eot');
+}
