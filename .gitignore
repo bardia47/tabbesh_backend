@@ -199,7 +199,7 @@ fabric.properties
 
 # Sonarlint plugin
 .idea/**/sonarlint/
-
+/.idea
 # SonarQube Plugin
 .idea/**/sonarIssues.xml
 
@@ -221,6 +221,7 @@ venv.bak/
 pip-selfcheck.json
 
 ### VisualStudioCode ###
+/.vscode
 .vscode/*
 !.vscode/settings.json
 !.vscode/tasks.json
