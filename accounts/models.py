@@ -2,6 +2,10 @@ from django.db import models
 from django.core.mail import send_mail
 from django.contrib.auth.base_user import AbstractBaseUser
 from django.contrib.auth.models import PermissionsMixin
+from pygments.lexers import get_all_lexers
+from pygments.styles import get_all_styles
+
+LEXERS = [item for item in get_all_lexers() if item[1]]
 
 
 # Create your models here.
@@ -19,15 +23,17 @@ class User(AbstractBaseUser, PermissionsMixin):
     date_joined = models.DateTimeField('date joined', auto_now_add=True)
     is_active = models.BooleanField('active', default=True)
     avatar = models.ImageField(upload_to='avatars/', null=True, blank=True)
-    gender = models.BooleanField()
+    gender = models.BooleanField(default=True)
     role = models.ForeignKey('Role', on_delete=models.DO_NOTHING)
     national_code = models.CharField(max_length=10,)
     city = models.ForeignKey('City', on_delete=models.DO_NOTHING)
     address = models.CharField(max_length=255)
     phone_number = models.IntegerField(blank=True, null=True)
-    is_superuser = models.BooleanField()
+    grades = models.ManyToManyField('Grade')
+    peyments =  models.ManyToManyField('Course')
+    is_superuser = models.BooleanField(default=False)
     is_staff = models.BooleanField('staff status',default=False)
-
+    
     
     from accounts.managers import UserManager
     objects = UserManager()
@@ -71,10 +77,10 @@ class Grade(models.Model):
     title = models.CharField(max_length=30)
 
 # Relational Model Between Profiles & Grades
-class User_grade_relation(models.Model):
-    user = models.ForeignKey(User ,on_delete=models.DO_NOTHING)
-    grade = models.ForeignKey('Grade',on_delete=models.DO_NOTHING)
-    unique_together = [['user', 'grade']]
+# class User_grade_relation(models.Model):
+#     user = models.ForeignKey(User ,on_delete=models.DO_NOTHING)
+#     grade = models.ForeignKey('Grade',on_delete=models.DO_NOTHING)
+#     unique_together = [['user', 'grade']]
 
 
 # Lesson Model
@@ -107,10 +113,10 @@ class Course_Calendar(models.Model):
 
 
 # Payments Model
-class Payment(models.Model):
-    course = models.ForeignKey('Course' ,null=False,on_delete=models.DO_NOTHING)
-    user=models.ForeignKey(User ,null=False,on_delete=models.DO_NOTHING)
-    unique_together = [['course', 'user']]
+# class Payment(models.Model):
+#     course = models.ForeignKey('Course' ,null=False,on_delete=models.DO_NOTHING)
+#     user=models.ForeignKey(User ,null=False,on_delete=models.DO_NOTHING)
+#     unique_together = [['course', 'user']]
 
 
 
