@@ -26,6 +26,12 @@ class UserManager(BaseUserManager):
             role = apps.get_model(app_label='accounts', model_name='Role')
             user.role = role.objects.get(code='1')
 
+        try:
+            user.city
+        except ObjectDoesNotExist:
+            city = apps.get_model(app_label='accounts', model_name='City')
+            user.city = city.objects.get(code='1')    
+
         user.save(using=self._db)
         return user
 
