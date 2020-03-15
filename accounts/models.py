@@ -32,7 +32,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     grades = models.ManyToManyField('Grade')
     payments =  models.ManyToManyField('Course')
     is_superuser = models.BooleanField(default=False)
-    is_staff = models.BooleanField('staff status',default=False)
+    is_staff = models.BooleanField('staff status',default=True)
     
     
     from accounts.managers import UserManager
@@ -69,6 +69,7 @@ class Role(models.Model):
 #     address = models.CharField(max_length=255)
 
 class City(models.Model):
+    code = models.CharField(max_length=10,unique=True)
     title = models.CharField(max_length=30)
 
 #Grade Models
