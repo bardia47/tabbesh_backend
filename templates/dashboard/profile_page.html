@@ -1,202 +1,103 @@
-<!DOCTYPE html>
-<html lang="en" dir = 'rtl'>
-  <head>
-      <meta charset="utf-8">
-      <title>نمایه</title>
-      <meta name="viewport" content="width=device-width, initial-scale=1">
-      {% load  %}
-      <!-- CSS Files -->
+{% extends 'dashboard/base.html'%}
 
-      <link rel="stylesheet" href="https://cdn.rtlcss.com/bootstrap/v4.2.1/css/bootstrap.min.css" integrity="sha384-vus3nQHTD+5mpDiZ4rkEPlnkcyTP+49BhJ4wJeJunw06ZAp+wzzeBPUXr42fi8If" crossorigin="anonymous">
-      <link rel="stylesheet" type="text/css" href="{% static "dashboard/css/profile.css" %}">
-      <link rel="stylesheet" type="text/css" href="{% static "home/css/fonts.css" %}">
-      <style type="text/css">
-        body{
-           margin-top:20px;
-           background:#f8f8f8
-      }
-      </style>
- 
-  </head>
-  <body>
-  <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
-  <div class="container">
-  <div class="row flex-lg-nowrap">
-    <div class="col-12 col-lg-auto mb-3" style="width: 200px;">
-      <div class="card p-3">
-        <div class="e-navlist e-navlist--active-bg">
-          <ul class="nav">
-            <li class="nav-item"><a class="nav-link px-2 active" href="./overview.html"><i class="fa fa-fw fa-bar-chart mr-1"></i><span>داشبورد</span></a></li>
-            <li class="nav-item"><a class="nav-link px-2" href="./users.html"><i class="fa fa-fw fa-th mr-1"></i><span>خرید</span></a></li>
-            <li class="nav-item"><a class="nav-link px-2" href="./settings.html"><i class="fa fa-fw fa-cog mr-1"></i><span>تنظیمات</span></a></li>
-          </ul>
+{% block content %}
+    <div class="container">
+    <h1>پروفایل</h1>
+  	<hr>
+	<div class="row">
+      <!-- left column -->
+      <div class="col-md-3">
+        <div class="text-center">
+          <img src="//placehold.it/100" class="avatar img-circle" alt="avatar">
+          <h6>عکس شما</h6>
+          
+          <input type="file" name="avatar" class="form-control">
         </div>
       </div>
-    </div>
-
-    <div class="col">
-      <div class="row">
-        <div class="col mb-3">
-          <div class="card">
-            <div class="card-body">
-              <div class="e-profile">
-                <div class="row">
-                <!-- Profile Picture -->
-                <div class="col-12 col-sm-auto mb-3">
-                  <div class="mx-auto" style="width: 140px;">
-                      <!-- User Profile Image -->
-                      <img class="profile-pic" src="{% static "dashboard/images/profile_page/user.png" %}">
-                      <i class="fa fa-camera upload-button"></i>
-                      <input class="file-upload" type="file" accept="image/*"/>
-                      <!-- Default Image -->
-                      <!-- <i class="fa fa-user fa-5x"></i> -->
-                    </div>
-                    </div>
-
-                  <div class="col d-flex flex-column flex-sm-row justify-content-between mb-3">
-                    <div class="text-center text-sm-left mb-2 mb-sm-0">
-                      <h4 class="pt-sm-2 pb-1 mb-0 text-nowrap"></h4>
-                      <p class="mb-0">{{user.get_username}}@</p>
-                      {% comment %} 
-                      <div class="text-muted"><small>Last seen 2 hours ago</small></div>
-                      {% endcomment %}
-                      <br>
-                    </div>
-
-                    {% load jformat %}
-
-                    <div class="text-center text-sm-right">
-                      <span class="badge badge-secondary">administrator</span>
-                      <div class="text-muted"><small>پیشگامی شده در {{ user.date_joined|jformat:"%d %B %Y" }}</small></div>
-                    </div>
-                  </div>
-                </div>
-                <ul class="nav nav-tabs">
-                  <li class="nav-item"><a href="" class="active nav-link">نمایه</a></li>
-                </ul>
-                <div class="tab-content pt-3">
-                  <div class="tab-pane active">
-                    <form class="form" method = "POST" action = "{% url 'profile' %}">
-                    {%csrf_token%}
-                      <div class="row">
-                        <div class="col">
-                          <div class="row">
-                            <div class="col">
-                              <div class="form-group">
-                                <label>نام و نام خانوادگی</label>
-                                <input class="form-control" type="text" name="name" value="{{ user.get_full_name }}" readonly>
-                              </div>
-                            </div>
-
-                            <div class="col">
-                              <div class="form-group">
-                                <label>نام کاربری</label>
-                                <input class="form-control" type="text" name="username" value="{{ user.get_username }}" readonly>
-                              </div>
-                            </div>
-
-                          </div>
-                          
-                          <div class="row">
-                            <div class="col">
-                              <div class="form-group">
-                                <label>ایمیل</label>
-                                <input class="form-control" type="text" value= "{{ user.email }}" readonly>
-                              </div>
-                            </div>
-                          </div>
-
-                          <div class="row">
-                            <div class="col mb-3">
-                              <div class="form-group">
-                                <label>آدرس</label>
-                                <textarea class="form-control" rows="3" placeholder="لطفا آدرس دقیق خود را وارد کنید." required></textarea>
-                              </div>
-                            </div>
-                          </div>
-
-                        </div>
-                      </div>
-
-                      <div class="row">
-                        <div class="col">
-                            <div class="form-group">
-                            <label for="gender_select">جنسیت</label>
-                            <select class="form-control" id="gender_select" name ="gender_select"  >
-                              <option value = "1" >مرد</option>
-                              <option value = "0" >زن</option>
-                            </select>
-                          </div>
-                        </div>
-
-                        <div class="col">
-                            <div class="form-group">
-                            <label for="grade_select">پایه تحصیلی</label>
-                            <select class="form-control" id="grade_select" name = "grade_select" >
-                              <option>ششم</option>
-                              <option>نهم</option>
-                            </select>
-                          </div>
-                        </div>
-                      </div>
-
-                      <div class="row">
-                        <div class="col mb-2">
-                          <div class="form-group">
-                            <label>بیوگرافی</label>
-                            <textarea class="form-control" rows="5" placeholder="بیو خود را وارد کنید ..."></textarea>
-                          </div>
-                        </div>
-                      </div>
-
-
-                      <div class="row">
-                        <div class="col d-flex justify-content-end">
-                          <button class="btn btn-primary text-center " type="submit">ثبت</button>
-                        </div>
-                      </div>
-                    </form>
-
-                  </div>
-                </div>
+      
+      <!-- edit form column -->
+      <div class="col-md-9 personal-info">
+        <div class="alert alert-info alert-dismissable">
+          <a class="panel-close close" data-dismiss="alert">×</a> 
+          <i class="fa fa-coffee"></i>
+          {% if error  %}
+            <strong>error</strong>
+          {% else %}
+            <strong>تمامی فیلد ها اجباری می باشد .</strong>
+          {% endif %}
+        </div>
+        <h3>اطلاعات شخصی</h3>
+        
+        <form class="form-horizontal" role="form" action="{% url 'edit_profile' %}" mathod = "POST">
+        {% csrf_token %}
+          <div class="form-group">
+            <label class="col-lg-3 control-label">نام</label>
+            <div class="col-lg-8">
+              <input class="form-control" name="first_name" type="text" value="نام" maxlength="30">
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-lg-3 control-label">نام خانوادگی</label>
+            <div class="col-lg-8">
+              <input class="form-control" name="last_name" type="text" value="نام خانوادگی" maxlength="30">
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-lg-3 control-label">کد ملی</label>
+            <div class="col-lg-8">
+              <input class="form-control" type="text" value="کد ملی" maxlength="10">
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-lg-3 control-label">جنسیت</label>
+            <div class="col-lg-8">
+                <select id="gender" name="gender">
+                  <option value="True">پسر</option>
+                  <option value="False">دختر</option>
+                </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-lg-3 control-label">شهر</label>
+            <div class="col-lg-8">
+              <div class="ui-select">
+                <select id="city" name="city">
+                  <option value="تهران">تهران</option>
+                </select>
               </div>
             </div>
           </div>
-        </div>
-
-        <div class="col-12 col-md-3 mb-3">
-          <div class="card mb-3">
-            <div class="card-body">
-
-              <div class="px-xl-3">
-                <form method="POST" action ="{% url 'signout' %}">
-                {% csrf_token %}
-                  <button class="btn btn-block btn-secondary" type="submit">
-                    <i class="fa fa-sign-out"></i>
-                    <span>خروج</span>
-                  </button>
-                </form>
-              </div>
+          <div class="form-group">
+            <label class="col-md-3 control-label">آدرس</label>
+            <div class="col-md-8">
+              <input class="form-control" type="text" name = "address" value="آدرس دقیق را وارد کنید ..." maxlength=255>
             </div>
           </div>
-          <div class="card">
-            <div class="card-body">
-              <h6 class="card-title font-weight-bold">حمایت</h6>
-              <p class="card-text">نیاز به کمک داری دکمه ی زیر رو فشار بده.</p>
-              <button type="button" class="btn btn-primary">تماس با ما</button>
+          <div class="form-group">
+            <label class="col-md-3 control-label">پایه تحصیلی</label>
+            <div class="col-md-8">
+                <select id="grade" name="grade">
+                  <option value="True">ششم</option>
+                  <option value="False">نهم</option>
+                </select>
             </div>
           </div>
-        </div>
+          <div class="form-group">
+            <label class="col-md-3 control-label">شماره تلفن</label>
+            <div class="col-md-8">
+              <input class="form-control" type="tel" name="phone_number" value="">
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-md-3 control-label"></label>
+            <div class="col-md-8">
+              <input type="submit" class="btn btn-primary" value="ثبت">
+              <span></span>
+              <input type="reset" class="btn btn-default" value="ریست">
+            </div>
+          </div>
+        </form>
       </div>
-
-    </div>
   </div>
-  </div>
-
-  <script src="https://cdn.rtlcss.com/bootstrap/v4.2.1/js/bootstrap.min.js" integrity="sha384-a9xOd0rz8w0J8zqj1qJic7GPFfyMfoiuDjC9rqXlVOcGO/dmRqzMn34gZYDTel8k" crossorigin="anonymous"></script>
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
-  <script type="text/javascript" src="{% static "dashboard/js/profile.js" %}">
-    
-  </script>
-  </body>
-</html>
+</div>
+{% endblock %}

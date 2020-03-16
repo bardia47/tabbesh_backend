@@ -1,5 +1,6 @@
 from django.shortcuts import render , redirect
 from accounts.models import User
+from .forms import ProfileForm
 
 # Create your views here.
 
@@ -29,3 +30,15 @@ def profile(request):
 
 def dashboard(request):
     return render(request , 'dashboard\dashboard.html')
+
+# Edit Profile Page 
+def edit_profile(request):
+    if request.method == 'POST':
+        form = ProfileForm(request.POST)
+        if form.is_valid():
+            User.objects.filter(username = request.user.username ).update(form.save())
+            return redirect ('dashboard')
+        else:
+            return render(request , 'dashboard\profile_page.html' , {{ 'error' : 'خطای ثبت نام'}})
+    else:    
+        return render(request , 'dashboard\profile_page.html')
