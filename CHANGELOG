@@ -1,0 +1,15 @@
+--use these for install frameworks
+pip install django 
+pip install djangorestframework 
+pip install pygments
+pip install django_jalali
+pip install django psycopg2
+
+db default config
+
+db: tbsh981221
+user:tbsh
+pass:Tabesh1378Pishgam
+
+
+roles needed in account_account {id=1,code='1',title='دانش آموز'}
