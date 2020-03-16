@@ -10,10 +10,6 @@ LEXERS = [item for item in get_all_lexers() if item[1]]
 
 # Create your models here.
 
-
-
-
-
 class User(AbstractBaseUser, PermissionsMixin):
     username = models.CharField(max_length=30,unique=True)
     password = models.CharField(max_length=128)
@@ -25,10 +21,10 @@ class User(AbstractBaseUser, PermissionsMixin):
     avatar = models.ImageField(upload_to='avatars/', null=True, blank=True)
     gender = models.BooleanField(default=True)
     role = models.ForeignKey('Role', on_delete=models.DO_NOTHING)
-    national_code = models.CharField(max_length=10,)
-    city = models.ForeignKey('City', on_delete=models.DO_NOTHING)
+    national_code = models.CharField(max_length=10)
+    city = models.ForeignKey('City',blank=True, null=True, on_delete=models.DO_NOTHING)
     address = models.CharField(max_length=255)
-    phone_number = models.IntegerField(blank=True, null=True)
+    phone_number = models.CharField(max_length=12,blank=True, null=True)
     grades = models.ManyToManyField('Grade')
     payments =  models.ManyToManyField('Course')
     is_superuser = models.BooleanField(default=False)
