@@ -7,12 +7,12 @@
 	<div class="row">
       <!-- left column -->
       <div class="col-md-3">
+      <form class="form-horizontal" action="{% url 'edit_profile' %}" method = "POST">
+          {% csrf_token %}
         <div class="text-center">
-          <img src="//placehold.it/100" class="avatar img-circle" alt="avatar">
-          <h6>عکس شما</h6>
-          
-          <input type="file" name="avatar" class="form-control">
-        </div>
+          <img src="http://ssl.gstatic.com/accounts/ui/avatar_2x.png" class="avatar img-circle img-thumbnail" alt="avatar">          <h6>Upload a different photo...</h6>
+          <input type="file" name = "avatar" class="text-center center-block file-upload">
+        </div></hr><br>
       </div>
       
       <!-- edit form column -->
@@ -21,39 +21,37 @@
           <a class="panel-close close" data-dismiss="alert">×</a> 
           <i class="fa fa-coffee"></i>
           {% if error  %}
-            <strong>error</strong>
+            <strong>{{error}}</strong>
           {% else %}
             <strong>تمامی فیلد ها اجباری می باشد .</strong>
           {% endif %}
         </div>
         <h3>اطلاعات شخصی</h3>
-        
-        <form class="form-horizontal" role="form" action="{% url 'edit_profile' %}" mathod = "POST">
-        {% csrf_token %}
+
           <div class="form-group">
             <label class="col-lg-3 control-label">نام</label>
             <div class="col-lg-8">
-              <input class="form-control" name="first_name" type="text" value="نام" maxlength="30">
+              <input class="form-control" name="first_name" type="text" value="" maxlength="30" required>
             </div>
           </div>
           <div class="form-group">
             <label class="col-lg-3 control-label">نام خانوادگی</label>
             <div class="col-lg-8">
-              <input class="form-control" name="last_name" type="text" value="نام خانوادگی" maxlength="30">
+              <input class="form-control" name="last_name" type="text" value="" maxlength="30" required>
             </div>
           </div>
           <div class="form-group">
             <label class="col-lg-3 control-label">کد ملی</label>
             <div class="col-lg-8">
-              <input class="form-control" type="text" value="کد ملی" maxlength="10">
+              <input class="form-control" type="text" name = "national_code" value="" maxlength="10" required>
             </div>
           </div>
           <div class="form-group">
             <label class="col-lg-3 control-label">جنسیت</label>
             <div class="col-lg-8">
                 <select id="gender" name="gender">
-                  <option value="True">پسر</option>
-                  <option value="False">دختر</option>
+                  <option v-bind:value="true" >پسر</option>
+                  <option v-bind:value="false" >دختر</option>
                 </select>
             </div>
           </div>
@@ -61,8 +59,10 @@
             <label class="col-lg-3 control-label">شهر</label>
             <div class="col-lg-8">
               <div class="ui-select">
-                <select id="city" name="city">
-                  <option value="تهران">تهران</option>
+                <select id="city" name="city" required>
+                  {% for element in form.fields.city.queryset %}
+                  <option value="{{ element.id }}">{{element.title }}</option>
+                  {% endfor %}
                 </select>
               </div>
             </div>
@@ -70,26 +70,28 @@
           <div class="form-group">
             <label class="col-md-3 control-label">آدرس</label>
             <div class="col-md-8">
-              <input class="form-control" type="text" name = "address" value="آدرس دقیق را وارد کنید ..." maxlength=255>
+              <input class="form-control" type="text" name = "address" value="آدرس دقیق را وارد کنید ..." maxlength="255" required>
             </div>
           </div>
           <div class="form-group">
             <label class="col-md-3 control-label">پایه تحصیلی</label>
             <div class="col-md-8">
-                <select id="grade" name="grade">
-                  <option value="True">ششم</option>
-                  <option value="False">نهم</option>
+                <select id="grades" name="grades" required>
+                  {% for element in form.fields.grades.queryset %}
+                  <option value="{{ element.id }}">{{element.title }}</option>
+                  {% endfor %}
                 </select>
             </div>
           </div>
           <div class="form-group">
-            <label class="col-md-3 control-label">شماره تلفن</label>
+            <label class="col-md-3 control-label" required>شماره تلفن</label>
             <div class="col-md-8">
-              <input class="form-control" type="tel" name="phone_number" value="">
+              <input class="form-control" type="text" name="phone_number" value="" maxlength="12">
             </div>
           </div>
+          
           <div class="form-group">
-            <label class="col-md-3 control-label"></label>
+            <label class="col-md-3 control-label" ></label>
             <div class="col-md-8">
               <input type="submit" class="btn btn-primary" value="ثبت">
               <span></span>

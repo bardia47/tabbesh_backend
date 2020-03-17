@@ -18,7 +18,7 @@ def signup(request):
                 city = City.objects.get(id=request.POST['city'])
                 user = User.objects.create_user(request.POST['username'],request.POST['email'], request.POST['password'],city=city)
                 auth.login( request ,user)
-                return redirect('home')
+                return redirect('edit_profile')
         else:
             return render(request, 'accounts/signup.html', {'error':'Passwords must match'}, {'form': form})
     else:
@@ -35,12 +35,12 @@ def signin(request):
             user = auth.authenticate(username=request.POST['username'],password=request.POST['password'])
         if user is not None:
             auth.login(request, user)
-            return redirect('home')
+            return redirect('dashboard')
         else:
             return render(request, 'accounts/signin.html',{'error':'username or password is incorrect.'})
     else:
         return render(request, 'accounts/signin.html')
 
 def signout(request):
-        auth.logout(request)
-        return redirect('home')
+    auth.logout(request)
+    return redirect('home')
