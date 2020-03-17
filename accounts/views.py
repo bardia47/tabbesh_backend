@@ -13,14 +13,17 @@ def signup(request):
         if request.POST['password'] == request.POST['password2']:
             try:
                 user = User.objects.get(username=request.POST['username'])
-                return render(request, 'accounts/signup.html', {'error':'Username has already been taken'},{'form': form})
+                form = UserForm()
+                form.errors={'username' : 'please try another username' } 
+                return render(request, 'accounts/signup.html',{'form': form})
             except User.DoesNotExist:
-                city = City.objects.get(id=request.POST['city'])
-                user = User.objects.create_user(request.POST['username'],request.POST['email'], request.POST['password'],city=city)
+                # city = City.objects.get(id=request.POST['city'])
+                user = User.objects.create_user(request.POST['username'],request.POST['email'], request.POST['password'])
                 auth.login( request ,user)
                 return redirect('edit_profile')
         else:
-            return render(request, 'accounts/signup.html', {'error':'Passwords must match'}, {'form': form})
+            form.errors={'password' : 'Passwords must match' } 
+            return render(request,{'form': form})
     else:
         # User wants to enter info
         form = UserForm()
