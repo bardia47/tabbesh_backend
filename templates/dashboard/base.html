@@ -22,12 +22,13 @@
 <body>
     <div class="wrapper">
         <!-- Sidebar  -->
-        <nav id="sidebar">
+        <nav id="sidebar" >
+        <div class="sticky-top">
             <div class="sidebar-header">
                 <h3 style="text-align:center;"> تابــش</h3>
             </div>
 
-            <ul class="list-unstyled components">
+            <ul class="list-unstyled components" >
                 <li class="active">
                   <a href="{% url 'dashboard' %}"><i class="fas fa-home" style="margin-left:20px; margin-right:20px"></i> داشبورد </a>
                 </li>
@@ -38,14 +39,14 @@
                   <a href="#"><i class="fas fa-shopping-basket" style="margin-left:20px; margin-right:20px"></i> سبد خرید </a>
                 </li>
             </ul>
-
+  </div>
         </nav>
 
         <!-- Page Content  -->
         <div id="content">
 
-            <nav class="navbar navbar-expand-lg navbar-light bg-light">
-                <div class="container-fluid">
+            <nav class="navbar navbar-expand-lg navbar-light bg-light navbar-fixed-top">
+                <div class="container-fluid ">
 
                     <button type="button" id="sidebarCollapse" class="btn btn-info">
                         <i class="fas fa-align-left"></i>
