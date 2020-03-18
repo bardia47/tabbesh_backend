@@ -3,7 +3,8 @@
   padding: 0;
 }
 body {
-  font-family: "Vazir_Light" , sans-serif;
+  margin: 50;
+  font-family: "Dana_Bold" , sans-serif;
   overflow-x: hidden;
   overflow-y: scroll;
 }
@@ -12,17 +13,21 @@ p {
   font-size: 14px;
 }
 /* ===== Headers ====*/
+
 .header {
-  background-image: url('../images/home_background.jpg');
-  background-attachment: fixed;
+  margin-bottom: 60px;
+  height: 100%;
+  background: url(../images/poster.svg); 
+  background-position: center;
   background-repeat: no-repeat;
-  background-position: 100% 100%;
-  background-size: cover;
+  background-size: 1  0% 100%;
 }
+
 /* Head Overlay
 .header-overlay {
   background-color: rgba(31, 31, 31, 0.75);
 } */
+
 .logo {
   padding: 50px;
 }
@@ -32,12 +37,12 @@ p {
 }
 .header-text h1 {
   font-family: "Vazir_Bold";
-  color: #fff; 
+  color: #000000; 
   font-size : 50px;
 }
 .header-text p {
   font-family: "Vazir_Light";
-  color: #fff;
+  color: #000000;
   font-size : 20px;
 }
 .header-btns {
@@ -80,144 +85,123 @@ p {
 
 
 /* ======= Posts ======= */
-.post-transition{
-  margin-top: 20px;
-  height: 600px;
+h5 {
+  font-size: 1.28571429em;
+  font-weight: 700;
+  line-height: 1.2857em;
+  margin: 0;
 }
-.post-transition-items{
-  height: 100%;
-  background-color: #c0c0c0;
-  border-radius: 6px;
+
+.card {
+  font-size: 1em;
+  overflow: hidden;
+  padding: 0;
+  border: none;
+  border-radius: .28571429rem;
+  box-shadow: 0 1px 3px 0 #d4d4d5, 0 0 0 1px #d4d4d5;
 }
-.post-transition-img{
+
+.card-block {
+  font-size: 1em;
+  position: relative;
+  margin: 0;
+  padding: 1em;
+  border: none;
+  border-top: 1px solid rgba(34, 36, 38, .1);
+  box-shadow: none;
+}
+
+.card-img-top {
+  display: block;
   width: 100%;
-  height: 50%;
-  padding-top: 10px;
-  padding-bottom: 10px;
-  padding-right:  10px;
-  padding-left: 10px;
-  border-radius: 8px;
+  height: auto;
 }
-.post-transition-text{
-  padding-top: 10px;
-  padding-bottom: 10px;
-  padding-right:  10px;
-  padding-left: 10px;
+
+.card-title {
+  font-size: 1.28571429em;
+  font-weight: 700;
+  line-height: 1.2857em;
 }
-.post-transition h1{
-  font-family: "Vazir_Bold";
-  font-size: 20px;
+
+.card-text {
+  clear: both;
+  margin-top: .5em;
+  color: rgba(0, 0, 0, .68);
 }
-.post-transition p{
-  font-family: "Vazir_Light";
-  font-size: 15px;
+
+.card-footer {
+  font-size: 1em;
+  position: static;
+  top: 0;
+  left: 0;
+  max-width: 100%;
+  padding: .75em 1em;
+  color: rgba(0, 0, 0, .4);
+  border-top: 1px solid rgba(0, 0, 0, .05) !important;
+  background: #fff;
 }
-.post-transition-btn{
-  position:absolute;
-  bottom:0;
-  left : 20px;
-  font-family: "Vazir_Bold";
-  font-size: 20px;
+
+.card-inverse .btn {
+  border: 1px solid rgba(0, 0, 0, .05);
 }
-.btn-more-see,
-.btn-more-see:focus,
-.btn-more-see:active,
-.btn-more-see:visited
-{
-  background-color: #686868;
-  color:#fff;
-  transition: all 1s;
-  -webkit-transition: all 1s;
-  -moz-transition: all 1s;
-   -o-transition: all 1s;
-   margin-left: 20px;
-   margin-bottom: 20px;
+
+.profile {
+  position: absolute;
+  top: -30px;
+  display: inline-block;
+  overflow: hidden;
+  box-sizing: border-box;
+  width: 60px;
+  height: 60px;
+  margin: 0;
+  border: 1px solid #fff;
+  border-radius: 50%;
 }
-.btn-more-see:hover {
-    background-color: #686868;
-    color : #fff;
+
+.profile-avatar {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+}
+
+.profile-inline {
+  position: relative;
+  top: 0;
+  display: inline-block;
+}
+
+.profile-inline ~ .card-title {
+  display: inline-block;
+  margin-left: 4px;
+  vertical-align: top;
+}
+
+.text-bold {
+  font-weight: 700;
+}
+
+.meta {
+  font-size: 1em;
+  color: rgba(0, 0, 0, .4);
+}
+
+.meta a {
+  text-decoration: none;
+  color: rgba(0, 0, 0, .4);
+}
+
+.meta a:hover {
+  color: rgba(0, 0, 0, .87);
 }
 .carousel-indicators {
-    margin-bottom: -25px;
-}
-.carousel-indicators li {
-   background-color:#000000;
-}
-.carousel-inner {
-   margin-bottom:10px;
+  bottom: -50px;
 }
 
-/* ====== About Us ======= */
-.about-us-container{
-  margin-top: 20px;
+.container {
+  margin-bottom: 40px;
 }
-.about-us-title {
-  margin : 5px;
-  text-align: center;
-}
-.about-us-title h1{
-  padding: 5px;
-  font-family: "Vazir_Bold";
-  font-size : 40px ;
-  color : #13538B ;
-}
-
-
 /* ======= Footer ====== */
-
-.footer {
-  margin-top: 50px;
-  height: 15%;
-  padding: 25px;
-  bottom: 0px;
-  width: 100%;
-  position: relative;
-  background-color: #686868;
-}
-.logo_footer {
-  text-align: center;
-  height: 125px;
-}
-.logo_footer img{
-  height: 150px;
-  width: 150px;
-}
-.qa_links {
-  text-align: center;
-  height: 125px;
-  font-size: 14px;
-  font-family: 'Vazir_Light';
-  color: #fff;
-}
-.qa_links li{
-  list-style-type: none;
-}
-.about_us_footer {
-  height: 125px;
-  text-align: center;
-  font-size: 14px;
-  font-family: 'Vazir_Light';
-  color: #fff;
-}
-.social_media {
-  height: 25px;
-  text-align: center;
-}
-.social_media img{
-  height: 25px;
-  width: 25px;
-}
-
-/* ===== Navbar ==== */
-.navbar-custom {
-  font-family: 'Vazir_Bold' ;
-  font-size: 18px;
-  background-color: rgba(0, 0, 0, 0);
-  z-index: 110;
-}
-.nav-item {
-  margin-left: 20px;
-}
-.color-me {
-  color: #fff;
+.page-footer {
+  background-color: #fff;
 }

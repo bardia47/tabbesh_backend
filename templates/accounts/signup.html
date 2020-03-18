@@ -52,18 +52,18 @@
                 <input type="password" name = "password2" id="inputConfirmPassword" class="form-control" placeholder="Password" required>
                 <label for="inputConfirmPassword">تکرار رمز عبور</label>
               </div>
-              <div class="form-label-group">
+              {% comment %} <div class="form-label-group">
               <select id="id_city" name="city">
               {% for element in form.fields.city.queryset %}
               <option value="{{ element.id }}">{{element.title }}</option>
               {% endfor %}
               
-             </select>
+             </select> 
 
-              </div>
+              </div> {% endcomment %}
 
               <button class="btn btn-lg btn-primary btn-block " type="submit"><p class="sign-btn">ثبت نام </p></button>
-              <a class="d-block text-center mt-2 small" href="#">حساب کاربری دارید! وارد شوید.</a>
+              <a class="d-block text-center mt-2 small" href="{% url 'signin' %}">حساب کاربری دارید! وارد شوید.</a>
               <hr class="my-4">
             </form>
           </div>
