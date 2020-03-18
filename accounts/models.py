@@ -85,7 +85,7 @@ class Lesson(models.Model):
     code = models.CharField(max_length= 10)
     title = models.CharField(max_length= 30)
     grade = models.ForeignKey('Grade' ,on_delete=models.DO_NOTHING)
-    parent=models.ForeignKey('self' ,on_delete=models.DO_NOTHING)
+    parent=models.ForeignKey('self' ,blank=True, null=True,on_delete=models.DO_NOTHING)
     unique_together = [['title', 'grade']]
 
 
