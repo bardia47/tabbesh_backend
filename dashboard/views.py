@@ -21,3 +21,7 @@ def edit_profile(request):
     else:  
         form = ProfileForm()  
         return render(request , 'dashboard/profile_page.html' , { 'form':form })
+
+#Lessons Page
+def lessons(request):
+    return render (request , 'dashboard/lessons.html')
