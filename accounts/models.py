@@ -4,6 +4,7 @@ from django.contrib.auth.base_user import AbstractBaseUser
 from django.contrib.auth.models import PermissionsMixin
 from pygments.lexers import get_all_lexers
 from pygments.styles import get_all_styles
+from django.template.defaultfilters import default
 
 LEXERS = [item for item in get_all_lexers() if item[1]]
 
@@ -24,7 +25,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     national_code = models.CharField(max_length=10)
     city = models.ForeignKey('City',blank=True, null=True, on_delete=models.DO_NOTHING)
     address = models.CharField(max_length=255)
-    phone_number = models.CharField(max_length=12,blank=True, null=True)
+    phone_number = models.CharField(max_length=12,default="",blank=True)
     grades = models.ManyToManyField('Grade')
     payments =  models.ManyToManyField('Course')
     is_superuser = models.BooleanField(default=False)
