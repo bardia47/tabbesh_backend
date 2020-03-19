@@ -95,16 +95,16 @@ class Course(models.Model):
     title = models.CharField(max_length= 30)
     lesson=models.ForeignKey('Lesson' ,on_delete=models.DO_NOTHING)
     teacher=models.ForeignKey(User ,on_delete=models.DO_NOTHING)
-    start_date=models.DateField
-    end_date=models.DateField
+    start_date=models.DateField(blank=True, null=True)
+    end_date=models.DateField(blank=True, null=True)
     amount=models.FloatField
     url=models.URLField
 
 # Course_Calendar Model
 class Course_Calendar(models.Model):
     course=models.ForeignKey('Course' ,on_delete=models.DO_NOTHING)
-    start_date=models.DateField
-    end_date=models.DateField
+    start_date=models.DateField(blank=True, null=True)
+    end_date=models.DateField(blank=True, null=True)
 
 
 
