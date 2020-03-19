@@ -1,231 +1,114 @@
-<!DOCTYPE html>
-<html dir="rtl">
-{% load static %}
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+{% extends 'dashboard/base.html'%}
 
-    <title>داشبورد</title>
-
-    <!-- Bootstrap CSS CDN -->
-    <link rel="stylesheet" href="https://cdn.rtlcss.com/bootstrap/v4.2.1/css/bootstrap.min.css" integrity="sha384-vus3nQHTD+5mpDiZ4rkEPlnkcyTP+49BhJ4wJeJunw06ZAp+wzzeBPUXr42fi8If" crossorigin="anonymous">
-    <!-- Our Custom CSS -->
-    <link rel="stylesheet" href="{% static 'dashboard/css/dashboard.css'%}">
-    <link rel="stylesheet" type="text/css" href="{% static "home/css/fonts.css" %}">
-
-    <!-- Font Awesome JS -->
-    <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/solid.js" integrity="sha384-tzzSw1/Vo+0N5UhStP3bvwWPq+uvzCMfrN1fEFe+xBmv1C/AtVX5K0uZtmcHitFZ" crossorigin="anonymous"></script>
-    <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/fontawesome.js" integrity="sha384-6OIrr52G08NpOFSZdxxz1xdNSndlD4vdcf/q2myIUVO0VsqaGHJsB0RaBE01VTOY" crossorigin="anonymous"></script>
-</head>
-
-<body>
-    <div class="wrapper">
-        <!-- Sidebar  -->
-        <nav id="sidebar">
-            <div class="sidebar-header">
-                <h3 style="text-align:center;"> تابــش</h3>
-            </div>
-
-            <ul class="list-unstyled components">
-                <li class="active">
-                  <a href="{% url 'dashboard' %}"><i class="fas fa-home" style="margin-left:20px; margin-right:20px"></i> داشبورد </a>
-                </li>
-                <li>
-                  <a href="#"><i class="fas fa-book" style="margin-left:20px; margin-right:20px"></i> دروس من </a>
-                </li>
-                <li>
-                  <a href="#"><i class="fas fa-shopping-basket" style="margin-left:20px; margin-right:20px"></i> سبد خرید </a>
-                </li>
-            </ul>
-
-        </nav>
-
-        <!-- Page Content  -->
-        <div id="content">
-
-            <nav class="navbar navbar-expand-lg navbar-light bg-light">
-                <div class="container-fluid">
-
-                    <button type="button" id="sidebarCollapse" class="btn btn-info">
-                        <i class="fas fa-align-left"></i>
-                        <span> تمام صفحه </span>
-                    </button>
-                    <button class="btn btn-dark d-inline-block d-lg-none ml-auto" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                        <i class="fas fa-align-justify"></i>
-                    </button>
-
-                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                        <ul class="nav navbar-nav ml-auto">
-                                  <li class="nav-item dropdown">
-                                  <a class="nav-link " href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    <img src="{% static 'dashboard/images/untitle.jpg'%}" width="60" height="60" class="rounded-circle">
-                                  </a>
-                                  <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                                    <a class="dropdown-item" href="{% url 'edit_profile' %}"><i class="fas fa-user-alt" style = "margin-left:5px;"></i>پروفایل</a>
-                                    <a class="dropdown-item" href="{% url 'signout' %}"><i class="fas fa-sign-out-alt" style = "margin-left:5px;"></i>خروج</a>
-                                  </div>
-                                </li>
-                        </ul>
-                    </div>
-                </div>
-            </nav>
-
-            <div class= "row">
-              <div class="col-md-6 overflow-div">
-                <div class="card">
-                    <div class="card-header p-0" style="text-align:center;">
-                        <h4 class="m-0">کلاس های شما</h4>
-                    </div>
-                    <div class="row search-div">
-                        <div class="col-md-12 col-12">
-                            <div class="search-input">
-                              <input type="text" class="form-control rounded-0" placeholder="Search user" aria-label="Recipient's username" aria-describedby="basic-addon2" id="user-list-search">
-                            </div>
-                        </div>
-                    </div>
-                    <ul class="list-group" id="user-list">
-                        <li class="list-group-item">
-                            <div class="row">
-                                <div class="col-md-12 col-12">
-                                    <div class="row">
-                                        <div class="col-md-4 col-4 user-img text-center pt-1">
-                                            <img src="http://nicesnippets.com/demo/cs-image2.png" alt="Seth Frazier" class="img-responsive img-circle rounded-circle" />
-                                        </div>
-                                        <div class="col-md-8 col-8">
-                                            <h5 class="font-weight-bold mb-1">محمد محمدی</h5>
-                                            <div class="user-detail">
-                                                <p class="m-0"> دوره ریاضی ششم</p>
-                                                <a href="#" class="btn btn-secondary btn-lg active" role="button" aria-pressed="true">Link</a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </li>
-                    </ul>
-                </div>
-
-              </div>
-
-              <div class = "col-md-6">
-                <div class = "row">
-                  <div class = "wrap">
-                    <h1> زمان تا شروع کلاس بعدی </h1>
-                  <div class="countdown">
-                     <div class="bloc-time hours" data-init-value="14">
-
-                       <div class="figure hours hours-1">
-                         <span class="top">2</span>
-                         <span class="top-back">
-                           <span>2</span>
-                         </span>
-                         <span class="bottom">2</span>
-                         <span class="bottom-back">
-                           <span>2</span>
-                         </span>
-                       </div>
-
-                       <div class="figure hours hours-2">
-                         <span class="top">4</span>
-                         <span class="top-back">
-                           <span>4</span>
-                         </span>
-                         <span class="bottom">4</span>
-                         <span class="bottom-back">
-                           <span>4</span>
-                         </span>
-                       </div>
-                     </div>
-
-                     <div class="bloc-time min" data-init-value="0">
-
-                       <div class="figure min min-1">
-                         <span class="top">0</span>
-                         <span class="top-back">
-                           <span>0</span>
-                         </span>
-                         <span class="bottom">0</span>
-                         <span class="bottom-back">
-                           <span>0</span>
-                         </span>
-                       </div>
-
-                       <div class="figure min min-2">
-                        <span class="top">0</span>
-                         <span class="top-back">
-                           <span>0</span>
-                         </span>
-                         <span class="bottom">0</span>
-                         <span class="bottom-back">
-                           <span>0</span>
-                         </span>
-                       </div>
-                     </div>
-
-                     <div class="bloc-time sec" data-init-value="0">
-
-                         <div class="figure sec sec-1">
-                         <span class="top">0</span>
-                         <span class="top-back">
-                           <span>0</span>
-                         </span>
-                         <span class="bottom">0</span>
-                         <span class="bottom-back">
-                           <span>0</span>
-                         </span>
-                       </div>
-
-                       <div class="figure sec sec-2">
-                         <span class="top">0</span>
-                         <span class="top-back">
-                           <span>0</span>
-                         </span>
-                         <span class="bottom">0</span>
-                         <span class="bottom-back">
-                           <span>0</span>
-                         </span>
-                       </div>
-                     </div>
-                   </div>
-                </div>
-              </div>
-
-                <div class= "row">
-                  <div class = "col-md-6 calender">
-                  <time datetime="2014-09-20" class="icon">
-                    <em>شنبه</em>
-                    <strong>اسفند</strong>
-                    <span>19</span>
-                  </time>
-                </div>
-                </div>
-
-                </div>
-
-            </div>
+{% block content %}
+    <div class="container">
+    <h1>پروفایل</h1>
+  	<hr>
+  	<form class="form-horizontal" action="{% url 'edit_profile' %}" method = "POST" enctype="multipart/form-data">
+  	   	 <input type="hidden" id="user.username" name="user.username" value={{user.username}}>
+  	 
+	<div class="row">
+      <!-- left column -->
+      <div class="col-md-3">
+      
+          {% csrf_token %}
+        <div class="text-center">
+          <img src="http://ssl.gstatic.com/accounts/ui/avatar_2x.png" class="avatar img-circle img-thumbnail" alt="avatar">          <h6>Upload a different photo...</h6>
+          <input type="file" id="avatar" name = "avatar" class="text-center center-block file-upload">
         </div>
-    </div>
+            <div class="col-md-8">
+              <input type="submit" name="upload" class="btn btn-primary" value="آپلود" >
+            </div>
+        </hr><br>
+      </div>
+              
+      
+      <!-- edit form column -->
+      <div class="col-md-9 personal-info">
+        <div class="alert alert-info alert-dismissable">
+          <a class="panel-close close" data-dismiss="alert">×</a> 
+          <i class="fa fa-coffee"></i>
+          {% if error  %}
+            <strong>{{error}}</strong>
+          {% else %}
+            <strong>تمامی فیلد ها اجباری می باشد .</strong>
+          {% endif %}
+        </div>
+        <h3>اطلاعات شخصی</h3>
 
-    <!-- jQuery CDN - Slim version (=without AJAX) -->
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/latest/TweenMax.min.js"></script>
-    <!-- Popper.JS -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js" integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ" crossorigin="anonymous"></script>
-    <!-- Bootstrap JS -->
-    <script src="https://cdn.rtlcss.com/bootstrap/v4.2.1/js/bootstrap.min.js" integrity="sha384-a9xOd0rz8w0J8zqj1qJic7GPFfyMfoiuDjC9rqXlVOcGO/dmRqzMn34gZYDTel8k" crossorigin="anonymous"></script>
+          <div class="form-group">
+            <label class="col-lg-3 control-label">نام</label>
+            <div class="col-lg-8">
+              <input class="form-control" name="first_name" type="text" value="{{ user.first_name }}" maxlength="30" required>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-lg-3 control-label">نام خانوادگی</label>
+            <div class="col-lg-8">
+              <input class="form-control" name="last_name" type="text" value="{{ user.last_name }}" maxlength="30" required>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-lg-3 control-label">کد ملی</label>
+            <div class="col-lg-8">
+              <input class="form-control" type="text" name = "national_code" value="{{ user.national_code }}" maxlength="10" required>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-lg-3 control-label">جنسیت</label>
+            <div class="col-lg-8">
+                <select id="gender" name="gender" required>
+                  <option value="True"  >پسر</option>
+                  <option value="False" {% ifequal user.gender False %} selected="selected"{% endifequal %} >دختر</option>
+                </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-lg-3 control-label">شهر</label>
+            <div class="col-lg-8">
+              <div class="ui-select">
+                <select id="city" name="city" required > 
+                  {% for element in form.fields.city.queryset %}
+                  <option value="{{ element.id }}" {% ifequal user.city.id element.id %} selected="selected"{% endifequal %}>{{element.title }}</option>
+                  {% endfor %}
+                </select>
+              </div>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-md-3 control-label">آدرس</label>
+            <div class="col-md-8">
+              <input class="form-control" type="text" name = "address" value="آدرس دقیق را وارد کنید ..." maxlength="255" required>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-md-3 control-label">پایه تحصیلی</label>
+            <div class="col-md-8">
+                <select id="grades" name="grades" required >
+                  {% for element in form.fields.grades.queryset %}
+                  <option value="{{ element.id }}" {% ifequal user.grades.first.id element.id %} selected="selected"{% endifequal %}>{{element.title }}</option>
+                  {% endfor %}
+                </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-md-3 control-label" required>شماره تلفن</label>
+            <div class="col-md-8">
+              <input class="form-control" type="text" name="phone_number" value="{{ user.phone_number }}" maxlength="12" required>
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <label class="col-md-3 control-label" ></label>
+            <div class="col-md-8">
+              <input type="submit" class="btn btn-primary" value="ثبت">
+              <span></span>
+              <input type="reset" class="btn btn-default" value="ریست">
+            </div>
+          </div>
+        </form>
+      </div>
+  </div>
+</div>
 
-    <!-- JS style -->
-    <script type="text/javascript" src="{% static 'dashboard/js/dashboard.js'%}"></script>
-
-    <script type="text/javascript">
-      $(document).ready(function() {
-        $("#sidebarCollapse").click(function () {
-        $("#sidebar").toggleClass('active');
-        });
-      });
-    </script>
-</body>
-
-</html>
+{% endblock %}
