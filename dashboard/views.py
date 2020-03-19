@@ -18,8 +18,7 @@ def edit_profile(request):
             return redirect ('dashboard')
         else:
             form = ProfileForm() 
-            form.errors = {'username' : "خطا در ثبت نام" } 
-            return render(request , 'dashboard/profile_page.html' , {'form':form})
+            return render(request , 'dashboard/profile_page.html' , {'form':form , 'error':'خطا در ثبت نام'})
     else:  
         form = ProfileForm()
         return render(request , 'dashboard/profile_page.html' , { 'form':form })
