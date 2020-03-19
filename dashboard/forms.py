@@ -11,7 +11,7 @@ class ProfileForm(forms.ModelForm):
     last_name = forms.CharField(max_length=30 , required=True)
     national_code = forms.CharField(max_length=10 , required=True)
     address = forms.CharField(max_length=255 , required=True)
-    gender = forms.BooleanField()
+    # gender = forms.ChoiceField()
     phone_number = forms.CharField(max_length=12 , required=True)
 
     class Meta :
