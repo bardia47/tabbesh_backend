@@ -12,12 +12,10 @@ def dashboard(request):
 # Edit Profile Page 
 def edit_profile(request):
     if request.method == 'POST':
-        if request.POST.get("upload"):
-            
-            form = ProfileForm(data=request.POST , instance=request.user)
-            if form.is_valid():
-                form.save()
-                return redirect ('dashboard')
+        form = ProfileForm(data=request.POST , instance=request.user)
+        if form.is_valid():
+            form.save()
+            return redirect ('dashboard')
         else:
             form = ProfileForm() 
             form.errors = {'username' : "خطا در ثبت نام" } 
