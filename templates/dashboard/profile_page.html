@@ -39,27 +39,27 @@
           <div class="form-group">
             <label class="col-lg-3 control-label">نام</label>
             <div class="col-lg-8">
-              <input class="form-control" name="first_name" type="text" value={{ user.first_name }} maxlength="30" required>
+              <input class="form-control" name="first_name" type="text" value="{{ user.first_name }}" maxlength="30" required>
             </div>
           </div>
           <div class="form-group">
             <label class="col-lg-3 control-label">نام خانوادگی</label>
             <div class="col-lg-8">
-              <input class="form-control" name="last_name" type="text" value={{ user.last_name }} maxlength="30" required>
+              <input class="form-control" name="last_name" type="text" value="{{ user.last_name }}" maxlength="30" required>
             </div>
           </div>
           <div class="form-group">
             <label class="col-lg-3 control-label">کد ملی</label>
             <div class="col-lg-8">
-              <input class="form-control" type="text" name = "national_code" value={{ user.national_code }} maxlength="10" required>
+              <input class="form-control" type="text" name = "national_code" value="{{ user.national_code }}" maxlength="10" required>
             </div>
           </div>
           <div class="form-group">
             <label class="col-lg-3 control-label">جنسیت</label>
             <div class="col-lg-8">
                 <select id="gender" name="gender" required>
-                  <option value="true" {% ifequal user.gender  true %} selected="selected"{% endifequal %} >پسر</option>
-                  <option value="false" {% ifequal user.gender false %} selected="selected"{% endifequal %} >دختر</option>
+                  <option value="True"  >پسر</option>
+                  <option value="False" {% ifequal user.gender False %} selected="selected"{% endifequal %} >دختر</option>
                 </select>
             </div>
           </div>
@@ -86,7 +86,7 @@
             <div class="col-md-8">
                 <select id="grades" name="grades" required >
                   {% for element in form.fields.grades.queryset %}
-                  <option value="{{ element.id }}" {% ifequal user.grades.1.id element.id %} selected="selected"{% endifequal %}>{{element.title }}</option>
+                  <option value="{{ element.id }}" {% ifequal user.grades.first.id element.id %} selected="selected"{% endifequal %}>{{element.title }}</option>
                   {% endfor %}
                 </select>
             </div>
@@ -94,7 +94,7 @@
           <div class="form-group">
             <label class="col-md-3 control-label" required>شماره تلفن</label>
             <div class="col-md-8">
-              <input class="form-control" type="text" name="phone_number" value={{ user.phone_number }} maxlength="12">
+              <input class="form-control" type="text" name="phone_number" value="{{ user.phone_number }}" maxlength="12" required>
             </div>
           </div>
           
