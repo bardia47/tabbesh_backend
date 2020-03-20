@@ -20,3 +20,10 @@ roles needed in account_account {id=1,code='1',title='دانش آموز'}
 1398/12/28 1:06
 حذف گرفتن شهر از مرحله اول ثبت نام
 
+
+
+1398/01/02
+polish " base.html, dashboard.html, dashboard/view.py, dashboard/url.py, accounts/models.py "  :  reformatting and whitespace handling
+modify "models.py, dashboard.html, base.html, view.py"
+متد های str به models.py اضافه شدن برای پنل ادمین.
+دوتا متد یکی برای اینکه ببینه کلاس در حال برگزاری هست یا نه و اون یکی برای اینکه ببینه دوره درس فعال هست یا نه اضافه شدن.

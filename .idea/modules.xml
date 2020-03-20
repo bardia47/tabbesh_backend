@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/pishgam_website.iml" filepath="$PROJECT_DIR$/.idea/pishgam_website.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../../Django/Projects/producthunt-project/.idea/producthunt-project.iml" filepath="$PROJECT_DIR$/../../Django/Projects/producthunt-project/.idea/producthunt-project.iml" />
     </modules>
   </component>
 </project>
