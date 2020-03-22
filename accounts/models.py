@@ -28,7 +28,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     address = models.CharField(max_length=255)
     phone_number = models.CharField(max_length=12, default="", blank=True)
     grades = models.ManyToManyField('Grade')
-    payments = models.ManyToManyField('Course')
+    payments = models.ManyToManyField('Course', blank=True)
     is_superuser = models.BooleanField(default=False)
     is_staff = models.BooleanField('staff status', default=True)
 
@@ -59,16 +59,6 @@ class Role(models.Model):
         return self.title
 
 
-# # Profile Models
-# class Profile(models.Model):
-#     id = models.IntegerField(primary_key= True)
-#     user = models.OneToOneField(User,on_delete=models.CASCADE)
-#     picture_id = models.URLField()
-#     gender = models.BooleanField ()
-#     biography = models.TextField()
-#     role_id = models.ForeignKey('Role',on_delete=models.DO_NOTHING)
-#     national_code = models.CharField(max_length=10,)
-#     address = models.CharField(max_length=255)
 
 class City(models.Model):
     code = models.CharField(max_length=10, unique=True)
@@ -86,12 +76,6 @@ class Grade(models.Model):
     def __str__(self):
         return self.title
 
-
-# Relational Model Between Profiles & Grades
-# class User_grade_relation(models.Model):
-#     user = models.ForeignKey(User ,on_delete=models.DO_NOTHING)
-#     grade = models.ForeignKey('Grade',on_delete=models.DO_NOTHING)
-#     unique_together = [['user', 'grade']]
 
 
 # Lesson Model
@@ -114,8 +98,8 @@ class Course(models.Model):
     teacher = models.ForeignKey(User, on_delete=models.DO_NOTHING)
     start_date = models.DateTimeField(blank=True, null=True)
     end_date = models.DateTimeField(blank=True, null=True)
-    amount = models.FloatField
-    url = models.URLField
+    amount = models.FloatField(blank=True, null=True)
+    url = models.URLField(blank=True, null=True)
 
     def __str__(self):
         return self.title
@@ -146,8 +130,4 @@ class Course_Calendar(models.Model):
             return False
 
 
-# Payments Model
-# class Payment(models.Model):
-#     course = models.ForeignKey('Course' ,null=False,on_delete=models.DO_NOTHING)
-#     user=models.ForeignKey(User ,null=False,on_delete=models.DO_NOTHING)
-#     unique_together = [['course', 'user']]
+
