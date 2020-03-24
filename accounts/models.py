@@ -141,10 +141,10 @@ class Course_Calendar(models.Model):
 
     class Meta:
         ordering = ['start_date']
+        verbose_name_plural = "زمان برگزاری"    
 
     def __str__(self):
         return self.course.title
-        verbose_name_plural = "زمان برگزاری"    
 
     def is_class_active(self):
         now = datetime.datetime.now(pytz.utc)
