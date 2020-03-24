@@ -71,13 +71,8 @@
                         <li class="nav-item dropdown">
                             <a class="nav-link " href="#" id="navbarDropdownMenuLink" role="button"
                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                {% if user.avatar %}
-                                    <img src="{{ user.avatar.url }}" width="60" height="60"
-                                         class="rounded-circle">
-                                {% else %}
-                                    <img src="{% static 'images/student.png' %}" width="60" height="60"
-                                         class="rounded-circle">
-                                {% endif %}
+                                <img src="{%if user.avatar%}{{user.avatar.url}}{%else%}{% static 'images/student.png' %}{%endif%}"
+                                width="60" height="60" class="rounded-circle">
                             </a>
                             <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                                 <a class="dropdown-item" href="{% url 'edit_profile' %}"><i class="fas fa-user-alt"

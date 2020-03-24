@@ -14,24 +14,27 @@ LEXERS = [item for item in get_all_lexers() if item[1]]
 # Create your models here.
 
 class User(AbstractBaseUser, PermissionsMixin):
-    username = models.CharField(max_length=30, unique=True)
-    password = models.CharField(max_length=128)
-    email = models.EmailField('email address', unique=True)
-    first_name = models.CharField('first name', max_length=30, blank=True)
-    last_name = models.CharField('last name', max_length=30, blank=True)
-    date_joined = models.DateTimeField('date joined', auto_now_add=True)
-    is_active = models.BooleanField('active', default=True)
+    username = models.CharField("نام کاربری",max_length=30, unique=True)
+    password = models.CharField("رمز",max_length=128)
+    email = models.EmailField('ایمیل', unique=True)
+    first_name = models.CharField('نام', max_length=30, blank=True)
+    last_name = models.CharField('نام خانوادگی', max_length=30, blank=True)
+    date_joined = models.DateTimeField('تاریخ عضویت', auto_now_add=True)
+    is_active = models.BooleanField('فعال', default=True)
     avatar = models.ImageField(upload_to='avatars/', null=True, blank=True)
     gender = models.BooleanField(default=True)
-    role = models.ForeignKey('Role', on_delete=models.DO_NOTHING)
-    national_code = models.CharField(max_length=10)
-    city = models.ForeignKey('City', blank=True, null=True, on_delete=models.DO_NOTHING)
-    address = models.CharField(max_length=255)
-    phone_number = models.CharField(max_length=12, default="", blank=True)
-    grades = models.ManyToManyField('Grade', null=True, blank=True)
+    role = models.ForeignKey('Role', on_delete=models.DO_NOTHING,verbose_name="نقش")
+    national_code = models.CharField("کد ملی",max_length=10)
+    city = models.ForeignKey('City', blank=True, null=True, on_delete=models.DO_NOTHING,verbose_name="شهر")
+    address = models.CharField("آدرس",max_length=255)
+    phone_number = models.CharField("تلفن همراه",max_length=12, default="", blank=True)
+    grades = models.ManyToManyField('Grade', null=True, blank=True , verbose_name="پایه")
     payments = models.ManyToManyField('Course', null=True, blank=True)
     is_superuser = models.BooleanField(default=False)
-    is_staff = models.BooleanField('staff status', default=True)
+    is_staff = models.BooleanField( default=True)
+    
+    class Meta:
+        verbose_name_plural = "کاربر"
 
     from accounts.managers import UserManager
     objects = UserManager()
@@ -53,70 +56,62 @@ class User(AbstractBaseUser, PermissionsMixin):
 # Roles Model
 class Role(models.Model):
     id = models.IntegerField(primary_key=True)
-    code = models.CharField(max_length=10)
-    title = models.CharField(max_length=30)
+    code = models.CharField("کد",max_length=10)
+    title = models.CharField("عنوان",max_length=30)
 
     def __str__(self):
         return self.title
+    class Meta:
+        verbose_name_plural = "نقش"
 
-
-# # Profile Models
-# class Profile(models.Model):
-#     id = models.IntegerField(primary_key= True)
-#     user = models.OneToOneField(User,on_delete=models.CASCADE)
-#     picture_id = models.URLField()
-#     gender = models.BooleanField ()
-#     biography = models.TextField()
-#     role_id = models.ForeignKey('Role',on_delete=models.DO_NOTHING)
-#     national_code = models.CharField(max_length=10,)
-#     address = models.CharField(max_length=255)
 
 class City(models.Model):
-    code = models.CharField(max_length=10, unique=True)
-    title = models.CharField(max_length=30)
+    code = models.CharField("کد",max_length=10, unique=True)
+    title = models.CharField("عنوان",max_length=30)
 
     def __str__(self):
         return self.title
+    class Meta:
+        verbose_name_plural = "شهر"
 
 
 # Grade Models
 class Grade(models.Model):
-    code = models.CharField(max_length=10)
-    title = models.CharField(max_length=30)
+    code = models.CharField("کد",max_length=10)
+    title = models.CharField("عنوان",max_length=30)
 
     def __str__(self):
         return self.title
+    
+    class Meta:
+        verbose_name_plural = "پایه"
 
-
-# Relational Model Between Profiles & Grades
-# class User_grade_relation(models.Model):
-#     user = models.ForeignKey(User ,on_delete=models.DO_NOTHING)
-#     grade = models.ForeignKey('Grade',on_delete=models.DO_NOTHING)
-#     unique_together = [['user', 'grade']]
 
 
 # Lesson Model
 class Lesson(models.Model):
-    code = models.CharField(max_length=10)
-    title = models.CharField(max_length=30)
-    grade = models.ForeignKey('Grade', on_delete=models.DO_NOTHING)
-    parent = models.ForeignKey('self', blank=True, null=True, on_delete=models.DO_NOTHING)
+    code = models.CharField("کد",max_length=10)
+    title = models.CharField("عنوان",max_length=30)
+    grade = models.ForeignKey('Grade', on_delete=models.DO_NOTHING,verbose_name="پایه")
+    parent = models.ForeignKey('self', blank=True, null=True, on_delete=models.DO_NOTHING,verbose_name="درس پدر")
     unique_together = [['title', 'grade']]
 
     def __str__(self):
         return self.title
-
+    
+    class Meta:
+        verbose_name_plural = "درس"
 
 # Course Model
 class Course(models.Model):
-    code = models.CharField(max_length=10)
-    title = models.CharField(max_length=30)
-    lesson = models.ForeignKey('Lesson', on_delete=models.DO_NOTHING)
-    teacher = models.ForeignKey(User, on_delete=models.DO_NOTHING)
-    start_date = models.DateTimeField(blank=True, null=True)
-    end_date = models.DateTimeField(blank=True, null=True)
-    amount = models.FloatField
-    url = models.URLField
+    code = models.CharField("کد",max_length=10)
+    title = models.CharField("عنوان",max_length=30)
+    lesson = models.ForeignKey('Lesson', on_delete=models.DO_NOTHING,verbose_name="درس")
+    teacher = models.ForeignKey(User, on_delete=models.DO_NOTHING,verbose_name="مدرس")
+    start_date = models.DateTimeField("تاریخ شروع",blank=True, null=True)
+    end_date = models.DateTimeField("تاریخ پایان",blank=True, null=True)
+    amount = models.FloatField("مبلغ",blank=True, null=True)
+    url = models.URLField("لینک",blank=True, null=True)
 
     class Meta:
         ordering = ['start_date']
@@ -132,13 +127,16 @@ class Course(models.Model):
             return True
         else:
             return False
+        
+    class Meta:
+        verbose_name_plural = "دوره"    
 
 
 # Course_Calendar Model
 class Course_Calendar(models.Model):
-    course = models.ForeignKey('Course', on_delete=models.DO_NOTHING)
-    start_date = models.DateTimeField(blank=True, null=True)
-    end_date = models.DateTimeField(blank=True, null=True)
+    course = models.ForeignKey('Course', on_delete=models.DO_NOTHING,verbose_name="دوره")
+    start_date = models.DateTimeField("تاریخ شروع",blank=True, null=True)
+    end_date = models.DateTimeField("تاریخ پایان",blank=True, null=True,)
 
     class Meta:
         ordering = ['start_date']
@@ -154,9 +152,9 @@ class Course_Calendar(models.Model):
             return True
         else:
             return False
+        
+    class Meta:
+        verbose_name_plural = "زمان برگزاری"    
 
-# Payments Model
-# class Payment(models.Model):
-#     course = models.ForeignKey('Course' ,null=False,on_delete=models.DO_NOTHING)
-#     user=models.ForeignKey(User ,null=False,on_delete=models.DO_NOTHING)
-#     unique_together = [['course', 'user']]
+
+

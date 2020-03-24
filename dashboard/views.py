@@ -52,16 +52,26 @@ def dashboard(request):
 # Edit Profile Page 
 def edit_profile(request):
     if request.method == 'POST':
-        form = ProfileForm(data=request.POST, instance=request.user)
-        if form.is_valid():
-            form.save()
-            return redirect('dashboard')
-        else:
-            form = ProfileForm()
-            return render(request, 'dashboard/profile_page.html', {'form': form, 'error': 'خطا در ثبت نام'})
+        if (request.POST.get("upload")):
+           avatar= request.FILES.get("avatar")
+           if (request.user.avatar):
+               request.user.avatar.delete()
+           request.user.avatar=avatar
+           request.user.save()
+           return redirect('dashboard')
+
+        else:   
+            form = ProfileForm(data=request.POST, instance=request.user)
+            if form.is_valid():
+                form.save()
+                return redirect('dashboard')
+            else:
+                form = ProfileForm()
+                return render(request, 'dashboard/profile_page.html', {'form': form, 'error': 'خطا در ثبت نام'})
     else:
         form = ProfileForm()
         return render(request, 'dashboard/profile_page.html', {'form': form})
+
 
 
 # Lessons Page
