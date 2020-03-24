@@ -59,7 +59,6 @@ def edit_profile(request):
                 form = ProfileForm()
                 return render(request, 'dashboard/profile_page.html', {'form': form, 'error': 'خطا در ثبت نام'})
     else:
-        print(request.method)
         form = ProfileForm()
         return render(request, 'dashboard/profile_page.html', {'form': form})
 
