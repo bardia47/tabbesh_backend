@@ -7,8 +7,10 @@ from pygments.lexers import get_all_lexers
 from pygments.styles import get_all_styles
 from django.template.defaultfilters import default
 import datetime
+import jdatetime
 
 LEXERS = [item for item in get_all_lexers() if item[1]]
+
 
 # Create your models here.
 
@@ -51,6 +53,10 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     def email_user(self, subject, message, from_email=None, **kwargs):
         send_mail(subject, message, from_email, [self.email], **kwargs)
+    
+    def date_joined_decorated(self):
+      print(self.date_joined)
+      return jdatetime.datetime.fromgregorian(datetime=self.date_joined).strftime("%a, %d %b %Y %H:%M:%S")
 
 
 # Roles Model
