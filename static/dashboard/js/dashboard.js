@@ -10,18 +10,21 @@ var Countdown = {
   init: function () {
     // DOM
     this.$ = {
+      days: this.$el.find(".bloc-time.days .figure"),
       hours: this.$el.find(".bloc-time.hours .figure"),
       minutes: this.$el.find(".bloc-time.min .figure"),
       seconds: this.$el.find(".bloc-time.sec .figure") };
 
     // Init countdown values
     this.values = {
+      days: this.$.days.parent().attr("data-init-value"),		
       hours: this.$.hours.parent().attr("data-init-value"),
       minutes: this.$.minutes.parent().attr("data-init-value"),
       seconds: this.$.seconds.parent().attr("data-init-value") };
 
     // Initialize total seconds
     this.total_seconds =
+    this.values.days*24 * 60 * 60 +	
     this.values.hours * 60 * 60 +
     this.values.minutes * 60 +
     this.values.seconds;
@@ -29,7 +32,7 @@ var Countdown = {
     this.count();
   },
   count: function () {
-    var that = this,$hour_1 = this.$.hours.eq(0),$hour_2 = this.$.hours.eq(1),$min_1 = this.$.minutes.eq(0),$min_2 = this.$.minutes.eq(1),$sec_1 = this.$.seconds.eq(0),$sec_2 = this.$.seconds.eq(1);
+    var that = this,$day_1 = this.$.days.eq(0),$day_2 = this.$.days.eq(1),$hour_1 = this.$.hours.eq(0),$hour_2 = this.$.hours.eq(1),$min_1 = this.$.minutes.eq(0),$min_2 = this.$.minutes.eq(1),$sec_1 = this.$.seconds.eq(0),$sec_2 = this.$.seconds.eq(1);
     this.countdown_interval = setInterval(function () {
       if (that.total_seconds > 0) {
         --that.values.seconds;
@@ -41,8 +44,13 @@ var Countdown = {
           that.values.minutes = 59;
           --that.values.hours;
         }
+        if (that.values.days >= 0 && that.values.hours < 0) {
+            that.values.hours = 24;
+            --that.values.days;
+          }
         // Update DOM values
         // Hours
+        that.checkHour(that.values.days, $day_1, $day_2);
         that.checkHour(that.values.hours, $hour_1, $hour_2);
         // Minutes
         that.checkHour(that.values.minutes, $min_1, $min_2);
