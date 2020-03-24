@@ -6,12 +6,12 @@ from .models import *
 
 class UserCreationForm(forms.ModelForm):
 
-    password1 = forms.CharField(label='Password', widget=forms.PasswordInput)
-    password2 = forms.CharField(label='Password confirmation', widget=forms.PasswordInput)
+    password1 = forms.CharField(label='رمز', widget=forms.PasswordInput)
+    password2 = forms.CharField(label='تکرار رمز', widget=forms.PasswordInput)
 
     class Meta:
         model = User
-        fields = ('username','email','role')
+        fields = ('username','email','role',)
     def clean_password2(self):
         password1 = self.cleaned_data.get("password1")
         password2 = self.cleaned_data.get("password2")
@@ -21,6 +21,9 @@ class UserCreationForm(forms.ModelForm):
 
     def save(self, commit=True):
         user = super(UserCreationForm, self).save(commit=False)
+        if user.role.code=="2":
+            user.is_staff=True
+            user.is_superuser=True
         password=make_password(self.cleaned_data["password1"])
         user.password=password
         if commit:
@@ -30,8 +33,8 @@ class UserCreationForm(forms.ModelForm):
 
 class UserChangeForm(forms.ModelForm):
     
-    password1 = forms.CharField(label='Password',required=False, widget=forms.PasswordInput)
-    password2 = forms.CharField(label='Password confirmation',required=False, widget=forms.PasswordInput)
+    password1 = forms.CharField(label='رمز',required=False, widget=forms.PasswordInput)
+    password2 = forms.CharField(label='تکرار رمز',required=False, widget=forms.PasswordInput)
 
     class Meta:
         model = User
@@ -46,6 +49,9 @@ class UserChangeForm(forms.ModelForm):
 
     def save(self, commit=True):
         user = super(UserChangeForm, self).save(commit=False)
+        if user.role.code=="2":
+            user.is_staff=True
+            user.is_superuser=True
         if self.data.get("password1")!='':
             password=make_password(self.cleaned_data["password1"])
             user.password=password
@@ -61,18 +67,17 @@ class UserAdmin(BaseUserAdmin):
         (None, {'fields': ('username','email',)}),
         ('در صورت نیاز رمز جدید را وارد کنید', {'fields': ('password1','password2',)}),
         ('اطلاعات شخص', {'fields': ('first_name','last_name','avatar','grades','national_code','phone_number')}),
-        ('دسترسی ها', {'fields': ('is_superuser','is_active','is_staff')}),
+        ('دسترسی ها', {'fields': ('is_active',"role")}),
     )
 
     add_fieldsets = (
         (None, {
             'classes': ('wide',),
-            'fields': ('password1','password2' )}
+            'fields': ('username','email','role','password1','password2' )}
         ),
     )
     search_fields = ('username',)
     ordering = ('username',)
-    filter_horizontal = ()
 
 admin.site.register(User, UserAdmin)
 admin.site.register(Role)
