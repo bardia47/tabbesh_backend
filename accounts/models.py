@@ -10,7 +10,6 @@ import datetime
 
 LEXERS = [item for item in get_all_lexers() if item[1]]
 
-
 # Create your models here.
 
 
@@ -28,7 +27,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     national_code = models.CharField("کد ملی", max_length=10)
     city = models.ForeignKey('City', blank=True, null=True, on_delete=models.DO_NOTHING, verbose_name="شهر")
     address = models.CharField("آدرس", max_length=255)
-    phone_number = models.CharField("تل�?ن همراه", max_length=12, default="", blank=True)
+    phone_number = models.CharField("تلفن همراه", max_length=12, default="", blank=True)
     grades = models.ManyToManyField('Grade', blank=True, verbose_name="پایه")
     payments = models.ManyToManyField('Course', blank=True)
     is_superuser = models.BooleanField(default=False)
@@ -137,13 +136,13 @@ class Course(models.Model):
 class Course_Calendar(models.Model):
     course = models.ForeignKey('Course', on_delete=models.DO_NOTHING, verbose_name="دوره")
     start_date = models.DateTimeField("تاریخ شروع", blank=True, null=True)
-    end_date = models.DateTimeField("تاریخ پایان", blank=True, null=True, )
+    end_date = models.DateTimeField("تاریخ پایان", blank=True, null=True,)
 
     class Meta:
         ordering = ['start_date']
+        verbose_name_plural = "زمان برگزاری"    
 
     def __str__(self):
-        verbose_name_plural = "زمان برگزاری"
         return self.course.title
 
     def is_class_active(self):
