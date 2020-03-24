@@ -26,34 +26,17 @@ def dashboard(request):
             courses = user.payments.order_by('course_calendar__end_date').distinct()
             next_course_calendar = courses[0].course_calendar_set.first()
 
-        calendar_time = next_course_calendar.start_date - now_utc
-        calendar_time_total_seconds = calendar_time.seconds
-        calendar_day = calendar_time.days
-        calendar_second = divmod(calendar_time_total_seconds, 60)[1]
-        calendar_time_total_minutes = divmod(calendar_time_total_seconds, 60)[0]
-        calendar_hour = divmod(calendar_time_total_minutes, 60)[0]
-        calendar_minute = divmod(calendar_time_total_minutes, 60)[1]
-        if calendar_day < 0:
-            calendar_day = 0
-            calendar_hour = 0
-            calendar_minute = 0
-            calendar_second = 0
+        class_time = next_course_calendar.start_date
 
         is_class_active = next_course_calendar.is_class_active
     else:
-        calendar_day = '-'
-        calendar_hour = '-'
-        calendar_minute = '-'
-        calendar_second = '-'
+        class_time = ''
         is_class_active = False
     # ------------------------------------------------------------------------------------------------------------------
 
     return render(request, 'dashboard/dashboard.html', {'now': now, 'courses': courses,
-                                                        'calendar_day': calendar_day,
-                                                        'calendar_hour': calendar_hour,
-                                                        'calendar_minute': calendar_minute,
-                                                        'calendar_second': calendar_second,
-                                                        'is_class_active': is_class_active})
+                                                        'class_time': class_time,
+                                                        'is_class_active':is_class_active})
 
 
 # Edit Profile Page 
@@ -76,6 +59,7 @@ def edit_profile(request):
                 form = ProfileForm()
                 return render(request, 'dashboard/profile_page.html', {'form': form, 'error': 'خطا در ثبت نام'})
     else:
+        print(request.method)
         form = ProfileForm()
         return render(request, 'dashboard/profile_page.html', {'form': form})
 
