@@ -22,8 +22,23 @@ roles needed in account_account {id=1,code='1',title='دانش آموز'}
 
 
 
-1398/01/02
+1399/01/02 - amirali
 polish " base.html, dashboard.html, dashboard/view.py, dashboard/url.py, accounts/models.py "  :  reformatting and whitespace handling
 modify "models.py, dashboard.html, base.html, view.py"
 متد های str به models.py اضافه شدن برای پنل ادمین.
 دوتا متد یکی برای اینکه ببینه کلاس در حال برگزاری هست یا نه و اون یکی برای اینکه ببینه دوره درس فعال هست یا نه اضافه شدن.
+
+
+1399/01/5 - amirali
+modify : "models.py, dashboard.html, base.html, view.py"
+- in "moodels.py" :
+payments and grades of User class can be null now.
+"Meta" class has added to Course and Course_Calendar for ordering
+"now" in "is_active_course" and "is_active_class" is calculating in utc now.
+__str__ method has added to Course_Calendar
+- in 'base.html' :
+checks if user's avatar exist shows that, else shows default avatar
+- in 'view.py' :
+تمام کلاس های یوزر به ترتیب پایان کلاس ها نشون داده میشه و اگه کلاس تموم بشه تایم کلاس آپدیت میشه برای روز بعدی که براش مقرر شده همچنین تقویم متناسب به اولین کلاس پیش روی کاربر تنظیم شده
+و فقط یه سری دستورات جاوا اسکریپت میخواد تا کامل بشه
+در تایمی که کلاس در حال اجرا شدن است یک مقدار ترو به متغیر مربوطه ارسال میشه تا لینک کلاس فعال بشه
