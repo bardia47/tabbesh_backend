@@ -27,7 +27,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     national_code = models.CharField("کد ملی", max_length=10)
     city = models.ForeignKey('City', blank=True, null=True, on_delete=models.DO_NOTHING, verbose_name="شهر")
     address = models.CharField("آدرس", max_length=255)
-    phone_number = models.CharField("تل�?ن همراه", max_length=12, default="", blank=True)
+    phone_number = models.CharField("تلفن همراه", max_length=12, default="", blank=True)
     grades = models.ManyToManyField('Grade', blank=True , verbose_name="پایه")
     payments = models.ManyToManyField('Course', blank=True)
     is_superuser = models.BooleanField(default=False)
