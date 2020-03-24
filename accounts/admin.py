@@ -4,14 +4,15 @@ from django import forms
 from django.contrib.auth.hashers import make_password
 from .models import *
 
-class UserCreationForm(forms.ModelForm):
 
+class UserCreationForm(forms.ModelForm):
     password1 = forms.CharField(label='رمز', widget=forms.PasswordInput)
     password2 = forms.CharField(label='تکرار رمز', widget=forms.PasswordInput)
 
     class Meta:
         model = User
-        fields = ('username','email','role',)
+        fields = ('username', 'email', 'role',)
+
     def clean_password2(self):
         password1 = self.cleaned_data.get("password1")
         password2 = self.cleaned_data.get("password2")
@@ -21,24 +22,26 @@ class UserCreationForm(forms.ModelForm):
 
     def save(self, commit=True):
         user = super(UserCreationForm, self).save(commit=False)
-        if user.role.code=="2":
-            user.is_staff=True
-            user.is_superuser=True
-        password=make_password(self.cleaned_data["password1"])
-        user.password=password
+        if user.role.code == "2":
+            user.is_staff = True
+            user.is_superuser = True
+        password = make_password(self.cleaned_data["password1"])
+        user.password = password
         if commit:
             user.save()
         return user
 
 
 class UserChangeForm(forms.ModelForm):
-    
-    password1 = forms.CharField(label='رمز',required=False, widget=forms.PasswordInput)
-    password2 = forms.CharField(label='تکرار رمز',required=False, widget=forms.PasswordInput)
+    password1 = forms.CharField(label='رمز', required=False, widget=forms.PasswordInput)
+    password2 = forms.CharField(label='تکرار رمز', required=False, widget=forms.PasswordInput)
 
     class Meta:
         model = User
-        fields = ('username','role','email','city', 'grades', 'avatar', 'first_name' , 'last_name' , 'national_code' , 'address', 'gender', 'phone_number')
+        fields = (
+            'username', 'role', 'email', 'city', 'grades', 'avatar', 'first_name', 'last_name', 'national_code',
+            'address',
+            'gender', 'phone_number')
 
     def clean_password2(self):
         password1 = self.data.get("password1")
@@ -49,35 +52,37 @@ class UserChangeForm(forms.ModelForm):
 
     def save(self, commit=True):
         user = super(UserChangeForm, self).save(commit=False)
-        if user.role.code=="2":
-            user.is_staff=True
-            user.is_superuser=True
-        if self.data.get("password1")!='':
-            password=make_password(self.cleaned_data["password1"])
-            user.password=password
+        if user.role.code == "2":
+            user.is_staff = True
+            user.is_superuser = True
+        if self.data.get("password1") != '':
+            password = make_password(self.cleaned_data["password1"])
+            user.password = password
         if commit:
             user.save()
         return user
+
 
 class UserAdmin(BaseUserAdmin):
     form = UserChangeForm
     add_form = UserCreationForm
     list_display = ('username', 'email', 'is_active')
     fieldsets = (
-        (None, {'fields': ('username','email',)}),
-        ('در صورت نیاز رمز جدید را وارد کنید', {'fields': ('password1','password2',)}),
-        ('اطلاعات شخص', {'fields': ('first_name','last_name','avatar','grades','national_code','phone_number')}),
-        ('دسترسی ها', {'fields': ('is_active',"role")}),
+        (None, {'fields': ('username', 'email',)}),
+        ('در صورت نیاز رمز جدید را وارد کنید', {'fields': ('password1', 'password2',)}),
+        ('اطلاعات شخص', {'fields': ('first_name', 'last_name', 'avatar', 'grades', 'national_code', 'phone_number')}),
+        ('دسترسی ها', {'fields': ('is_active', "role")}),
     )
 
     add_fieldsets = (
         (None, {
             'classes': ('wide',),
-            'fields': ('username','email','role','password1','password2' )}
-        ),
+            'fields': ('username', 'email', 'role', 'password1', 'password2')}
+         ),
     )
     search_fields = ('username',)
     ordering = ('username',)
+
 
 admin.site.register(User, UserAdmin)
 admin.site.register(Role)
@@ -86,10 +91,3 @@ admin.site.register(Grade)
 admin.site.register(Lesson)
 admin.site.register(Course)
 admin.site.register(Course_Calendar)
-
-
-
-
-
-
-

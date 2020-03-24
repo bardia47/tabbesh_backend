@@ -10,6 +10,7 @@ import datetime
 
 LEXERS = [item for item in get_all_lexers() if item[1]]
 
+
 # Create your models here.
 
 
@@ -28,11 +29,11 @@ class User(AbstractBaseUser, PermissionsMixin):
     city = models.ForeignKey('City', blank=True, null=True, on_delete=models.DO_NOTHING, verbose_name="شهر")
     address = models.CharField("آدرس", max_length=255)
     phone_number = models.CharField("تل�?ن همراه", max_length=12, default="", blank=True)
-    grades = models.ManyToManyField('Grade', blank=True , verbose_name="پایه")
+    grades = models.ManyToManyField('Grade', blank=True, verbose_name="پایه")
     payments = models.ManyToManyField('Course', blank=True)
     is_superuser = models.BooleanField(default=False)
     is_staff = models.BooleanField(default=True)
-    
+
     class Meta:
         verbose_name_plural = "کاربر"
 
@@ -84,7 +85,7 @@ class Grade(models.Model):
 
     def __str__(self):
         return self.title
-    
+
     class Meta:
         verbose_name_plural = "پایه"
 
@@ -99,7 +100,7 @@ class Lesson(models.Model):
 
     def __str__(self):
         return self.title
-    
+
     class Meta:
         verbose_name_plural = "درس"
 
@@ -117,7 +118,7 @@ class Course(models.Model):
 
     class Meta:
         ordering = ['start_date']
-        verbose_name_plural = "دوره"    
+        verbose_name_plural = "دوره"
 
     def __str__(self):
         return self.title
@@ -130,21 +131,20 @@ class Course(models.Model):
             return True
         else:
             return False
-        
 
 
 # Course_Calendar Model
 class Course_Calendar(models.Model):
     course = models.ForeignKey('Course', on_delete=models.DO_NOTHING, verbose_name="دوره")
     start_date = models.DateTimeField("تاریخ شروع", blank=True, null=True)
-    end_date = models.DateTimeField("تاریخ پایان", blank=True, null=True,)
+    end_date = models.DateTimeField("تاریخ پایان", blank=True, null=True, )
 
     class Meta:
         ordering = ['start_date']
 
     def __str__(self):
+        verbose_name_plural = "زمان برگزاری"
         return self.course.title
-        verbose_name_plural = "زمان برگزاری"    
 
     def is_class_active(self):
         now = datetime.datetime.now(pytz.utc)
@@ -154,5 +154,3 @@ class Course_Calendar(models.Model):
             return True
         else:
             return False
-        
-

@@ -1,233 +1,241 @@
 <!DOCTYPE html>
 <html lang="en" dir="rtl">
-   {% load static %}
-   <head>
-      <meta charset="utf-8">
-      <meta name="viewport" content="width=width-device, initial-scale=1">
-      <!-- CSS Files -->
-      <link rel="stylesheet" type="text/css" href="{% static "home/css/fonts.css" %}">
-      <link rel="stylesheet" href="https://cdn.rtlcss.com/bootstrap/v4.2.1/css/bootstrap.min.css" integrity="sha384-vus3nQHTD+5mpDiZ4rkEPlnkcyTP+49BhJ4wJeJunw06ZAp+wzzeBPUXr42fi8If" crossorigin="anonymous">
-      <link rel="stylesheet" type="text/css" href="{% static "home/css/style.css" %}">
-      <title></title>
-   </head>
-   <body>
-      <!-- Header -->
-      <header class="header" >
-         <!-- Navbar -->
-         <nav class="navbar navbar-expand-lg navbar-light navbar-custom ">
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+{% load static %}
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=width-device, initial-scale=1">
+    <!-- CSS Files -->
+    <link rel="stylesheet" type="text/css" href="{% static "home/css/fonts.css" %}">
+    <link rel="stylesheet" href="https://cdn.rtlcss.com/bootstrap/v4.2.1/css/bootstrap.min.css"
+          integrity="sha384-vus3nQHTD+5mpDiZ4rkEPlnkcyTP+49BhJ4wJeJunw06ZAp+wzzeBPUXr42fi8If" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="{% static "home/css/style.css" %}">
+    <title></title>
+</head>
+<body>
+<!-- Header -->
+<header class="header">
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-light navbar-custom ">
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-               <ul class="navbar-nav mr-auto">
-                  <li class="nav-item active">
-                     <a class="nav-link text-white" href="#">خانه <span class="sr-only">(current)</span></a>
-                  </li>
-                  <li class="nav-item">
-                     <a class="nav-link text-white" href="#">اخبار</a>
-                  </li>
-                  <li class="nav-item">
-                     <a class="nav-link text-white" href="#" tabindex="-1" aria-disabled="true">درباره ی ما</a>
-                  </li>
-               </ul>
-            </div>
-         </nav>
-         <div class="poster">
-            <div class="header-overlay">
-               <div class="container header-container">
-                  <div class="row">
-                     <div class="col-md-12">
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item active">
+                    <a class="nav-link text-white" href="#">خانه <span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white" href="#">اخبار</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white" href="#" tabindex="-1" aria-disabled="true">درباره ی ما</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    <div class="poster">
+        <div class="header-overlay">
+            <div class="container header-container">
+                <div class="row">
+                    <div class="col-md-12">
                         <!-- Text & Descriptions -->
                         <div class="header-text">
-                           <h1>همین امروز پیشگامی شو</h1>
-                           <p> در صورت داشتن حساب وارد شوید </p>
+                            <h1>همین امروز پیشگامی شو</h1>
+                            <p> در صورت داشتن حساب وارد شوید </p>
                         </div>
                         <div class="header-btns">
-                           <!-- Buttons -->
-                           <a class="btn btn-signup" href="{% url 'signup'%}"> ثبت نام </a>
-                           <a class="btn btn-login" href="{% url 'signin'%}">ورود</a>
+                            <!-- Buttons -->
+                            <a class="btn btn-signup" href="{% url 'signup' %}"> ثبت نام </a>
+                            <a class="btn btn-login" href="{% url 'signin' %}">ورود</a>
                         </div>
-                     </div>
-                  </div>
-               </div>
+                    </div>
+                </div>
             </div>
-         </div>
-         </div>
-      </header>
-      <!-- Posts -->
-      <section>
-         <div class="container">
-            <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
-               <ol class="carousel-indicators">
-                  <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
-                  <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
-                  <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
-               </ol>
-               <div class="carousel-inner">
-                  <div class="carousel-item active">
-                     <div class="row">
-                     <!-- 1 -->
+        </div>
+    </div>
+    </div>
+</header>
+<!-- Posts -->
+<section>
+    <div class="container">
+        <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
+            <ol class="carousel-indicators">
+                <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
+                <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
+                <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
+            </ol>
+            <div class="carousel-inner">
+                <div class="carousel-item active">
+                    <div class="row">
+                        <!-- 1 -->
                         <div class="col-sm-6 col-md-4 col-lg-3 mt-4">
-                           <div class="card">
-                              <img class="card-img-top" src="https://picsum.photos/200/150/?random">
-                              <div class="card-block">
-                                 <figure class="profile">
-                                    <img src="https://picsum.photos/200/150/?random" class="profile-avatar" alt="">
-                                 </figure>
-                                 <h4 class="card-title mt-3">هوش و خلاقیت ششم</h4>
-                                 <div class="meta">
-                                    <a>پایه ی ششم</a>
-                                 </div>
-                                 <div class="card-text">
-                                    درس هوش و خلاقیت ششم با آقای صابر دلاوری 
-                                 </div>
-                              </div>
-                              <div class="card-footer">
-                                 <small>تا پایان آذر ماه</small>
-                                 <button class="btn btn-secondary float-right btn-sm">خرید دوره</button>
-                              </div>
-                           </div>
+                            <div class="card">
+                                <img class="card-img-top" src="https://picsum.photos/200/150/?random">
+                                <div class="card-block">
+                                    <figure class="profile">
+                                        <img src="https://picsum.photos/200/150/?random" class="profile-avatar" alt="">
+                                    </figure>
+                                    <h4 class="card-title mt-3">هوش و خلاقیت ششم</h4>
+                                    <div class="meta">
+                                        <a>پایه ی ششم</a>
+                                    </div>
+                                    <div class="card-text">
+                                        درس هوش و خلاقیت ششم با آقای صابر دلاوری
+                                    </div>
+                                </div>
+                                <div class="card-footer">
+                                    <small>تا پایان آذر ماه</small>
+                                    <button class="btn btn-secondary float-right btn-sm">خرید دوره</button>
+                                </div>
+                            </div>
                         </div>
                         <!-- 2 -->
                         <div class="col-sm-6 col-md-4 col-lg-3 mt-4">
-                           <div class="card">
-                              <img class="card-img-top" src="https://picsum.photos/200/150/?random">
-                              <div class="card-block">
-                                 <figure class="profile">
-                                    <img src="https://picsum.photos/200/150/?random" class="profile-avatar" alt="">
-                                 </figure>
-                                 <h4 class="card-title mt-3">Tawshif Ahsan Khan</h4>
-                                 <div class="meta">
-                                    <a>Friends</a>
-                                 </div>
-                                 <div class="card-text">
-                                    Tawshif is a web designer living in Bangladesh.
-                                 </div>
-                              </div>
-                              <div class="card-footer">
-                                 <small>Last updated 3 mins ago</small>
-                                 <button class="btn btn-secondary float-right btn-sm">show</button>
-                              </div>
-                           </div>
+                            <div class="card">
+                                <img class="card-img-top" src="https://picsum.photos/200/150/?random">
+                                <div class="card-block">
+                                    <figure class="profile">
+                                        <img src="https://picsum.photos/200/150/?random" class="profile-avatar" alt="">
+                                    </figure>
+                                    <h4 class="card-title mt-3">Tawshif Ahsan Khan</h4>
+                                    <div class="meta">
+                                        <a>Friends</a>
+                                    </div>
+                                    <div class="card-text">
+                                        Tawshif is a web designer living in Bangladesh.
+                                    </div>
+                                </div>
+                                <div class="card-footer">
+                                    <small>Last updated 3 mins ago</small>
+                                    <button class="btn btn-secondary float-right btn-sm">show</button>
+                                </div>
+                            </div>
                         </div>
                         <!-- 3 -->
                         <div class="col-sm-6 col-md-4 col-lg-3 mt-4">
-                           <div class="card">
-                              <img class="card-img-top" src="https://picsum.photos/200/150/?random">
-                              <div class="card-block">
-                                 <figure class="profile">
-                                    <img src="https://picsum.photos/200/150/?random" class="profile-avatar" alt="">
-                                 </figure>
-                                 <h4 class="card-title mt-3">Tawshif Ahsan Khan</h4>
-                                 <div class="meta">
-                                    <a>Friends</a>
-                                 </div>
-                                 <div class="card-text">
-                                    Tawshif is a web designer living in Bangladesh.
-                                 </div>
-                              </div>
-                              <div class="card-footer">
-                                 <small>Last updated 3 mins ago</small>
-                                 <button class="btn btn-secondary float-right btn-sm">show</button>
-                              </div>
-                           </div>
+                            <div class="card">
+                                <img class="card-img-top" src="https://picsum.photos/200/150/?random">
+                                <div class="card-block">
+                                    <figure class="profile">
+                                        <img src="https://picsum.photos/200/150/?random" class="profile-avatar" alt="">
+                                    </figure>
+                                    <h4 class="card-title mt-3">Tawshif Ahsan Khan</h4>
+                                    <div class="meta">
+                                        <a>Friends</a>
+                                    </div>
+                                    <div class="card-text">
+                                        Tawshif is a web designer living in Bangladesh.
+                                    </div>
+                                </div>
+                                <div class="card-footer">
+                                    <small>Last updated 3 mins ago</small>
+                                    <button class="btn btn-secondary float-right btn-sm">show</button>
+                                </div>
+                            </div>
                         </div>
                         <!-- 4 -->
                         <div class="col-sm-6 col-md-4 col-lg-3 mt-4">
-                           <div class="card">
-                              <img class="card-img-top" src="https://picsum.photos/200/150/?random">
-                              <div class="card-block">
-                                 <figure class="profile">
-                                    <img src="https://picsum.photos/200/150/?random" class="profile-avatar" alt="">
-                                 </figure>
-                                 <h4 class="card-title mt-3">Tawshif Ahsan Khan</h4>
-                                 <div class="meta">
-                                    <a>Friends</a>
-                                 </div>
-                                 <div class="card-text">
-                                    Tawshif is a web designer living in Bangladesh.
-                                 </div>
-                              </div>
-                              <div class="card-footer">
-                                 <small>Last updated 3 mins ago</small>
-                                 <button class="btn btn-secondary float-right btn-sm">show</button>
-                              </div>
-                           </div>
+                            <div class="card">
+                                <img class="card-img-top" src="https://picsum.photos/200/150/?random">
+                                <div class="card-block">
+                                    <figure class="profile">
+                                        <img src="https://picsum.photos/200/150/?random" class="profile-avatar" alt="">
+                                    </figure>
+                                    <h4 class="card-title mt-3">Tawshif Ahsan Khan</h4>
+                                    <div class="meta">
+                                        <a>Friends</a>
+                                    </div>
+                                    <div class="card-text">
+                                        Tawshif is a web designer living in Bangladesh.
+                                    </div>
+                                </div>
+                                <div class="card-footer">
+                                    <small>Last updated 3 mins ago</small>
+                                    <button class="btn btn-secondary float-right btn-sm">show</button>
+                                </div>
+                            </div>
                         </div>
-                     </div>
-                  </div>
-               </div>
-               <!-- Post Two -->
-               <div class="carousel-item">
-                  <div class="row">
-                  </div>
-               </div>
-               <!-- Post 3 -->
-               <div class="carousel-item">
-                  <div class="row">
-                  </div>
-               </div>
+                    </div>
+                </div>
             </div>
-         </div>
-      </section>
-      <!-- About us -->
-      <!--
-         <div class="container about-us-container">
-         
-           <div class="row">
-         
-             <div class="col-md-12 about-us-title">
-         
-                 <h1>درباره ما</h1>
-         
-             </div>
-         
-           </div>
-         
-           <div class="row">
-         
-             <div class="col-md-6">
-         
-               <div class="col-md-1 icon">
-         
-         
-               </div>
-               <div class="col-md-5">
-         
-                 <p>توضیحات درباره ی ما</p>
-         
-               </div>
-         
-             </div>
-         
-         
-             <div class="col-md-6">
-         
-         
-         
-             </div>
-         
-         
-         
-         
-           </div>
-         
-         
-         </div>
-         -->
-      <!-- Footer -->
-      <footer class="page-footer font-small blue">
-
-        <!-- Copyright -->
-        <div class="footer-copyright text-center py-3" dir = 'ltr'>© 1398 Copyright: Tetha Team
+            <!-- Post Two -->
+            <div class="carousel-item">
+                <div class="row">
+                </div>
+            </div>
+            <!-- Post 3 -->
+            <div class="carousel-item">
+                <div class="row">
+                </div>
+            </div>
         </div>
-        <!-- Copyright -->
+    </div>
+</section>
+<!-- About us -->
+<!--
+   <div class="container about-us-container">
 
-      </footer>
-      <!-- Footer -->
-      <!-- Bootstrap & JQuery -->
-      <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-      <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
-      <script src="https://cdn.rtlcss.com/bootstrap/v4.2.1/js/bootstrap.min.js" integrity="sha384-a9xOd0rz8w0J8zqj1qJic7GPFfyMfoiuDjC9rqXlVOcGO/dmRqzMn34gZYDTel8k" crossorigin="anonymous"></script>
-   </body>
+     <div class="row">
+
+       <div class="col-md-12 about-us-title">
+
+           <h1>درباره ما</h1>
+
+       </div>
+
+     </div>
+
+     <div class="row">
+
+       <div class="col-md-6">
+
+         <div class="col-md-1 icon">
+
+
+         </div>
+         <div class="col-md-5">
+
+           <p>توضیحات درباره ی ما</p>
+
+         </div>
+
+       </div>
+
+
+       <div class="col-md-6">
+
+
+
+       </div>
+
+
+
+
+     </div>
+
+
+   </div>
+   -->
+<!-- Footer -->
+<footer class="page-footer font-small blue">
+
+    <!-- Copyright -->
+    <div class="footer-copyright text-center py-3" dir='ltr'>© 1398 Copyright: Tetha Team
+    </div>
+    <!-- Copyright -->
+
+</footer>
+<!-- Footer -->
+<!-- Bootstrap & JQuery -->
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js"
+        integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
+        crossorigin="anonymous"></script>
+<script src="https://cdn.rtlcss.com/bootstrap/v4.2.1/js/bootstrap.min.js"
+        integrity="sha384-a9xOd0rz8w0J8zqj1qJic7GPFfyMfoiuDjC9rqXlVOcGO/dmRqzMn34gZYDTel8k"
+        crossorigin="anonymous"></script>
+</body>
 </html>

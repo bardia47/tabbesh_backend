@@ -1,34 +1,34 @@
-{% extends 'dashboard/base.html'%}
+{% extends 'dashboard/base.html' %}
 {% block content %}
-{% load static %}
-<link rel="stylesheet" href="{% static 'dashboard/css/lessons.css'%}">
-<!-- Post Rows -->
-{% for i in '1234'|make_list %}
-<div class = "row">
-    <!-- Post Cards -->
-   {% for i in '1234'|make_list %}
-   <div class="col-sm-6 col-md-4 col-lg-3 mt-4">
-      <div class="card">
-         <img class="card-img-top" src="{% static "dashboard/images/lessons.jpg"%}">
-         <div class="card-block">
-            <figure class="profile">
-               <img src="{% static "dashboard/images/profile.jpg"%}" class="profile-avatar" alt="">
-            </figure>
-            <h4 class="card-title mt-3">شیمی دهم</h4>
-            <div class="meta">
-               <a>پایه ی دهم</a>
-            </div>
-            <div class="card-text">
-               🥉شیمی دهم با مهدی شهبازی دارنده مدال برنز المپیاد شیمی
-            </div>
-         </div>
-         <div class="card-footer">
-            <small>تا پایان آذر ماه</small>
-            <button class="btn btn-secondary float-right btn-sm">خرید دوره</button>
-         </div>
-      </div>
-   </div>
-   {% endfor %}
-</div>
-{% endfor %}
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'dashboard/css/lessons.css' %}">
+    <!-- Post Rows -->
+    {% for i in '1234'|make_list %}
+        <div class="row">
+            <!-- Post Cards -->
+            {% for i in '1234'|make_list %}
+                <div class="col-sm-6 col-md-4 col-lg-3 mt-4">
+                    <div class="card">
+                        <img class="card-img-top" src="{% static "dashboard/images/lessons.jpg" %}">
+                        <div class="card-block">
+                            <figure class="profile">
+                                <img src="{% static "dashboard/images/profile.jpg" %}" class="profile-avatar" alt="">
+                            </figure>
+                            <h4 class="card-title mt-3">شیمی دهم</h4>
+                            <div class="meta">
+                                <a>پایه ی دهم</a>
+                            </div>
+                            <div class="card-text">
+                                🥉شیمی دهم با مهدی شهبازی دارنده مدال برنز المپیاد شیمی
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            <small>تا پایان آذر ماه</small>
+                            <button class="btn btn-secondary float-right btn-sm">خرید دوره</button>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% endfor %}
 {% endblock %}
