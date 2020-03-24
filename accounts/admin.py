@@ -3,7 +3,6 @@ from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django import forms
 from django.contrib.auth.hashers import make_password
 from .models import *
-from rest_framework.fields import ReadOnlyField
 
 
 class UserCreationForm(forms.ModelForm):
