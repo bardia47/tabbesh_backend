@@ -3,6 +3,7 @@ from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django import forms
 from django.contrib.auth.hashers import make_password
 from .models import *
+from rest_framework.fields import ReadOnlyField
 
 
 class UserCreationForm(forms.ModelForm):
@@ -33,15 +34,20 @@ class UserCreationForm(forms.ModelForm):
 
 
 class UserChangeForm(forms.ModelForm):
+    GENDERS = [(True, "پسر"), (False, "دختر")]
     password1 = forms.CharField(label='رمز', required=False, widget=forms.PasswordInput)
     password2 = forms.CharField(label='تکرار رمز', required=False, widget=forms.PasswordInput)
+    gender = forms.ChoiceField(choices=GENDERS, label="جنسیت" , initial='', widget=forms.Select(), required=True)
 
     class Meta:
         model = User
         fields = (
             'username', 'role', 'email', 'city', 'grades', 'avatar', 'first_name', 'last_name', 'national_code',
             'address',
-            'gender', 'phone_number')
+            'gender', 'phone_number', 'payments')
+        labels = {
+            'date_joined_decorated': "تاریخ عضویت",
+        }
 
     def clean_password2(self):
         password1 = self.data.get("password1")
@@ -64,14 +70,20 @@ class UserChangeForm(forms.ModelForm):
 
 
 class UserAdmin(BaseUserAdmin):
+
+    readonly_fields = ('date_joined_decorated',)
+    
     form = UserChangeForm
     add_form = UserCreationForm
     list_display = ('username', 'email', 'is_active')
+    
     fieldsets = (
-        (None, {'fields': ('username', 'email',)}),
+        (None, {'fields': ('username', 'email', 'date_joined_decorated')}),
         ('در صورت نیاز رمز جدید را وارد کنید', {'fields': ('password1', 'password2',)}),
-        ('اطلاعات شخص', {'fields': ('first_name', 'last_name', 'avatar', 'grades', 'national_code', 'phone_number')}),
+     ('اطلاعات شخص', {'fields': ('first_name', 'last_name', 'avatar', 'grades', 'national_code', 'phone_number', 'address', 'city', 'gender')}),
         ('دسترسی ها', {'fields': ('is_active', "role")}),
+        ('پرداختی ها', {'fields': ('payments',)}),
+
     )
 
     add_fieldsets = (
