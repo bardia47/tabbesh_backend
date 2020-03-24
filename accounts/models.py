@@ -27,8 +27,8 @@ class User(AbstractBaseUser, PermissionsMixin):
     city = models.ForeignKey('City', blank=True, null=True, on_delete=models.DO_NOTHING,verbose_name="شهر")
     address = models.CharField("آدرس",max_length=255)
     phone_number = models.CharField("تلفن همراه",max_length=12, default="", blank=True)
-    grades = models.ManyToManyField('Grade',verbose_name="پایه")
-    payments = models.ManyToManyField('Course', blank=True)
+    grades = models.ManyToManyField('Grade', null=True, blank=True , verbose_name="پایه")
+    payments = models.ManyToManyField('Course', null=True, blank=True)
     is_superuser = models.BooleanField(default=False)
     is_staff = models.BooleanField( default=True)
     
