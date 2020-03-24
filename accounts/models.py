@@ -1,3 +1,4 @@
+import pytz
 from django.db import models
 from django.core.mail import send_mail
 from django.contrib.auth.base_user import AbstractBaseUser
@@ -112,11 +113,14 @@ class Course(models.Model):
     amount = models.FloatField("مبلغ",blank=True, null=True)
     url = models.URLField("لینک",blank=True, null=True)
 
+    class Meta:
+        ordering = ['start_date']
+
     def __str__(self):
         return self.title
 
     def is_course_active(self):
-        now = datetime.datetime.now()
+        now = datetime.datetime.now(pytz.utc)
         a = now - self.start_date
         b = now - self.end_date
         if a.total_seconds() >= 0 and b.total_seconds() < 0:
@@ -134,8 +138,14 @@ class Course_Calendar(models.Model):
     start_date = models.DateTimeField("تاریخ شروع",blank=True, null=True)
     end_date = models.DateTimeField("تاریخ پایان",blank=True, null=True,)
 
+    class Meta:
+        ordering = ['start_date']
+
+    def __str__(self):
+        return self.course.title
+
     def is_class_active(self):
-        now = datetime.datetime.now()
+        now = datetime.datetime.now(pytz.utc)
         a = now - self.start_date
         b = now - self.end_date
         if a.total_seconds() >= 0 and b.total_seconds() < 0:
