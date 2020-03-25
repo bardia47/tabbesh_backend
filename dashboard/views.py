@@ -20,14 +20,9 @@ def dashboard(request):
         next_course_calendar = courses[0].course_calendar_set.first()
         if next_course_calendar.end_date < now_utc:
             next_course_calendar.end_date += datetime.timedelta(days=7)
-            next_course_calendar.save()
             next_course_calendar.start_date += datetime.timedelta(days=7)
             next_course_calendar.save()
-            courses = user.payments.order_by('course_calendar__end_date').distinct()
-            next_course_calendar = courses[0].course_calendar_set.first()
-
         class_time = next_course_calendar.start_date
-
         is_class_active = next_course_calendar.is_class_active
     else:
         class_time = ''
@@ -35,7 +30,7 @@ def dashboard(request):
     # ------------------------------------------------------------------------------------------------------------------
 
     return render(request, 'dashboard/dashboard.html', {'now': now, 'courses': courses,
-                                                        'class_time': class_time,
+                                                        'class_time': class_time-now_utc,
                                                         'is_class_active':is_class_active})
 
 
