@@ -27,13 +27,14 @@ def dashboard(request):
 
         class_time = next_course_calendar.start_date
         is_class_active = next_course_calendar.is_class_active
+        class_time = class_time - now_utc
     else:
         class_time = ''
         is_class_active = False
     # ------------------------------------------------------------------------------------------------------------------
 
     return render(request, 'dashboard/dashboard.html', {'now': now, 'courses': courses,
-                                                        'class_time': class_time-now_utc,
+                                                        'class_time': class_time,
                                                         'is_class_active':is_class_active})
 
 
