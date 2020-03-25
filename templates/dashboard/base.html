@@ -40,10 +40,10 @@
                                                        style="margin-left:20px; margin-right:20px"></i> داشبورد </a>
                 </li>
                 <li>
-                    <a href="#"><i class="fas fa-book" style="margin-left:20px; margin-right:20px"></i> دروس من </a>
+                    <a href="{% url 'lessons' %}"><i class="fas fa-book" style="margin-left:20px; margin-right:20px"></i> دروس من </a>
                 </li>
                 <li>
-                    <a href="{% url 'lessons' %}"><i class="fas fa-shopping-basket"
+                    <a href="{% url 'shopping' %}"><i class="fas fa-shopping-basket"
                                                      style="margin-left:20px; margin-right:20px"></i>خرید درس</a>
                 </li>
             </ul>
@@ -111,7 +111,7 @@
 
 <!-- JS style -->
 <script type="text/javascript" src="{% static 'dashboard/js/dashboard.js' %}"></script>
-
+<script src="{% static 'dashboard/js/shopping.js' %}"
 <script type="text/javascript">
     $(document).ready(function () {
         $("#sidebarCollapse").click(function () {

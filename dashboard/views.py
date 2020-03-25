@@ -22,7 +22,8 @@ def dashboard(request):
             next_course_calendar.end_date += datetime.timedelta(days=7)
             next_course_calendar.start_date += datetime.timedelta(days=7)
             next_course_calendar.save()
-            courses = user.payments.order_by('course_calendar__end_date').distinct()
+            courses = user.payments.order_by(
+                'course_calendar__end_date').distinct()
             next_course_calendar = courses[0].course_calendar_set.first()
 
         class_time = next_course_calendar.start_date
@@ -35,10 +36,10 @@ def dashboard(request):
 
     return render(request, 'dashboard/dashboard.html', {'now': now, 'courses': courses,
                                                         'class_time': class_time,
-                                                        'is_class_active':is_class_active})
+                                                        'is_class_active': is_class_active})
 
 
-# Edit Profile Page 
+# Edit Profile Page
 def edit_profile(request):
     if request.method == 'POST':
         if request.POST.get("upload"):
@@ -65,3 +66,9 @@ def edit_profile(request):
 # Lessons Page
 def lessons(request):
     return render(request, 'dashboard/lessons.html')
+
+# Shopping Page
+
+
+def shopping(request):
+    return render(request, 'dashboard/shopping.html')
