@@ -47,3 +47,5 @@ checks if user's avatar exist shows that, else shows default avatar
 مرج با نسخه امیرعلی
 تغییرات من --پاک کردن عکس پروفایل قبلی در صورت جایگزینی ، فارسی سازی ادمین
 تغییرات من -تغییر تقویم داشبورد و واگذاری کارهای بک اند تا جای ممکن به js
+تغییر صفحه ادمین و افزودن تقویم فارسی
+pip install django-jalali-date   
