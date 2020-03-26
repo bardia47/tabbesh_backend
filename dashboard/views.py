@@ -65,10 +65,11 @@ def edit_profile(request):
 
 # Lessons Page
 def lessons(request):
-    return render(request, 'dashboard/lessons.html')
+    user = get_object_or_404(User, pk=request.user.id)
+    courses = user.payments.all()
+    return render(request, 'dashboard/lessons.html', {'courses': courses})
+
 
 # Shopping Page
-
-
 def shopping(request):
     return render(request, 'dashboard/shopping.html')
