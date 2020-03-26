@@ -49,3 +49,4 @@ checks if user's avatar exist shows that, else shows default avatar
 تغییرات من -تغییر تقویم داشبورد و واگذاری کارهای بک اند تا جای ممکن به js
 تغییر صفحه ادمین و افزودن تقویم فارسی
 pip install django-jalali-date   
+فارسی سازی تقویم تمام شد
