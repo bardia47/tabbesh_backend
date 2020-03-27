@@ -122,7 +122,7 @@ class Course(models.Model):
     amount = models.FloatField("مبلغ", blank=True, null=True)
     url = models.URLField("لینک", blank=True, null=True)
     image = models.ImageField(upload_to='courses_image/', null=True, blank=True)
-    description = models.CharField(null=True, blank=True)
+    description = models.TextField(null=True, blank=True)
 
     class Meta:
         ordering = ['start_date']
