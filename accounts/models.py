@@ -39,6 +39,7 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     class Meta:
         verbose_name_plural = "کاربر"
+        verbose_name = "کاربر"
 
     from accounts.managers import UserManager
     objects = UserManager()
@@ -72,6 +73,7 @@ class Role(models.Model):
 
     class Meta:
         verbose_name_plural = "نقش"
+        verbose_name = "نقش"
 
 
 class City(models.Model):
@@ -83,6 +85,7 @@ class City(models.Model):
 
     class Meta:
         verbose_name_plural = "شهر"
+        verbose_name = "شهر"
 
 
 # Grade Models
@@ -95,6 +98,7 @@ class Grade(models.Model):
 
     class Meta:
         verbose_name_plural = "پایه"
+        verbose_name = "پایه"
 
 
 # Lesson Model
@@ -110,6 +114,7 @@ class Lesson(models.Model):
 
     class Meta:
         verbose_name_plural = "درس"
+        verbose_name = "درس"
 
 
 # Course Model
@@ -126,6 +131,7 @@ class Course(models.Model):
     class Meta:
         ordering = ['start_date']
         verbose_name_plural = "دوره"
+        verbose_name = "دوره"
 
     def __str__(self):
         return self.title
@@ -141,7 +147,7 @@ class Course(models.Model):
         
     def clean_fields(self, exclude=None):
         super().clean_fields(exclude=exclude)
-        if self.end_date< self.start_date :
+        if self.end_date < self.start_date :
             raise ValidationError("تاریخ پایان باید پس از تاریخ شروع باشد")
 
 # Course_Calendar Model
@@ -153,6 +159,7 @@ class Course_Calendar(models.Model):
     class Meta:
         ordering = ['start_date']
         verbose_name_plural = "زمان برگزاری"    
+        verbose_name = "زمان برگزاری"    
 
     def __str__(self):
         return self.course.title
@@ -168,7 +175,7 @@ class Course_Calendar(models.Model):
         
     def clean_fields(self, exclude=None):
         super().clean_fields(exclude=exclude)
-        if self.end_date< self.start_date :
+        if self.end_date < self.start_date :
             raise ValidationError("تاریخ پایان باید پس از تاریخ شروع باشد")
 
         
