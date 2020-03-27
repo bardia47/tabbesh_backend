@@ -6,6 +6,7 @@ from django.contrib.auth.models import PermissionsMixin
 from pygments.lexers import get_all_lexers
 from pygments.styles import get_all_styles
 from django.template.defaultfilters import default
+from accounts.enums import RoleCodes
 import datetime
 import jdatetime
 from django.core.exceptions import ValidationError
@@ -51,6 +52,8 @@ class User(AbstractBaseUser, PermissionsMixin):
         full_name = '%s %s' % (self.first_name, self.last_name)
         return full_name.strip()
 
+    get_full_name.short_description = 'نام'
+
     def get_short_name(self):
         return self.first_name
 
@@ -60,6 +63,17 @@ class User(AbstractBaseUser, PermissionsMixin):
     def date_joined_decorated(self):
       print(self.date_joined)
       return jdatetime.datetime.fromgregorian(datetime=self.date_joined).strftime("%a, %d %b %Y %H:%M:%S")
+    
+    
+    
+    def set_default_avatar(self):
+        if not self.avatar :
+            if self.role.code==RoleCodes.STUDENT.value:
+                self.avatar= "avatars/student.png"
+            if self.role.code==RoleCodes.TEACHER.value:     
+                self.avatar= "avatars/teacher.png"
+        print(self.avatar)        
+        
 
 
 # Roles Model
@@ -149,6 +163,9 @@ class Course(models.Model):
         super().clean_fields(exclude=exclude)
         if self.end_date < self.start_date :
             raise ValidationError("تاریخ پایان باید پس از تاریخ شروع باشد")
+        if self.teacher.role.code != RoleCodes.TEACHER.value:
+            raise ValidationError("مدرس باید نقش مدرس داشته باشد")
+
 
 # Course_Calendar Model
 class Course_Calendar(models.Model):
