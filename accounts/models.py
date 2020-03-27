@@ -8,6 +8,8 @@ from pygments.styles import get_all_styles
 from django.template.defaultfilters import default
 import datetime
 import jdatetime
+from django.core.exceptions import ValidationError
+
 
 LEXERS = [item for item in get_all_lexers() if item[1]]
 
@@ -37,6 +39,7 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     class Meta:
         verbose_name_plural = "کاربر"
+        verbose_name = "کاربر"
 
     from accounts.managers import UserManager
     objects = UserManager()
@@ -70,6 +73,7 @@ class Role(models.Model):
 
     class Meta:
         verbose_name_plural = "نقش"
+        verbose_name = "نقش"
 
 
 class City(models.Model):
@@ -81,6 +85,7 @@ class City(models.Model):
 
     class Meta:
         verbose_name_plural = "شهر"
+        verbose_name = "شهر"
 
 
 # Grade Models
@@ -93,6 +98,7 @@ class Grade(models.Model):
 
     class Meta:
         verbose_name_plural = "پایه"
+        verbose_name = "پایه"
 
 
 # Lesson Model
@@ -108,6 +114,7 @@ class Lesson(models.Model):
 
     class Meta:
         verbose_name_plural = "درس"
+        verbose_name = "درس"
 
 
 # Course Model
@@ -116,14 +123,15 @@ class Course(models.Model):
     title = models.CharField("عنوان", max_length=30)
     lesson = models.ForeignKey('Lesson', on_delete=models.DO_NOTHING, verbose_name="درس")
     teacher = models.ForeignKey(User, on_delete=models.DO_NOTHING, verbose_name="مدرس")
-    start_date = models.DateTimeField("تاریخ شروع", blank=True, null=True)
-    end_date = models.DateTimeField("تاریخ پایان", blank=True, null=True)
+    start_date = models.DateTimeField("تاریخ شروع")
+    end_date = models.DateTimeField("تاریخ پایان")
     amount = models.FloatField("مبلغ", blank=True, null=True)
     url = models.URLField("لینک", blank=True, null=True)
 
     class Meta:
         ordering = ['start_date']
         verbose_name_plural = "دوره"
+        verbose_name = "دوره"
 
     def __str__(self):
         return self.title
@@ -136,17 +144,22 @@ class Course(models.Model):
             return True
         else:
             return False
-
+        
+    def clean_fields(self, exclude=None):
+        super().clean_fields(exclude=exclude)
+        if self.end_date < self.start_date :
+            raise ValidationError("تاریخ پایان باید پس از تاریخ شروع باشد")
 
 # Course_Calendar Model
 class Course_Calendar(models.Model):
     course = models.ForeignKey('Course', on_delete=models.DO_NOTHING, verbose_name="دوره")
-    start_date = models.DateTimeField("تاریخ شروع", blank=True, null=True)
-    end_date = models.DateTimeField("تاریخ پایان", blank=True, null=True,)
+    start_date = models.DateTimeField("تاریخ شروع")
+    end_date = models.DateTimeField("تاریخ پایان")
 
     class Meta:
         ordering = ['start_date']
         verbose_name_plural = "زمان برگزاری"    
+        verbose_name = "زمان برگزاری"    
 
     def __str__(self):
         return self.course.title
@@ -159,3 +172,10 @@ class Course_Calendar(models.Model):
             return True
         else:
             return False
+        
+    def clean_fields(self, exclude=None):
+        super().clean_fields(exclude=exclude)
+        if self.end_date < self.start_date :
+            raise ValidationError("تاریخ پایان باید پس از تاریخ شروع باشد")
+
+        

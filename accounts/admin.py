@@ -3,6 +3,9 @@ from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django import forms
 from django.contrib.auth.hashers import make_password
 from .models import *
+from jalali_date.admin import ModelAdminJalaliMixin, StackedInlineJalaliMixin, TabularInlineJalaliMixin    
+from jalali_date import datetime2jalali, date2jalali
+from django.contrib.auth.models import Group
 
 
 class UserCreationForm(forms.ModelForm):
@@ -75,7 +78,8 @@ class UserAdmin(BaseUserAdmin):
     form = UserChangeForm
     add_form = UserCreationForm
     list_display = ('username', 'email', 'is_active')
-    
+    list_filter = ('is_active',)
+
     fieldsets = (
         (None, {'fields': ('username', 'email', 'date_joined_decorated')}),
         ('در صورت نیاز رمز جدید را وارد کنید', {'fields': ('password1', 'password2',)}),
@@ -95,10 +99,35 @@ class UserAdmin(BaseUserAdmin):
     ordering = ('username',)
 
 
+class CourseCalendarInline(TabularInlineJalaliMixin, admin.TabularInline):
+    model = Course_Calendar
+    extra = 0
+
+
+class CourseAdmin(ModelAdminJalaliMixin, admin.ModelAdmin):
+
+    inlines = [
+        CourseCalendarInline,
+    ]
+    list_display = ['code', 'title', 'get_start_jalali', 'get_end_jalali']
+    search_fields = ['code', 'title']
+
+    def get_start_jalali(self, obj):
+        return datetime2jalali(obj.start_date).strftime('%y/%m/%d , %H:%M:%S')
+
+    def get_end_jalali(self, obj):
+        return datetime2jalali(obj.end_date).strftime('%y/%m/%d , %H:%M:%S')
+    
+    get_start_jalali.short_description = 'تاریخ شروع'
+    get_start_jalali.admin_order_field = 'start_date'
+    get_end_jalali.short_description = 'تاریخ پایان'
+    get_end_jalali.admin_order_field = 'end_date'
+
+    
 admin.site.register(User, UserAdmin)
 admin.site.register(Role)
 admin.site.register(City)
 admin.site.register(Grade)
 admin.site.register(Lesson)
-admin.site.register(Course)
-admin.site.register(Course_Calendar)
+admin.site.register(Course, CourseAdmin)
+admin.site.unregister(Group)
