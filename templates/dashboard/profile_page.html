@@ -13,7 +13,9 @@
 
                     {% csrf_token %}
                     <div class="text-center">
-                        <img src="http://ssl.gstatic.com/accounts/ui/avatar_2x.png"
+                        <img src="{% if user.avatar %}{{ user.avatar.url }}
+                                  {% else %}http://ssl.gstatic.com/accounts/ui/avatar_2x.png
+                                  {% endif %}"
                              class="avatar img-circle img-thumbnail" alt="avatar">          <h6>Upload a different
                         photo...</h6>
                         <input type="file" id="avatar" name="avatar" class="text-center center-block file-upload">
