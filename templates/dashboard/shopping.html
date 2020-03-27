@@ -1,102 +1,112 @@
-{% extends 'dashboard/base.html'%} {% block content %} {% load static %}
-<link rel="stylesheet" href="{% static 'dashboard/css/shopping.css'%}">
-<!-- Search Content-->
-<section class="shop">
-   <div class="search-content">
-      <!-- Search Titr -->
-      <div class="search-title">
-         <h1>دوره های تابش</h1>
-      </div>
-      <!-- Cart Section -->
-      <div class = "cart-list">
-         <hr>
-      </div>
-      <!-- Cart Footer Section -->
-      <div class="cart-footer">
-         <!-- Purchase -->
-         <div style="margin: 10px">
-            <!-- Purchase Button -->
-            <a href="" class="btn btn-success">پرداخت</a>
-            <div style="margin: 5px">
-               مبلغ قابل پرداخت : <b class="cart-total-price">0</b> تومان
+{% extends 'dashboard/base.html' %} {% block content %} {% load static %}
+    <link rel="stylesheet" href="{% static 'dashboard/css/shopping.css' %}">
+    <!-- Search Content-->
+    <section class="shop">
+        <div class="search-content">
+            <!-- Search Titr -->
+            <div class="search-title">
+                <h1>دوره های تابش</h1>
             </div>
-         </div>
-      </div>
-   </div>
-   <!-- Shopping Cards - include Courses -->
-   <div class="shopping-cards">
-      <!-- Search Section -->
-      <div class="row">
-         <!-- Select Grade -->
-         <div class="col-md-3" style="margin-right:20px;">
-            <select class="custom-select">
-               <option selected disabled>پایه</option>
-               <option value="1">ششم</option>
-               <option value="2">نهم</option>
-               <option value="3">دوازدهم</option>
-            </select>
-         </div>
-         <!-- Select Lessons -->
-         <div class="col-md-3 ">
-            <select class="custom-select">
-               <option selected disabled>دروس</option>
-               <option value="1">ریاضی</option>
-               <option value="2">فیزیک</option>
-               <option value="3">شیمی</option>
-            </select>
-         </div>
-         <!-- Select teachers -->
-         <div class="col-md-3 ">
-            <select class="custom-select">
-               <option selected disabled>استاد</option>
-               <option value="1">آقای محمد محمدی</option>
-               <option value="2">آقای حسین امیری</option>
-               <option value="3">آقای مهدی شهبازی</option>
-            </select>
-         </div>
-         <!-- Search Buttom -->
-         <div class="col-md-2">
-            <input type="submit" class="form-control" style="background-color:#7386D5; 
-               color:#fff;" value="جستجو">
-         </div>
-         <!-- Shopping Cards -->
-         <div class="row">
+            <!-- Cart Section -->
+            <div class="cart-list">
+                <hr>
+            </div>
+            <!-- Cart Footer Section -->
+            <div class="cart-footer">
+                <!-- Purchase -->
+                <div style="margin: 10px">
+                    <!-- Purchase Button -->
+                    <a href="" class="btn btn-success">پرداخت</a>
+                    <div style="margin: 5px">
+                        مبلغ قابل پرداخت : <b class="cart-total-price">0</b> تومان
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Shopping Cards - include Courses -->
+        <div class="shopping-cards">
+            <!-- Search Section -->
+            <form action="{% url 'shopping' %}">
+                <div class="row">
+                    <!-- Select Grade -->
+                    <div class="col-md-3">
+                        <select class="custom-select" name="grade">
+                            <option selected disabled>پایه</option>
+                            {% for grade in grades %}
+                                <option value="{{ grade.id }}">{{ grade.title }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <!-- Select Lessons -->
+                    <div class="col-md-3 ">
+                        <select class="custom-select" name="lesson">
+                            <option selected disabled>دروس</option>
+                            {% for lesson in lessons %}
+                                <option value="{{ lesson.id }}">{{ lesson.title }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <!-- Select teachers -->
+                    <div class="col-md-3 ">
+                        <select class="custom-select" name="teacher">
+                            <option selected disabled>استاد</option>
+                            {% for teacher in teachers %}
+                                <option value="{{ teacher.id }}">{{ teacher.get_full_name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <!-- Search Button -->
+                    <div class="col-md-3">
+                        <input type="submit" class="form-control" style="background-color:#7386D5;color:#fff;"
+                               value="جستجو">
+                    </div>
+                </div>
+            </form>
+
+            <!-- Shopping Cards -->
             <!-- Shop Rows -->
-            {% for i in '1234'|make_list %}
             <div class="row">
-               <!-- Shop Cards -->
-               {% for i in '1234'|make_list %}
-               <div class="col-sm-6 col-md-4 col-lg-3 mt-4">
-                  <div class="card">
-                     <img class="card-img-top" src="{% static "dashboard/images/lessons.jpg" %}">
-                     <div class="card-block">
-                        <!-- Teacher Profile -->
-                        <figure class="profile">
-                           <img src="{% static "dashboard/images/profile.jpg" %}" class="profile-avatar" alt="">
-                        </figure>
-                        <!-- Course Title -->
-                        <h4 class="card-title mt-3">شیمی</h4>
-                        <!-- Course Grade -->
-                        <div class="meta">
-                           <a>پایه ی دهم</a>
+                <!-- Shop Cards -->
+                {% for course in courses %}
+                    <div class="col-sm-6 col-md-4 col-lg-3 mt-4">
+                        <div class="card">
+                            <img class="card-img-top" src="{% if course.image %}{{ course.image.url }}
+                                      {% else %}{% static "dashboard/images/lessons.jpg" %}
+                                      {% endif %}">
+                            <div class="card-block">
+                                <!-- Teacher Profile -->
+                                <figure class="profile">
+                                    <img src="{% if course.teacher.avatar %}{{ course.teacher.avatar.url }}
+                                      {% else %}{% static 'dashboard/images/teacher.png' %}
+                                      {% endif %}"
+                                         class="profile-avatar" alt="">
+                                </figure>
+                                <!-- Course Title -->
+                                <h4 class="card-title mt-3">{{ course.title }}</h4>
+                                <!-- Course Grade -->
+                                <div class="meta">
+                                    <h6>{{ course.lesson.grade }}</h6>
+                                </div>
+                                <!-- Course Description -->
+                                <div class="card-text">
+                                    این درس توسط استاد <p class="card-teacher"
+                                                          style="padding-top: 25px">{{ course.teacher.get_full_name }}</p>
+                                    تدریس میشود.
+                                </div>
+                            </div>
+                            <div class="card-footer">
+                                <!-- Course Price & Add to cart button -->
+                                قیمت: <b class="card-price"
+                                         style="text-align:center; padding-bottom:50px;">{{ course.amount }}</b>
+                                تومان
+                                <button class="btn btn-secondary float-right btn-sm add-to-cart"
+                                        style="margin-top : 5px ; margin-left:0px">اضافه به سبد خرید
+                                </button>
+                            </div>
                         </div>
-                        <!-- Course Description -->
-                        <div class="card-text">
-                           🥉شیمی دهم با مهدی شهبازی دارنده مدال برنز المپیاد شیمی
-                        </div>
-                     </div>
-                     <div class="card-footer">
-                        <!-- Course Price & Add to cart button -->
-                        قیمت: <b class="card-price" style="text-align:center; padding-bottom:50px;">2000000</b> تومان
-                        <button class="btn btn-secondary float-right btn-sm add-to-cart" style="margin-top : 5px ; margin-left:0px">اضافه به سبد خرید</button>
-                     </div>
-                  </div>
-               </div>
-               {% endfor %}
+                    </div>
+                {% endfor %}
             </div>
-            {% endfor %}
-         </div>
-      </div>
-   </div>
-</section>
+        </div>
+    </section>
 {% endblock %}

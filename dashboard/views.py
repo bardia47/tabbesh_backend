@@ -1,4 +1,5 @@
 import pytz
+from django.db.models import Q
 from django.shortcuts import render, redirect, get_object_or_404
 from accounts.models import User
 import datetime
@@ -72,4 +73,17 @@ def lessons(request):
 
 # Shopping Page
 def shopping(request):
-    return render(request, 'dashboard/shopping.html')
+    grades = Grade.objects.all()
+    LESSONS = Lesson.objects.all()
+    teachers = User.objects.filter(role__title="معلم")
+    courses = Course.objects.all()
+    if request.GET.get("teacher") or request.GET.get("lesson") or request.GET.get("grade"):
+        if request.GET.get("teacher"):
+            courses = courses.filter(teacher__id=request.GET.get("teacher"))
+        if request.GET.get("grade"):
+            courses = courses.filter(lesson__grade__id=request.GET.get("grade"))
+        if request.GET.get("lesson"):
+            courses = courses.filter(lesson__id=request.GET.get("lesson"))
+
+    return render(request, 'dashboard/shopping.html', {'grades': grades, 'lessons': LESSONS, 'teachers': teachers,
+                                                       'courses': courses})

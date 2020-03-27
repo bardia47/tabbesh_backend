@@ -53,10 +53,10 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     def email_user(self, subject, message, from_email=None, **kwargs):
         send_mail(subject, message, from_email, [self.email], **kwargs)
-    
+
     def date_joined_decorated(self):
-      print(self.date_joined)
-      return jdatetime.datetime.fromgregorian(datetime=self.date_joined).strftime("%a, %d %b %Y %H:%M:%S")
+        print(self.date_joined)
+        return jdatetime.datetime.fromgregorian(datetime=self.date_joined).strftime("%a, %d %b %Y %H:%M:%S")
 
 
 # Roles Model
@@ -92,6 +92,7 @@ class Grade(models.Model):
         return self.title
 
     class Meta:
+        ordering = ['code']
         verbose_name_plural = "پایه"
 
 
@@ -120,6 +121,8 @@ class Course(models.Model):
     end_date = models.DateTimeField("تاریخ پایان", blank=True, null=True)
     amount = models.FloatField("مبلغ", blank=True, null=True)
     url = models.URLField("لینک", blank=True, null=True)
+    image = models.ImageField(upload_to='courses_image/', null=True, blank=True)
+    description = models.CharField(null=True, blank=True)
 
     class Meta:
         ordering = ['start_date']
@@ -142,11 +145,11 @@ class Course(models.Model):
 class Course_Calendar(models.Model):
     course = models.ForeignKey('Course', on_delete=models.DO_NOTHING, verbose_name="دوره")
     start_date = models.DateTimeField("تاریخ شروع", blank=True, null=True)
-    end_date = models.DateTimeField("تاریخ پایان", blank=True, null=True,)
+    end_date = models.DateTimeField("تاریخ پایان", blank=True, null=True, )
 
     class Meta:
         ordering = ['start_date']
-        verbose_name_plural = "زمان برگزاری"    
+        verbose_name_plural = "زمان برگزاری"
 
     def __str__(self):
         return self.course.title
