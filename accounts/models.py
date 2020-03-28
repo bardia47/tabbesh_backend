@@ -64,10 +64,11 @@ class User(AbstractBaseUser, PermissionsMixin):
     
     def set_default_avatar(self):
         if not self.avatar :
-            if self.role.code == RoleCodes.STUDENT.value:
-                self.avatar = "defaults/student.png"
             if self.role.code == RoleCodes.TEACHER.value:     
                 self.avatar = "defaults/teacher.png"
+            else :
+                self.avatar = "defaults/student.png"
+    
         print(self.avatar)        
 
 
@@ -163,8 +164,6 @@ class Course(models.Model):
             raise ValidationError("تاریخ پایان باید پس از تاریخ شروع باشد")
         if self.teacher.role.code != RoleCodes.TEACHER.value:
             raise ValidationError("مدرس باید نقش مدرس داشته باشد")
-        if not self.course_calendar_set.exists():
-            raise ValidationError("زمان برگذاری برای دوره تعریف نشده است")
 
 
 # Course_Calendar Model
@@ -192,6 +191,6 @@ class Course_Calendar(models.Model):
         
     def clean_fields(self, exclude=None):
         super().clean_fields(exclude=exclude)
-        if self.end_date < self.start_date :
+        if not self.start_date or not self.end_date or self.end_date < self.start_date :
             raise ValidationError("تاریخ پایان باید پس از تاریخ شروع باشد")
         
