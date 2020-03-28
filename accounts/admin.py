@@ -133,6 +133,11 @@ class CourseAdmin(ModelAdminJalaliMixin, admin.ModelAdmin):
     get_start_jalali.admin_order_field = 'start_date'
     get_end_jalali.short_description = 'تاریخ پایان'
     get_end_jalali.admin_order_field = 'end_date'
+    
+    def render_change_form(self, request, context, *args, **kwargs):
+         context['adminform'].form.fields['teacher'].queryset  = User.objects.filter(role__code=RoleCodes.TEACHER.value)
+         return super(CourseAdmin, self).render_change_form(request, context, *args, **kwargs)
+
 
     
 class CityAdmin(admin.ModelAdmin):
