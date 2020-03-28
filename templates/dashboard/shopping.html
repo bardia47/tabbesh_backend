@@ -76,9 +76,7 @@
                             <div class="card-block">
                                 <!-- Teacher Profile -->
                                 <figure class="profile">
-                                    <img src="{% if course.teacher.avatar %}{{ course.teacher.avatar.url }}
-                                      {% else %}{% static 'dashboard/images/teacher.png' %}
-                                      {% endif %}"
+                                    <img src="{{ course.teacher.avatar.url }}"
                                          class="profile-avatar" alt="">
                                 </figure>
                                 <!-- Course Title -->
@@ -97,7 +95,7 @@
                             <div class="card-footer">
                                 <!-- Course Price & Add to cart button -->
                                 قیمت: <b class="card-price"
-                                         style="text-align:center; padding-bottom:50px;">{{ course.amount }}</b>
+                                         style="text-align:center; padding-bottom:50px;">{{ course.amount|floatformat:0 }}</b>
                                 تومان
                                 <button class="btn btn-secondary float-right btn-sm add-to-cart"
                                         style="margin-top : 5px ; margin-left:0px">اضافه به سبد خرید

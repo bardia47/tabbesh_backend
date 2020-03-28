@@ -4,6 +4,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from accounts.models import User
 import datetime
 from accounts.models import *
+from accounts.enums import RoleCodes
 
 from .forms import ProfileForm
 
@@ -45,10 +46,11 @@ def edit_profile(request):
     if request.method == 'POST':
         if request.POST.get("upload"):
             avatar = request.FILES.get("avatar")
-            if request.user.avatar:
-                request.user.avatar.delete()
-            request.user.avatar = avatar
-            request.user.save()
+            if  avatar  :
+                if not request.user.avatar.url.startswith("/media/defaults"):
+                    request.user.avatar.delete()
+                request.user.avatar = avatar
+                request.user.save()
             return redirect('dashboard')
 
         else:
@@ -75,7 +77,7 @@ def lessons(request):
 def shopping(request):
     grades = Grade.objects.all()
     LESSONS = Lesson.objects.all()
-    teachers = User.objects.filter(role__title="معلم")
+    teachers = User.objects.filter(role__code=RoleCodes.TEACHER.value)
     courses = Course.objects.all()
     if request.GET.get("teacher") or request.GET.get("lesson") or request.GET.get("grade"):
         if request.GET.get("teacher"):

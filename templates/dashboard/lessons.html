@@ -13,9 +13,7 @@
                                       {% endif %}">
                     <div class="card-block">
                         <figure class="profile">
-                            <img src="{% if course.teacher.avatar %}{{ course.teacher.avatar.url }}
-                                      {% else %}{% static 'dashboard/images/teacher.png' %}
-                                      {% endif %}"
+                            <img src="{{ course.teacher.avatar.url }}"
                                  class="profile-avatar" alt="">
                         </figure>
                         <h4 class="card-title mt-3">{{ course.title }}</h4>
