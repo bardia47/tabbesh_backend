@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html dir="rtl">
+<html dir="rtl" xmlns="http://www.w3.org/1999/html">
 {% load static %}
 {% load jformat %}
 <head>
@@ -40,11 +40,12 @@
                                                        style="margin-left:20px; margin-right:20px"></i> داشبورد </a>
                 </li>
                 <li>
-                    <a href="#"><i class="fas fa-book" style="margin-left:20px; margin-right:20px"></i> دروس من </a>
+                    <a href="{% url 'lessons' %}"><i class="fas fa-book"
+                                                     style="margin-left:20px; margin-right:20px"></i> دروس من </a>
                 </li>
                 <li>
-                    <a href="{% url 'lessons' %}"><i class="fas fa-shopping-basket"
-                                                     style="margin-left:20px; margin-right:20px"></i>خرید درس</a>
+                    <a href="{% url 'shopping' %}"><i class="fas fa-shopping-basket"
+                                                      style="margin-left:20px; margin-right:20px"></i>خرید درس</a>
                 </li>
             </ul>
         </div>
@@ -109,7 +110,7 @@
 
 <!-- JS style -->
 <script type="text/javascript" src="{% static 'dashboard/js/dashboard.js' %}"></script>
-
+<script src="{% static 'dashboard/js/shopping.js' %}"></script>
 <script type="text/javascript">
     $(document).ready(function () {
         $("#sidebarCollapse").click(function () {

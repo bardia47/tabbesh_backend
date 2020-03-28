@@ -11,9 +11,7 @@ import datetime
 import jdatetime
 from django.core.exceptions import ValidationError
 
-
 LEXERS = [item for item in get_all_lexers() if item[1]]
-
 
 # Create your models here.
 
@@ -59,21 +57,18 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     def email_user(self, subject, message, from_email=None, **kwargs):
         send_mail(subject, message, from_email, [self.email], **kwargs)
-    
+
     def date_joined_decorated(self):
-      print(self.date_joined)
-      return jdatetime.datetime.fromgregorian(datetime=self.date_joined).strftime("%a, %d %b %Y %H:%M:%S")
-    
-    
+        print(self.date_joined)
+        return jdatetime.datetime.fromgregorian(datetime=self.date_joined).strftime("%a, %d %b %Y %H:%M:%S")
     
     def set_default_avatar(self):
         if not self.avatar :
-            if self.role.code==RoleCodes.STUDENT.value:
-                self.avatar= "avatars/student.png"
-            if self.role.code==RoleCodes.TEACHER.value:     
-                self.avatar= "avatars/teacher.png"
+            if self.role.code == RoleCodes.STUDENT.value:
+                self.avatar = "defaults/student.png"
+            if self.role.code == RoleCodes.TEACHER.value:     
+                self.avatar = "defaults/teacher.png"
         print(self.avatar)        
-        
 
 
 # Roles Model
@@ -111,6 +106,7 @@ class Grade(models.Model):
         return self.title
 
     class Meta:
+        ordering = ['code']
         verbose_name_plural = "پایه"
         verbose_name = "پایه"
 
@@ -139,8 +135,10 @@ class Course(models.Model):
     teacher = models.ForeignKey(User, on_delete=models.DO_NOTHING, verbose_name="مدرس")
     start_date = models.DateTimeField("تاریخ شروع")
     end_date = models.DateTimeField("تاریخ پایان")
-    amount = models.FloatField("مبلغ", blank=True, null=True)
+    amount = models.FloatField("مبلغ", default=float(0))
     url = models.URLField("لینک", blank=True, null=True)
+    image = models.ImageField(upload_to='courses_image/', default='defaults/course.jpg')
+    description = models.TextField(null=True, blank=True)
 
     class Meta:
         ordering = ['start_date']
@@ -165,6 +163,8 @@ class Course(models.Model):
             raise ValidationError("تاریخ پایان باید پس از تاریخ شروع باشد")
         if self.teacher.role.code != RoleCodes.TEACHER.value:
             raise ValidationError("مدرس باید نقش مدرس داشته باشد")
+        if not self.course_calendar_set.exists():
+            raise ValidationError("زمان برگذاری برای دوره تعریف نشده است")
 
 
 # Course_Calendar Model
@@ -175,8 +175,8 @@ class Course_Calendar(models.Model):
 
     class Meta:
         ordering = ['start_date']
-        verbose_name_plural = "زمان برگزاری"    
-        verbose_name = "زمان برگزاری"    
+        verbose_name_plural = "زمان برگزاری"
+        verbose_name = "زمان برگزاری"
 
     def __str__(self):
         return self.course.title
@@ -194,5 +194,4 @@ class Course_Calendar(models.Model):
         super().clean_fields(exclude=exclude)
         if self.end_date < self.start_date :
             raise ValidationError("تاریخ پایان باید پس از تاریخ شروع باشد")
-
         
