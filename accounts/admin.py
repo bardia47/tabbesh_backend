@@ -102,11 +102,24 @@ class UserAdmin(BaseUserAdmin):
     )
     search_fields = ('username',)
     ordering = ('username',)
-
+    
+class CourseCalendarFormSetInline(forms.models.BaseInlineFormSet):
+    def clean(self):
+        count = 0
+        for form in self.forms:
+           try: 
+               if form.cleaned_data :
+                       if not form.cleaned_data["DELETE"]: 
+                           count += 1
+           except AttributeError:
+               pass
+        if count < 1:
+            raise forms.ValidationError("زمان برگذاری برای دوره تعریف نشده است") 
 
 class CourseCalendarInline(TabularInlineJalaliMixin, admin.TabularInline):
+    formset=CourseCalendarFormSetInline
     model = Course_Calendar
-    extra = 0
+    max_num=3
 
 
 class CourseAdmin(ModelAdminJalaliMixin, admin.ModelAdmin):
@@ -137,6 +150,21 @@ class CourseAdmin(ModelAdminJalaliMixin, admin.ModelAdmin):
     def render_change_form(self, request, context, *args, **kwargs):
          context['adminform'].form.fields['teacher'].queryset  = User.objects.filter(role__code=RoleCodes.TEACHER.value)
          return super(CourseAdmin, self).render_change_form(request, context, *args, **kwargs)
+     
+class CourseCalendarAdmin(ModelAdminJalaliMixin, admin.ModelAdmin):
+    list_display = ['course', 'get_start_jalali', 'get_end_jalali',]
+    search_fields = ['course']
+    
+    def get_start_jalali(self, obj):
+        return datetime2jalali(obj.start_date).strftime('%y/%m/%d , %H:%M:%S')
+
+    def get_end_jalali(self, obj):
+        return datetime2jalali(obj.end_date).strftime('%y/%m/%d , %H:%M:%S')
+    
+    get_start_jalali.short_description = 'تاریخ شروع'
+    get_start_jalali.admin_order_field = 'start_date'
+    get_end_jalali.short_description = 'تاریخ پایان'
+    get_end_jalali.admin_order_field = 'end_date'
 
 
     
@@ -158,4 +186,5 @@ admin.site.register(City, CityAdmin)
 admin.site.register(Grade, GradeAdmin)
 admin.site.register(Lesson, LessonAdmin)
 admin.site.register(Course, CourseAdmin)
+admin.site.register(Course_Calendar, CourseCalendarAdmin)
 admin.site.unregister(Group)
