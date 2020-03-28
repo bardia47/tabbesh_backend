@@ -6,6 +6,7 @@ from .models import *
 from jalali_date.admin import ModelAdminJalaliMixin, StackedInlineJalaliMixin, TabularInlineJalaliMixin    
 from jalali_date import datetime2jalali, date2jalali
 from django.contrib.auth.models import Group
+from accounts.enums import RoleCodes
 
 
 class UserCreationForm(forms.ModelForm):
@@ -25,11 +26,13 @@ class UserCreationForm(forms.ModelForm):
 
     def save(self, commit=True):
         user = super(UserCreationForm, self).save(commit=False)
-        if user.role.code == "2":
+        if user.role.code == RoleCodes.ADMIN.value:
             user.is_staff = True
             user.is_superuser = True
         password = make_password(self.cleaned_data["password1"])
         user.password = password
+        user.set_default_avatar()
+
         if commit:
             user.save()
         return user
@@ -60,12 +63,13 @@ class UserChangeForm(forms.ModelForm):
 
     def save(self, commit=True):
         user = super(UserChangeForm, self).save(commit=False)
-        if user.role.code == "2":
+        if user.role.code == RoleCodes.ADMIN.value:
             user.is_staff = True
             user.is_superuser = True
         if self.data.get("password1") != '':
             password = make_password(self.cleaned_data["password1"])
             user.password = password
+        user.set_default_avatar()  
         if commit:
             user.save()
         return user
@@ -77,7 +81,7 @@ class UserAdmin(BaseUserAdmin):
     
     form = UserChangeForm
     add_form = UserCreationForm
-    list_display = ('username', 'email', 'is_active')
+    list_display = ('username', 'email', 'get_full_name', 'phone_number', 'is_active')
     list_filter = ('is_active',)
 
     fieldsets = (
@@ -92,8 +96,9 @@ class UserAdmin(BaseUserAdmin):
     add_fieldsets = (
         (None, {
             'classes': ('wide',),
-            'fields': ('username', 'email', 'role', 'password1', 'password2')}
-         ),
+            'fields': ('username', 'email', 'role', 'password1', 'password2') }),
+         ('اطلاعات شخص', {'fields': ('first_name', 'last_name', 'avatar', 'grades', 'national_code', 'phone_number', 'address', 'city', 'gender')}),
+
     )
     search_fields = ('username',)
     ordering = ('username',)
@@ -109,8 +114,14 @@ class CourseAdmin(ModelAdminJalaliMixin, admin.ModelAdmin):
     inlines = [
         CourseCalendarInline,
     ]
-    list_display = ['code', 'title', 'get_start_jalali', 'get_end_jalali']
+    list_display = ['code', 'title', 'get_start_jalali', 'get_end_jalali', 'teacher_full_name']
     search_fields = ['code', 'title']
+    
+    def teacher_full_name(self, obj):
+        return obj.teacher.get_full_name()
+
+    teacher_full_name.short_description = 'نام مدرس'
+    teacher_full_name.admin_order_field = 'teacher__get_full_name'
 
     def get_start_jalali(self, obj):
         return datetime2jalali(obj.start_date).strftime('%y/%m/%d , %H:%M:%S')
@@ -122,12 +133,29 @@ class CourseAdmin(ModelAdminJalaliMixin, admin.ModelAdmin):
     get_start_jalali.admin_order_field = 'start_date'
     get_end_jalali.short_description = 'تاریخ پایان'
     get_end_jalali.admin_order_field = 'end_date'
+    
+    def render_change_form(self, request, context, *args, **kwargs):
+         context['adminform'].form.fields['teacher'].queryset  = User.objects.filter(role__code=RoleCodes.TEACHER.value)
+         return super(CourseAdmin, self).render_change_form(request, context, *args, **kwargs)
+
+
+    
+class CityAdmin(admin.ModelAdmin):
+        list_display = ['code', 'title']
+
+
+class LessonAdmin(admin.ModelAdmin):
+        list_display = ['code', 'title', 'grade']
+
+        
+class GradeAdmin(admin.ModelAdmin):
+        list_display = ['code', 'title']        
 
     
 admin.site.register(User, UserAdmin)
 admin.site.register(Role)
-admin.site.register(City)
-admin.site.register(Grade)
-admin.site.register(Lesson)
+admin.site.register(City, CityAdmin)
+admin.site.register(Grade, GradeAdmin)
+admin.site.register(Lesson, LessonAdmin)
 admin.site.register(Course, CourseAdmin)
 admin.site.unregister(Group)

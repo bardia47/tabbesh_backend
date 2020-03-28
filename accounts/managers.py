@@ -2,6 +2,7 @@ from django.contrib.auth.base_user import BaseUserManager
 from django.apps import apps
 from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth.hashers import make_password
+from .enums import  RoleCodes
 
 
 class UserManager(BaseUserManager):
@@ -25,6 +26,7 @@ class UserManager(BaseUserManager):
         except ObjectDoesNotExist:
             role = apps.get_model(app_label='accounts', model_name='Role')
             user.role = role.objects.get(code='1')
+        user.set_default_avatar()    
 
         # try:
         #     user.city
