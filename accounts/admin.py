@@ -7,6 +7,8 @@ from jalali_date.admin import ModelAdminJalaliMixin, StackedInlineJalaliMixin, T
 from jalali_date import datetime2jalali, date2jalali
 from django.contrib.auth.models import Group
 from accounts.enums import RoleCodes
+from pip._internal import self_outdated_check
+from django.contrib import messages
 
 
 class UserCreationForm(forms.ModelForm):
@@ -165,8 +167,27 @@ class CourseCalendarAdmin(ModelAdminJalaliMixin, admin.ModelAdmin):
     get_start_jalali.admin_order_field = 'start_date'
     get_end_jalali.short_description = 'تاریخ پایان'
     get_end_jalali.admin_order_field = 'end_date'
+    
 
-
+    def delete_model(self, request, obj):
+        if len(obj.course.course_calendar_set.all())==1 :
+            self.message_user(request, "این آخرین زمان برگذاری دوره است و امکان حذف آن وجود ندارد", level=messages.ERROR)
+            return self
+        admin.ModelAdmin.delete_model(self, request, obj)
+    
+    def remove_default_message(self, request):
+        storage = messages.get_messages(request)
+        try:
+            del storage._queued_messages[-1]
+        except KeyError:
+            pass
+        return True
+    
+        
+    def response_delete(self, request, obj_display, obj_id):
+        response = super().response_delete(request, obj_display, obj_id)
+        self.remove_default_message(request)
+        return response  
     
 class CityAdmin(admin.ModelAdmin):
         list_display = ['code', 'title']
