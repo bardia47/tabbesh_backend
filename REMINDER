@@ -1,0 +1,5 @@
+برداشتن  خط  admin.site.register(Role)
+admin.py 
+
+اضافه کردن filter(now<end_date)
+خط 17 views.py

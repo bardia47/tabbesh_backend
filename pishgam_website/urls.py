@@ -28,3 +28,8 @@ urlpatterns = [
                   path('signout/', signout, name='signout'),
                   path('dashboard/', include('dashboard.urls')),
               ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+
+admin.site.site_header = "صفحه ادمین"
+admin.site.site_title = "صفحه ادمین"
+admin.site.index_title = "صفحه ادمین"

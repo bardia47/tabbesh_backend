@@ -3,32 +3,33 @@
     {% load static %}
     <link rel="stylesheet" href="{% static 'dashboard/css/lessons.css' %}">
     <!-- Post Rows -->
-    {% for i in '1234'|make_list %}
-        <div class="row">
+    <div class="row">
+        {% for course in courses %}
             <!-- Post Cards -->
-            {% for i in '1234'|make_list %}
-                <div class="col-sm-6 col-md-4 col-lg-3 mt-4">
-                    <div class="card">
-                        <img class="card-img-top" src="{% static "dashboard/images/lessons.jpg" %}">
-                        <div class="card-block">
-                            <figure class="profile">
-                                <img src="{% static "dashboard/images/profile.jpg" %}" class="profile-avatar" alt="">
-                            </figure>
-                            <h4 class="card-title mt-3">شیمی دهم</h4>
-                            <div class="meta">
-                                <a>پایه ی دهم</a>
-                            </div>
-                            <div class="card-text">
-                                🥉شیمی دهم با مهدی شهبازی دارنده مدال برنز المپیاد شیمی
-                            </div>
+            <div class="col-sm-6 col-md-4 col-lg-3 mt-4">
+                <div class="card">
+                    <img class="card-img-top" src="{% if course.image %}{{ course.image.url }}
+                                      {% else %}{% static "dashboard/images/lessons.jpg" %}
+                                      {% endif %}">
+                    <div class="card-block">
+                        <figure class="profile">
+                            <img src="{{ course.teacher.avatar.url }}"
+                                 class="profile-avatar" alt="">
+                        </figure>
+                        <h4 class="card-title mt-3">{{ course.title }}</h4>
+                        <div class="meta">
+                            <h6>{{ course.lesson.grade }}</h6>
                         </div>
-                        <div class="card-footer">
-                            <small>تا پایان آذر ماه</small>
-                            <button class="btn btn-secondary float-right btn-sm">خرید دوره</button>
+                        <div class="card-text">
+                            <p style="padding-top: 25px">این درس توسط استاد {{ course.teacher.get_full_name }} تدریس میشود.</p>
                         </div>
                     </div>
+                    <div class="card-footer">
+                        <a class="btn text-light btn-secondary float-right btn-sm"
+                           href="#">درباره دوره</a>
+                    </div>
                 </div>
-            {% endfor %}
-        </div>
-    {% endfor %}
+            </div>
+        {% endfor %}
+    </div>
 {% endblock %}

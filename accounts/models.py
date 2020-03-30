@@ -6,11 +6,12 @@ from django.contrib.auth.models import PermissionsMixin
 from pygments.lexers import get_all_lexers
 from pygments.styles import get_all_styles
 from django.template.defaultfilters import default
+from accounts.enums import RoleCodes
 import datetime
 import jdatetime
+from django.core.exceptions import ValidationError
 
 LEXERS = [item for item in get_all_lexers() if item[1]]
-
 
 # Create your models here.
 
@@ -37,6 +38,7 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     class Meta:
         verbose_name_plural = "کاربر"
+        verbose_name = "کاربر"
 
     from accounts.managers import UserManager
     objects = UserManager()
@@ -48,15 +50,26 @@ class User(AbstractBaseUser, PermissionsMixin):
         full_name = '%s %s' % (self.first_name, self.last_name)
         return full_name.strip()
 
+    get_full_name.short_description = 'نام'
+
     def get_short_name(self):
         return self.first_name
 
     def email_user(self, subject, message, from_email=None, **kwargs):
         send_mail(subject, message, from_email, [self.email], **kwargs)
-    
+
     def date_joined_decorated(self):
-      print(self.date_joined)
-      return jdatetime.datetime.fromgregorian(datetime=self.date_joined).strftime("%a, %d %b %Y %H:%M:%S")
+        print(self.date_joined)
+        return jdatetime.datetime.fromgregorian(datetime=self.date_joined).strftime("%a, %d %b %Y %H:%M:%S")
+    
+    def set_default_avatar(self):
+        if not self.avatar :
+            if self.role.code == RoleCodes.TEACHER.value:     
+                self.avatar = "defaults/teacher.png"
+            else :
+                self.avatar = "defaults/student.png"
+    
+        print(self.avatar)        
 
 
 # Roles Model
@@ -70,6 +83,7 @@ class Role(models.Model):
 
     class Meta:
         verbose_name_plural = "نقش"
+        verbose_name = "نقش"
 
 
 class City(models.Model):
@@ -81,6 +95,7 @@ class City(models.Model):
 
     class Meta:
         verbose_name_plural = "شهر"
+        verbose_name = "شهر"
 
 
 # Grade Models
@@ -92,7 +107,9 @@ class Grade(models.Model):
         return self.title
 
     class Meta:
+        ordering = ['code']
         verbose_name_plural = "پایه"
+        verbose_name = "پایه"
 
 
 # Lesson Model
@@ -108,6 +125,7 @@ class Lesson(models.Model):
 
     class Meta:
         verbose_name_plural = "درس"
+        verbose_name = "درس"
 
 
 # Course Model
@@ -116,14 +134,17 @@ class Course(models.Model):
     title = models.CharField("عنوان", max_length=30)
     lesson = models.ForeignKey('Lesson', on_delete=models.DO_NOTHING, verbose_name="درس")
     teacher = models.ForeignKey(User, on_delete=models.DO_NOTHING, verbose_name="مدرس")
-    start_date = models.DateTimeField("تاریخ شروع", blank=True, null=True)
-    end_date = models.DateTimeField("تاریخ پایان", blank=True, null=True)
-    amount = models.FloatField("مبلغ", blank=True, null=True)
+    start_date = models.DateTimeField("تاریخ شروع")
+    end_date = models.DateTimeField("تاریخ پایان")
+    amount = models.FloatField("مبلغ", default=float(0))
     url = models.URLField("لینک", blank=True, null=True)
+    image = models.ImageField(upload_to='courses_image/', default='defaults/course.jpg')
+    description = models.TextField(null=True, blank=True)
 
     class Meta:
         ordering = ['start_date']
         verbose_name_plural = "دوره"
+        verbose_name = "دوره"
 
     def __str__(self):
         return self.title
@@ -136,17 +157,25 @@ class Course(models.Model):
             return True
         else:
             return False
+        
+    def clean_fields(self, exclude=None):
+        super().clean_fields(exclude=exclude)
+        if self.end_date < self.start_date :
+            raise ValidationError("تاریخ پایان باید پس از تاریخ شروع باشد")
+        if self.teacher.role.code != RoleCodes.TEACHER.value:
+            raise ValidationError("مدرس باید نقش مدرس داشته باشد")
 
 
 # Course_Calendar Model
 class Course_Calendar(models.Model):
     course = models.ForeignKey('Course', on_delete=models.DO_NOTHING, verbose_name="دوره")
-    start_date = models.DateTimeField("تاریخ شروع", blank=True, null=True)
-    end_date = models.DateTimeField("تاریخ پایان", blank=True, null=True,)
+    start_date = models.DateTimeField("تاریخ شروع")
+    end_date = models.DateTimeField("تاریخ پایان")
 
     class Meta:
         ordering = ['start_date']
-        verbose_name_plural = "زمان برگزاری"    
+        verbose_name_plural = "زمان برگزاری"
+        verbose_name = "زمان برگزاری"
 
     def __str__(self):
         return self.course.title
@@ -159,3 +188,9 @@ class Course_Calendar(models.Model):
             return True
         else:
             return False
+        
+    def clean_fields(self, exclude=None):
+        super().clean_fields(exclude=exclude)
+        if not self.start_date or not self.end_date or self.end_date < self.start_date :
+            raise ValidationError("تاریخ پایان باید پس از تاریخ شروع باشد")
+        
