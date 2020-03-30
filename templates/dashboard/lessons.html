@@ -1,35 +1,45 @@
 {% extends 'dashboard/base.html' %}
+{% load static %}
+<!-- Title block of base.html -->
+{% block title %}دروس من{% endblock %}
+
+<!-- CSS files -->
+{% block CSSfiles %}
+<link rel="stylesheet" href="{% static 'dashboard/css/lessons.css' %}">
+<link rel="stylesheet" href="{% static 'dashboard/css/dashboard.css' %}">
+{% endblock %}
+
+<!-- Active menu of sidebar -->
+{% block lesson_active %}active-menu{% endblock %}
+
+<!-- Content of page -->
 {% block content %}
-    {% load static %}
-    <link rel="stylesheet" href="{% static 'dashboard/css/lessons.css' %}">
-    <!-- Post Rows -->
-    <div class="row">
-        {% for course in courses %}
-            <!-- Post Cards -->
-            <div class="col-sm-6 col-md-4 col-lg-3 mt-4">
-                <div class="card">
-                    <img class="card-img-top" src="{% if course.image %}{{ course.image.url }}
+<!-- Post Rows -->
+<div class="row">
+    {% for course in courses %}
+    <!-- Post Cards -->
+    <div class="col-sm-6 col-md-4 col-lg-3 mt-4">
+        <div class="card">
+            <img class="card-img-top" src="{% if course.image %}{{ course.image.url }}
                                       {% else %}{% static "dashboard/images/lessons.jpg" %}
                                       {% endif %}">
-                    <div class="card-block">
-                        <figure class="profile">
-                            <img src="{{ course.teacher.avatar.url }}"
-                                 class="profile-avatar" alt="">
-                        </figure>
-                        <h4 class="card-title mt-3">{{ course.title }}</h4>
-                        <div class="meta">
-                            <h6>{{ course.lesson.grade }}</h6>
-                        </div>
-                        <div class="card-text">
-                            <p style="padding-top: 25px">این درس توسط استاد {{ course.teacher.get_full_name }} تدریس میشود.</p>
-                        </div>
-                    </div>
-                    <div class="card-footer">
-                        <a class="btn text-light btn-secondary float-right btn-sm"
-                           href="#">درباره دوره</a>
-                    </div>
+            <div class="card-block">
+                <figure class="profile">
+                    <img src="{{ course.teacher.avatar.url }}" class="profile-avatar" alt="">
+                </figure>
+                <h4 class="card-title mt-3">{{ course.title }}</h4>
+                <div class="meta">
+                    <h6>{{ course.lesson.grade }}</h6>
+                </div>
+                <div class="card-text">
+                    <p style="padding-top: 25px">این درس توسط استاد {{ course.teacher.get_full_name }} تدریس میشود.</p>
                 </div>
             </div>
-        {% endfor %}
+            <div class="card-footer">
+                <a class="btn text-light btn-secondary float-right btn-sm" href="#">درباره دوره</a>
+            </div>
+        </div>
     </div>
+    {% endfor %}
+</div>
 {% endblock %}

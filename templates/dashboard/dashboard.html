@@ -1,180 +1,191 @@
 {% extends 'dashboard/base.html' %}
+{% load jformat %}
+{% load static %}
+
+<!-- Title block of base.html -->
+{% block title %}داشبورد{% endblock %}
+
+<!-- CSS files -->
+{% block CSSfiles %}
+<link rel="stylesheet" href="{% static 'dashboard/css/dashboard.css' %}">
+{% endblock %}
+
+<!-- Active menu of sidebar -->
+{% block dashboard_active %}active-menu{% endblock %}
+
+<!-- Content of page -->
 {% block content %}
-    {% load jformat %}
-    {% load static %}
-    <div class="row">
-        <div class="col-md-6 overflow-div">
-            <div class="card">
-                <div class="card-header p-0" style="text-align:center;">
-                    <h4 class="m-0">کلاس های شما</h4>
-                </div>
-                <div class="row search-div">
-                    <div class="col-md-12 col-12">
-                        <div class="search-input">
-                            <input type="text" class="form-control rounded-0" placeholder="Search user"
-                                   aria-label="Recipient's username" aria-describedby="basic-addon2"
-                                   id="user-list-search">
-                        </div>
-                    </div>
-                </div>
-                {#            list of courses -----------------------------------------------------------------------------------                  #}
-                <ul class="list-group" id="user-list">
-                    {% for course in courses %}
-                        <li class="list-group-item">
-                            <div class="row">
-                                <div class="col-md-12 col-12">
-                                    <div class="row">
-                                        <div class="col-md-4 col-4 user-img text-center pt-1">
-                                            {% if course.teacher.avatar %}
-                                                <img src="{{ course.teacher.avatar.url }}" alt="Seth Frazier"
-                                                     class="img-responsive img-circle rounded-circle"/>
-                                            {% else %}
-                                                <img src="{% static 'dashboard/images/teacher.png' %}"
-                                                     alt="Seth Frazier"
-                                                     class="img-responsive img-circle rounded-circle"/>
-                                            {% endif %}
-                                        </div>
-                                        <div class="col-md-8 col-8">
-                                            <h5 class="font-weight-bold mb-1">{{ course.teacher.get_full_name }}</h5>
-                                            <div class="user-detail">
-                                                <p class="m-0">{{ course.title }}</p>
-                                                <a href="{{ course.url }}" class="btn btn-secondary btn-lg active"
-                                                   role="button"
-                                                   aria-pressed="true">Link</a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </li>
-                    {% endfor %}
-                </ul>
-            </div>
-
+<div class="row">
+  <div class="col-md-6 overflow-div">
+    <div class="card">
+      <div class="card-header p-0" style="text-align:center;">
+        <h4 class="m-0">کلاس های شما</h4>
+      </div>
+      <div class="row search-div">
+        <div class="col-md-12 col-12">
+          <div class="search-input">
+            <input type="text" class="form-control rounded-0" placeholder="Search user"
+              aria-label="Recipient's username" aria-describedby="basic-addon2" id="user-list-search">
+          </div>
         </div>
-
-              <div class = "col-md-6">
-                <div class = "row">
-                  <div class = "wrap">
-                    <h1> زمان تا شروع کلاس بعدی </h1>
-                  <div class="countdown">
-                   <div class="bloc-time days" >
-
-                       <div class="figure days days-1">
-                         <span class="top">-</span>
-                         <span class="top-back">
-                           <span>-</span>
-                         </span>
-                         <span class="bottom">-</span>
-                         <span class="bottom-back">
-                           <span>-</span>
-                         </span>
-                       </div>
-                         <div class="figure days days-2">
-                         <span class="top">-</span>
-                         <span class="top-back">
-                           <span>-</span>
-                         </span>
-                         <span class="bottom">-</span>
-                         <span class="bottom-back">
-                           <span>-</span>
-                         </span>
-                       </div>
-                     </div>
-                     <div class="bloc-time hours" >
-
-                       <div class="figure hours hours-1">
-                         <span class="top">-</span>
-                         <span class="top-back">
-                           <span>2</span>
-                         </span>
-                         <span class="bottom">-</span>
-                         <span class="bottom-back">
-                           <span>-</span>
-                         </span>
-                       </div>
-
-                       <div class="figure hours hours-2">
-                         <span class="top">-</span>
-                         <span class="top-back">
-                           <span>-</span>
-                         </span>
-                         <span class="bottom">-</span>
-                         <span class="bottom-back">
-                           <span>-</span>
-                         </span>
-                       </div>
-                     </div>
-
-                     <div class="bloc-time min" >
-
-                       <div class="figure min min-1">
-                         <span class="top">-</span>
-                         <span class="top-back">
-                           <span>-</span>
-                         </span>
-                         <span class="bottom">-</span>
-                         <span class="bottom-back">
-                           <span>-</span>
-                         </span>
-                       </div>
-
-                       <div class="figure min min-2">
-                        <span class="top">-</span>
-                         <span class="top-back">
-                           <span>-</span>
-                         </span>
-                         <span class="bottom">-</span>
-                         <span class="bottom-back">
-                           <span>-</span>
-                         </span>
-                       </div>
-                     </div>
-
-                     <div class="bloc-time sec" data-init-value="{{class_time.total_seconds}}">
-
-                         <div class="figure sec sec-1">
-                         <span class="top">-</span>
-                         <span class="top-back">
-                           <span>-</span>
-                         </span>
-                         <span class="bottom">-</span>
-                         <span class="bottom-back">
-                           <span>-</span>
-                         </span>
-                       </div>
-
-                       <div class="figure sec sec-2">
-                         <span class="top">-</span>
-                         <span class="top-back">
-                           <span>-</span>
-                         </span>
-                         <span class="bottom">-</span>
-                         <span class="bottom-back">
-                           <span>-</span>
-                         </span>
-                       </div>
-                     </div>
-                   </div>
+      </div>
+      {#            list of courses -----------------------------------------------------------------------------------                  #}
+      <ul class="list-group" id="user-list">
+        {% for course in courses %}
+        <li class="list-group-item">
+          <div class="row">
+            <div class="col-md-12 col-12">
+              <div class="row">
+                <div class="col-md-4 col-4 user-img text-center pt-1">
+                  {% if course.teacher.avatar %}
+                  <img src="{{ course.teacher.avatar.url }}" alt="Seth Frazier"
+                    class="img-responsive img-circle rounded-circle" />
+                  {% else %}
+                  <img src="{% static 'dashboard/images/teacher.png' %}" alt="Seth Frazier"
+                    class="img-responsive img-circle rounded-circle" />
+                  {% endif %}
+                </div>
+                <div class="col-md-8 col-8">
+                  <h5 class="font-weight-bold mb-1">{{ course.teacher.get_full_name }}</h5>
+                  <div class="user-detail">
+                    <p class="m-0">{{ course.title }}</p>
+                    <a href="{{ course.url }}" class="btn btn-secondary btn-lg active" role="button"
+                      aria-pressed="true">Link</a>
+                  </div>
                 </div>
               </div>
-            <h1>{{ is_class_active }} ------------- {{class_time.day}}</h1>
-            {#                          calendar ---------------------------------------------------------------------#}
-            <div class="row">
-                <div class="col-md-6 calender">
-                    <time datetime="2014-09-20" class="icon">
-                        <em>{{ now |jformat:"%A" }}</em>
-                        <strong>{{ now |jformat:"%B" }}</strong>
-                        <span> {{ now |jformat:"%d" }} </span>
-                    </time>
-                </div>
+            </div>
+          </div>
+        </li>
+        {% endfor %}
+      </ul>
+    </div>
+
+  </div>
+
+  <div class="col-md-6">
+    <div class="row">
+      <div class="wrap">
+        <h1> زمان تا شروع کلاس بعدی </h1>
+        <div class="countdown">
+          <div class="bloc-time days">
+
+            <div class="figure days days-1">
+              <span class="top">-</span>
+              <span class="top-back">
+                <span>-</span>
+              </span>
+              <span class="bottom">-</span>
+              <span class="bottom-back">
+                <span>-</span>
+              </span>
+            </div>
+            <div class="figure days days-2">
+              <span class="top">-</span>
+              <span class="top-back">
+                <span>-</span>
+              </span>
+              <span class="bottom">-</span>
+              <span class="bottom-back">
+                <span>-</span>
+              </span>
+            </div>
+          </div>
+          <div class="bloc-time hours">
+
+            <div class="figure hours hours-1">
+              <span class="top">-</span>
+              <span class="top-back">
+                <span>2</span>
+              </span>
+              <span class="bottom">-</span>
+              <span class="bottom-back">
+                <span>-</span>
+              </span>
             </div>
 
+            <div class="figure hours hours-2">
+              <span class="top">-</span>
+              <span class="top-back">
+                <span>-</span>
+              </span>
+              <span class="bottom">-</span>
+              <span class="bottom-back">
+                <span>-</span>
+              </span>
+            </div>
+          </div>
+
+          <div class="bloc-time min">
+
+            <div class="figure min min-1">
+              <span class="top">-</span>
+              <span class="top-back">
+                <span>-</span>
+              </span>
+              <span class="bottom">-</span>
+              <span class="bottom-back">
+                <span>-</span>
+              </span>
+            </div>
+
+            <div class="figure min min-2">
+              <span class="top">-</span>
+              <span class="top-back">
+                <span>-</span>
+              </span>
+              <span class="bottom">-</span>
+              <span class="bottom-back">
+                <span>-</span>
+              </span>
+            </div>
+          </div>
+
+          <div class="bloc-time sec" data-init-value="{{class_time.total_seconds}}">
+
+            <div class="figure sec sec-1">
+              <span class="top">-</span>
+              <span class="top-back">
+                <span>-</span>
+              </span>
+              <span class="bottom">-</span>
+              <span class="bottom-back">
+                <span>-</span>
+              </span>
+            </div>
+
+            <div class="figure sec sec-2">
+              <span class="top">-</span>
+              <span class="top-back">
+                <span>-</span>
+              </span>
+              <span class="bottom">-</span>
+              <span class="bottom-back">
+                <span>-</span>
+              </span>
+            </div>
+          </div>
         </div>
-
+      </div>
     </div>
-    
+    <h1>{{ is_class_active }} ------------- {{class_time.day}}</h1>
+    {#                          calendar ---------------------------------------------------------------------#}
+    <div class="row">
+      <div class="col-md-6 calender">
+        <time datetime="2014-09-20" class="icon">
+          <em>{{ now |jformat:"%A" }}</em>
+          <strong>{{ now |jformat:"%B" }}</strong>
+          <span> {{ now |jformat:"%d" }} </span>
+        </time>
+      </div>
+    </div>
+
+  </div>
+
+</div>
 {% endblock %}
-<script type="text/javascript" src="{% static 'dashboard/js/dashboard.js'%}"> </script>
 
-
+<!-- JS files -->
+{% block JSfile %}
+<script type="text/javascript" src="{% static 'dashboard/js/dashboard-timer.js' %}"></script>
+{% endblock %}

@@ -51,7 +51,7 @@ function addItemToCart(title, price, teacher, imageSrc) {
     var cartItemNames = cartItems.getElementsByClassName('product-name')
     for (var i = 0; i < cartItemNames.length; i++) {
         if (cartItemNames[i].textContent == title) {
-            alert('This item is already added to the cart')
+            alert('قبلا انتخاب کردید . ')
             return
         }
     }
