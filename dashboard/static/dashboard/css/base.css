@@ -16,14 +16,15 @@ a, a:hover, a:focus {
 }
 
 /* Sidebar CSS */
-
 #sidebar {
     min-width: 250px;
     max-width: 250px;
     background: #FFDE03;
     color: #fff;
-    transition: all 0.5s;
-    position: relative;
+    transition: all 0.3s;
+    position: fixed;
+    height: 100%;
+    z-index: 1;
 }
 
 #sidebar.active {
@@ -67,13 +68,14 @@ a, a:hover, a:focus {
 }
 
 .sidebar-menu {
-    padding-right: 40px;
+    padding-right: 30px;
+    margin-right: 1px;
+    margin-left: 1px;
 }
 
 .sidebar-menu hr {
     margin-top: 5px;
     margin-bottom: 5px;
-    color: ;
 }
 
 .sidebar-menu img {
@@ -98,15 +100,17 @@ a, a:hover, a:focus {
 
 .active-menu {
     background-color: #fafafa;
-    padding: 8px 40px 8px 0px;
-    border-top-right-radius: 50px;
-    border-bottom-left-radius: 50px;
+    border-radius: 50px;
+    padding-top: 8px;
+    padding-bottom: 8px;
+    margin-right: 1px;
+    margin-left: 1px;
 }
 
 .footer {
+    position: absolute;
     bottom: 10px;
     left: 5px;
-    position: absolute;
 }
 
 .footer img {
@@ -152,23 +156,46 @@ a, a:hover, a:focus {
     margin-right: 5px;
 }
 
+
+/* Wrapper content of page CSS */
+#content {
+    margin-right: 250px;
+}
+#content.active {
+    margin-right: 0px;
+}
+
 /* ---------------------------------------------------
     MEDIAQUERIES for when screen width is lower than 768 pixels
 ----------------------------------------------------- */
 
-@media (max-width: 768px) {
+@media (max-width: 900px) {
     #sidebar {
         margin-right: -250px;
         text-align: center;
+        position: relative;
+        height: inherit;
+
     }
     #sidebar.active {
         margin-left: 0;
         margin-right: 0;
+        position: relative;
+        height: inherit;
     }
     #sidebarCollapse span {
         display: none;
     }
     .navbar-nav li {
         margin-top: 20px;
+    }
+    #content{
+        margin-right: 0px;
+        height: inherit;
+    }
+    .footer{
+        bottom: 10px;
+        left: 5px;
+        position: absolute;
     }
 }

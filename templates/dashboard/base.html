@@ -42,7 +42,8 @@
                 <div class="col-md-8">
                     <div class="row">
                         <div class="col-md-12">
-                            <p class="account-title-name">{{ user.get_full_name }}<p>
+                            <p class="account-title-name">{{ user.get_full_name }}
+                                <p>
                         </div>
                         <div class="col-md-12">
                             <!-- Give grade title from m2m field grade -->
@@ -52,7 +53,7 @@
                 </div>
             </div>
             <!-- Sidebar menus ! block for active menu -->
-            <div class="container">
+            <div class="container" style="">
                 <div class="row sidebar-menu {% block dashboard_active %}{% endblock %}">
                     <img src="{% static 'home/images/icons/home.svg' %}" alt="آیکون">
                     <a href="{% url 'dashboard' %}">داشبورد</a>
@@ -86,7 +87,7 @@
         <div id="content">
 
             <!-- Navigation bar -->
-            <nav class="navbar navbar-inverse">
+            <nav class="navbar navbar-inverse sticky-top">
                 <div class="container-fluid ">
                     <!-- Toggle button -->
                     <button type="button" id="sidebarCollapse" class="btn btn-warning">
@@ -122,8 +123,9 @@
     <!-- JS file for base.html  -->
     <script src="{% static 'dashboard/js/base.js' %}"></script>
     <!-- JS files for other page -->
-    {% block JSfiles %}
+    {% block JSfile %}
     {% endblock %}
+
 </body>
 
 </html>
