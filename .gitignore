@@ -213,6 +213,7 @@ pyvenv.cfg
 .env
 .venv
 env/
+/static/
 venv/
 ENV/
 env.bak/
