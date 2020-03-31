@@ -46,7 +46,7 @@ def edit_profile(request):
     if request.method == 'POST':
         if request.POST.get("upload"):
             avatar = request.FILES.get("avatar")
-            if  avatar  :
+            if avatar:
                 if not request.user.avatar.url.startswith("/media/defaults"):
                     request.user.avatar.delete()
                 request.user.avatar = avatar

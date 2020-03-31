@@ -3,3 +3,5 @@ admin.py
 
 اضافه کردن filter(now<end_date)
 خط 17 views.py
+
+زوم تو صفحه داشبورد مشکل دارد

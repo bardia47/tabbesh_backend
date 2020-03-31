@@ -35,10 +35,10 @@
             <div class="row mb-2">
                 <!-- Name field -->
                 <div class="field-label col-md-2">
-                    <label for="name">نام</label>
+                    <label for="first_name">نام</label>
                 </div>
                 <div class="col-md-4">
-                    <input type="text" id="name">
+                    <input type="text" id="first_name" name="first_name">
                 </div>
                 <!-- Gender field -->
                 <div class="col-md-6">
@@ -51,51 +51,55 @@
                             <div class="row">
                                 <div class="col-md-6 custom-radio custom-control-inline">
                                     <span> پسر </span>
-                                    <input type="radio" class="custom-control-input" id="grade_boy" name="example"
+                                    <input type="radio" class="custom-control-input" id="gender_boy" name="gender"
                                         value="boy-selection">
-                                    <label class="custom-control-label yellow " for="grade_boy"></label>
+                                    <label class="custom-control-label yellow " for="gender_boy"></label>
                                 </div>
                                 <div class="col-md-6 custom-radio custom-control-inline">
                                     <span> دختر </span>
-                                    <input type="radio" class="custom-control-input" id="grade_girl" name="example"
+                                    <input type="radio" class="custom-control-input" id="gender_girl" name="gender"
                                         value="girl-selection">
-                                    <label class="custom-control-label yellow" for="grade_girl"></label>
+                                    <label class="custom-control-label yellow" for="gender_girl"></label>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <!-- Gender field -->
+            <!-- Last name field -->
             <div class="row mb-2">
                 <div class="col-md-2 field-label">
-                    <label for="fname">نام خانوادگی</label>
+                    <label for="last_name">نام خانوادگی</label>
                 </div>
                 <div class="col-md-4">
-                    <input type="text" id="fname">
+                    <input type="text" id="last_name" name="last_name">
                 </div>
             </div>
-            <!-- National code field -->
+            <!-- Username field -->
             <div class="row mb-2">
                 <div class="col-md-2 field-label">
-                    <label for="nationalcode">کد ملی</label>
+                    <label for="username">نام کاربری</label>
                 </div>
                 <div class="col-md-4">
-                    <input type="text" id="nationalcode">
+                    <input type="text" id="username" name="username" required>
                 </div>
             </div>
-            <!-- City field -->
+            <!-- Password1 field -->
             <div class="row mb-2">
                 <div class="col-md-2 field-label">
-                    <label for="city">شهر</label>
+                    <label for="password1">رمز عبور</label>
                 </div>
                 <div class="col-md-4">
-                    <select id="city">
-                        <option selected disabled>لطفا شهر خود را انتخاب کنید</option>
-                        <option value="1">تهران</option>
-                        <option value="2">قم</option>
-                        <option value="3">اراک</option>
-                    </select>
+                    <input type="password" id="password1" name="password1" required>
+                </div>
+            </div>
+            <!-- Password2 field -->
+            <div class="row mb-2">
+                <div class="col-md-2 field-label">
+                    <label for="password2">تکرار رمز عبور</label>
+                </div>
+                <div class="col-md-4">
+                    <input type="password" id="password2" name="password2" required>
                 </div>
             </div>
             <!-- Grade field -->
@@ -104,11 +108,10 @@
                     <label for="grade">پایه</label>
                 </div>
                 <div class="col-md-4">
-                    <select id="grade">
-                        <option selected disabled>لطفا پایه خود را انتخاب کنید</option>
-                        <option value="1">نهم</option>
-                        <option value="2">دهم</option>
-                        <option value="3">یازدهم</option>
+                    <select id="grades" name="grades" required>
+                            {% for element in form.fields.grades.queryset %}
+                            <option value="{{ element.id }}" >{{ element.title }}</option>
+                            {% endfor %}
                     </select>
                 </div>
             </div>
@@ -120,7 +123,7 @@
                 <div class="phone-number-field col-md-10">
                     <!-- pattern check phone number is valid or not -->
                     <input type="text" class="phone-number" pattern="9(0[1-2]|1[0-9]|3[0-9]|2[0-1])-?[0-9]{3}-?[0-9]{4}"
-                        id="defaultInline10">
+                        id="defaultInline10" name="phone_number">
                     <input type="text" value="+98" class="area-code" readonly>
                     <p>نکته : شماره تلفن را بدون صفر وارد کنید . مثال : 9121111111</p>
                 </div>

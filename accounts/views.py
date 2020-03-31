@@ -10,7 +10,6 @@ from accounts.models import City
 def signup(request):
     if request.method == 'POST':
         form = UserForm(request.POST)
-        # User has info and wants an account now!
         if request.POST['password'] == request.POST['password2']:
             try:
                 user = User.objects.get(username=request.POST['username'])
@@ -27,7 +26,6 @@ def signup(request):
             form.errors = {'password': 'Passwords must match'}
             return render(request, {'form': form})
     else:
-        # User wants to enter info
         form = UserForm()
         return render(request, 'accounts/signup.html', {'form': form})
 
@@ -42,7 +40,7 @@ def signin(request):
             auth.login(request, user)
             return redirect('dashboard')
         else:
-            return render(request, 'accounts/signin.html', {'error': 'username or password is incorrect.'})
+            return render(request, 'accounts/signin.html', {'error': 'نام کاربری یا رمز عبور اشتباه است'})
     else:
         return render(request, 'accounts/signin.html')
 

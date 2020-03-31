@@ -14,10 +14,10 @@
     <h1>پروفایل</h1>
     <hr>
     <form class="form-horizontal" action="{% url 'edit_profile' %}" method="POST" enctype="multipart/form-data">
-        <input type="hidden" id="user.username" name="user.username" value={{ user.username }}>
+{#        <input type="hidden" id="user.username" name="user.username" value={{ user.username }}>#}
 
         <div class="row">
-            <!-- left column -->
+            <!-- right column -->
             <div class="col-md-3">
 
                 {% csrf_token %}
@@ -30,7 +30,7 @@
                 <div class="col-md-8">
                     <input type="submit" name="upload" class="btn btn-primary" value="آپلود">
                 </div>
-                </hr><br>
+                <hr><br>
             </div>
 
 
@@ -80,7 +80,7 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="col-lg-3 control-label">شهر</label>
+                    <label for="city" class="col-lg-3 control-label">شهر</label>
                     <div class="col-lg-8">
                         <div class="ui-select">
                             <select id="city" name="city" required>
@@ -95,12 +95,12 @@
                 <div class="form-group">
                     <label class="col-md-3 control-label">آدرس</label>
                     <div class="col-md-8">
-                        <input class="form-control" type="text" name="address" value="آدرس دقیق را وارد کنید ..."
+                        <input class="form-control" type="text" name="address" value="{{ user.address }}"
                             maxlength="255" required>
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="col-md-3 control-label">پایه تحصیلی</label>
+                    <label for="grades" class="col-md-3 control-label">پایه تحصیلی</label>
                     <div class="col-md-8">
                         <select id="grades" name="grades" required>
                             {% for element in form.fields.grades.queryset %}

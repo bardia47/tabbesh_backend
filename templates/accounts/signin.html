@@ -26,10 +26,13 @@
             <!-- Password Input -->
             <div class="row" style="margin:10px; margin-bottom:20px">
                <p> رمز عبور </p>
-               <input type="password" id="inputPassword" name="password" class="form-control" placeholder="رمز عبور خود را با دقت وارد کنید ..." required style "background-color:#BEBEBD">
+               <input type="password" id="inputPassword" name="password" class="form-control" placeholder="رمز عبور خود را با دقت وارد کنید ..." required style="background-color:#BEBEBD">
             </div>
          </div>
          <button class="btn btn-lg btn-warning btn-block sign-in-button" type="submit">ورود</button>
+            {% if error %}
+            <p style="color: #7c0001">{{ error }}</p>
+            {% endif %}
          <p class="footer-p"> حساب کاربری ندارید؟ <span><a href="{% url 'signup' %}" style="">ثبت نام کنید</a></span></p>
       </form>
    </body>
