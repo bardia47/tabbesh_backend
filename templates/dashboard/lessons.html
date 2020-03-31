@@ -6,7 +6,6 @@
 <!-- CSS files -->
 {% block CSSfiles %}
 <link rel="stylesheet" href="{% static 'dashboard/css/lessons.css' %}">
-<link rel="stylesheet" href="{% static 'dashboard/css/dashboard.css' %}">
 {% endblock %}
 
 <!-- Active menu of sidebar -->
@@ -14,29 +13,61 @@
 
 <!-- Content of page -->
 {% block content %}
-<!-- Post Rows -->
+<!-- Course Rows -->
 <div class="row">
     {% for course in courses %}
-    <!-- Post Cards -->
-    <div class="col-sm-6 col-md-4 col-lg-3 mt-4">
-        <div class="card">
-            <img class="card-img-top" src="{% if course.image %}{{ course.image.url }}
-                                      {% else %}{% static "dashboard/images/lessons.jpg" %}
-                                      {% endif %}">
-            <div class="card-block">
-                <figure class="profile">
-                    <img src="{{ course.teacher.avatar.url }}" class="profile-avatar" alt="">
+    <!-- Course Cards -->
+    <div class="col-md-4">
+        <!-- Course Card  -->
+        <div class="card course-card">
+            <!-- Course poster -->
+            <img class="card-img-top course-card-image" src="{{ course.image.url }}">
+            <!-- Course content -->
+            <div class="card-block course-card-block">
+                <!-- Teacher profile  -->
+                <figure class="teacher-profile">
+                    <img src="{{ course.teacher.avatar.url }}" class="profile-avatar" alt="course teacher profile">
                 </figure>
+                <!-- Course title  -->
                 <h4 class="card-title mt-3">{{ course.title }}</h4>
-                <div class="meta">
+                <!-- Course grade  -->
+                <div class="course-grade">
                     <h6>{{ course.lesson.grade }}</h6>
                 </div>
-                <div class="card-text">
-                    <p style="padding-top: 25px">این درس توسط استاد {{ course.teacher.get_full_name }} تدریس میشود.</p>
+                <!-- Course calender for next class  -->
+                <div class="course-calender">
+                    <p>
+                        <img src="{% static 'home/images/icons/clock.svg'%}" alt="">
+                        جلسه ی بعدی:
+                        <span>یکشنبه 12 فروردین</span>
+                    </p>
+                </div>
+                <!-- End of the course  -->
+                <div class="course-end-date">
+                    <p>
+                        <img src="{% static 'home/images/icons/calendar.svg'%}" alt="">
+                        اتمام دوره:
+                        <span>سه شنبه 14 اردیبهشت</span>
+                    </p>
+                </div>
+                <!-- Description of the course  -->
+                <div class="course-description">
+                    <p class="course-description-title">
+                        <img src="{% static 'home/images/icons/paragraph.svg'%}" alt="">
+                        توضیحات:
+                    </p>
+                    <p class="course-description-p">
+                        در این دوره مبحث الکترومغناطیس به طور کامل پوشش داده شده و شما را برای صد زدن در کنکور آماده می
+                        کند
+                    </p>
                 </div>
             </div>
-            <div class="card-footer">
-                <a class="btn text-light btn-secondary float-right btn-sm" href="#">درباره دوره</a>
+            <!-- Button link to class -->
+            <div class="card-footer button-to-class">
+                <button class="btn btn-success">
+                    <img src="{% static 'home/images/icons/click.svg'%}" alt="button link to class">
+                    ورود به کلاس
+                </button>
             </div>
         </div>
     </div>

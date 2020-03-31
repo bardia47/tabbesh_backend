@@ -160,10 +160,15 @@ a, a:hover, a:focus {
 /* Wrapper content of page CSS */
 #content {
     margin-right: 250px;
+    width: 100%;
+    padding: 20px;
+    min-height: 100vh;
+    transition: all 0.3s;
 }
 #content.active {
     margin-right: 0px;
 }
+  
 
 /* ---------------------------------------------------
     MEDIAQUERIES for when screen width is lower than 768 pixels

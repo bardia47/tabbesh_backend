@@ -13,63 +13,20 @@
 <!-- Active menu of sidebar -->
 {% block dashboard_active %}active-menu{% endblock %}
 
-<!-- Content of page -->
+<!-- Content of dashboard page  -->
 {% block content %}
-<div class="row">
-  <div class="col-md-6 overflow-div">
-    <div class="card">
-      <div class="card-header p-0" style="text-align:center;">
-        <h4 class="m-0">کلاس های شما</h4>
-      </div>
-      <div class="row search-div">
-        <div class="col-md-12 col-12">
-          <div class="search-input">
-            <input type="text" class="form-control rounded-0" placeholder="Search user"
-              aria-label="Recipient's username" aria-describedby="basic-addon2" id="user-list-search">
-          </div>
-        </div>
-      </div>
-      {#            list of courses -----------------------------------------------------------------------------------                  #}
-      <ul class="list-group" id="user-list">
-        {% for course in courses %}
-        <li class="list-group-item">
-          <div class="row">
-            <div class="col-md-12 col-12">
-              <div class="row">
-                <div class="col-md-4 col-4 user-img text-center pt-1">
-                  {% if course.teacher.avatar %}
-                  <img src="{{ course.teacher.avatar.url }}" alt="Seth Frazier"
-                    class="img-responsive img-circle rounded-circle" />
-                  {% else %}
-                  <img src="{% static 'dashboard/images/teacher.png' %}" alt="Seth Frazier"
-                    class="img-responsive img-circle rounded-circle" />
-                  {% endif %}
-                </div>
-                <div class="col-md-8 col-8">
-                  <h5 class="font-weight-bold mb-1">{{ course.teacher.get_full_name }}</h5>
-                  <div class="user-detail">
-                    <p class="m-0">{{ course.title }}</p>
-                    <a href="{{ course.url }}" class="btn btn-secondary btn-lg active" role="button"
-                      aria-pressed="true">Link</a>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </li>
-        {% endfor %}
-      </ul>
-    </div>
-
-  </div>
-
-  <div class="col-md-6">
-    <div class="row">
+<div class="container">
+  <!-- Countdown & date section -->
+  <div class="row">
+    <!-- Countdown to first class -->
+    <div class="col-md-6">
       <div class="wrap">
+        <!-- Title of countdown -->
         <h1> زمان تا شروع کلاس بعدی </h1>
         <div class="countdown">
-          <div class="bloc-time days">
-
+          <!-- Days section of countdown -->
+          <div class="bloc-time days ">
+            <h6> روز </h6>
             <div class="figure days days-1">
               <span class="top">-</span>
               <span class="top-back">
@@ -91,8 +48,9 @@
               </span>
             </div>
           </div>
+          <!-- Hours section of countdown -->
           <div class="bloc-time hours">
-
+            <h6> ساعت </h6>
             <div class="figure hours hours-1">
               <span class="top">-</span>
               <span class="top-back">
@@ -115,9 +73,9 @@
               </span>
             </div>
           </div>
-
-          <div class="bloc-time min">
-
+          <!-- Minutes section of countdown -->
+          <div id="minutes-block" class="bloc-time min">
+            <h6> دقیقه </h6>
             <div class="figure min min-1">
               <span class="top">-</span>
               <span class="top-back">
@@ -140,9 +98,9 @@
               </span>
             </div>
           </div>
-
-          <div class="bloc-time sec" data-init-value="{{class_time.total_seconds}}">
-
+          <!-- Seconds section of countdown -->
+          <div id="second-block" class="bloc-time sec" data-init-value="{{class_time.total_seconds}}">
+            <h6> ثانیه </h6>
             <div class="figure sec sec-1">
               <span class="top">-</span>
               <span class="top-back">
@@ -168,24 +126,67 @@
         </div>
       </div>
     </div>
-    <h1>{{ is_class_active }} ------------- {{class_time.day}}</h1>
-    {#                          calendar ---------------------------------------------------------------------#}
-    <div class="row">
-      <div class="col-md-6 calender">
-        <time datetime="2014-09-20" class="icon">
-          <em>{{ now |jformat:"%A" }}</em>
-          <strong>{{ now |jformat:"%B" }}</strong>
-          <span> {{ now |jformat:"%d" }} </span>
-        </time>
+    <!-- Responsive date with jformat -->
+    <div class="col-md-6">
+      <div class="row">
+        <div class="col-md-6 calender">
+          <time class="icon">
+            <em>{{ now |jformat:"%A" }}</em>
+            <strong>{{ now |jformat:"%B" }}</strong>
+            <span> {{ now |jformat:"%d" }} </span>
+          </time>
+        </div>
       </div>
     </div>
-
+    </div>
+    <hr>
+    <!-- Course cards -->
+  <div class="row">
+    <div class="col-md-12 card-section">
+          <!-- Course cards title -->
+      <div class="card-title">
+          <h4>کلاس های شما</h4>
+        </div>
+        <!-- Loop for Courses  -->
+        {% for course in courses %}
+        <div class="card">
+          <div class="card-body">
+            <div class="row">
+              <!-- Course image -->
+              <div class="col-md-1 course-image">
+                <img src="{{ course.image.url }}" alt="course image">
+              </div>
+              <!-- Course title -->
+              <div class="col-md-2 course-title">
+                <p class="course-title">{{ course.title }}</p>
+              </div>
+              <!--Course teacher name -->
+              <div class="col-md-2 course-teacher-name">
+                <p>{{ course.teacher.get_full_name}}</p>
+              </div>
+              <!-- Course date -->
+              <div class="col-md-3 course-date">
+                <p><img src="{% static 'home/images/icons/calendar.svg'%}" alt="calender icon" >شروع نشده ساعت 12 بیا</p>
+            </div>
+            <!-- Button link to class -->
+              <div class="col-md-4 button-to-class">
+                <button class="btn"><img src="{% static 'home/images/icons/click.svg'%}" alt="button link to class">بریم سر کلاس</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+  
+    </div>
+  
   </div>
 
+
 </div>
+
 {% endblock %}
 
 <!-- JS files -->
 {% block JSfile %}
-<script type="text/javascript" src="{% static 'dashboard/js/dashboard-timer.js' %}"></script>
+<script src="{% static 'dashboard/js/dashboard-timer.js' %}"></script>
 {% endblock %}

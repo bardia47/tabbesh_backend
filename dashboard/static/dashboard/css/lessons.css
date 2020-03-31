@@ -1,11 +1,6 @@
-h5 {
-  font-size: 1.28571429em;
-  font-weight: 700;
-  line-height: 1.2857em;
-  margin: 0;
-}
+/* Lesson page CSS */
 
-.card {
+.course-card {
   font-size: 1em;
   overflow: hidden;
   padding: 0;
@@ -42,23 +37,9 @@ h5 {
   color: rgba(0, 0, 0, .68);
 }
 
-.card-footer {
-  font-size: 1em;
-  position: static;
-  top: 0;
-  left: 0;
-  max-width: 100%;
-  padding: .75em 1em;
-  color: rgba(0, 0, 0, .4);
-  border-top: 1px solid rgba(0, 0, 0, .05) !important;
-  background: #fff;
-}
+/* Teacher profile image */
 
-.card-inverse .btn {
-  border: 1px solid rgba(0, 0, 0, .05);
-}
-
-.profile {
+.teacher-profile {
   position: absolute;
   top: -30px;
   display: inline-block;
@@ -78,40 +59,98 @@ h5 {
   border-radius: 50%;
 }
 
-.profile-inline {
-  position: relative;
-  top: 0;
-  display: inline-block;
+/* Course grade */
+
+.course-grade h6 {
+  font-size: 15px;
+  color: rgba(0, 0, 0, .4);
 }
 
-.profile-inline~.card-title {
-  display: inline-block;
-  margin-left: 4px;
-  vertical-align: top;
+/* Course calendar */
+
+.course-calender {
+  margin-top: 20px;
+  font-size: 15px;
 }
 
-.text-bold {
-  font-weight: 700;
+.course-calender img {
+  width: 20px;
+  height: 20px;
+  margin-left: 5px;
 }
 
-.meta {
+.course-calender p {
+  font-family: 'Dana_Bold';
+}
+
+.course-calender span {
+  font-family: 'Vazir_Light';
+}
+
+/* Course end date */
+
+.course-end-date {
+  margin-top: 20px;
+  font-size: 15px;
+}
+
+.course-end-date img {
+  width: 20px;
+  height: 20px;
+  margin-left: 5px;
+}
+
+.course-end-date p {
+  font-family: 'Dana_Bold';
+}
+
+.course-end-date span {
+  font-family: 'Vazir_Light';
+}
+
+/* Course description */
+
+.course-description {
+  margin-top: 20px;
+  font-size: 15px;
+}
+
+.course-description img {
+  width: 20px;
+  height: 20px;
+  margin-left: 5px;
+}
+
+.course-description-title {
+  font-family: 'Dana_Bold';
+}
+
+.course-description-p {
+  font-family: 'Vazir_Light';
+  margin-right: 20px;
+}
+
+/* Footer of course card */
+
+.card-footer {
   font-size: 1em;
+  position: static;
+  top: 0;
+  left: 0;
+  max-width: 100%;
+  padding: .75em 1em;
   color: rgba(0, 0, 0, .4);
+  border-top: 1px solid rgba(0, 0, 0, .05) !important;
+  background: #fff;
 }
 
-.meta a {
-  text-decoration: none;
-  color: rgba(0, 0, 0, .4);
+.button-to-class {
+  text-align: center;
+  direction: ltr;
 }
 
-.meta a:hover {
-  color: rgba(0, 0, 0, .87);
-}
-
-.carousel-indicators {
-  bottom: -50px;
-}
-
-.container {
-  margin-bottom: 40px;
+.button-to-class img {
+  width: 20px;
+  height: 20px;
+  margin-right: 5px;
 }
