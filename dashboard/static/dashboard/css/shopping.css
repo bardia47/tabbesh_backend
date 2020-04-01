@@ -1,136 +1,387 @@
-/* Shopping Cards CSS */
+/* Shopping CSS */
 
-h5 {
-    font-size: 1.28571429em;
-    font-weight: 700;
-    line-height: 1.2857em;
-    margin: 0;
+.shopping {
+  height: 76%;
+  width: 100%;
+  margin: 20px auto;
 }
 
-.card {
-    font-size: 1em;
-    overflow: hidden;
-    padding: 0;
-    border: none;
-    border-radius: .28571429rem;
-    box-shadow: 0 1px 3px 0 #d4d4d5, 0 0 0 1px #d4d4d5;
+.shopping-content {
+  margin-top: 1px;
+  color: black;
 }
 
-.card-block {
-    font-size: 1em;
-    position: relative;
-    margin: 0;
-    padding: 1em;
-    border: none;
-    border-top: 1px solid rgba(34, 36, 38, .1);
-    box-shadow: none;
+.shopping-title {
+  margin-bottom: 40px;
+  text-align: center;
 }
 
-.card-img-top {
-    display: block;
-    width: 100%;
-    height: auto;
+/* Shopping cart section */
+
+.card-section {
+  text-align: center;
+  margin-bottom: 5px;
 }
 
-.card-title {
-    font-size: 1.28571429em;
-    font-weight: 700;
-    line-height: 1.2857em;
+.cart-title {
+  text-align: center;
+  background-color: #527318;
+  color: white;
+  padding: 20px;
+  border-radius: 4px;
+  margin-bottom: 5px;
 }
 
-.card-text {
-    clear: both;
-    margin-top: .5em;
-    color: rgba(0, 0, 0, .68);
+.cart-title img {
+  width: 35px;
+  height: 35px;
+  margin-left: 5px;
 }
 
 .cart-footer {
-    font-size: 1em;
-    position: static;
-    top: 0;
-    left: 0;
-    max-width: 100%;
-    padding: .75em 1em;
-    color: rgba(0, 0, 0, .4);
-    border-top: 1px solid rgba(0, 0, 0, .05) !important;
-    background: #fff;
-    margin-bottom: 20px;
-    text-align: center
+  font-size: 1em;
+  position: static;
+  top: 0;
+  left: 0;
+  max-width: 100%;
+  padding: .75em 1em;
+  color: rgba(0, 0, 0, .4);
+  background-color: transparent;
+  border: none;
+  margin-bottom: 20px;
+  text-align: center
 }
 
-.profile {
-    position: absolute;
-    top: -30px;
-    display: inline-block;
-    overflow: hidden;
-    box-sizing: border-box;
-    width: 60px;
-    height: 60px;
-    margin: 0;
-    border: 1px solid #fff;
-    border-radius: 50%;
+.cart-footer button {
+  background-color: #899857;
+  border: none;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+  height: 50px;
+  text-align: center;
+}
+
+.cart-footer button:focus, .cart-footer button:hover {
+  background-color: #527318;
+  border: none;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+  height: 50px;
+  text-align: center;
+  box-shadow: none;
+}
+.cart-total-price{
+  font-family: 'Vazir_light';
+  margin-top: 5px;
+}
+
+/* Shopping card with filter CSS */
+
+.shopping-search-title h1{
+  text-align: center;
+  padding: 5px;
+  margin: 30px;
+}
+.shopping-search-title img{
+  height: 50px;
+  width:50px;
+  margin-left: 5px;
+}
+
+/* Search filters */
+
+.form-search {
+  margin-bottom: 20px;
+}
+
+.form-search select {
+  text-align: center;
+  text-align-last: center;
+}
+.form-search input[type="submit"]{
+  background-color:#527318;
+  border: none;
+  color:#fff;
+}
+
+/* Shopping Cards CSS */
+
+.course-card {
+  font-size: 1em;
+  overflow: hidden;
+  padding: 0;
+  border: none;
+  border-radius: .28571429rem;
+  box-shadow: 0 1px 3px 0 #d4d4d5, 0 0 0 1px #d4d4d5;
+}
+
+.card-block {
+  font-size: 1em;
+  position: relative;
+  margin: 0;
+  padding: 1em;
+  border: none;
+  border-top: 1px solid rgba(34, 36, 38, .1);
+  box-shadow: none;
+}
+
+.card-img-top {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/* Course title */
+
+.course-title {
+  font-size: 1.28571429em;
+  font-weight: 700;
+  line-height: 1.2857em;
+}
+
+/* Course teacher profile image */
+
+.teacher-profile {
+  position: absolute;
+  top: -30px;
+  display: inline-block;
+  overflow: hidden;
+  box-sizing: border-box;
+  width: 60px;
+  height: 60px;
+  margin: 0;
+  border: 1px solid #fff;
+  border-radius: 50%;
 }
 
 .profile-avatar {
-    display: block;
-    width: 100%;
-    height: 100%;
-    border-radius: 50%;
+  display: block;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
 }
 
-.card-title {
-    display: inline-block;
-    margin-left: 4px;
-    vertical-align: top;
+/* Course teacher name  */
+
+.course-teacher-name h6 {
+  font-size: 15px;
+  color: rgba(0, 0, 0, .4);
 }
 
-.meta {
-    font-size: 1em;
-    color: rgba(0, 0, 0, .4);
+/* Course calendar */
+
+.course-calender {
+  margin-top: 20px;
+  font-size: 15px;
 }
 
-.meta a {
-    text-decoration: none;
-    color: rgba(0, 0, 0, .4);
+.course-calender img {
+  width: 20px;
+  height: 20px;
+  margin-left: 5px;
 }
 
-.meta a:hover {
-    color: rgba(0, 0, 0, .87);
+.course-calender p {
+  font-family: 'Dana_Bold';
 }
 
-/* Search section CSS */
-
-.shop {
-    height: 76%;
-    width: 90%;
-    margin: 20px auto;
+.course-calender-time {
+  margin-right: 20px;
+  font-family: 'Vazir_light' !important;
 }
 
-.search-content {
-    margin-top: 1px;
-    color: black;
+/* Course start date */
+
+.course-start-date {
+  margin-top: 20px;
+  font-size: 15px;
 }
 
-.search-title {
-    margin-bottom: 40px;
-    text-align: center;
+.course-start-date img {
+  width: 20px;
+  height: 20px;
+  margin-left: 5px;
 }
 
-.shopping-cards {
-    display: inline;
+.course-start-date p {
+  font-family: 'Dana_Bold';
 }
 
-.custom-select {
-    margin-bottom: 20px;
+.course-start-date span {
+  font-family: 'Vazir_Light';
 }
 
-select {
-    text-align: center;
-    text-align-last: center;
+/* Course end date */
+
+.course-end-date {
+  margin-top: 20px;
+  font-size: 15px;
 }
 
-/* Cart section */
+.course-end-date img {
+  width: 20px;
+  height: 20px;
+  margin-left: 5px;
+}
 
-.shopping-cart {
-    margin-top: 20px;
+.course-end-date p {
+  font-family: 'Dana_Bold';
+}
+
+.course-end-date span {
+  font-family: 'Vazir_Light';
+}
+
+/* Course description */
+
+.course-description {
+  margin-top: 20px;
+  font-size: 15px;
+}
+
+.course-description img {
+  width: 20px;
+  height: 20px;
+  margin-left: 5px;
+}
+
+.course-description-title {
+  font-family: 'Dana_Bold';
+}
+
+.course-description-p {
+  font-family: 'Vazir_Light';
+  margin-right: 20px;
+}
+
+/* Course price */
+
+.course-price {
+  margin-top: 20px;
+  font-size: 15px;
+}
+
+.course-price img {
+  width: 20px;
+  height: 20px;
+  margin-left: 5px;
+}
+
+.course-price p {
+  font-family: 'Dana_Bold';
+}
+
+.price {
+  font-family: 'Vazir_Bold';
+}
+
+/* Button add to cart */
+
+.card-footer {
+  font-size: 1em;
+  position: static;
+  top: 0;
+  left: 0;
+  max-width: 100%;
+  padding: .75em 1em;
+  color: rgba(0, 0, 0, .4);
+  border-top: 1px solid rgba(0, 0, 0, .05) !important;
+  background: #fff;
+}
+
+.add-to-cart {
+  text-align: center;
+  direction: ltr;
+}
+
+.add-to-cart img {
+  width: 20px;
+  height: 20px;
+  margin-right: 5px;
+}
+
+
+/* Cart section CSS */
+
+.cart-course-image img {
+  width: 60px;
+  height: 60px;
+  border-radius: 4px;
+  margin-top: -5px;
+}
+
+.cart-course-title p {
+  font-family: 'Vazir_Medium', sans-serif;
+  font-size: 20px;
+  padding: 6px;
+}
+
+.cart-course-teacher-name p {
+  font-family: 'Vazir_light', sans-serif;
+  font-size: 15px;
+  padding: 10px 6px 6px 6px;
+}
+
+.cart-price img {
+  width: 20px;
+  height: 20px;
+  margin-left: 5px;
+}
+
+.cart-price p {
+  font-family: 'Vazir_light', sans-serif;
+  font-size: 15px;
+  padding: 10px 6px 6px 6px;
+}
+
+.cart-button-to-delete {
+  direction: ltr;
+  height: 50px;
+  margin-top: -5px;
+}
+
+.cart-button-to-delete img {
+  width: 20px;
+  height: 20px;
+  margin-right: 5px;
+}
+
+.cart-button-to-delete button {
+  border: none;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+  height: 50px;
+  text-align: center;
+}
+
+.cart-button-to-delete button:hover {
+  border: none;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+  height: 50px;
+  text-align: center;
+}
+.btn-remove {
+  background-color: #da2d2d;
+  border: none;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+  height: 50px;
+  text-align: center;
+}
+
+.btn-remove:focus, .btn-remove:hover {
+  background-color: #da2d2d;
+  border: none;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+  height: 50px;
+  text-align: center;
+  box-shadow: none;
 }
