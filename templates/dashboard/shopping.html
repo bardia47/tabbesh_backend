@@ -1,5 +1,6 @@
 {% extends 'dashboard/base.html' %}
 {% load static %}
+{% load jformat %}
 
 <!-- Title block of base.html -->
 {% block title %}سبد خرید{% endblock %}
@@ -112,7 +113,7 @@
                         <h4 class="title mt-3">{{ course.title }}</h4>
                         <!-- Course teacher name  -->
                         <div class="course-teacher-name">
-                            <h6 class="teacher-name">{{ course.teacher.get_full_name }}</h6>
+                            <h6 class="teacher-name">استاد {{ course.teacher.get_full_name }}</h6>
                         </div>
                         <!-- Course calender  -->
                         <div class="course-calender">
@@ -121,10 +122,10 @@
                                 جلسات:
                             </p>
                             <!-- Loop for course calender times -->
-                            {% for number in '12'|make_list %}
+                            {% for cc in course.course_calendar_set.all %}
                             <p class="course-calender-time">
                                 <img src="{% static 'home/images/icons/add-time.svg'%}" alt="">
-                                دوشنبه ساعت 13
+                                {{cc.start_date|date:"l"}} ها ساعت {{cc.start_date|date:"H:i"}}
                             </p>
                             {% endfor %}
                         </div>
@@ -133,7 +134,7 @@
                             <p>
                                 <img src="{% static 'home/images/icons/start-date.svg'%}" alt="">
                                 شروع دوره:
-                                <span>سه شنبه 14 فروردین</span>
+                                <span>{{ course.start_date|jformat:" %B %d %A " }}</span>
                             </p>
                         </div>
                         <!-- End of the course  -->
@@ -141,7 +142,7 @@
                             <p>
                                 <img src="{% static 'home/images/icons/end-date.svg'%}" alt="">
                                 اتمام دوره:
-                                <span>سه شنبه 14 اردیبهشت</span>
+                                <span>{{ course.end_date|jformat:" %B %d %A " }}</span>
                             </p>
                         </div>
                         <!-- Description of the course  -->
@@ -150,18 +151,14 @@
                                 <img src="{% static 'home/images/icons/paragraph.svg'%}" alt="">
                                 توضیحات:
                             </p>
-                            <p class="course-description-p">
-                                در این دوره مبحث الکترومغناطیس به طور کامل پوشش داده شده و شما را برای صد زدن در کنکور
-                                آماده می
-                                کند
-                            </p>
+                            <p class="course-description-p">{{course.description}}</p>
                         </div>
                         <!-- Course price -->
                         <div class="course-price">
                             <p>
                                 <img src="{% static 'home/images/icons/price.svg'%}" alt="">
                                 قیمت:
-                                <span class="price">100000</span>
+                                <span class="price">{{course.amount}}</span>
                                 <span class="currency">تومان</span>
                             </p>
                         </div>

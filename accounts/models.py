@@ -173,7 +173,7 @@ class Course_Calendar(models.Model):
     end_date = models.DateTimeField("تاریخ پایان")
 
     class Meta:
-        ordering = ['start_date']
+        ordering = ['end_date']
         verbose_name_plural = "زمان برگزاری"
         verbose_name = "زمان برگزاری"
 

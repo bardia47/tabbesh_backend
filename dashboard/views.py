@@ -9,7 +9,6 @@ from accounts.enums import RoleCodes
 from .forms import ProfileForm
 
 
-# Create your views here.
 def dashboard(request):
     # just for calendar
     now = datetime.datetime.now()
@@ -17,15 +16,14 @@ def dashboard(request):
     # courses and downcounter(for the next course) ---------------------------------------------------------------------
     now_utc = datetime.datetime.now(pytz.utc)
     user = get_object_or_404(User, pk=request.user.id)
-    courses = user.payments.order_by('course_calendar__end_date').distinct()
+    courses = user.payments.order_by('course_calendar').filter(course_calendar__start_date__day=now_utc.day)
     if courses.count() > 0:
         next_course_calendar = courses[0].course_calendar_set.first()
         if next_course_calendar.end_date < now_utc:
             next_course_calendar.end_date += datetime.timedelta(days=7)
             next_course_calendar.start_date += datetime.timedelta(days=7)
             next_course_calendar.save()
-            courses = user.payments.order_by(
-                'course_calendar__end_date').distinct()
+            courses = user.payments.order_by('course_calendar').filter(course_calendar__start_date__day=now_utc.day)
             next_course_calendar = courses[0].course_calendar_set.first()
 
         class_time = next_course_calendar.start_date

@@ -1,11 +1,12 @@
 {% extends 'dashboard/base.html' %}
 {% load static %}
+{% load jformat %}
 <!-- Title block of base.html -->
 {% block title %}دروس من{% endblock %}
 
 <!-- CSS files -->
 {% block CSSfiles %}
-<link rel="stylesheet" href="{% static 'dashboard/css/lessons.css' %}">
+    <link rel="stylesheet" href="{% static 'dashboard/css/lessons.css' %}">
 {% endblock %}
 
 <!-- Active menu of sidebar -->
@@ -13,66 +14,68 @@
 
 <!-- Content of page -->
 {% block content %}
-<!-- Course Rows -->
-<div class="row">
-    {% for course in courses %}
-    <!-- Course Cards -->
-    <div class="col-md-4">
-        <!-- Course Card  -->
-        <div class="card course-card">
-            <!-- Course poster -->
-            <img class="card-img-top course-card-image" src="{{ course.image.url }}">
-            <!-- Course content -->
-            <div class="card-block course-card-block">
-                <!-- Teacher profile  -->
-                <figure class="teacher-profile">
-                    <img src="{{ course.teacher.avatar.url }}" class="profile-avatar" alt="course teacher profile">
-                </figure>
-                <!-- Course title  -->
-                <h4 class="card-title mt-3">{{ course.title }}</h4>
-                <!-- Course grade  -->
-                <div class="course-grade">
-                    <h6>{{ course.lesson.grade }}</h6>
-                </div>
-                <!-- Course calender for next class  -->
-                <div class="course-calender">
-                    <p>
-                        <img src="{% static 'home/images/icons/clock.svg'%}" alt="">
-                        جلسه ی بعدی:
-                        <span>یکشنبه 12 فروردین</span>
-                    </p>
-                </div>
-                <!-- End of the course  -->
-                <div class="course-end-date">
-                    <p>
-                        <img src="{% static 'home/images/icons/calendar.svg'%}" alt="">
-                        اتمام دوره:
-                        <span>سه شنبه 14 اردیبهشت</span>
-                    </p>
-                </div>
-                <!-- Description of the course  -->
-                <div class="course-description">
-                    <p class="course-description-title">
-                        <img src="{% static 'home/images/icons/paragraph.svg'%}" alt="">
-                        توضیحات:
-                    </p>
-                    <p class="course-description-p">
-                        در این دوره مبحث الکترومغناطیس به طور کامل پوشش داده شده و شما را برای صد زدن در کنکور آماده می
-                        کند
-                    </p>
+    <!-- Course Rows -->
+    <div class="row">
+        {% for course in courses %}
+            <!-- Course Cards -->
+            <div class="col-md-4">
+                <!-- Course Card  -->
+                <div class="card course-card">
+                    <!-- Course poster -->
+                    <img class="card-img-top course-card-image" src="{{ course.image.url }}">
+                    <!-- Course content -->
+                    <div class="card-block course-card-block">
+                        <!-- Teacher profile  -->
+                        <figure class="teacher-profile">
+                            <img src="{{ course.teacher.avatar.url }}" class="profile-avatar"
+                                 alt="course teacher profile">
+                        </figure>
+                        <!-- Course title  -->
+                        <h4 class="card-title mt-3">{{ course.title }}</h4>
+                        <!-- Course teacher  -->
+                        <div class="course-teacher-name">
+                            <h6>استاد {{ course.teacher.get_full_name }}</h6>
+                        </div>
+                        <!-- Course calender for next class  -->
+                        <div class="course-calender">
+                            <p>
+                                <img src="{% static 'home/images/icons/clock.svg' %}" alt="">
+                                جلسه ی بعدی:
+                                <span>
+                                    {% with course.course_calendar_set.all|first as next %}
+                                        {{ next.start_date|date:"l" }} ساعت {{ next.start_date|date:"H:i" }}
+                                    {% endwith %}
+                                </span>
+                            </p>
+                        </div>
+                        <!-- End of the course  -->
+                        <div class="course-end-date">
+                            <p>
+                                <img src="{% static 'home/images/icons/calendar.svg' %}" alt="">
+                                اتمام دوره:
+                                <span>{{ course.end_date|jformat:" %B %d %A " }}</span>
+                            </p>
+                        </div>
+                        <!-- Description of the course  -->
+                        <div class="course-description">
+                            <p class="course-description-title">
+                                <img src="{% static 'home/images/icons/paragraph.svg' %}" alt="">
+                                توضیحات:
+                            </p>
+                            <p class="course-description-p">{{ course.description }}</p>
+                        </div>
+                    </div>
+                    <!-- Button link to class -->
+                    <div class="card-footer button-to-class">
+                        <button class="btn btn-success">
+                            <img src="{% static 'home/images/icons/click.svg' %}" alt="button link to class">
+                            ورود به کلاس
+                        </button>
+                    </div>
                 </div>
             </div>
-            <!-- Button link to class -->
-            <div class="card-footer button-to-class">
-                <button class="btn btn-success">
-                    <img src="{% static 'home/images/icons/click.svg'%}" alt="button link to class">
-                    ورود به کلاس
-                </button>
-            </div>
-        </div>
+        {% endfor %}
     </div>
-    {% endfor %}
-</div>
 {% endblock %}
 
 <!-- JS files -->

@@ -66,6 +66,12 @@
   color: rgba(0, 0, 0, .4);
 }
 
+/* Course teacher name */
+.course-teacher-name h6 {
+  font-size: 15px;
+  color: rgba(0, 0, 0, .4);
+}
+
 /* Course calendar */
 
 .course-calender {
