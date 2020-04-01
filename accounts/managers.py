@@ -3,15 +3,28 @@ from django.apps import apps
 from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth.hashers import make_password
 from .enums import  RoleCodes
+from django.db.transaction import commit
 
 
 class UserManager(BaseUserManager):
     use_in_migrations = True
+    
+    def create_form_user(self,form):
+
+        user=form.save(commit=False)
+        try:
+            user.role
+        except :
+            role = apps.get_model(app_label='accounts', model_name='Role')
+            user.role = role.objects.get(code=RoleCodes.STUDENT.value)
+        user.set_default_avatar()  
+        user.password = make_password(user.password)
+        user.save(using=self._db)
+
+        return user
+
 
     def _create_user(self, username, email, password, **extra_fields):
-        """
-        Creates and saves a User with the given email and password.
-        """
         if not email:
             raise ValueError('The given email must be set')
         email = self.normalize_email(email)
@@ -25,7 +38,7 @@ class UserManager(BaseUserManager):
             user.role
         except ObjectDoesNotExist:
             role = apps.get_model(app_label='accounts', model_name='Role')
-            user.role = role.objects.get(code='1')
+            user.role = role.objects.get(code=RoleCodes.STUDENT.value)
         user.set_default_avatar()    
 
         # try:

@@ -52,13 +52,13 @@
                                 <div class="col-md-6 custom-radio custom-control-inline">
                                     <span> پسر </span>
                                     <input type="radio" class="custom-control-input" id="gender_boy" name="gender"
-                                        value="boy-selection">
+                                        value="True">
                                     <label class="custom-control-label yellow " for="gender_boy"></label>
                                 </div>
                                 <div class="col-md-6 custom-radio custom-control-inline">
                                     <span> دختر </span>
                                     <input type="radio" class="custom-control-input" id="gender_girl" name="gender"
-                                        value="girl-selection">
+                                        value="False">
                                     <label class="custom-control-label yellow" for="gender_girl"></label>
                                 </div>
                             </div>
@@ -87,10 +87,10 @@
             <!-- Password1 field -->
             <div class="row mb-2">
                 <div class="col-md-2 field-label">
-                    <label for="password1">رمز عبور</label>
+                    <label for="password">رمز عبور</label>
                 </div>
                 <div class="col-md-4">
-                    <input type="password" id="password1" name="password1" required>
+                    <input type="password" id="password" name="password" required>
                 </div>
             </div>
             <!-- Password2 field -->
@@ -129,8 +129,9 @@
                 </div>
             </div>
             <button class="btn btn-lg btn-warning btn-block sign-up-button" type="submit">ثبت نام</button>
-        </div>
-        </div>
+                       {% if form.error %}
+            <p style="color: #7c0001">{{ form.error }}</p>
+            {% endif %}
         </div>
     </form>
 </body>
