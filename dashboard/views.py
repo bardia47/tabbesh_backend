@@ -1,7 +1,5 @@
 import pytz
-from django.db.models import Q
 from django.shortcuts import render, redirect, get_object_or_404
-from accounts.models import User
 import datetime
 from accounts.models import *
 from accounts.enums import RoleCodes
@@ -12,23 +10,24 @@ from .forms import ProfileForm
 def dashboard(request):
     # just for calendar
     now = datetime.datetime.now()
-
-    # courses and downcounter(for the next course) ---------------------------------------------------------------------
+    # voice (april/2/2020)
+    # courses and down counter(for the next course) --------------------------------------------------------------------
     now_utc = datetime.datetime.now(pytz.utc)
     user = get_object_or_404(User, pk=request.user.id)
-    courses = user.payments.order_by('course_calendar').filter(course_calendar__start_date__day=now_utc.day)
+    courses = user.payments.order_by('course_calendar').filter(course_calendar__start_date__day=now.day)
     if courses.count() > 0:
-        next_course_calendar = courses[0].course_calendar_set.first()
+        next_course_calendar = courses.first().course_calendar_set.first()
         if next_course_calendar.end_date < now_utc:
             next_course_calendar.end_date += datetime.timedelta(days=7)
             next_course_calendar.start_date += datetime.timedelta(days=7)
             next_course_calendar.save()
-            courses = user.payments.order_by('course_calendar').filter(course_calendar__start_date__day=now_utc.day)
-            next_course_calendar = courses[0].course_calendar_set.first()
+            courses = user.payments.order_by('course_calendar').filter(course_calendar__start_date__day=now.day)
+            next_course_calendar = courses.first().course_calendar_set.first()
 
         class_time = next_course_calendar.start_date
         is_class_active = next_course_calendar.is_class_active
         class_time = class_time - now_utc
+
     else:
         class_time = ''
         is_class_active = False
