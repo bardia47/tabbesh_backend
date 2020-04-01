@@ -14,34 +14,51 @@
 
 <!-- Content of page -->
 {% block content %}
-<!-- Search Content-->
-<section class="shop">
-    <div class="search-content">
-        <!-- Search Titr -->
-        <div class="search-title">
-            <h1>دوره های تابش</h1>
+<section class="shopping">
+    <!-- Shopping content-->
+    <div class="shopping-content">
+        <!-- Shopping title -->
+        <div class="shopping-title">
+            <h1>
+                دوره های تابش
+            </h1>
         </div>
-        <!-- Cart Section -->
-        <div class="cart-list">
-            <hr>
+        <!-- Cart Section use cart-list for shopping.js -->
+        <div class="cart-list card-section">
+            <!-- Cart title -->
+            <div class="cart-title">
+                <h4>
+                    <img src="{% static 'home/images/icons/shopping-basket.svg'%}">
+                    سبد خرید
+                </h4>
+            </div>
+            <!-- Cart items add with shopping.js -->
+            <!-- End cart items -->
         </div>
-        <!-- Cart Footer Section -->
-        <div class="cart-footer">
-            <!-- Purchase -->
-            <div style="margin: 10px">
-                <!-- Purchase Button -->
-                <a href="" class="btn btn-success">پرداخت</a>
-                <div style="margin: 5px">
-                    مبلغ قابل پرداخت : <b class="cart-total-price">0</b> تومان
-                </div>
+        <!-- Cart footer section -->
+        <div class="card cart-footer">
+            <!-- Cart purchase button -->
+            <div>
+                <button href="#" class="btn">پرداخت</button>
+            </div>
+            <div class="cart-total-price">
+                مبلغ قابل پرداخت : <b class="total-price">0</b> تومان
             </div>
         </div>
     </div>
-    <!-- Shopping Cards - include Courses -->
+    <hr>
+    <!-- Shopping cards - include Courses & Search section -->
     <div class="shopping-cards">
-        <!-- Search Section -->
+        <!-- Shopping search title -->
+        <div class="shopping-search-title">
+            <h1>
+                <img src="{% static 'home/images/icons/search.svg' %}">
+                جستجوی دروس
+            </h1>
+        </div>
+        <!-- Search form -->
         <form action="{% url 'shopping' %}">
-            <div class="row">
+            <div class="row form-search">
                 <!-- Select Grade -->
                 <div class="col-md-3">
                     <select class="custom-select" name="grade">
@@ -71,47 +88,89 @@
                 </div>
                 <!-- Search Button -->
                 <div class="col-md-3">
-                    <input type="submit" class="form-control" style="background-color:#7386D5;color:#fff;"
-                        value="جستجو">
+                    <input type="submit" class="form-control" value="جستجو">
                 </div>
             </div>
         </form>
 
         <!-- Shopping Cards -->
-        <!-- Shop Rows -->
         <div class="row">
-            <!-- Shop Cards -->
+            <!-- Loop for courses -->
             {% for course in courses %}
-            <div class="col-sm-6 col-md-4 col-lg-3 mt-4">
-                <div class="card">
-                    <img class="card-img-top" src="{% if course.image %}{{ course.image.url }}
-                                      {% else %}{% static "dashboard/images/lessons.jpg" %}
-                                      {% endif %}">
+            <div class="col-md-4">
+                <div class="card course-card">
+                    <!-- Course poster -->
+                    <img class="card-img-top" src="{{ course.image.url }}">
+                    <!-- Course content -->
                     <div class="card-block">
-                        <!-- Teacher Profile -->
-                        <figure class="profile">
-                            <img src="{{ course.teacher.avatar.url }}" class="profile-avatar" alt="">
+                        <!-- Course teacher profile  -->
+                        <figure class="teacher-profile">
+                            <img src="{{ course.teacher.avatar.url }}" class="profile-avatar"
+                                alt="course teacher profile">
                         </figure>
-                        <!-- Course Title -->
-                        <h4 class="card-title mt-3">{{ course.title }}</h4>
-                        <!-- Course Grade -->
-                        <div class="meta">
-                            <h6>{{ course.lesson.grade }}</h6>
+                        <!-- Course title  -->
+                        <h4 class="title mt-3">{{ course.title }}</h4>
+                        <!-- Course teacher name  -->
+                        <div class="course-teacher-name">
+                            <h6 class="teacher-name">{{ course.teacher.get_full_name }}</h6>
                         </div>
-                        <!-- Course Description -->
-                        <div class="card-text">
-                            این درس توسط استاد <p class="card-teacher" style="padding-top: 25px">
-                                {{ course.teacher.get_full_name }}</p>
-                            تدریس میشود.
+                        <!-- Course calender  -->
+                        <div class="course-calender">
+                            <p>
+                                <img src="{% static 'home/images/icons/clock.svg'%}" alt="">
+                                جلسات:
+                            </p>
+                            <!-- Loop for course calender times -->
+                            {% for number in '12'|make_list %}
+                            <p class="course-calender-time">
+                                <img src="{% static 'home/images/icons/add-time.svg'%}" alt="">
+                                دوشنبه ساعت 13
+                            </p>
+                            {% endfor %}
+                        </div>
+                        <!-- Start of the course  -->
+                        <div class="course-start-date">
+                            <p>
+                                <img src="{% static 'home/images/icons/start-date.svg'%}" alt="">
+                                شروع دوره:
+                                <span>سه شنبه 14 فروردین</span>
+                            </p>
+                        </div>
+                        <!-- End of the course  -->
+                        <div class="course-end-date">
+                            <p>
+                                <img src="{% static 'home/images/icons/end-date.svg'%}" alt="">
+                                اتمام دوره:
+                                <span>سه شنبه 14 اردیبهشت</span>
+                            </p>
+                        </div>
+                        <!-- Description of the course  -->
+                        <div class="course-description">
+                            <p class="course-description-title">
+                                <img src="{% static 'home/images/icons/paragraph.svg'%}" alt="">
+                                توضیحات:
+                            </p>
+                            <p class="course-description-p">
+                                در این دوره مبحث الکترومغناطیس به طور کامل پوشش داده شده و شما را برای صد زدن در کنکور
+                                آماده می
+                                کند
+                            </p>
+                        </div>
+                        <!-- Course price -->
+                        <div class="course-price">
+                            <p>
+                                <img src="{% static 'home/images/icons/price.svg'%}" alt="">
+                                قیمت:
+                                <span class="price">100000</span>
+                                <span class="currency">تومان</span>
+                            </p>
                         </div>
                     </div>
-                    <div class="card-footer">
-                        <!-- Course Price & Add to cart button -->
-                        قیمت: <b class="card-price"
-                            style="text-align:center; padding-bottom:50px;">{{ course.amount|floatformat:0 }}</b>
-                        تومان
-                        <button class="btn btn-secondary float-right btn-sm add-to-cart"
-                            style="margin-top : 5px ; margin-left:0px">اضافه به سبد خرید
+                    <!-- Button add course to cart -->
+                    <div class="card-footer add-to-cart">
+                        <button class="btn btn-success add-to-cart-button">
+                            <img src="{% static 'home/images/icons/add-to-cart.svg'%}" alt="button link to class">
+                            اضافه به سبد خرید
                         </button>
                     </div>
                 </div>

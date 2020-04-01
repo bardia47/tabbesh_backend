@@ -8,16 +8,16 @@ if (document.readyState == 'loading') {
 function ready() {
 
     // Remove cart item with button
-    var removeCartItemButtons = document.getElementsByClassName('btn-remove')
-    for (var i = 0; i < removeCartItemButtons.length; i++) {
-        var button = removeCartItemButtons[i]
+    let removeCartItemButtons = document.getElementsByClassName('btn-remove')
+    for (let i = 0; i < removeCartItemButtons.length; i++) {
+        let button = removeCartItemButtons[i]
         button.addEventListener('click', removeCartItem)
     }
 
     // Add to cart with "Add to list Button"
-    var addToCartButtons = document.getElementsByClassName('add-to-cart')
-    for (var i = 0; i < addToCartButtons.length; i++) {
-        var button = addToCartButtons[i]
+    let addToCartButtons = document.getElementsByClassName('add-to-cart-button')
+    for (let i = 0; i < addToCartButtons.length; i++) {
+        let button = addToCartButtons[i]
         button.addEventListener('click', addToCartClicked)
     }
 
@@ -25,70 +25,86 @@ function ready() {
 
 // Remove Cart Item 
 function removeCartItem(event) {
-    var buttonClicked = event.target
-    buttonClicked.parentElement.parentElement.remove()
+    let buttonClicked = event.target
+    buttoncl = buttonClicked.parentElement.parentElement.parentElement.parentElement.parentElement
+    buttoncl.remove()
     updateCartTotal()
 }
 
 // Add Cart Item With add-to-cart button
 function addToCartClicked(event) {
-    var button = event.target
-    var shopItem = button.parentElement.parentElement
-    var title = shopItem.getElementsByClassName('card-title')[0].textContent;
-    var price = shopItem.getElementsByClassName('card-price')[0].textContent;
-    var teacher = shopItem.getElementsByClassName('card-teacher')[0].textContent;
-    var imageSrc = shopItem.getElementsByClassName('card-img-top')[0].src;
+  console.log("hi")
+    let button = event.target
+    let shopItem = button.parentElement.parentElement
+    let title = shopItem.getElementsByClassName('title')[0].textContent;
+    let price = shopItem.getElementsByClassName('price')[0].textContent;
+    let teacher = shopItem.getElementsByClassName('teacher-name')[0].textContent;
+    let imageSrc = shopItem.getElementsByClassName('card-img-top')[0].src;
     addItemToCart(title, price, teacher, imageSrc)
     updateCartTotal()
 }
 
 // Create cart item
 function addItemToCart(title, price, teacher, imageSrc) {
-    var cartRow = document.createElement('div')
+    let cartRow = document.createElement('div')
     cartRow.classList.add('row')
     cartRow.classList.add('card-row')
-    var cartItems = document.getElementsByClassName('cart-list')[0]
-    var cartItemNames = cartItems.getElementsByClassName('product-name')
-    for (var i = 0; i < cartItemNames.length; i++) {
+    let cartItems = document.getElementsByClassName('cart-list')[0]
+    let cartItemNames = cartItems.getElementsByClassName('cart-course-title')
+    for (let i = 0; i < cartItemNames.length; i++) {
         if (cartItemNames[i].textContent == title) {
             alert('قبلا انتخاب کردید . ')
             return
         }
     }
-    var cartRowContents = `
-        <div class="col-sm-12 col-md-2 text-center" style="margin-bottom: 100px">
-        <img class="img-responsive" src="${imageSrc}" alt="prewiew" width="100" height="100" style="border-radius:5px ">
+    let cartRowContents = `
+    <div class="col-md-12 cart-item ">
+    <div class="card">
+    <div class="card-body">
+      <div class="row">
+        <!-- Course image -->
+        <div class="col-md-1 cart-course-image">
+          <img src="${imageSrc}" alt="course image">
         </div>
-        <div class="text-sm-center col-sm-12 text-md-center col-md-2">
-        <h4 class="product-name">${title}</h4>
-        <h5>
-            <small>${teacher}</small>
-        </h5>
+        <!-- Course title -->
+        <div class="col-md-2 cart-course-title">
+          <p class="cart-course-title">${title}</p>
         </div>
-        <div class="col-sm-3 col-md-4 text-md-right" style="padding-top: 5px">
-            <p class = "card-price">
-                <strong>${price}</strong> تومان
-            </p>
+        <!--Course teacher name -->
+        <div class="col-md-2 cart-course-teacher-name">
+          <p>${teacher}</p>
         </div>
-        <div class="col-sm-2 col-md-4 text-right btn-remove">
-            <button type="button" class="btn btn-danger btn-remove">حذف</button>
+        <!-- Course price -->
+        <div class="col-md-3 cart-price">
+          <p style="font-family:'Vazir_Bold'">
+          <span style="font-family:'Vazir_Light'">قیمت : </span>
+          <span class="cart-price-text">${price}</span>
+          </p>
+      </div>
+      <!-- Button-to-delete -->
+        <div class="col-md-4 cart-button-to-delete">
+          <button class="btn btn-danger btn-remove"><img src="/static/home/images/icons/delete.svg" alt="button link to class">حذف</button>
         </div>
-        </hr>`
+      </div>
+    </div>
+  </div>
+  </div>`
     cartRow.innerHTML = cartRowContents
     cartItems.append(cartRow)
     cartRow.getElementsByClassName('btn-remove')[0].addEventListener('click', removeCartItem)
+    cartItems.parentElement.scrollIntoView();
 }
 
 // Update cart total price
 function updateCartTotal() {
-    var cartRows = document.getElementsByClassName('card-row')
-    var total = 0
-    for (var i = 0; i < cartRows.length; i++) {
-        var cartRow = cartRows[i]
-        var priceElement = cartRow.getElementsByClassName('card-price')[0]
-        var price = parseFloat(priceElement.innerText)
+    let cartRows = document.getElementsByClassName('cart-item')
+    let total = 0
+    for (let i = 0; i < cartRows.length; i++) {
+        let cartRow = cartRows[i]
+        let priceElement = cartRow.getElementsByClassName('cart-price-text')[0]
+        let price = parseFloat(priceElement.innerText)
         total = total + price
     }
     total = Math.round(total * 100) / 100
-    document.getElementsByClassName('cart-total-price')[0].innerText = total
+    document.getElementsByClassName('total-price')[0].innerText = total.toLocaleString()
 }
