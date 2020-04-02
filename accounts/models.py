@@ -36,7 +36,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     national_code = models.CharField("کد ملی", max_length=10, null=True, blank=True)
     city = models.ForeignKey('City', blank=True, null=True, on_delete=models.DO_NOTHING, verbose_name="شهر")
     address = models.CharField("آدرس", max_length=255, null=True, blank=True)
-    phone_number = models.CharField("تلفن همراه", max_length=12, default="", blank=True)
+    phone_number = models.CharField("تلفن همراه", max_length=12, unique=True)
     grades = models.ManyToManyField('Grade', blank=True, verbose_name="پایه")
     payments = models.ManyToManyField('Course', blank=True)
     is_superuser = models.BooleanField(default=False)
@@ -132,7 +132,7 @@ class Grade(models.Model):
 class Lesson(models.Model):
     code = models.CharField("کد", max_length=10)
     title = models.CharField("عنوان", max_length=30)
-    grade = models.ForeignKey('Grade', on_delete=models.DO_NOTHING, verbose_name="پایه")
+    grades = models.ManyToManyField('Grade', blank=True, verbose_name="پایه")
     parent = models.ForeignKey('self', blank=True, null=True, on_delete=models.DO_NOTHING, verbose_name="درس پدر")
     unique_together = [['title', 'grade']]
 
@@ -149,6 +149,7 @@ class Course(models.Model):
     code = models.CharField("کد", max_length=10)
     title = models.CharField("عنوان", max_length=30)
     lesson = models.ForeignKey('Lesson', on_delete=models.DO_NOTHING, verbose_name="درس")
+    grade = models.ForeignKey('Grade',  blank=True, null=True, on_delete=models.DO_NOTHING, verbose_name="پایه")
     teacher = models.ForeignKey(User, on_delete=models.DO_NOTHING, verbose_name="مدرس")
     start_date = models.DateTimeField("تاریخ شروع")
     end_date = models.DateTimeField("تاریخ پایان")

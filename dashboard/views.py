@@ -72,13 +72,15 @@ def shopping(request):
     LESSONS = Lesson.objects.all()
     teachers = User.objects.filter(role__code=RoleCodes.TEACHER.value)
     courses = Course.objects.filter(end_date__gt=now)
-    if request.GET.get("teacher") or request.GET.get("lesson") or request.GET.get("grade"):
-        if request.GET.get("teacher"):
+    if request.GET.get("teacher"):
             courses = courses.filter(teacher__id=request.GET.get("teacher"))
-        if request.GET.get("grade"):
-            courses = courses.filter(lesson__grade__id=request.GET.get("grade"))
-        if request.GET.get("lesson"):
+    if request.GET.get("lesson"):
             courses = courses.filter(lesson__id=request.GET.get("lesson"))
+    if request.GET.get("grade"):
+            courses = courses.filter(grade__id=request.GET.get("grade"))
+    else:
+            courses = courses.filter(grade__id=request.user.grades.first().id)
+    
 
     return render(request, 'dashboard/shopping.html', {'grades': grades, 'lessons': LESSONS, 'teachers': teachers,
                                                        'courses': courses})
