@@ -2,6 +2,9 @@ from django.shortcuts import render, redirect, get_object_or_404
 import datetime
 from accounts.models import *
 from accounts.enums import RoleCodes
+from django.db.models import Q
+from operator import or_
+from functools import reduce
 
 from .forms import ProfileForm
 
@@ -71,16 +74,41 @@ def shopping(request):
     grades = Grade.objects.all()
     LESSONS = Lesson.objects.all()
     teachers = User.objects.filter(role__code=RoleCodes.TEACHER.value)
-    courses = Course.objects.filter(end_date__gt=now)
-    if request.GET.get("teacher"):
-            courses = courses.filter(teacher__id=request.GET.get("teacher"))
-    if request.GET.get("lesson"):
-            courses = courses.filter(lesson__id=request.GET.get("lesson"))
-    if request.GET.get("grade"):
+    if request.GET.get("teacher") or request.GET.get("lesson") or request.GET.get("grade"):
+        if request.GET.get("lesson"):
+            courses = getAllLessons(request.GET.get("lesson"))
+        else:
+            courses = Course.objects.filter(end_date__gt=now)    
+        if request.GET.get("grade"):
             courses = courses.filter(grade__id=request.GET.get("grade"))
-    else:
-            courses = courses.filter(grade__id=request.user.grades.first().id)
+        if request.GET.get("teacher"):
+            courses = courses.filter(teacher__id=request.GET.get("teacher"))               
+    else:   
+         if (request.user.grades.count() > 0):
+                courses = courses.filter(grade__id=request.user.grades.first().id)
+         else:
+            courses = Course.objects.filter(end_date__gt=now) 
+            
+            
     
 
     return render(request, 'dashboard/shopping.html', {'grades': grades, 'lessons': LESSONS, 'teachers': teachers,
                                                        'courses': courses})
+    
+def getAllLessons(lesson_id):
+    lessons = Lesson.objects.filter(id=lesson_id) 
+    whilelessons=lessons
+    while True:
+        extend_lesson=[]
+        query = reduce(or_, (Q(parent__id=lesson.id) for lesson in whilelessons))
+        extend_lesson=Lesson.objects.filter(query)
+        if  len(extend_lesson)==0 :
+            break 
+        else:
+            whilelessons=extend_lesson
+            lessons.extened(whilelessons)
+    query = reduce(or_, (Q(lesson__id=lesson.id) for lesson in lessons))
+    courses = Course.objects.filter(query) 
+    return courses
+
+    

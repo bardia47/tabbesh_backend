@@ -132,7 +132,7 @@ class Grade(models.Model):
 class Lesson(models.Model):
     code = models.CharField("کد", max_length=10)
     title = models.CharField("عنوان", max_length=30)
-    grades = models.ManyToManyField('Grade', blank=True, verbose_name="پایه")
+   # grades = models.ManyToManyField('Grade', blank=True, verbose_name="پایه")
     parent = models.ForeignKey('self', blank=True, null=True, on_delete=models.DO_NOTHING, verbose_name="درس پدر")
     unique_together = [['title', 'grade']]
 

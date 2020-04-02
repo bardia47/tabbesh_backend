@@ -205,30 +205,30 @@ class CourseCalendarAdmin(ModelAdminJalaliMixin, admin.ModelAdmin):
 class CityAdmin(admin.ModelAdmin):
         list_display = ['code', 'title']
 
-class LessonInline(admin.StackedInline):
-    model = Lesson.grades.through
-    verbose_name_plural = "پایه مرتبط"
-    verbose_name = "پایه مرتبط"
-    extra=0
-    def get_formset(self, request, obj=None, **kwargs):
-        formset = super(LessonInline, self).get_formset(request, obj, **kwargs)
-        form = formset.form
-        form.base_fields['grade'].label="پایه"
-        widget = form.base_fields['grade'].widget
-        widget.can_add_related = False
-        widget.can_change_related = False
-        widget.can_add_related = False
-        widget.can_change_related = False
-        widget.label='پایه'
-        return formset
+# class LessonInline(admin.StackedInline):
+#     model = Lesson.grades.through
+#     verbose_name_plural = "پایه مرتبط"
+#     verbose_name = "پایه مرتبط"
+#     extra=0
+#     def get_formset(self, request, obj=None, **kwargs):
+#         formset = super(LessonInline, self).get_formset(request, obj, **kwargs)
+#         form = formset.form
+#         form.base_fields['grade'].label="پایه"
+#         widget = form.base_fields['grade'].widget
+#         widget.can_add_related = False
+#         widget.can_change_related = False
+#         widget.can_add_related = False
+#         widget.can_change_related = False
+#         widget.label='پایه'
+#         return formset
 
 
 class LessonAdmin(admin.ModelAdmin):
         list_display = ['code', 'title']
         exclude = ('grades',)
-        inlines = [
-        LessonInline,
-    ]
+#         inlines = [
+#         LessonInline,
+#     ]
         
 class GradeAdmin(admin.ModelAdmin):
         list_display = ['code', 'title']        
