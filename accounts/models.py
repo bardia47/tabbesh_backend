@@ -11,6 +11,12 @@ import datetime
 import jdatetime
 from django.core.exceptions import ValidationError
 
+# import for compress images
+import sys 
+from PIL import Image
+from io import BytesIO
+from django.core.files.uploadedfile import InMemoryUploadedFile
+
 LEXERS = [item for item in get_all_lexers() if item[1]]
 
 # Create your models here.
@@ -36,6 +42,16 @@ class User(AbstractBaseUser, PermissionsMixin):
     is_superuser = models.BooleanField(default=False)
     is_staff = models.BooleanField(default=True)
 
+    #compress images
+    def compressImage(self,uploadedImage):
+        imageTemproary = Image.open(uploadedImage)
+        outputIoStream = BytesIO()
+        imageTemproaryResized = imageTemproary.resize((20,20), Image.ANTIALIAS) 
+        imageTemproary = imageTemproary.convert('RGB')
+        imageTemproary.save(outputIoStream , format='JPEG', quality=60)
+        outputIoStream.seek(0)
+        uploadedImage = InMemoryUploadedFile(outputIoStream,'ImageField', "%s.jpg" % uploadedImage.name.split('.')[0], 'image/jpeg', sys.getsizeof(outputIoStream), None)
+        return uploadedImage
     class Meta:
         verbose_name_plural = "کاربر"
         verbose_name = "کاربر"

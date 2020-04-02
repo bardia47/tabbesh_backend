@@ -45,7 +45,7 @@ def dashboard(request):
 def edit_profile(request):
     if request.method == 'POST':
         if request.POST.get("upload"):
-            avatar = request.FILES.get("avatar")
+            avatar = request.user.compressImage(request.FILES.get("file"))
             if avatar:
                 if not request.user.avatar.url.startswith("/media/defaults"):
                     request.user.avatar.delete()

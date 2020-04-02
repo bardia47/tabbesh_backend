@@ -1,3 +1,8 @@
+html *
+{
+    font-family: 'Iransense' !important;
+}
+
 body {
   display: -ms-flexbox;
   display: flex;
@@ -23,11 +28,6 @@ a {
   text-decoration: none;
 }
 
-span {
-  font-family: 'Iransense';
-  font-size: 21px;
-  color: white;
-}
 
 /* Select input CSS */
 select {
@@ -39,15 +39,13 @@ select {
   font-family: "Iransense";
   text-align: center;
   text-align-last: center;
+  color: #000000 !;
 }
 
-select:focus {
-  border-color: rgba(176, 154, 6, 0.8);
-  box-shadow: 0px 0px 6px rgba(176, 154, 6, 1);
-  outline: 0 none;
-  padding-right: 5px;
-  padding-left: 5px;
-}
+.chosen-single span {
+  font-family: 'Iransense';
+  height: 36px;
+} 
 
 .container {
   margin: 0px;
@@ -128,6 +126,7 @@ custom-control-inline{
   border-color: rgba(176, 154, 6, 0.8);
   box-shadow: 0px 0px 6px rgba(176, 154, 6, 1);
   outline: 0 none;
+  font-family: 'Iransense';
 }
 
 .form-signup label {
@@ -195,7 +194,17 @@ custom-control-inline{
   color: rgb(46, 46, 46, 0.79);
 }
 
+/* CSS for Chosen select height */
+.chosen-rtl .chosen-single {
+  overflow: visible;
+  padding: .375rem .75rem !important;
+}
 
+.chosen-rtl .chosen-single span {
+  margin-right: 0;
+  margin-left: 26px;
+  direction: rtl;
+}
 /* if the width of screen is lower 768 override this css attribute */
 @media (max-width: 768px) {
   .custom-radio {

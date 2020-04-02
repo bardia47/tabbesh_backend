@@ -14,6 +14,8 @@
         integrity="sha384-vus3nQHTD+5mpDiZ4rkEPlnkcyTP+49BhJ4wJeJunw06ZAp+wzzeBPUXr42fi8If" crossorigin="anonymous">
     <link rel="stylesheet" href="{% static 'signup/css/signup.css' %}">
     <link rel="stylesheet" href="{% static 'home/css/fonts.css' %}">
+    <!-- CSS File for choicen jquery -->
+    <link rel="stylesheet" href="{% static 'home/chosen/css/chosen.min.css' %}">
 </head>
 
 <body class="text-center">
@@ -108,11 +110,13 @@
                     <label for="grade">پایه</label>
                 </div>
                 <div class="col-md-4">
-                    <select id="grades" name="grades" required>
-                            {% for element in form.fields.grades.queryset %}
-                            <option value="{{ element.id }}" >{{ element.title }}</option>
-                            {% endfor %}
+                    <select data-placeholder="پایه تحصیلی" class="grade-choicen" tabindex="4">
+                        <option value=""></option>
+                        {% for element in form.fields.grades.queryset %}
+                        <option value="{{ element.id }}" >{{ element.title }}</option>
+                        {% endfor %}
                     </select>
+                      
                 </div>
             </div>
             <!-- Phone number field -->
@@ -133,6 +137,12 @@
         </div>
         </div>
     </form>
+    <!-- Choicen jQuery JS -->
+    <script src="{% static 'home/chosen/js/jquery-3.2.1.min.js' %}"></script>
+    <script src="{% static 'home/chosen/js/chosen.jquery.min.js' %}"></script>
+    <!-- Add Choicen to grade -->
+    <script>
+        $(".grade-choicen").chosen({ rtl: true  , width: '50%'});
+    </script> 
 </body>
-
 </html>

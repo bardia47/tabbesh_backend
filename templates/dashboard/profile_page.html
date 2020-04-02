@@ -5,7 +5,8 @@
 
 <!-- CSS files -->
 {% block CSSfiles %}
-<link rel="stylesheet" href="{% static 'dashboard/css/dashboard.css' %}">
+<!-- CSS File for choicen jquery -->
+<link rel="stylesheet" href="{% static 'home/chosen/css/chosen.min.css' %}">
 {% endblock %}
 
 <!-- Content of page -->
@@ -14,7 +15,7 @@
     <h1>پروفایل</h1>
     <hr>
     <form class="form-horizontal" action="{% url 'edit_profile' %}" method="POST" enctype="multipart/form-data">
-{#        <input type="hidden" id="user.username" name="user.username" value={{ user.username }}>#}
+        {#        <input type="hidden" id="user.username" name="user.username" value={{ user.username }}>#}
 
         <div class="row">
             <!-- right column -->
@@ -22,10 +23,9 @@
 
                 {% csrf_token %}
                 <div class="text-center">
-                    <img src="{{ user.avatar.url }}" class="avatar img-circle img-thumbnail" alt="avatar">
-                    <h6>Upload a different
-                        photo...</h6>
-                    <input type="file" id="avatar" name="avatar" class="text-center center-block file-upload">
+                    <img src="{{ user.avatar.url }}" id="avatar" class="avatar img-circle img-thumbnail" alt="avatar">
+                    <input type="file" id="file" name="file" class="text-center center-block file-upload"
+                        accept="image/*">
                 </div>
                 <div class="col-md-8">
                     <input type="submit" name="upload" class="btn btn-primary" value="آپلود">
@@ -71,7 +71,7 @@
                 <div class="form-group">
                     <label class="col-lg-3 control-label">جنسیت</label>
                     <div class="col-lg-8">
-                        <select id="gender" name="gender" required>
+                        <select id="gender" name="gender" class="gender-choice" required>
                             <option value="True">پسر</option>
                             <option value="False" {% ifequal user.gender False %} selected="selected" {% endifequal %}>
                                 دختر
@@ -83,7 +83,7 @@
                     <label for="city" class="col-lg-3 control-label">شهر</label>
                     <div class="col-lg-8">
                         <div class="ui-select">
-                            <select id="city" name="city" required>
+                            <select id="city" name="city" class="city-choice" required>
                                 {% for element in form.fields.city.queryset %}
                                 <option value="{{ element.id }}" {% ifequal user.city.id element.id %}
                                     selected="selected" {% endifequal %}>{{ element.title }}</option>
@@ -102,7 +102,7 @@
                 <div class="form-group">
                     <label for="grades" class="col-md-3 control-label">پایه تحصیلی</label>
                     <div class="col-md-8">
-                        <select id="grades" name="grades" required>
+                        <select id="grades" name="grades" class="grade-choice" required>
                             {% for element in form.fields.grades.queryset %}
                             <option value="{{ element.id }}" {% ifequal user.grades.first.id element.id %}
                                 selected="selected" {% endifequal %}>{{ element.title }}</option>
@@ -136,4 +136,13 @@
 <!-- JS files -->
 {% block JSfile %}
 <script src="{% static 'dashboard/js/edit_profile.js' %}"></script>
+<!-- Choicen jQuery JS -->
+<script src="{% static 'home/chosen/js/jquery-3.2.1.min.js' %}"></script>
+<script src="{% static 'home/chosen/js/chosen.jquery.min.js' %}"></script>
+<!-- Add Choicen to grade -->
+<script>
+    $(".grade-choice").chosen({ rtl: true, width: '100px' });
+    $(".city-choice").chosen({ rtl: true, width: '70px' });
+    $(".gender-choice").chosen({ rtl: true, width: '70px' });
+</script>
 {% endblock %}
