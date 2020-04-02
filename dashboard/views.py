@@ -1,7 +1,4 @@
-import pytz
-from django.db.models import Q
 from django.shortcuts import render, redirect, get_object_or_404
-from accounts.models import User
 import datetime
 from accounts.models import *
 from accounts.enums import RoleCodes
@@ -9,36 +6,30 @@ from accounts.enums import RoleCodes
 from .forms import ProfileForm
 
 
-# Create your views here.
 def dashboard(request):
-    # just for calendar
     now = datetime.datetime.now()
-
-    # courses and downcounter(for the next course) ---------------------------------------------------------------------
-    now_utc = datetime.datetime.now(pytz.utc)
+    # courses and down counter(for the next course)
     user = get_object_or_404(User, pk=request.user.id)
-    courses = user.payments.order_by('course_calendar__end_date').distinct()
-    if courses.count() > 0:
-        next_course_calendar = courses[0].course_calendar_set.first()
-        if next_course_calendar.end_date < now_utc:
-            next_course_calendar.end_date += datetime.timedelta(days=7)
-            next_course_calendar.start_date += datetime.timedelta(days=7)
-            next_course_calendar.save()
-            courses = user.payments.order_by(
-                'course_calendar__end_date').distinct()
-            next_course_calendar = courses[0].course_calendar_set.first()
+    courses = user.payments.order_by('course_calendar').filter(end_date__gt=now)
+    classes = Course_Calendar.objects.filter(course__in=courses, start_date__day=now.day)
+    no_class_today_text = None
 
-        class_time = next_course_calendar.start_date
-        is_class_active = next_course_calendar.is_class_active
-        class_time = class_time - now_utc
+    if classes.count() > 0:
+        next_class = classes.first()
+        if next_class.end_date < now:
+            next_class.end_date += datetime.timedelta(days=7)
+            next_class.start_date += datetime.timedelta(days=7)
+            next_class.save()
+            classes = Course_Calendar.objects.filter(course__in=courses, start_date__day=now.day)
+            next_class = classes.first()
+        calendar_time = next_class.start_date - now
     else:
-        class_time = ''
-        is_class_active = False
-    # ------------------------------------------------------------------------------------------------------------------
+        calendar_time = ''
+        no_class_today_text = 'امروز هیچ کلاسی نداری'
 
-    return render(request, 'dashboard/dashboard.html', {'now': now, 'courses': courses,
-                                                        'class_time': class_time,
-                                                        'is_class_active': is_class_active})
+    return render(request, 'dashboard/dashboard.html', {'now': now, 'classes': classes,
+                                                        'calendar_time': calendar_time,
+                                                        'no_class_today_text': no_class_today_text})
 
 
 # Edit Profile Page
@@ -68,17 +59,19 @@ def edit_profile(request):
 
 # Lessons Page
 def lessons(request):
+    now = datetime.datetime.now()
     user = get_object_or_404(User, pk=request.user.id)
-    courses = user.payments.all()
+    courses = user.payments.filter(end_date__gt=now)
     return render(request, 'dashboard/lessons.html', {'courses': courses})
 
 
 # Shopping Page
 def shopping(request):
+    now = datetime.datetime.now()
     grades = Grade.objects.all()
     LESSONS = Lesson.objects.all()
     teachers = User.objects.filter(role__code=RoleCodes.TEACHER.value)
-    courses = Course.objects.all()
+    courses = Course.objects.filter(end_date__gt=now)
     if request.GET.get("teacher") or request.GET.get("lesson") or request.GET.get("grade"):
         if request.GET.get("teacher"):
             courses = courses.filter(teacher__id=request.GET.get("teacher"))
