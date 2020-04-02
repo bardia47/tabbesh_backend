@@ -72,30 +72,30 @@ def lessons(request):
 def shopping(request):
     now = datetime.datetime.now()
     grades = Grade.objects.all()
-    LESSONS = Lesson.objects.all()
+    lessons = Lesson.objects.all()
     teachers = User.objects.filter(role__code=RoleCodes.TEACHER.value)
     if request.GET.get("teacher") or request.GET.get("lesson") or request.GET.get("grade"):
         if request.GET.get("lesson"):
-            courses = getAllLessons(request.GET.get("lesson"))
+            courses = getAllLessons(request.GET.get("lesson"),now)
         else:
             courses = Course.objects.filter(end_date__gt=now)    
         if request.GET.get("grade"):
             courses = courses.filter(grade__id=request.GET.get("grade"))
         if request.GET.get("teacher"):
             courses = courses.filter(teacher__id=request.GET.get("teacher"))               
-    else:   
-         if (request.user.grades.count() > 0):
+    else:  
+        courses = Course.objects.filter(end_date__gt=now)  
+        if (request.user.grades.count() > 0):
                 courses = courses.filter(grade__id=request.user.grades.first().id)
-         else:
-            courses = Course.objects.filter(end_date__gt=now) 
+           
             
             
     
 
-    return render(request, 'dashboard/shopping.html', {'grades': grades, 'lessons': LESSONS, 'teachers': teachers,
+    return render(request, 'dashboard/shopping.html', {'grades': grades, 'lessons': lessons, 'teachers': teachers,
                                                        'courses': courses})
     
-def getAllLessons(lesson_id):
+def getAllLessons(lesson_id,now):
     lessons = Lesson.objects.filter(id=lesson_id) 
     whilelessons=lessons
     while True:
@@ -108,7 +108,7 @@ def getAllLessons(lesson_id):
             whilelessons=extend_lesson
             lessons.extened(whilelessons)
     query = reduce(or_, (Q(lesson__id=lesson.id) for lesson in lessons))
-    courses = Course.objects.filter(query) 
+    courses = Course.objects.filter(query | Q(end_date__gt=now)) 
     return courses
 
     
