@@ -43,7 +43,11 @@
                                 جلسه ی بعدی:
                                 <span>
                                     {% with course.course_calendar_set.all|first as next %}
-                                        {{ next.start_date|date:"l" }} ساعت {{ next.start_date|date:"H:i" }}
+                                        {{ next.start_date|date:"l" }}
+                                        {{ next.start_date|jformat:"%d‌" }}
+                                        ام
+                                        ساعت
+                                        {{ next.start_date|date:"H:i" }}
                                     {% endwith %}
                                 </span>
                             </p>

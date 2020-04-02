@@ -99,7 +99,8 @@
                             </div>
                         </div>
                         <!-- Seconds section of countdown -->
-                        <div id="second-block" class="bloc-time sec" data-init-value="{{ class_time.total_seconds }}">
+                        <div id="second-block" class="bloc-time sec"
+                             data-init-value="{{ calendar_time.total_seconds }}">
                             <h6> ثانیه </h6>
                             <div class="figure sec sec-1">
                                 <span class="top">-</span>
@@ -147,36 +148,39 @@
                 <div class="card-title">
                     <h4>کلاس های امروز شما</h4>
                 </div>
+                {% if no_class_today_text %}
+                    <p>{{ no_class_today_text }}</p>
+                {% endif %}
                 <!-- Loop for Courses  -->
-                {% for course in courses %}
+                {% for klass in classes %}
                     <div class="card">
                         <div class="card-body">
                             <div class="row">
                                 <!-- Course image -->
                                 <div class="col-md-1 course-image">
-                                    <img src="{{ course.image.url }}" alt="course image">
+                                    <img src="{{ klass.course.image.url }}" alt="course image">
                                 </div>
                                 <!-- Course title -->
                                 <div class="col-md-2 course-title">
-                                    <p class="course-title">{{ course.title }}</p>
+                                    <p class="course-title">{{ klass.course.title }}</p>
                                 </div>
                                 <!--Course teacher name -->
                                 <div class="col-md-2 course-teacher-name">
-                                    <p>{{ course.teacher.get_full_name }}</p>
+                                    <p>{{ klass.course.teacher.get_full_name }}</p>
                                 </div>
                                 <!-- Course date -->
                                 <div class="col-md-3 course-date">
                                     <p><img src="{% static 'home/images/icons/calendar.svg' %}" alt="calender icon">
-                                        {% with course.course_calendar_set.all|first as next %}
-                                            ساعت {{ next.start_date|date:"H:i" }} شروع میشه
-                                        {% endwith %}
+                                        ساعت {{ klass.start_date|date:"H:i" }} شروع میشه
                                     </p>
                                 </div>
                                 <!-- Button link to class -->
                                 <div class="col-md-4 button-to-class">
-                                    <button class="btn"><img src="{% static 'home/images/icons/click.svg' %}"
-                                                             alt="button link to class">بریم سر کلاس
+                                    <button class="btn" onclick="window.location.href = '{{ klass.course.url }}';">
+                                        <img src="{% static 'home/images/icons/click.svg' %}"
+                                             alt="button link to class">بریم سر کلاس
                                     </button>
+                                    <h6>{{ klass.is_class_active }}</h6>
                                 </div>
                             </div>
                         </div>

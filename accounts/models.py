@@ -149,14 +149,14 @@ class Course(models.Model):
     def __str__(self):
         return self.title
 
-    def is_course_active(self):
-        now = datetime.datetime.now(pytz.utc)
-        a = now - self.start_date
-        b = now - self.end_date
-        if a.total_seconds() >= 0 and b.total_seconds() < 0:
-            return True
-        else:
-            return False
+    # def is_course_active(self):
+    #     now = datetime.datetime.now()
+    #     a = now - self.start_date
+    #     b = now - self.end_date
+    #     if a.total_seconds() >= 0 and b.total_seconds() < 0:
+    #         return True
+    #     else:
+    #         return False
         
     def clean_fields(self, exclude=None):
         super().clean_fields(exclude=exclude)
@@ -181,7 +181,7 @@ class Course_Calendar(models.Model):
         return self.course.title
 
     def is_class_active(self):
-        now = datetime.datetime.now(pytz.utc)
+        now = datetime.datetime.now()
         a = now - self.start_date
         b = now - self.end_date
         if a.total_seconds() >= 0 and b.total_seconds() < 0:
