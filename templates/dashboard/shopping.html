@@ -173,12 +173,15 @@
                             اضافه به سبد خرید
                         </button>
                     </div>
-                    <input type="text" class="course_id" value="{{ course.code }}">
+                    <!-- hidden lesson code for handel total buy code in shopping.js -->
+                    <input type="hidden" class="course-code" value="{{ course.code }}">
                 </div>
             </div>
             {% endfor %}
         </div>
     </div>
+    <!-- Total cart items code for pass to back-end -->
+    <input type="hidden" name="total_code">
 </section>
 {% endblock %}
 

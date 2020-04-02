@@ -33,19 +33,19 @@ function removeCartItem(event) {
 
 // Add Cart Item With add-to-cart button
 function addToCartClicked(event) {
-  console.log("hi")
     let button = event.target
     let shopItem = button.parentElement.parentElement
     let title = shopItem.getElementsByClassName('title')[0].textContent;
     let price = shopItem.getElementsByClassName('price')[0].textContent;
     let teacher = shopItem.getElementsByClassName('teacher-name')[0].textContent;
     let imageSrc = shopItem.getElementsByClassName('card-img-top')[0].src;
-    addItemToCart(title, price, teacher, imageSrc)
+    let code = shopItem.getElementsByClassName('course-code')[0].value;
+    addItemToCart(title, price, teacher, imageSrc , code)
     updateCartTotal()
 }
 
 // Create cart item
-function addItemToCart(title, price, teacher, imageSrc) {
+function addItemToCart(title, price, teacher, imageSrc , code) {
     let cartRow = document.createElement('div')
     cartRow.classList.add('row')
     cartRow.classList.add('card-row')
@@ -88,6 +88,7 @@ function addItemToCart(title, price, teacher, imageSrc) {
       </div>
     </div>
   </div>
+  <input type="hidden" class="cart-course-code" value="${code}">
   </div>`
     cartRow.innerHTML = cartRowContents
     cartItems.append(cartRow)
@@ -99,12 +100,17 @@ function addItemToCart(title, price, teacher, imageSrc) {
 function updateCartTotal() {
     let cartRows = document.getElementsByClassName('cart-item')
     let total = 0
+    let total_code = ""
     for (let i = 0; i < cartRows.length; i++) {
         let cartRow = cartRows[i]
         let priceElement = cartRow.getElementsByClassName('cart-price-text')[0]
         let price = parseFloat(priceElement.innerText)
+        let code = cartRow.getElementsByClassName('cart-course-code')[0].value
         total = total + price
+        total_code = total_code + code + ","
     }
     total = Math.round(total * 100) / 100
     document.getElementsByClassName('total-price')[0].innerText = total.toLocaleString()
+    // send total code to input
+    document.getElementsByName('total_code').value = total_code
 }
