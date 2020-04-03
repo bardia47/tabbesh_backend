@@ -19,10 +19,10 @@
     <div class="container" style="width: 100%;">
         <p> همین امروز آنــــــلاین شو </p>
         <div class="buttons" style="margin-right: 100px;">
-            <button onclick="window.location.href = '{% url 'signin' %}';" type="button"
-                class="btn btn-dark">ورود</button>
-            <button onclick="window.location.href = '{% url 'signup' %}';" type="button" class="btn btn-dark">ثبت
-                نام</button>
+            <a  href="{% url 'signin' %}"
+                class="btn btn-dark">ورود</a>
+                <a  href="{% url 'signup' %}"
+                class="btn btn-dark">ثبت نام</a>
         </div>
     </div>
     <!-- Footer -->

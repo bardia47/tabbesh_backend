@@ -129,6 +129,24 @@ custom-control-inline{
   font-family: 'Iransense';
 }
 
+.form-signup input[type="password"] {
+  background-color: #BEBEBD;
+  border-radius: 5px;
+  border: none;
+  height: 36px;
+  width: 185px;
+  font-family: "Iransense";
+  padding-right: 10px;
+  padding-left: 10px;
+}
+
+.form-signup input[type="password"]:focus {
+  border-color: rgba(176, 154, 6, 0.8);
+  box-shadow: 0px 0px 6px rgba(176, 154, 6, 1);
+  outline: 0 none;
+  font-family: 'Iransense';
+}
+
 .form-signup label {
   margin-left: 40px;
   margin-right: 10px;

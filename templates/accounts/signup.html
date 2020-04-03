@@ -7,16 +7,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="Sign up page">
     <meta name="author" content="Taabesh website">
-    <meta name="generator" content="Jekyll v3.8.5">
     <title>ثبت نام</title>
     <!-- CSS Files -->
     <link rel="stylesheet" href="https://cdn.rtlcss.com/bootstrap/v4.2.1/css/bootstrap.min.css"
         integrity="sha384-vus3nQHTD+5mpDiZ4rkEPlnkcyTP+49BhJ4wJeJunw06ZAp+wzzeBPUXr42fi8If" crossorigin="anonymous">
-     <script src="{% static 'dashboard/js/jquery-3.3.1.slim.min.js' %}"></script>
+    <script src="{% static 'dashboard/js/jquery-3.3.1.slim.min.js' %}"></script>
     <link rel="stylesheet" href="{% static 'signup/css/signup.css' %}">
     <link rel="stylesheet" href="{% static 'home/css/fonts.css' %}">
-    <!-- CSS File for choicen jquery -->
-    <link rel="stylesheet" href="{% static 'home/chosen/css/chosen.min.css' %}">
 </head>
 
 <body class="text-center">
@@ -77,7 +74,7 @@
                 <div class="col-md-4">
                     <input type="text" id="last_name" name="last_name" required>
                 </div>
-                <p id="name_message" style="color: #7c0001"></p>  
+                <p id="name_message" style="color: #7c0001"></p>
             </div>
             <!-- Username field -->
             <div class="row mb-2">
@@ -88,7 +85,7 @@
                     <input type="text" id="username" name="username" required>
                 </div>
                 <p id="username_message" style="color: #7c0001"></p>
-                
+
             </div>
             <!-- Password1 field -->
             <div class="row mb-2">
@@ -100,15 +97,15 @@
                 </div>
             </div>
             <!-- Password2 field -->
-            <div class="row mb-2">
-                <div class="col-md-2 field-label">
+            <div class="row mb-3">
+                <div class="col-md-2 field-label ml-0 pr-0">
                     <label for="password2">تکرار رمز عبور</label>
                 </div>
                 <div class="col-md-4">
                     <input type="password" id="password2" name="password2" required>
                 </div>
                 <p id="password_message" style="color: #7c0001"></p>
-                
+
             </div>
             <!-- Grade field -->
             <div class="row mb-2">
@@ -119,10 +116,10 @@
                     <select data-placeholder="پایه تحصیلی" class="grade-choicen" tabindex="4">
                         <option value=""></option>
                         {% for element in form.fields.grades.queryset %}
-                        <option value="{{ element.id }}" >{{ element.title }}</option>
+                        <option value="{{ element.id }}">{{ element.title }}</option>
                         {% endfor %}
                     </select>
-                      
+
                 </div>
             </div>
             <!-- Phone number field -->
@@ -132,27 +129,23 @@
                 </div>
                 <div class="phone-number-field col-md-10">
                     <!-- pattern check phone number is valid or not -->
-                    <input type="text" class="phone-number" pattern="[9][0-9]{9}"
-                        id="defaultInline10" name="phone_number">
+                    <input type="text" class="phone-number" pattern="[9][0-9]{9}" id="defaultInline10"
+                        name="phone_number">
                     <input type="text" value="+98" class="area-code" readonly>
                     <p>نکته : شماره تلفن را بدون صفر وارد کنید . مثال : 9121111111</p>
                 </div>
             </div>
             <button id="submit" class="btn btn-lg btn-warning btn-block sign-up-button" type="submit">ثبت نام</button>
-              <p id="message" style="color: #7c0001"></p>
-                       {% if form.error %}
+            <p id="message" style="color: #7c0001"></p>
+            {% if form.error %}
             <p style="color: #7c0001">{{ form.error }}</p>
             {% endif %}
         </div>
     </form>
     {% block JSfile %}
     <script src="{% static 'signup/js/signup.js' %}"></script>
-        <!-- Choicen jQuery JS -->
     <script src="{% static 'home/chosen/js/jquery-3.2.1.min.js' %}"></script>
-    <script src="{% static 'home/chosen/js/chosen.jquery.min.js' %}"></script>
-    <!-- Add Choicen to grade -->
-    <script>
-    </script> 
-{% endblock %}
+    {% endblock %}
 </body>
+
 </html>
