@@ -5,10 +5,12 @@ from accounts.enums import RoleCodes
 from django.db.models import Q
 from operator import or_
 from functools import reduce
-
+from django.contrib.auth.decorators import login_required
 from .forms import ProfileForm
 
 
+# Create your views here.
+@login_required
 def dashboard(request):
     now = datetime.datetime.now()
     user = get_object_or_404(User, pk=request.user.id)
@@ -37,6 +39,7 @@ def dashboard(request):
 
 
 # Edit Profile Page
+@login_required
 def edit_profile(request):
     if request.method == 'POST':
         if request.POST.get("upload"):
@@ -62,6 +65,7 @@ def edit_profile(request):
 
 
 # Lessons Page
+@login_required
 def lessons(request):
     now = datetime.datetime.now()
     user = get_object_or_404(User, pk=request.user.id)
@@ -77,6 +81,7 @@ def lessons(request):
 
 
 # Shopping Page
+@login_required
 def shopping(request):
     now = datetime.datetime.now()
     grades = Grade.objects.all()

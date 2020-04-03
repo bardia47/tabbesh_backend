@@ -225,7 +225,7 @@ class CityAdmin(admin.ModelAdmin):
 
 class LessonAdmin(admin.ModelAdmin):
         list_display = ['code', 'title']
-        exclude = ('grades',)
+#        exclude = ('grades',)
 #         inlines = [
 #         LessonInline,
 #     ]

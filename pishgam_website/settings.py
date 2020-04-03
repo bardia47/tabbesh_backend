@@ -147,8 +147,9 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'home/static/'),
     os.path.join(BASE_DIR, 'accounts/static/'),
     os.path.join(BASE_DIR, 'dashboard/static/'),
+    
 ]
-
+LOGIN_URL='/signin/'
 AUTH_USER_MODEL = 'accounts.User'
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
