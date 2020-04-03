@@ -1,0 +1,58 @@
+/* Home page CSS */
+
+html, body {
+  height: 100%;
+  overflow: hidden;
+}
+
+body {
+  position: relative;
+  align-items: center;
+  padding-top: 40px;
+  padding-bottom: 40px;
+  background-color: #EFEFEF;
+  background-image: url('../images/poster.svg');
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+}
+
+/* Content CSS */
+
+.container {
+  position: absolute;
+  top: 30%;
+  padding: 20px;
+  right: 150px;
+}
+
+.container p {
+  font-family: 'Vazir_Bold';
+  font-size: 40px;
+  width: 100%;
+}
+
+.container button {
+  font-family: 'Vazir_Bold';
+  text-align: center;
+  font-size: 20px;
+  margin-right: 10px;
+}
+
+/* Footer CSS */
+
+.footer {
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  background-color: #23374d;
+  color: white;
+  text-align: center;
+}
+
+.footer p {
+  padding: 5px;
+  margin-top: 5px;
+  font-family: 'Vazir_bold';
+  font-size: 15px;
+}

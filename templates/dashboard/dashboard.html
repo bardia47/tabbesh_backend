@@ -170,17 +170,25 @@
                                 </div>
                                 <!-- Course date -->
                                 <div class="col-md-3 course-date">
+                                    {% if klass.is_class_active %}
+                                    <p><img src="{% static 'home/images/icons/live.svg' %}"  style="width: 30px; height: 30px;" alt="calender icon">
+                                        در حال برگزاری 
+                                    </p>
+                                    {% else %}
                                     <p><img src="{% static 'home/images/icons/calendar.svg' %}" alt="calender icon">
                                         ساعت {{ klass.start_date|date:"H:i" }} شروع میشه
                                     </p>
+                                    {% endif %}
                                 </div>
+
                                 <!-- Button link to class -->
                                 <div class="col-md-4 button-to-class">
+                                    {% if klass.is_class_active %}
                                     <button class="btn" onclick="window.location.href = '{{ klass.course.url }}';">
                                         <img src="{% static 'home/images/icons/click.svg' %}"
                                              alt="button link to class">بریم سر کلاس
                                     </button>
-                                    <h6>{{ klass.is_class_active }}</h6>
+                                    {% endif %}
                                 </div>
                             </div>
                         </div>
