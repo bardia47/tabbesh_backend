@@ -1,0 +1,232 @@
+html *
+{
+    font-family: 'Iransense' !important;
+}
+
+body {
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-align: center;
+  align-items: center;
+  padding-top: 60px;
+  padding-bottom: 40px;
+  background: url('../images/sign_up_poster.jpg') no-repeat center center fixed;
+  background-size: cover;
+  height: 100%;
+}
+
+p {
+  margin-bottom: 6px;
+  color: #E4E4E4;
+  font-family: "Iransense";
+  font-size: 18px;
+}
+
+a {
+  color: #FFDE03;
+  font-size: 18px;
+  text-decoration: none;
+}
+
+
+/* Select input CSS */
+select {
+  background-color: #BEBEBD;
+  border-radius: 5px;
+  border: none;
+  height: 36px;
+  width: 185px;
+  font-family: "Iransense";
+  text-align: center;
+  text-align-last: center;
+  color: #000000 !;
+}
+
+.chosen-single span {
+  font-family: 'Iransense';
+  height: 36px;
+} 
+
+.container {
+  margin: 0px;
+  padding: 0px;
+  width: 100%;
+}
+
+.avatar {
+  width: 110px;
+  height: 110px;
+  margin-top: -60px;
+}
+
+.title {
+  font-family: 'Vazir_Bold';
+  font-size: 40px;
+  color: #fff;
+}
+
+/* CSS of labels */
+.field-label {
+  text-align: right;
+}
+.field-label label {
+  width: 100%;
+}
+.field-label span {
+  margin-left:20px;
+}
+.field-label-gender {
+  margin-left:20px;
+}
+
+
+/*CSS of Radio Button 
+  CSS style when we checked the radio button */
+.custom-control-input:checked~.custom-control-label::before {
+  background-color: #fff;
+  border-color: #B09A06;
+  border-width: 6px;
+  box-shadow: 0 0 0 1px transparent, 0 0 0 0.2rem rgba(68, 68, 68, 0.1);
+
+}
+custom-control-inline{
+  margin: 0px;
+}
+.custom-radio{
+  margin: 0;
+  padding: auto;
+}
+.custom-radio span{
+  margin-left:20px;
+}
+
+
+.form-signup {
+  min-width: 200px;
+  max-width: 900px;
+  margin: auto;
+  background-color: rgba(255, 255, 255, 0.3);
+  border-radius: 20px;
+  -webkit-backdrop-filter: blur(4px);
+  backdrop-filter: blur(4px);
+}
+
+.form-signup input[type="text"] {
+  background-color: #BEBEBD;
+  border-radius: 5px;
+  border: none;
+  height: 36px;
+  width: 185px;
+  font-family: "Iransense";
+  padding-right: 10px;
+  padding-left: 10px;
+}
+
+.form-signup input[type="text"]:focus {
+  border-color: rgba(176, 154, 6, 0.8);
+  box-shadow: 0px 0px 6px rgba(176, 154, 6, 1);
+  outline: 0 none;
+  font-family: 'Iransense';
+}
+
+.form-signup input[type="password"] {
+  background-color: #BEBEBD;
+  border-radius: 5px;
+  border: none;
+  height: 36px;
+  width: 185px;
+  font-family: "Iransense";
+  padding-right: 10px;
+  padding-left: 10px;
+}
+
+.form-signup input[type="password"]:focus {
+  border-color: rgba(176, 154, 6, 0.8);
+  box-shadow: 0px 0px 6px rgba(176, 154, 6, 1);
+  outline: 0 none;
+  font-family: 'Iransense';
+}
+
+.form-signup label {
+  margin-left: 40px;
+  margin-right: 10px;
+  font-family: 'Iransense';
+  font-size: 21px;
+  color: #fff
+}
+
+/* Font of place holder of inputs */
+::-webkit-input-placeholder {
+  font-family: 'Iransense';
+  font-size: 15px;
+  text-align: center;
+}
+
+::-moz-placeholder {
+  /* Firefox 19+ */
+  font-family: 'Iransense';
+  font-size: 15px;
+}
+
+:-ms-input-placeholder {
+  /* IE 10+ */
+  font-family: 'Iransense';
+  font-size: 15px;
+}
+
+:-moz-placeholder {
+  /* Firefox 18- */
+  font-family: 'Iransense';
+  font-size: 15px;
+}
+
+/* Phone number field CSS */
+.phone-number-field {
+  display: inline-flex ;
+  text-align: center;
+}
+.phone-number-field input{
+  direction: ltr;
+}
+.phone-number-field p{
+  margin-top: 10px;
+  margin-right: 10px;
+  font-family: 'Iransense';
+  font-size: 15px;
+}
+.area-code {
+  max-width: 45px;
+  margin-right: 5px;
+  border-radius: 5px;
+  text-align: center;
+}
+
+.sign-up-button {
+  width: 100%;
+  max-height: 50px;
+  border-radius: 0;
+  background-color: #FFDE03;
+  margin-bottom: 30px;
+  border: #FFDE03;
+  font-family: 'Vazir_Bold';
+  color: rgb(46, 46, 46, 0.79);
+}
+
+/* CSS for Chosen select height */
+.chosen-rtl .chosen-single {
+  overflow: visible;
+  padding: .375rem .75rem !important;
+}
+
+.chosen-rtl .chosen-single span {
+  margin-right: 0;
+  margin-left: 26px;
+  direction: rtl;
+}
+/* if the width of screen is lower 768 override this css attribute */
+@media (max-width: 768px) {
+  .custom-radio {
+     margin-right: 40%;
+  }
+  
+}

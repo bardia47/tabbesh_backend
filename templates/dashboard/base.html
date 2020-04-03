@@ -1,144 +1,129 @@
 <!DOCTYPE html>
-<html dir="rtl" xmlns="http://www.w3.org/1999/html">
+<html dir="rtl">
 {% load static %}
 {% load jformat %}
+
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
-    <title>داشبورد</title>
+    <title>{% block title %}{% endblock %}</title>
 
-    <!-- Bootstrap CSS CDN -->
-    <link rel="stylesheet" href="https://cdn.rtlcss.com/bootstrap/v4.2.1/css/bootstrap.min.css"
-          integrity="sha384-vus3nQHTD+5mpDiZ4rkEPlnkcyTP+49BhJ4wJeJunw06ZAp+wzzeBPUXr42fi8If" crossorigin="anonymous">
-    <!-- Our Custom CSS -->
-    <link rel="stylesheet" href="{% static 'dashboard/css/dashboard.css' %}">
-    <link rel="stylesheet" type="text/css" href="{% static "home/css/fonts.css" %}">
+    <!-- CSS files -->
+    <link rel="stylesheet" href="{% static 'dashboard/css/bootstrap.min.css'%}">
+    <link rel="stylesheet" href="{% static 'home/css/fonts.css'%}">
+    <link rel="stylesheet" href="{% static 'dashboard/css/base.css' %}">
+    {% block CSSfiles %}
+    {% endblock %}
 
-    <!-- Font Awesome JS -->
-    <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/solid.js"
-            integrity="sha384-tzzSw1/Vo+0N5UhStP3bvwWPq+uvzCMfrN1fEFe+xBmv1C/AtVX5K0uZtmcHitFZ"
-            crossorigin="anonymous"></script>
-    <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/fontawesome.js"
-            integrity="sha384-6OIrr52G08NpOFSZdxxz1xdNSndlD4vdcf/q2myIUVO0VsqaGHJsB0RaBE01VTOY"
-            crossorigin="anonymous"></script>
+
 </head>
 
 <body>
-<div class="wrapper">
-    <!-- Sidebar  -->
-    <nav id="sidebar">
-        <div class="sticky-top">
-            <div class="sidebar-header">
-                <a href="{% url 'home' %}"><h3 style="text-align:center;"> تابــش</h3></a>
-            </div>
-
-            <ul class="list-unstyled components">
-                <li class="active">
-                    <a href="{% url 'dashboard' %}"><i class="fas fa-home"
-                                                       style="margin-left:20px; margin-right:20px"></i> داشبورد </a>
-                </li>
-                <li>
-                    <a href="{% url 'lessons' %}"><i class="fas fa-book"
-                                                     style="margin-left:20px; margin-right:20px"></i> دروس من </a>
-                </li>
-                <li>
-                    <a href="{% url 'shopping' %}"><i class="fas fa-shopping-basket"
-                                                      style="margin-left:20px; margin-right:20px"></i>خرید درس</a>
-                </li>
-            </ul>
-        </div>
-    </nav>
-
-    <!-- Page Content  -->
-    <div id="content">
-
-        <nav class="navbar navbar-expand-lg navbar-light bg-light navbar-fixed-top">
-            <div class="container-fluid ">
-
-                <button type="button" id="sidebarCollapse" class="btn btn-info">
-                    <i class="fas fa-align-left"></i>
-                    <span> تمام صفحه </span>
-                </button>
-                <button class="btn btn-dark d-inline-block d-lg-none ml-auto" type="button" data-toggle="collapse"
-                        data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <i class="fas fa-align-justify"></i>
-                </button>
-
-                <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                    <ul class="nav navbar-nav ml-auto">
-                        <li class="nav-item dropdown">
-                            <a class="nav-link " href="#" id="navbarDropdownMenuLink" role="button"
-                               data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <img src="{{ user.avatar.url }}"
-                                     width="60" height="60" class="rounded-circle">
-                            </a>
-                            <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                                <a class="dropdown-item" href="{% url 'edit_profile' %}"><i class="fas fa-user-alt"
-                                                                                            style="margin-left:5px;"></i>پروفایل</a>
-                                <a class="dropdown-item" href="{% url 'signout' %}"><i class="fas fa-sign-out-alt"
-                                                                                       style="margin-left:5px;"></i>خروج</a>
-                            </div>
-                        </li>
-                    </ul>
+    <div class="wrapper">
+        <!-- Sidebar  -->
+        <nav id="sidebar">
+            <!-- Brand name title -->
+            <div class="row">
+                <div class="col-md-12 brand-title ">
+                    <a href="{% url 'home' %}">
+                        <h1>تابــش</h1>
+                    </a>
                 </div>
+            </div>
+            <!-- Account title include [profile picture , name , grade ] -->
+            <div class="row account-title">
+                <!-- Profile picture -->
+                <div class="col-md-4">
+                    <img src="{{ user.avatar.url }}" alt="تصویر پروفایل">
+                </div>
+                <!-- Name & Grade -->
+                <div class="col-md-8">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <p class="account-title-name">{{ user.get_full_name }}
+                                <p>
+                        </div>
+                        <div class="col-md-12">
+                            <!-- Give grade title from m2m field grade -->
+                            <p class="account-title-grade">{% for grade in user.grades.all %}{{grade}}{% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Sidebar menus ! block for active menu -->
+            <div class="container">
+                <div class="row sidebar-menu {% block dashboard_active %}{% endblock %}">
+                    <img src="{% static 'home/images/icons/home.svg' %}" alt="آیکون">
+                    <a href="{% url 'dashboard' %}">داشبورد</a>
+                </div>
+                <hr>
+                <div class="row sidebar-menu {% block lesson_active %}{% endblock %}">
+                    <img src="{% static 'home/images/icons/book-open.svg' %}" alt="آیکون">
+                    <a href="{% url 'lessons' %}">دروس من</a>
+                </div>
+                <hr>
+                <div class="row sidebar-menu {% block shopping_active %}{% endblock %}">
+                    <img src="{% static 'home/images/icons/shopping-cart.svg' %}" alt="آیکون"></img>
+                    <a href="{% url 'shopping' %}">خرید درس</a>
+                </div>
+            </div>
+            <!-- Footer of sidebar -->
+            <div class="footer">
+                <a href="http://twitter.com">
+                    <img src="{% static 'dashboard/images/icons/facebook-f-brands.svg' %}" alt="آیکون">
+                </a>
+                <a href="http://instagram.com">
+                    <img src="{% static 'dashboard/images/icons/instagram-brands.svg' %}" alt="آیکون">
+                </a>
+                <a href="http://facebook.com">
+                    <img src="{% static 'dashboard/images/icons/twitter-brands.svg' %}" alt="آیکون">
+                </a>
             </div>
         </nav>
 
-        {% block content %}
+        <!-- Page content  -->
+        <div id="content">
 
-        {% endblock %}
+            <!-- Navigation bar -->
+            <nav class="navbar navbar-inverse sticky-top">
+                <div class="container-fluid ">
+                    <!-- Toggle button -->
+                    <button type="button" id="sidebarCollapse" class="btn btn-warning">
+                        <img class="navbar-full-screen" src="{% static 'home/images/icons/full-screen.svg'%}">
+                    </button>
+                    <!-- Nav menus -->
+                    <div style="display: inline-block;">
+                        <ul class="nav navbar-nav navbar-right ">
+                            <li><a href="{% url 'edit_profile' %}"><span><img
+                                            src="{% static 'home/images/icons/profile.svg'%}" alt="آیکون"></span> صفحه ی
+                                    پروفایل</a>
+                            </li>
+                            <li><a href="{% url 'signout' %}"><span><img
+                                            src=" {% static 'home/images/icons/logout.svg'%}"
+                                            alt="آیکون"></span>خروج</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+
+            {% block content %}
+
+            {% endblock %}
+
+        </div>
     </div>
-</div>
 
-<!-- jQuery CDN - Slim version (=without AJAX) -->
-<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
-        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
-        crossorigin="anonymous"></script>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/latest/TweenMax.min.js"></script>
-<!-- Popper.JS -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"
-        integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ"
-        crossorigin="anonymous"></script>
-<!-- Bootstrap JS -->
-<script src="https://cdn.rtlcss.com/bootstrap/v4.2.1/js/bootstrap.min.js"
-        integrity="sha384-a9xOd0rz8w0J8zqj1qJic7GPFfyMfoiuDjC9rqXlVOcGO/dmRqzMn34gZYDTel8k"
-        crossorigin="anonymous"></script>
-
-<!-- JS style -->
-<script type="text/javascript" src="{% static 'dashboard/js/dashboard.js' %}"></script>
-<script src="{% static 'dashboard/js/shopping.js' %}"></script>
-<script type="text/javascript">
-    $(document).ready(function () {
-        $("#sidebarCollapse").click(function () {
-            $("#sidebar").toggleClass('active');
-        });
-    });
-</script>
-<script type="text/javascript">
-    $(document).ready(function () {
-
-        var readURL = function (input) {
-            if (input.files && input.files[0]) {
-                var reader = new FileReader();
-
-                reader.onload = function (e) {
-                    $('.avatar').attr('src', e.target.result);
-                }
-
-                reader.readAsDataURL(input.files[0]);
-            }
-        }
-
-
-        $(".file-upload").on('change', function () {
-            readURL(this);
-        });
-    });
-</script>
+    <!-- JS files -->
+    <!-- jQuery CDN for toggler button -->
+    <script src="{% static 'dashboard/js/jquery-3.3.1.slim.min.js' %}"></script>
+    <!-- JS file for timer -->
+    <script src="{% static 'dashboard/js/TweenMax.min.js' %}"></script>
+    <!-- JS file for base.html  -->
+    <script src="{% static 'dashboard/js/base.js' %}"></script>
+    <!-- JS files for other page -->
+    {% block JSfile %}
+    {% endblock %}
 
 </body>
 

@@ -1,73 +1,38 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en" dir="rtl">
-<head>
-
-    {% load static %}
-    <meta charset="UTF-8">
-
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>ثبت نام</title>
-
-    <!-- CSS Files -->
-
-    <link rel="stylesheet" type="text/css" href="{% static "home/css/fonts.css" %}">
-    <link rel="stylesheet" href="https://cdn.rtlcss.com/bootstrap/v4.2.1/css/bootstrap.min.css"
-          integrity="sha384-vus3nQHTD+5mpDiZ4rkEPlnkcyTP+49BhJ4wJeJunw06ZAp+wzzeBPUXr42fi8If" crossorigin="anonymous">
-    <link rel="stylesheet" type="text/css" href="{% static "signup/css/style.css" %}">
-
-</head>
-
-<body>
-
-<div class="">
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-10 col-xl-9 mx-auto">
-                <div class="card card-signin flex-row my-5">
-                    <div class="card-img-left d-none d-md-flex">
-                        <!-- Background image for card set in CSS! -->
-                    </div>
-                    <div class="card-body">
-                        <h5 class="card-title text-center">ورود</h5>
-                        <form class="form-signin" method="POST" action="{% url 'signin' %}">
-                            {% csrf_token %}
-                            <div class="form-label-group">
-                                <input type="text" name="username" id="inputUserame" class="form-control"
-                                       placeholder="Username" required autofocus>
-                                <label for="inputUserame"> نام کاربری یا ایمیل</label>
-                            </div>
-
-                            <div class="form-label-group">
-                                <input type="password" name="password" id="inputPassword" class="form-control"
-                                       placeholder="Password" required>
-                                <label for="inputPassword">رمز عبور</label>
-                            </div>
-
-                            <button class="btn btn-lg btn-primary btn-block " type="submit"><p class="sign-btn">
-                                ورود </p></button>
-                            <a class="d-block text-center mt-2 small" href="{% url 'signup' %}">اکانت ندارید ! ثبت نام
-                                کنید</a>
-                            <hr class="my-4">
-                        </form>
-                    </div>
-                </div>
+   {% load static %}
+   <head>
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+      <meta name="description" content="Sign in page">
+      <meta name="author" content="Taabesh website">
+      <title>ورود</title>
+      <!-- CSS Files -->
+      <link rel="stylesheet" href="https://cdn.rtlcss.com/bootstrap/v4.2.1/css/bootstrap.min.css" integrity="sha384-vus3nQHTD+5mpDiZ4rkEPlnkcyTP+49BhJ4wJeJunw06ZAp+wzzeBPUXr42fi8If" crossorigin="anonymous">
+      <link rel="stylesheet" href="{% static 'signin/css/signin.css' %}">
+      <link rel="stylesheet" href="{% static 'home/css/fonts.css' %}">
+   </head>
+   <body class="text-center">
+      <form class="form-signin" method="POST" action="{% url 'signin' %}">
+         {% csrf_token %}
+         <h1 class="title">ورود</h1>
+         <div class="container">
+            <!-- Email OR Username Input -->
+            <div class="row" style="margin:10px">
+               <p> نام کاربری یا شماره تلفن</p>
+               <input type="username" id="inputEmail" name="username" class="form-control" placeholder="شماره تلفن یا نام کاربری خود را وارد کنید ..." required autofocus>
             </div>
-        </div>
-    </div>
-</div>
-
-
-<!-- JS files -->
-<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
-        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
-        crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js"
-        integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
-        crossorigin="anonymous"></script>
-<script src="https://cdn.rtlcss.com/bootstrap/v4.2.1/js/bootstrap.min.js"
-        integrity="sha384-a9xOd0rz8w0J8zqj1qJic7GPFfyMfoiuDjC9rqXlVOcGO/dmRqzMn34gZYDTel8k"
-        crossorigin="anonymous"></script>
-
-</body>
+            <!-- Password Input -->
+            <div class="row" style="margin:10px; margin-bottom:20px">
+               <p> رمز عبور </p>
+               <input type="password" id="inputPassword" name="password" class="form-control" placeholder="رمز عبور خود را با دقت وارد کنید ..." required style="background-color:#BEBEBD">
+            </div>
+         </div>
+         <button class="btn btn-lg btn-warning btn-block sign-in-button" type="submit">ورود</button>
+            {% if error %}
+            <p style="color: #7c0001">{{ error }}</p>
+            {% endif %}
+         <p class="footer-p"> حساب کاربری ندارید؟ <span><a href="{% url 'signup' %}">ثبت نام کنید</a></span></p>
+      </form>
+   </body>
 </html>

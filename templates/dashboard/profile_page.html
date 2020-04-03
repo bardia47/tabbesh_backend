@@ -1,126 +1,148 @@
 {% extends 'dashboard/base.html' %}
+{% load static %}
+<!-- Title block of base.html -->
+{% block title %}پروفایل{% endblock %}
 
+<!-- CSS files -->
+{% block CSSfiles %}
+<!-- CSS File for choicen jquery -->
+<link rel="stylesheet" href="{% static 'home/chosen/css/chosen.min.css' %}">
+{% endblock %}
+
+<!-- Content of page -->
 {% block content %}
-    <div class="container">
-        <h1>پروفایل</h1>
-        <hr>
-        <form class="form-horizontal" action="{% url 'edit_profile' %}" method="POST" enctype="multipart/form-data">
-            <input type="hidden" id="user.username" name="user.username" value={{ user.username }}>
+<div class="container">
+    <h1>پروفایل</h1>
+    <hr>
+    <form class="form-horizontal" action="{% url 'edit_profile' %}" method="POST" enctype="multipart/form-data">
+        {#        <input type="hidden" id="user.username" name="user.username" value={{ user.username }}>#}
 
-            <div class="row">
-                <!-- left column -->
-                <div class="col-md-3">
+        <div class="row">
+            <!-- right column -->
+            <div class="col-md-3">
 
-                    {% csrf_token %}
-                    <div class="text-center">
-                        <img src="{{ user.avatar.url }}"
-
-                             class="avatar img-circle img-thumbnail" alt="avatar">          <h6>Upload a different
-                        photo...</h6>
-                        <input type="file" id="avatar" name="avatar" class="text-center center-block file-upload">
-                    </div>
-                    <div class="col-md-8">
-                        <input type="submit" name="upload" class="btn btn-primary" value="آپلود">
-                    </div>
-                    </hr><br>
+                {% csrf_token %}
+                <div class="text-center">
+                    <img src="{{ user.avatar.url }}" id="avatar" class="avatar img-circle img-thumbnail" alt="avatar">
+                    <input type="file" id="file" name="file" class="text-center center-block file-upload"
+                        accept="image/*">
                 </div>
+                <div class="col-md-8">
+                    <input type="submit" name="upload" class="btn btn-primary" value="آپلود">
+                </div>
+                <hr><br>
+            </div>
 
 
-                <!-- edit form column -->
-                <div class="col-md-9 personal-info">
-                    <div class="alert alert-info alert-dismissable">
-                        <a class="panel-close close" data-dismiss="alert">×</a>
-                        <i class="fa fa-coffee"></i>
-                        {% if error %}
-                            <strong>{{ error }}</strong>
-                        {% else %}
-                            <strong>تمامی فیلد ها اجباری می باشد .</strong>
-                        {% endif %}
-                    </div>
-                    <h3>اطلاعات شخصی</h3>
+            <!-- edit form column -->
+            <div class="col-md-9 personal-info">
+                <div class="alert alert-info alert-dismissable">
+                    <a class="panel-close close" data-dismiss="alert">×</a>
+                    <i class="fa fa-coffee"></i>
+                    {% if error %}
+                    <strong>{{ error }}</strong>
+                    {% else %}
+                    <strong>تمامی فیلد ها اجباری می باشد .</strong>
+                    {% endif %}
+                </div>
+                <h3>اطلاعات شخصی</h3>
 
-                    <div class="form-group">
-                        <label class="col-lg-3 control-label">نام</label>
-                        <div class="col-lg-8">
-                            <input class="form-control" name="first_name" type="text" value="{{ user.first_name }}"
-                                   maxlength="30" required>
-                        </div>
+                <div class="form-group">
+                    <label class="col-lg-3 control-label">نام</label>
+                    <div class="col-lg-8">
+                        <input class="form-control" name="first_name" type="text" value="{{ user.first_name }}"
+                            maxlength="30" required>
                     </div>
-                    <div class="form-group">
-                        <label class="col-lg-3 control-label">نام خانوادگی</label>
-                        <div class="col-lg-8">
-                            <input class="form-control" name="last_name" type="text" value="{{ user.last_name }}"
-                                   maxlength="30" required>
-                        </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-lg-3 control-label">نام خانوادگی</label>
+                    <div class="col-lg-8">
+                        <input class="form-control" name="last_name" type="text" value="{{ user.last_name }}"
+                            maxlength="30" required>
                     </div>
-                    <div class="form-group">
-                        <label class="col-lg-3 control-label">کد ملی</label>
-                        <div class="col-lg-8">
-                            <input class="form-control" type="text" name="national_code"
-                                   value="{{ user.national_code }}" maxlength="10" required>
-                        </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-lg-3 control-label">کد ملی</label>
+                    <div class="col-lg-8">
+                        <input class="form-control" type="text" name="national_code" value="{{ user.national_code |default_if_none:'' }}"
+                            maxlength="10" required>
                     </div>
-                    <div class="form-group">
-                        <label class="col-lg-3 control-label">جنسیت</label>
-                        <div class="col-lg-8">
-                            <select id="gender" name="gender" required>
-                                <option value="True">پسر</option>
-                                <option value="False" {% ifequal user.gender False %}
-                                        selected="selected"{% endifequal %} >دختر
-                                </option>
-                            </select>
-                        </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-lg-3 control-label">جنسیت</label>
+                    <div class="col-lg-8">
+                        <select id="gender" name="gender" class="gender-choice" required>
+                            <option value="True">پسر</option>
+                            <option value="False" {% ifequal user.gender False %} selected="selected" {% endifequal %}>
+                                دختر
+                            </option>
+                        </select>
                     </div>
-                    <div class="form-group">
-                        <label class="col-lg-3 control-label">شهر</label>
-                        <div class="col-lg-8">
-                            <div class="ui-select">
-                                <select id="city" name="city" required>
-                                    {% for element in form.fields.city.queryset %}
-                                        <option value="{{ element.id }}" {% ifequal user.city.id element.id %}
-                                                selected="selected"{% endifequal %}>{{ element.title }}</option>
-                                    {% endfor %}
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-md-3 control-label">آدرس</label>
-                        <div class="col-md-8">
-                            <input class="form-control" type="text" name="address" value="آدرس دقیق را وارد کنید ..."
-                                   maxlength="255" required>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-md-3 control-label">پایه تحصیلی</label>
-                        <div class="col-md-8">
-                            <select id="grades" name="grades" required>
-                                {% for element in form.fields.grades.queryset %}
-                                    <option value="{{ element.id }}" {% ifequal user.grades.first.id element.id %}
-                                            selected="selected"{% endifequal %}>{{ element.title }}</option>
+                </div>
+                <div class="form-group">
+                    <label for="city" class="col-lg-3 control-label">شهر</label>
+                    <div class="col-lg-8">
+                        <div class="ui-select">
+                            <select id="city" name="city" class="city-choice" required>
+                                {% for element in form.fields.city.queryset %}
+                                <option value="{{ element.id }}" {% ifequal user.city.id element.id %}
+                                    selected="selected" {% endifequal %}>{{ element.title }}</option>
                                 {% endfor %}
                             </select>
                         </div>
                     </div>
-                    <div class="form-group">
-                        <label class="col-md-3 control-label" required>شماره تلفن</label>
-                        <div class="col-md-8">
-                            <input class="form-control" type="text" name="phone_number" value="{{ user.phone_number }}"
-                                   maxlength="12" required>
-                        </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-md-3 control-label">آدرس</label>
+                    <div class="col-md-8">
+                        <input class="form-control" type="text" name="address" value="{{ user.address|default_if_none:''  }}"
+                            maxlength="255" required>
                     </div>
+                </div>
+                <div class="form-group">
+                    <label for="grades" class="col-md-3 control-label">پایه تحصیلی</label>
+                    <div class="col-md-8">
+                        <select id="grades" name="grades" class="grade-choice" required>
+                            {% for element in form.fields.grades.queryset %}
+                            <option value="{{ element.id }}" {% ifequal user.grades.first.id element.id %}
+                                selected="selected" {% endifequal %}>{{ element.title }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-md-3 control-label" required>شماره تلفن</label>
+                    <div class="col-md-8">
+                        <input class="form-control" type="text" name="phone_number" value="{{ user.phone_number }}"
+                            maxlength="12" required>
+                    </div>
+                </div>
 
-                    <div class="form-group">
-                        <label class="col-md-3 control-label"></label>
-                        <div class="col-md-8">
-                            <input type="submit" class="btn btn-primary" value="ثبت">
-                            <span></span>
-                            <input type="reset" class="btn btn-default" value="ریست">
-                        </div>
+                <div class="form-group">
+                    <label class="col-md-3 control-label"></label>
+                    <div class="col-md-8">
+                        <input type="submit" class="btn btn-primary" value="ثبت">
+                        <span></span>
+                        <input type="reset" class="btn btn-default" value="ریست">
                     </div>
                 </div>
             </div>
-        </form>
-    </div>
+        </div>
+    </form>
+</div>
 
+{% endblock %}
+
+<!-- JS files -->
+{% block JSfile %}
+<script src="{% static 'dashboard/js/edit_profile.js' %}"></script>
+<!-- Choicen jQuery JS -->
+<script src="{% static 'home/chosen/js/jquery-3.2.1.min.js' %}"></script>
+<script src="{% static 'home/chosen/js/chosen.jquery.min.js' %}"></script>
+<!-- Add Choicen to grade -->
+<script>
+    $(".grade-choice").chosen({ width: '100px' });
+    $(".city-choice").chosen({ rtl: true, width: '70px' });
+    $(".gender-choice").chosen({ rtl: true, width: '70px' });
+</script>
 {% endblock %}

@@ -43,3 +43,17 @@
          url('../fonts/Dana/dana-bold.woff2') format('woff2'),
          url('../fonts/Dana/dana-regular.eot') format('eot');
 }
+
+@font-face {
+  font-family: 'Dana_Bold';
+  src: url('../fonts/Dana/dana-bold.woff') format('woff'),
+         url('../fonts/Dana/dana-bold.woff2') format('woff2'),
+         url('../fonts/Dana/dana-regular.eot') format('eot');
+}
+
+@font-face {
+  font-family: 'Iransense';
+  src: url('../fonts/Iransans/BRoya.woff') format('woff'),
+         url('../fonts/Iransans/BRoya.eot') format('eot'),
+         url('../fonts/Iransans/BRoya.ttf') format('ttf');
+}

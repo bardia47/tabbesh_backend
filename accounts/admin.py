@@ -47,8 +47,9 @@ class UserCreationForm(forms.ModelForm):
     def save(self, commit=True):
         user = super(UserCreationForm, self).save(commit=False)
         if user.role.code == RoleCodes.ADMIN.value:
-            user.is_staff = True
             user.is_superuser = True
+        else:
+            user.is_superuser = False   
         password = make_password(self.cleaned_data["password1"])
         user.password = password
         user.set_default_avatar()
@@ -75,8 +76,10 @@ class UserChangeForm(UserCreationForm):
     def save(self, commit=True):
         user = super(UserChangeForm, self).save(commit=False)
         if user.role.code == RoleCodes.ADMIN.value:
-            user.is_staff = True
             user.is_superuser = True
+        else:
+            user.is_superuser = False
+
         if self.data.get("password1") != '':
             password = make_password(self.cleaned_data["password1"])
             user.password = password
@@ -202,10 +205,30 @@ class CourseCalendarAdmin(ModelAdminJalaliMixin, admin.ModelAdmin):
 class CityAdmin(admin.ModelAdmin):
         list_display = ['code', 'title']
 
+# class LessonInline(admin.StackedInline):
+#     model = Lesson.grades.through
+#     verbose_name_plural = "پایه مرتبط"
+#     verbose_name = "پایه مرتبط"
+#     extra=0
+#     def get_formset(self, request, obj=None, **kwargs):
+#         formset = super(LessonInline, self).get_formset(request, obj, **kwargs)
+#         form = formset.form
+#         form.base_fields['grade'].label="پایه"
+#         widget = form.base_fields['grade'].widget
+#         widget.can_add_related = False
+#         widget.can_change_related = False
+#         widget.can_add_related = False
+#         widget.can_change_related = False
+#         widget.label='پایه'
+#         return formset
+
 
 class LessonAdmin(admin.ModelAdmin):
-        list_display = ['code', 'title', 'grade']
-
+        list_display = ['code', 'title']
+#        exclude = ('grades',)
+#         inlines = [
+#         LessonInline,
+#     ]
         
 class GradeAdmin(admin.ModelAdmin):
         list_display = ['code', 'title']        
