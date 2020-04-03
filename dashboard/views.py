@@ -74,23 +74,19 @@ def shopping(request):
     grades = Grade.objects.all()
     lessons = Lesson.objects.all()
     teachers = User.objects.filter(role__code=RoleCodes.TEACHER.value)
+    query = Q(end_date__gt=now)
     if request.GET.get("teacher") or request.GET.get("lesson") or request.GET.get("grade"):
         if request.GET.get("lesson"):
-            courses = getAllLessons(request.GET.get("lesson"),now)
-        else:
-            courses = Course.objects.filter(end_date__gt=now)    
+          query &= getAllLessons(request.GET.get("lesson"),now)
         if request.GET.get("grade"):
-            courses = courses.filter(grade__id=request.GET.get("grade"))
+             query &=Q(grade__id=request.GET.get("grade"))
         if request.GET.get("teacher"):
-            courses = courses.filter(teacher__id=request.GET.get("teacher"))               
+            query &=Q(teacher__id=request.GET.get("teacher"))               
     else:  
-        courses = Course.objects.filter(end_date__gt=now)  
         if (request.user.grades.count() > 0):
-                courses = courses.filter(grade__id=request.user.grades.first().id)
-           
-            
-            
-    
+               query &=Q(grade__id=request.user.grades.first().id)
+               
+    courses=Course.objects.filter(query)           
 
     return render(request, 'dashboard/shopping.html', {'grades': grades, 'lessons': lessons, 'teachers': teachers,
                                                        'courses': courses})
@@ -106,9 +102,8 @@ def getAllLessons(lesson_id,now):
             break 
         else:
             whilelessons=extend_lesson
-            lessons.extened(whilelessons)
+            lessons= lessons | whilelessons
     query = reduce(or_, (Q(lesson__id=lesson.id) for lesson in lessons))
-    courses = Course.objects.filter(query | Q(end_date__gt=now)) 
-    return courses
+    return query
 
     
