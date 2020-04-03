@@ -8,21 +8,22 @@ from .forms import ProfileForm
 
 def dashboard(request):
     now = datetime.datetime.now()
-    # courses and down counter(for the next course)
     user = get_object_or_404(User, pk=request.user.id)
-    courses = user.payments.order_by('course_calendar').filter(end_date__gt=now)
-    classes = Course_Calendar.objects.filter(course__in=courses, start_date__day=now.day)
+    courses = user.payments.filter(end_date__gt=now)
+    classes = Course_Calendar.objects.filter(course__in=courses)
     no_class_today_text = None
 
+    # update all classes time
+    for klass in classes:
+        while klass.end_date < now:
+            klass.start_date += datetime.timedelta(days=7)
+            klass.end_date += datetime.timedelta(days=7)
+            klass.save()
+
+    classes = Course_Calendar.objects.filter(course__in=courses, start_date__day=now.day)
+
     if classes.count() > 0:
-        next_class = classes.first()
-        if next_class.end_date < now:
-            next_class.end_date += datetime.timedelta(days=7)
-            next_class.start_date += datetime.timedelta(days=7)
-            next_class.save()
-            classes = Course_Calendar.objects.filter(course__in=courses, start_date__day=now.day)
-            next_class = classes.first()
-        calendar_time = next_class.start_date - now
+        calendar_time = classes.first().start_date - now
     else:
         calendar_time = ''
         no_class_today_text = 'امروز هیچ کلاسی نداری'
@@ -62,6 +63,13 @@ def lessons(request):
     now = datetime.datetime.now()
     user = get_object_or_404(User, pk=request.user.id)
     courses = user.payments.filter(end_date__gt=now)
+    classes = Course_Calendar.objects.filter(course__in=courses)
+    # update all classes time
+    for klass in classes:
+        while klass.end_date < now:
+            klass.start_date += datetime.timedelta(days=7)
+            klass.end_date += datetime.timedelta(days=7)
+            klass.save()
     return render(request, 'dashboard/lessons.html', {'courses': courses})
 
 
