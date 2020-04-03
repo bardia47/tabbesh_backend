@@ -179,8 +179,6 @@ class Course(models.Model):
         super().clean_fields(exclude=exclude)
         if self.end_date < self.start_date :
             raise ValidationError("تاریخ پایان باید پس از تاریخ شروع باشد")
-        if self.teacher.role.code != RoleCodes.TEACHER.value:
-            raise ValidationError("مدرس باید نقش مدرس داشته باشد")
 
 
 # Course_Calendar Model

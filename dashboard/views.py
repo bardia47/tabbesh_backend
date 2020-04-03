@@ -98,6 +98,10 @@ def shopping(request):
     else:  
         if (request.user.grades.count() > 0):
                query &=Q(grade__id=request.user.grades.first().id)
+    if request.user.payments.all() :
+      queryNot = reduce(or_, (Q(id=course.id) for course in request.user.payments.all()))
+      query=query & ~queryNot
+                   
                
     courses=Course.objects.filter(query)           
 
