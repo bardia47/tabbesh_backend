@@ -28,7 +28,7 @@ def dashboard(request):
         calendar_time = next_class.start_date - now
     else:
         calendar_time = ''
-        no_class_today_text = 'امروز هیچ کلاسی نداری'
+        no_class_today_text = True
 
     return render(request, 'dashboard/dashboard.html', {'now': now, 'classes': classes,
                                                         'calendar_time': calendar_time,
