@@ -158,7 +158,7 @@
                             <p>
                                 <img src="{% static 'home/images/icons/price.svg'%}" alt="">
                                 قیمت:
-                                <span class="price">{{course.amount}}</span>
+                                <span class="price">{{course.amount|floatformat:"-3"}}</span>
                                 <span class="currency">تومان</span>
                             </p>
                         </div>
