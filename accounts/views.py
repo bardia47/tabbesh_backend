@@ -35,8 +35,9 @@ def signup(request):
 
 def signin(request):
     if request.method == 'POST':
-        if '@' in request.POST['username']:
-            user = auth.authenticate(email=request.POST['username'], password=request.POST['password'])
+        if request.POST['username'].isdigit():
+            user1=User.objects.get(phone_number=request.POST['username'])
+            user = auth.authenticate(username=user1.username, password=request.POST['password'])
         else:
             user = auth.authenticate(username=request.POST['username'], password=request.POST['password'])
         if user is not None:

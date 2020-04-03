@@ -12,6 +12,7 @@
     <!-- CSS Files -->
     <link rel="stylesheet" href="https://cdn.rtlcss.com/bootstrap/v4.2.1/css/bootstrap.min.css"
         integrity="sha384-vus3nQHTD+5mpDiZ4rkEPlnkcyTP+49BhJ4wJeJunw06ZAp+wzzeBPUXr42fi8If" crossorigin="anonymous">
+     <script src="{% static 'dashboard/js/jquery-3.3.1.slim.min.js' %}"></script>
     <link rel="stylesheet" href="{% static 'signup/css/signup.css' %}">
     <link rel="stylesheet" href="{% static 'home/css/fonts.css' %}">
     <!-- CSS File for choicen jquery -->
@@ -40,7 +41,7 @@
                     <label for="first_name">نام</label>
                 </div>
                 <div class="col-md-4">
-                    <input type="text" id="first_name" name="first_name">
+                    <input type="text" id="first_name" name="first_name" required>
                 </div>
                 <!-- Gender field -->
                 <div class="col-md-6">
@@ -54,7 +55,7 @@
                                 <div class="col-md-6 custom-radio custom-control-inline">
                                     <span> پسر </span>
                                     <input type="radio" class="custom-control-input" id="gender_boy" name="gender"
-                                        value="True">
+                                        value="True" checked="checked">
                                     <label class="custom-control-label yellow " for="gender_boy"></label>
                                 </div>
                                 <div class="col-md-6 custom-radio custom-control-inline">
@@ -74,8 +75,9 @@
                     <label for="last_name">نام خانوادگی</label>
                 </div>
                 <div class="col-md-4">
-                    <input type="text" id="last_name" name="last_name">
+                    <input type="text" id="last_name" name="last_name" required>
                 </div>
+                <p id="name_message" style="color: #7c0001"></p>  
             </div>
             <!-- Username field -->
             <div class="row mb-2">
@@ -85,6 +87,8 @@
                 <div class="col-md-4">
                     <input type="text" id="username" name="username" required>
                 </div>
+                <p id="username_message" style="color: #7c0001"></p>
+                
             </div>
             <!-- Password1 field -->
             <div class="row mb-2">
@@ -103,6 +107,8 @@
                 <div class="col-md-4">
                     <input type="password" id="password2" name="password2" required>
                 </div>
+                <p id="password_message" style="color: #7c0001"></p>
+                
             </div>
             <!-- Grade field -->
             <div class="row mb-2">
@@ -126,24 +132,27 @@
                 </div>
                 <div class="phone-number-field col-md-10">
                     <!-- pattern check phone number is valid or not -->
-                    <input type="text" class="phone-number" pattern="9(0[1-2]|1[0-9]|3[0-9]|2[0-1])-?[0-9]{3}-?[0-9]{4}"
+                    <input type="text" class="phone-number" pattern="[9][0-9]{9}"
                         id="defaultInline10" name="phone_number">
                     <input type="text" value="+98" class="area-code" readonly>
                     <p>نکته : شماره تلفن را بدون صفر وارد کنید . مثال : 9121111111</p>
                 </div>
             </div>
-            <button class="btn btn-lg btn-warning btn-block sign-up-button" type="submit">ثبت نام</button>
+            <button id="submit" class="btn btn-lg btn-warning btn-block sign-up-button" type="submit">ثبت نام</button>
+              <p id="message" style="color: #7c0001"></p>
                        {% if form.error %}
             <p style="color: #7c0001">{{ form.error }}</p>
             {% endif %}
         </div>
     </form>
-    <!-- Choicen jQuery JS -->
+    {% block JSfile %}
+    <script src="{% static 'signup/js/signup.js' %}"></script>
+        <!-- Choicen jQuery JS -->
     <script src="{% static 'home/chosen/js/jquery-3.2.1.min.js' %}"></script>
     <script src="{% static 'home/chosen/js/chosen.jquery.min.js' %}"></script>
     <!-- Add Choicen to grade -->
     <script>
-        $(".grade-choicen").chosen({ rtl: true  , width: '50%'});
     </script> 
+{% endblock %}
 </body>
 </html>
