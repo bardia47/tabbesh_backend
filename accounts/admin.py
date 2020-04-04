@@ -45,7 +45,7 @@ class UserCreationForm(forms.ModelForm):
         return password2
 
     def save(self, commit=True):
-        user = super(UserChangeForm, self).save(commit=False)
+        user = super(UserCreationForm, self).save(commit=False)
         if user.role.code == RoleCodes.ADMIN.value:
             user.is_superuser = True
         else:
