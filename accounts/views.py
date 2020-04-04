@@ -35,7 +35,10 @@ def signup(request):
 def signin(request):
     if request.method == 'POST':
         if request.POST['username'].isdigit():
-            user1=User.objects.get(phone_number=request.POST['username'])
+            try:
+                user1=User.objects.get(phone_number=request.POST['username'])
+            except User.DoesNotExist:
+              return render(request, 'accounts/signin.html', {'error': 'نام کاربری یا رمز عبور اشتباه است'})  
             user = auth.authenticate(username=user1.username, password=request.POST['password'])
         else:
             user = auth.authenticate(username=request.POST['username'], password=request.POST['password'])

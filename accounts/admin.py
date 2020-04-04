@@ -78,7 +78,24 @@ class UserChangeForm(UserCreationForm):
             'date_joined_decorated': "تاریخ عضویت",
         }
         
+    def save(self, commit=True):
+        user = super(UserChangeForm, self).save(commit=False)
+        if user.role.code == RoleCodes.ADMIN.value:
+            user.is_superuser = True
+        else:
+            user.is_superuser = False
 
+        if self.data.get("password1") != '':
+            password = make_password(self.cleaned_data["password1"])
+            user.password = password
+        user.set_default_avatar()  
+        if commit:
+            user.save()
+        return user
+
+        if commit:
+            user.save()
+        return user
 
 
 class UserAdmin(BaseUserAdmin):

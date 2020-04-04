@@ -11,6 +11,7 @@
    <!-- CSS Files -->
    <link rel="stylesheet" href="https://cdn.rtlcss.com/bootstrap/v4.2.1/css/bootstrap.min.css"
       integrity="sha384-vus3nQHTD+5mpDiZ4rkEPlnkcyTP+49BhJ4wJeJunw06ZAp+wzzeBPUXr42fi8If" crossorigin="anonymous">
+    <script src="{% static 'dashboard/js/jquery-3.3.1.slim.min.js' %}"></script>
    <link rel="stylesheet" href="{% static 'signin/css/signin.css' %}">
    <link rel="stylesheet" href="{% static 'home/css/fonts.css' %}">
 </head>
@@ -23,7 +24,7 @@
          <!-- Email OR Username Input -->
          <div class="row" style="margin:10px">
             <p> نام کاربری یا شماره تلفن</p>
-            <input type="username" id="inputEmail" name="username" class="form-control"
+            <input type="username" id="username" name="username" class="form-control"
                placeholder="شماره تلفن یا نام کاربری خود را وارد کنید ..." required autofocus>
          </div>
          <!-- Password Input -->
@@ -33,12 +34,15 @@
                placeholder="رمز عبور خود را با دقت وارد کنید ..." required style="background-color:#BEBEBD">
          </div>
       </div>
-      <button class="btn btn-lg btn-warning btn-block sign-in-button" type="submit">ورود</button>
+      <button id="submit" class="btn btn-lg btn-warning btn-block sign-in-button" type="submit">ورود</button>
       {% if error %}
       <p style="color: #7c0001">{{ error }}</p>
       {% endif %}
       <p class="footer-p"> حساب کاربری ندارید؟ <span><a href="{% url 'signup' %}">ثبت نام کنید</a></span></p>
    </form>
+   {% block JSfile %}
+    <script src="{% static 'signin/js/signin.js' %}"></script>
+    {% endblock %}
 </body>
 
 </html>
