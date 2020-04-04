@@ -1,10 +1,10 @@
-import pytz
-from django.db.models import Q
 from django.shortcuts import render, redirect, get_object_or_404
-from accounts.models import User
 import datetime
 from accounts.models import *
 from accounts.enums import RoleCodes
+from django.db.models import Q
+from operator import or_
+from functools import reduce
 from django.contrib.auth.decorators import login_required
 from .forms import ProfileForm
 
@@ -12,34 +12,30 @@ from .forms import ProfileForm
 # Create your views here.
 @login_required
 def dashboard(request):
-    # just for calendar
     now = datetime.datetime.now()
-
-    # courses and downcounter(for the next course) ---------------------------------------------------------------------
-    now_utc = datetime.datetime.now(pytz.utc)
     user = get_object_or_404(User, pk=request.user.id)
-    courses = user.payments.order_by('course_calendar__end_date').distinct()
-    if courses.count() > 0:
-        next_course_calendar = courses[0].course_calendar_set.first()
-        if next_course_calendar.end_date < now_utc:
-            next_course_calendar.end_date += datetime.timedelta(days=7)
-            next_course_calendar.start_date += datetime.timedelta(days=7)
-            next_course_calendar.save()
-            courses = user.payments.order_by(
-                'course_calendar__end_date').distinct()
-            next_course_calendar = courses[0].course_calendar_set.first()
+    courses = user.payments.filter(end_date__gt=now)
+    classes = Course_Calendar.objects.filter(course__in=courses)
+    no_class_today_text = None
 
-        class_time = next_course_calendar.start_date
-        is_class_active = next_course_calendar.is_class_active
-        class_time = class_time - now_utc
+    # update all classes time
+    for klass in classes:
+        while klass.end_date < now:
+            klass.start_date += datetime.timedelta(days=7)
+            klass.end_date += datetime.timedelta(days=7)
+            klass.save()
+
+    classes = Course_Calendar.objects.filter(course__in=courses, start_date__day=now.day)
+
+    if classes.count() > 0:
+        calendar_time = classes.first().start_date - now
     else:
-        class_time = ''
-        is_class_active = False
-    # ------------------------------------------------------------------------------------------------------------------
+        calendar_time = ''
+        no_class_today_text = True
 
-    return render(request, 'dashboard/dashboard.html', {'now': now, 'courses': courses,
-                                                        'class_time': class_time,
-                                                        'is_class_active': is_class_active})
+    return render(request, 'dashboard/dashboard.html', {'now': now, 'classes': classes,
+                                                        'calendar_time': calendar_time,
+                                                        'no_class_today_text': no_class_today_text})
 
 
 # Edit Profile Page
@@ -47,8 +43,8 @@ def dashboard(request):
 def edit_profile(request):
     if request.method == 'POST':
         if request.POST.get("upload"):
-            avatar = request.FILES.get("avatar")
-            if  avatar  :
+            avatar = request.user.compressImage(request.FILES.get("file"))
+            if avatar:
                 if not request.user.avatar.url.startswith("/media/defaults"):
                     request.user.avatar.delete()
                 request.user.avatar = avatar
@@ -71,25 +67,60 @@ def edit_profile(request):
 # Lessons Page
 @login_required
 def lessons(request):
+    now = datetime.datetime.now()
     user = get_object_or_404(User, pk=request.user.id)
-    courses = user.payments.all()
+    courses = user.payments.filter(end_date__gt=now)
+    classes = Course_Calendar.objects.filter(course__in=courses)
+    # update all classes time
+    for klass in classes:
+        while klass.end_date < now:
+            klass.start_date += datetime.timedelta(days=7)
+            klass.end_date += datetime.timedelta(days=7)
+            klass.save()
     return render(request, 'dashboard/lessons.html', {'courses': courses})
 
 
 # Shopping Page
 @login_required
 def shopping(request):
+    now = datetime.datetime.now()
     grades = Grade.objects.all()
-    LESSONS = Lesson.objects.all()
+    lessons = Lesson.objects.all()
     teachers = User.objects.filter(role__code=RoleCodes.TEACHER.value)
-    courses = Course.objects.all()
+    query = Q(end_date__gt=now)
     if request.GET.get("teacher") or request.GET.get("lesson") or request.GET.get("grade"):
-        if request.GET.get("teacher"):
-            courses = courses.filter(teacher__id=request.GET.get("teacher"))
-        if request.GET.get("grade"):
-            courses = courses.filter(lesson__grade__id=request.GET.get("grade"))
         if request.GET.get("lesson"):
-            courses = courses.filter(lesson__id=request.GET.get("lesson"))
+          query &= getAllLessons(request.GET.get("lesson"),now)
+        if request.GET.get("grade"):
+             query &=Q(grade__id=request.GET.get("grade"))
+        if request.GET.get("teacher"):
+            query &=Q(teacher__id=request.GET.get("teacher"))               
+    else:  
+        if (request.user.grades.count() > 0):
+               query &=Q(grade__id=request.user.grades.first().id)
+    if request.user.payments.all() :
+      queryNot = reduce(or_, (Q(id=course.id) for course in request.user.payments.all()))
+      query=query & ~queryNot
+                   
+               
+    courses=Course.objects.filter(query)           
 
-    return render(request, 'dashboard/shopping.html', {'grades': grades, 'lessons': LESSONS, 'teachers': teachers,
+    return render(request, 'dashboard/shopping.html', {'grades': grades, 'lessons': lessons, 'teachers': teachers,
                                                        'courses': courses})
+    
+def getAllLessons(lesson_id,now):
+    lessons = Lesson.objects.filter(id=lesson_id) 
+    whilelessons=lessons
+    while True:
+        extend_lesson=[]
+        query = reduce(or_, (Q(parent__id=lesson.id) for lesson in whilelessons))
+        extend_lesson=Lesson.objects.filter(query)
+        if  len(extend_lesson)==0 :
+            break 
+        else:
+            whilelessons=extend_lesson
+            lessons= lessons | whilelessons
+    query = reduce(or_, (Q(lesson__id=lesson.id) for lesson in lessons))
+    return query
+
+    

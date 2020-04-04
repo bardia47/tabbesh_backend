@@ -1,35 +1,87 @@
 {% extends 'dashboard/base.html' %}
-{% block content %}
-    {% load static %}
+{% load static %}
+{% load jformat %}
+<!-- Title block of base.html -->
+{% block title %}دروس من{% endblock %}
+
+<!-- CSS files -->
+{% block CSSfiles %}
     <link rel="stylesheet" href="{% static 'dashboard/css/lessons.css' %}">
-    <!-- Post Rows -->
+{% endblock %}
+
+<!-- Active menu of sidebar -->
+{% block lesson_active %}active-menu{% endblock %}
+
+<!-- Content of page -->
+{% block content %}
+    <!-- Course Rows -->
     <div class="row">
         {% for course in courses %}
-            <!-- Post Cards -->
-            <div class="col-sm-6 col-md-4 col-lg-3 mt-4">
-                <div class="card">
-                    <img class="card-img-top" src="{% if course.image %}{{ course.image.url }}
-                                      {% else %}{% static "dashboard/images/lessons.jpg" %}
-                                      {% endif %}">
-                    <div class="card-block">
-                        <figure class="profile">
-                            <img src="{{ course.teacher.avatar.url }}"
-                                 class="profile-avatar" alt="">
+            <!-- Course Cards -->
+            <div class="col-md-4">
+                <!-- Course Card  -->
+                <div class="card course-card">
+                    <!-- Course poster -->
+                    <img class="card-img-top course-card-image" src="{{ course.image.url }}">
+                    <!-- Course content -->
+                    <div class="card-block course-card-block">
+                        <!-- Teacher profile  -->
+                        <figure class="teacher-profile">
+                            <img src="{{ course.teacher.avatar.url }}" class="profile-avatar"
+                                 alt="course teacher profile">
                         </figure>
+                        <!-- Course title  -->
                         <h4 class="card-title mt-3">{{ course.title }}</h4>
-                        <div class="meta">
-                            <h6>{{ course.lesson.grade }}</h6>
+                        <!-- Course teacher  -->
+                        <div class="course-teacher-name">
+                            <h6>استاد {{ course.teacher.get_full_name }}</h6>
                         </div>
-                        <div class="card-text">
-                            <p style="padding-top: 25px">این درس توسط استاد {{ course.teacher.get_full_name }} تدریس میشود.</p>
+                        <!-- Course calender for next class  -->
+                        <div class="course-calender">
+                            <p>
+                                <img src="{% static 'home/images/icons/clock.svg' %}" alt="">
+                                جلسه ی بعدی:
+                                <span>
+                                    {% with course.course_calendar_set.all|first as next %}
+                                        {{ next.start_date|date:"l" }}
+                                        {{ next.start_date|jformat:"%d‌" }}
+                                        ام
+                                        ساعت
+                                        {{ next.start_date|date:"H:i" }}
+                                    {% endwith %}
+                                </span>
+                            </p>
+                        </div>
+                        <!-- End of the course  -->
+                        <div class="course-end-date">
+                            <p>
+                                <img src="{% static 'home/images/icons/calendar.svg' %}" alt="">
+                                اتمام دوره:
+                                <span>{{ course.end_date|jformat:" %B %d %A " }}</span>
+                            </p>
+                        </div>
+                        <!-- Description of the course  -->
+                        <div class="course-description">
+                            <p class="course-description-title">
+                                <img src="{% static 'home/images/icons/paragraph.svg' %}" alt="">
+                                توضیحات:
+                            </p>
+                            <p class="course-description-p">{{ course.description }}</p>
                         </div>
                     </div>
-                    <div class="card-footer">
-                        <a class="btn text-light btn-secondary float-right btn-sm"
-                           href="#">درباره دوره</a>
+                    <!-- Button link to class -->
+                    <div class="card-footer button-to-class">
+                        <button class="btn btn-success">
+                            <img src="{% static 'home/images/icons/click.svg' %}" alt="button link to class">
+                            ورود به کلاس
+                        </button>
                     </div>
                 </div>
             </div>
         {% endfor %}
     </div>
+{% endblock %}
+
+<!-- JS files -->
+{% block JSfile %}
 {% endblock %}

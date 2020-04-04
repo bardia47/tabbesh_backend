@@ -1,96 +1,151 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en" dir="rtl">
+{% load static %}
+
 <head>
-
-    {% load static %}
-    <meta charset="UTF-8">
-
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="Sign up page">
+    <meta name="author" content="Taabesh website">
     <title>ثبت نام</title>
-
     <!-- CSS Files -->
-
-    <link rel="stylesheet" type="text/css" href="{% static "home/css/fonts.css" %}">
     <link rel="stylesheet" href="https://cdn.rtlcss.com/bootstrap/v4.2.1/css/bootstrap.min.css"
-          integrity="sha384-vus3nQHTD+5mpDiZ4rkEPlnkcyTP+49BhJ4wJeJunw06ZAp+wzzeBPUXr42fi8If" crossorigin="anonymous">
-    <link rel="stylesheet" type="text/css" href="{% static "signup/css/style.css" %}">
-
+        integrity="sha384-vus3nQHTD+5mpDiZ4rkEPlnkcyTP+49BhJ4wJeJunw06ZAp+wzzeBPUXr42fi8If" crossorigin="anonymous">
+    <script src="{% static 'dashboard/js/jquery-3.3.1.slim.min.js' %}"></script>
+    <link rel="stylesheet" href="{% static 'signup/css/signup.css' %}">
+    <link rel="stylesheet" href="{% static 'home/css/fonts.css' %}">
 </head>
 
-<body>
-
-<div class="">
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-10 col-xl-9 mx-auto">
-                <div class="card card-signin flex-row my-5">
-                    <div class="card-img-left d-none d-md-flex">
-                        <!-- Background image for card set in CSS! -->
-                    </div>
-                    <div class="card-body">
-                        <h5 class="card-title text-center">پیشگامی شو</h5>
-                        <form class="form-signin" method="POST" action="{% url 'signup' %}">
-                            {% csrf_token %}
-                            <div class="form-label-group">
-                                <input type="text" name="username" id="inputUserame" class="form-control"
-                                       placeholder="Username" required autofocus>
-                                <label for="inputUserame">نام کاربری</label>
+<body class="text-center">
+    <!-- Form of sing up page -->
+    <form class="form-signup" method="POST" action="{% url 'signup' %}">
+        {% csrf_token %}
+        <!-- Content of sign up page -->
+        <div class="container mt-3">
+            <!-- Header of sign up -->
+            <div class="row mb-4">
+                <div class="col-md-4">
+                    <img class="avatar" src="{% static 'signup/images/avatar.png' %}"> </img>
+                </div>
+                <div class="col-md-8">
+                    <h1 class="title">ثبت نام</h1>
+                </div>
+            </div>
+            <!-- Name & Gender field -->
+            <div class="row mb-2">
+                <!-- Name field -->
+                <div class="field-label col-md-2">
+                    <label for="first_name">نام</label>
+                </div>
+                <div class="col-md-4">
+                    <input type="text" id="first_name" name="first_name" required>
+                </div>
+                <!-- Gender field -->
+                <div class="col-md-6">
+                    <div class="row">
+                        <div class="col-md-4 field-label">
+                            <label>جنسیت</label>
+                        </div>
+                        <!-- Radio buttons -->
+                        <div class="col-md-8">
+                            <div class="row">
+                                <div class="col-md-6 custom-radio custom-control-inline">
+                                    <span> پسر </span>
+                                    <input type="radio" class="custom-control-input" id="gender_boy" name="gender"
+                                        value="True" checked="checked">
+                                    <label class="custom-control-label yellow " for="gender_boy"></label>
+                                </div>
+                                <div class="col-md-6 custom-radio custom-control-inline">
+                                    <span> دختر </span>
+                                    <input type="radio" class="custom-control-input" id="gender_girl" name="gender"
+                                        value="False">
+                                    <label class="custom-control-label yellow" for="gender_girl"></label>
+                                </div>
                             </div>
-
-                            <div class="form-label-group">
-                                <input type="email" name="email" id="inputEmail" class="form-control"
-                                       placeholder="Email address" required>
-                                <label for="inputEmail">ایمیل</label>
-                            </div>
-
-                            <hr>
-
-                            <div class="form-label-group">
-                                <input type="password" name="password" id="inputPassword" class="form-control"
-                                       placeholder="Password" required>
-                                <label for="inputPassword">رمز عبور</label>
-                            </div>
-
-                            <div class="form-label-group">
-                                <input type="password" name="password2" id="inputConfirmPassword" class="form-control"
-                                       placeholder="Password" required>
-                                <label for="inputConfirmPassword">تکرار رمز عبور</label>
-                            </div>
-                            {% comment %} <div class="form-label-group">
-              <select id="id_city" name="city">
-              {% for element in form.fields.city.queryset %}
-              <option value="{{ element.id }}">{{element.title }}</option>
-              {% endfor %}
-              
-             </select> 
-
-              </div> {% endcomment %}
-
-                            <button class="btn btn-lg btn-primary btn-block " type="submit"><p class="sign-btn">ثبت
-                                نام </p></button>
-                            <a class="d-block text-center mt-2 small" href="{% url 'signin' %}">حساب کاربری دارید! وارد
-                                شوید.</a>
-                            <hr class="my-4">
-                        </form>
+                        </div>
                     </div>
                 </div>
             </div>
+            <!-- Last name field -->
+            <div class="row mb-2">
+                <div class="col-md-2 field-label">
+                    <label for="last_name">نام خانوادگی</label>
+                </div>
+                <div class="col-md-4">
+                    <input type="text" id="last_name" name="last_name" required>
+                </div>
+                <p id="name_message" style="color: #7c0001"></p>
+            </div>
+            <!-- Username field -->
+            <div class="row mb-2">
+                <div class="col-md-2 field-label">
+                    <label for="username">نام کاربری</label>
+                </div>
+                <div class="col-md-4">
+                    <input type="text" id="username" name="username" required>
+                </div>
+                <p id="username_message" style="color: #7c0001"></p>
+
+            </div>
+            <!-- Password1 field -->
+            <div class="row mb-2">
+                <div class="col-md-2 field-label">
+                    <label for="password">رمز عبور</label>
+                </div>
+                <div class="col-md-4">
+                    <input type="password" id="password" name="password" required>
+                </div>
+            </div>
+            <!-- Password2 field -->
+            <div class="row mb-3">
+                <div class="col-md-2 field-label ml-0 pr-0">
+                    <label for="password2">تکرار رمز عبور</label>
+                </div>
+                <div class="col-md-4">
+                    <input type="password" id="password2" name="password2" required>
+                </div>
+                <p id="password_message" style="color: #7c0001"></p>
+
+            </div>
+            <!-- Grade field -->
+            <div class="row mb-2">
+                <div class="col-md-2 field-label">
+                    <label for="grade">پایه</label>
+                </div>
+                <div class="col-md-4">
+                    <select data-placeholder="پایه تحصیلی" class="grade-choicen" tabindex="4">
+                        <option value=""></option>
+                        {% for element in form.fields.grades.queryset %}
+                        <option value="{{ element.id }}">{{ element.title }}</option>
+                        {% endfor %}
+                    </select>
+
+                </div>
+            </div>
+            <!-- Phone number field -->
+            <div class="row mb-4 ">
+                <div class="col-md-2 field-label">
+                    <label for="defaultInline10">شماره تماس</label>
+                </div>
+                <div class="phone-number-field col-md-10">
+                    <!-- pattern check phone number is valid or not -->
+                    <input type="text" class="phone-number" pattern="[9][0-9]{9}" id="defaultInline10"
+                        name="phone_number">
+                    <input type="text" value="+98" class="area-code" readonly>
+                    <p>نکته : شماره تلفن را بدون صفر وارد کنید . مثال : 9121111111</p>
+                </div>
+            </div>
+            <button id="submit" class="btn btn-lg btn-warning btn-block sign-up-button" type="submit">ثبت نام</button>
+            <p id="message" style="color: #7c0001"></p>
+            {% if form.error %}
+            <p style="color: #7c0001">{{ form.error }}</p>
+            {% endif %}
         </div>
-    </div>
-</div>
-
-
-<!-- JS files -->
-<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
-        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
-        crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js"
-        integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
-        crossorigin="anonymous"></script>
-<script src="https://cdn.rtlcss.com/bootstrap/v4.2.1/js/bootstrap.min.js"
-        integrity="sha384-a9xOd0rz8w0J8zqj1qJic7GPFfyMfoiuDjC9rqXlVOcGO/dmRqzMn34gZYDTel8k"
-        crossorigin="anonymous"></script>
-
+    </form>
+    {% block JSfile %}
+    <script src="{% static 'signup/js/signup.js' %}"></script>
+    <script src="{% static 'home/chosen/js/jquery-3.2.1.min.js' %}"></script>
+    {% endblock %}
 </body>
+
 </html>

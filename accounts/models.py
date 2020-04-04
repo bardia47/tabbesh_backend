@@ -11,6 +11,12 @@ import datetime
 import jdatetime
 from django.core.exceptions import ValidationError
 
+# import for compress images
+import sys 
+from PIL import Image
+from io import BytesIO
+from django.core.files.uploadedfile import InMemoryUploadedFile
+
 LEXERS = [item for item in get_all_lexers() if item[1]]
 
 # Create your models here.
@@ -19,7 +25,7 @@ LEXERS = [item for item in get_all_lexers() if item[1]]
 class User(AbstractBaseUser, PermissionsMixin):
     username = models.CharField("نام کاربری", max_length=30, unique=True)
     password = models.CharField("رمز", max_length=128)
-    email = models.EmailField('ایمیل', unique=True)
+    email = models.EmailField('ایمیل', unique=True, null=True, blank=True)
     first_name = models.CharField('نام', max_length=30, blank=True)
     last_name = models.CharField('نام خانوادگی', max_length=30, blank=True)
     date_joined = models.DateTimeField('تاریخ عضویت', auto_now_add=True)
@@ -27,15 +33,25 @@ class User(AbstractBaseUser, PermissionsMixin):
     avatar = models.ImageField(upload_to='avatars/', null=True, blank=True)
     gender = models.BooleanField(default=True)
     role = models.ForeignKey('Role', on_delete=models.DO_NOTHING, verbose_name="نقش")
-    national_code = models.CharField("کد ملی", max_length=10)
+    national_code = models.CharField("کد ملی", max_length=10, null=True, blank=True)
     city = models.ForeignKey('City', blank=True, null=True, on_delete=models.DO_NOTHING, verbose_name="شهر")
-    address = models.CharField("آدرس", max_length=255)
-    phone_number = models.CharField("تلفن همراه", max_length=12, default="", blank=True)
+    address = models.CharField("آدرس", max_length=255, null=True, blank=True)
+    phone_number = models.CharField("تلفن همراه", max_length=12, unique=True)
     grades = models.ManyToManyField('Grade', blank=True, verbose_name="پایه")
     payments = models.ManyToManyField('Course', blank=True)
     is_superuser = models.BooleanField(default=False)
     is_staff = models.BooleanField(default=True)
 
+    #compress images
+    def compressImage(self,uploadedImage):
+        imageTemproary = Image.open(uploadedImage)
+        outputIoStream = BytesIO()
+        imageTemproaryResized = imageTemproary.resize((20,20), Image.ANTIALIAS) 
+        imageTemproary = imageTemproary.convert('RGB')
+        imageTemproary.save(outputIoStream , format='JPEG', quality=60)
+        outputIoStream.seek(0)
+        uploadedImage = InMemoryUploadedFile(outputIoStream,'ImageField', "%s.jpg" % uploadedImage.name.split('.')[0], 'image/jpeg', sys.getsizeof(outputIoStream), None)
+        return uploadedImage
     class Meta:
         verbose_name_plural = "کاربر"
         verbose_name = "کاربر"
@@ -116,7 +132,7 @@ class Grade(models.Model):
 class Lesson(models.Model):
     code = models.CharField("کد", max_length=10)
     title = models.CharField("عنوان", max_length=30)
-    grade = models.ForeignKey('Grade', on_delete=models.DO_NOTHING, verbose_name="پایه")
+   # grades = models.ManyToManyField('Grade', blank=True, verbose_name="پایه")
     parent = models.ForeignKey('self', blank=True, null=True, on_delete=models.DO_NOTHING, verbose_name="درس پدر")
     unique_together = [['title', 'grade']]
 
@@ -133,6 +149,7 @@ class Course(models.Model):
     code = models.CharField("کد", max_length=10)
     title = models.CharField("عنوان", max_length=30)
     lesson = models.ForeignKey('Lesson', on_delete=models.DO_NOTHING, verbose_name="درس")
+    grade = models.ForeignKey('Grade',  blank=True, null=True, on_delete=models.DO_NOTHING, verbose_name="پایه")
     teacher = models.ForeignKey(User, on_delete=models.DO_NOTHING, verbose_name="مدرس")
     start_date = models.DateTimeField("تاریخ شروع")
     end_date = models.DateTimeField("تاریخ پایان")
@@ -149,21 +166,19 @@ class Course(models.Model):
     def __str__(self):
         return self.title
 
-    def is_course_active(self):
-        now = datetime.datetime.now(pytz.utc)
-        a = now - self.start_date
-        b = now - self.end_date
-        if a.total_seconds() >= 0 and b.total_seconds() < 0:
-            return True
-        else:
-            return False
+    # def is_course_active(self):
+    #     now = datetime.datetime.now()
+    #     a = now - self.start_date
+    #     b = now - self.end_date
+    #     if a.total_seconds() >= 0 and b.total_seconds() < 0:
+    #         return True
+    #     else:
+    #         return False
         
     def clean_fields(self, exclude=None):
         super().clean_fields(exclude=exclude)
         if self.end_date < self.start_date :
             raise ValidationError("تاریخ پایان باید پس از تاریخ شروع باشد")
-        if self.teacher.role.code != RoleCodes.TEACHER.value:
-            raise ValidationError("مدرس باید نقش مدرس داشته باشد")
 
 
 # Course_Calendar Model
@@ -173,7 +188,7 @@ class Course_Calendar(models.Model):
     end_date = models.DateTimeField("تاریخ پایان")
 
     class Meta:
-        ordering = ['start_date']
+        ordering = ['end_date']
         verbose_name_plural = "زمان برگزاری"
         verbose_name = "زمان برگزاری"
 
@@ -181,7 +196,7 @@ class Course_Calendar(models.Model):
         return self.course.title
 
     def is_class_active(self):
-        now = datetime.datetime.now(pytz.utc)
+        now = datetime.datetime.now()
         a = now - self.start_date
         b = now - self.end_date
         if a.total_seconds() >= 0 and b.total_seconds() < 0:
