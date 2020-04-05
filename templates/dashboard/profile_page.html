@@ -5,8 +5,6 @@
 
 <!-- CSS files -->
 {% block CSSfiles %}
-<!-- CSS File for choicen jquery -->
-<link rel="stylesheet" href="{% static 'home/chosen/css/chosen.min.css' %}">
 {% endblock %}
 
 <!-- Content of page -->
@@ -42,7 +40,7 @@
                     {% if error %}
                     <strong>{{ error }}</strong>
                     {% else %}
-                    <strong>تمامی فیلد ها اجباری می باشد .</strong>
+                    <strong>تمامی فیلد ها ضروری است و در صورت تغییر دادن چند مورد فقط آن را تغییر دهید.</strong>
                     {% endif %}
                 </div>
                 <h3>اطلاعات شخصی</h3>
@@ -50,28 +48,28 @@
                 <div class="form-group">
                     <label class="col-lg-3 control-label">نام</label>
                     <div class="col-lg-8">
-                        <input class="form-control" name="first_name" type="text" value="{{ user.first_name }}"
+                        <input class="form-control w-25" name="first_name" type="text" value="{{ user.first_name }}"
                             maxlength="30" required>
                     </div>
                 </div>
                 <div class="form-group">
                     <label class="col-lg-3 control-label">نام خانوادگی</label>
                     <div class="col-lg-8">
-                        <input class="form-control" name="last_name" type="text" value="{{ user.last_name }}"
+                        <input class="form-control w-50" name="last_name" type="text" value="{{ user.last_name }}"
                             maxlength="30" required>
                     </div>
                 </div>
                 <div class="form-group">
                     <label class="col-lg-3 control-label">کد ملی</label>
                     <div class="col-lg-8">
-                        <input class="form-control" type="text" name="national_code"
+                        <input class="form-control w-50" type="text" name="national_code"
                             value="{{ user.national_code |default_if_none:'' }}" maxlength="10" required>
                     </div>
                 </div>
                 <div class="form-group">
                     <label class="col-lg-3 control-label">جنسیت</label>
                     <div class="col-lg-8">
-                        <select id="gender" name="gender" class="gender-choice" required>
+                        <select id="gender" name="gender" class="custom-select w-25 text-center" size="2" required>
                             <option value="True">پسر</option>
                             <option value="False" {% ifequal user.gender False %} selected="selected" {% endifequal %}>
                                 دختر
@@ -83,12 +81,12 @@
                     <label for="city" class="col-lg-3 control-label">شهر</label>
                     <div class="col-lg-8">
                         <div class="ui-select">
-                            <select id="city" name="city" class="city-choice" required>
-                                {% for element in form.fields.city.queryset %}
-                                <option value="{{ element.id }}" {% ifequal user.city.id element.id %}
-                                    selected="selected" {% endifequal %}>{{ element.title }}</option>
-                                {% endfor %}
-                            </select>
+                                <select id="city" name="city" class="custom-select w-50 text-center" size="3" required>
+                                    {% for element in form.fields.city.queryset %}
+                                    <option value="{{ element.id }}" {% ifequal user.city.id element.id %}
+                                        selected="selected" {% endifequal %}>{{ element.title }}</option>
+                                    {% endfor %}
+                                </select>
                         </div>
                     </div>
                 </div>
@@ -102,10 +100,10 @@
                 <div class="form-group">
                     <label for="grades" class="col-md-3 control-label">پایه تحصیلی</label>
                     <div class="col-md-8">
-                        <select id="grades" name="grades" class="grade-choice" required>
+                        <select id="grades" name="grades" class="custom-select w-25 text-center" required size="3">
                             {% for element in form.fields.grades.queryset %}
-                            <option value="{{ element.id }}" {% ifequal user.grades.first.id element.id %}
-                                selected="selected" {% endifequal %}>{{ element.title }}</option>
+                            <option value="{{ element.id }}" {% ifequal user.grades.first.id element.id %} selected
+                                {% endifequal %}>{{ element.title }}</option>
                             {% endfor %}
                         </select>
                     </div>
@@ -113,11 +111,22 @@
                 <div class="form-group">
                     <label class="col-md-3 control-label" required>شماره تلفن</label>
                     <div class="col-md-8">
-                        <input class="form-control" type="text" name="phone_number" value="{{ user.phone_number }}"
+                        <input class="form-control w-50" type="text" name="phone_number" value="{{ user.phone_number }}"
                             maxlength="12" required>
                     </div>
                 </div>
-
+                <hr>
+                <div class="form-group">
+                    <label class="col-md-3 control-label" required>تغییر رمز عبور</label>
+                    <div class="col-md-8">
+                        <input class="form-control w-75" type="password" name="old_password"
+                            placeholder="رمز عبور خود را وارد کنید" maxlength="12" required>
+                        <input class="form-control mt-2 w-75" type="password" name="new_password"
+                            placeholder="رمز عبور جدید خود را وارد کنید" maxlength="12" required>
+                        <input class="form-control mt-2 w-75" type="password" name="new_coniform_password"
+                            placeholder="رمز عبور جدید را دوباره وارد کنید" maxlength="12" required>
+                    </div>
+                </div>
                 <div class="form-group">
                     <label class="col-md-3 control-label"></label>
                     <div class="col-md-8">
@@ -139,10 +148,11 @@
 <!-- Choicen jQuery JS -->
 <script src="{% static 'home/chosen/js/jquery-3.2.1.min.js' %}"></script>
 <script src="{% static 'home/chosen/js/chosen.jquery.min.js' %}"></script>
-<!-- Add Choicen to grade -->
-<script>
-    $(".grade-choice").chosen({ width: '100px' });
-    $(".city-choice").chosen({ rtl: true, width: '70px' });
-    $(".gender-choice").chosen({ rtl: true, width: '70px' });
-</script>
+<!-- Bootstrap Javascript -->
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+    integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+    crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+    integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+    crossorigin="anonymous"></script>
 {% endblock %}
