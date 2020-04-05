@@ -27,8 +27,8 @@ urlpatterns = [
                   path('signin/', signin, name='signin'),
                   path('signout/', signout, name='signout'),
                   path('dashboard/', include('dashboard.urls')),
+                  path('zarinpal/', include('zarinpal.urls')),
               ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
-
 
 admin.site.site_header = "صفحه ادمین"
 admin.site.site_title = "صفحه ادمین"
