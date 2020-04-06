@@ -1,5 +1,5 @@
 body {
-    font-family: 'Yekan', 'Yekan-Number' , sans-serif;
+    font-family: 'Yekan', 'Yekan-Number', sans-serif;
     background: #fafafa;
 }
 
@@ -16,6 +16,7 @@ a, a:hover, a:focus {
 }
 
 /* Sidebar CSS */
+
 #sidebar {
     min-width: 250px;
     max-width: 250px;
@@ -156,8 +157,8 @@ a, a:hover, a:focus {
     margin-right: 5px;
 }
 
-
 /* Wrapper content of page CSS */
+
 #content {
     margin-right: 250px;
     width: 100%;
@@ -165,13 +166,13 @@ a, a:hover, a:focus {
     min-height: 100vh;
     transition: all 0.3s;
 }
+
 #content.active {
     margin-right: 0px;
 }
-  
 
 /* ---------------------------------------------------
-    MEDIAQUERIES for when screen width is lower than 768 pixels
+    MEDIAQUERIES for when screen width is lower than 900 pixels
 ----------------------------------------------------- */
 
 @media (max-width: 900px) {
@@ -180,7 +181,6 @@ a, a:hover, a:focus {
         text-align: center;
         position: relative;
         height: inherit;
-
     }
     #sidebar.active {
         margin-left: 0;
@@ -194,11 +194,11 @@ a, a:hover, a:focus {
     .navbar-nav li {
         margin-top: 20px;
     }
-    #content{
+    #content {
         margin-right: 0px;
         height: inherit;
     }
-    .footer{
+    .footer {
         bottom: 10px;
         left: 5px;
         position: absolute;

@@ -1,0 +1,35 @@
+.text p {
+    font-family: 'Vazir_Light', sans-serif;
+    font-size: 30px;
+}
+
+.text span {
+    color: #EF6B07;
+}
+
+.button-to-home a {
+    font-family: 'Vazir_Bold', sans-serif;
+    font-size: 25px;
+}
+
+/* ---------------------------------------------------
+    MEDIAQUERIES for when screen width is lower than 900 pixels
+----------------------------------------------------- */
+
+@media (max-width: 900px) {
+    .text p {
+        font-size: 18px;
+    }
+    .button-to-home a {
+        font-size: 15px;
+    }
+    .poster {
+        width: 375px;
+        height: 250px;
+        margin-bottom: 15px;
+    }
+    .icon {
+        width: 50px;
+        height: 50px;
+    }
+}

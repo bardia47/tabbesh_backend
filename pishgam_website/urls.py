@@ -15,19 +15,20 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from home.views import home
+from home.views import home, page_not_found
 from accounts.views import signup, signin, signout
 from django.conf import settings
 from django.conf.urls.static import static
 
 urlpatterns = [
-                  path('admin/', admin.site.urls),
-                  path('', home, name='home'),
-                  path('signup/', signup, name='signup'),
-                  path('signin/', signin, name='signin'),
-                  path('signout/', signout, name='signout'),
-                  path('dashboard/', include('dashboard.urls')),
-              ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    path('admin/', admin.site.urls),
+    path('', home, name='home'),
+    path('404-page-not-found/', page_not_found, name="page-not-found"),
+    path('signup/', signup, name='signup'),
+    path('signin/', signin, name='signin'),
+    path('signout/', signout, name='signout'),
+    path('dashboard/', include('dashboard.urls')),
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 
 admin.site.site_header = "صفحه ادمین"
