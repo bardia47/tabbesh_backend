@@ -17,5 +17,14 @@ $(document).ready(function () {
         readURL(this);
     });
 });
+$('#password, #password2').on('keyup', function () {
+  if ($('#password').val() == $('#password2').val()) {
+	  $('#password_message').html('');
+	  $("#changePassword").prop("disabled",false);
+  } else {
+	  $('#password_message').html('تکرار رمز صحیح نمیباشد');
+	    $("#changePassword").prop("disabled",true);
 
+	  }
+});
 

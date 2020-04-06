@@ -50,7 +50,14 @@ def edit_profile(request):
                 request.user.avatar = avatar
                 request.user.save()
             return redirect('dashboard')
+        elif request.POST.get("changePassword"):
+            form = ProfileForm()
+            if not request.user.check_password("old_password"):
+                error='رمز وارد شده اشتباه است'
+            else:
+                error='تغییر رمز با موفقیت انجام شد'
 
+                return render(request, 'dashboard/profile_page.html', {'form': form, 'error': error})
         else:
             form = ProfileForm(data=request.POST, instance=request.user)
             if form.is_valid():
