@@ -1,0 +1,10 @@
+/* CSS file of filemanager */
+.table th{
+    text-align: center;
+    font-family: 'Vazir_Bold';
+    font-size: 18px;
+}
+.table td{
+    text-align: center;
+    font-size: 15px;
+}

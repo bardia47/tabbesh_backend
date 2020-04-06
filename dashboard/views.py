@@ -119,4 +119,8 @@ def getAllLessons(lesson_id,now):
     query = reduce(or_, (Q(lesson__id=lesson.id) for lesson in lessons))
     return query
 
+# File manager page 
+def filemanager(request):
+    return render(request,'dashboard/filemanager.html')
+
     
