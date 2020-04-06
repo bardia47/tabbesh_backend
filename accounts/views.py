@@ -3,6 +3,7 @@ from .models import User
 from django.contrib import auth
 from accounts.forms import UserForm
 from accounts.models import City
+from django.db.models import Q
 
 
 # Create your views here.
@@ -12,19 +13,17 @@ def signup(request):
         form = UserForm(request.POST)
         form.gender=request.POST['gender']
         if request.POST['password'] == request.POST['password2']:
-            try:
-                user = User.objects.get(username=form.data['username'])
-                form = UserForm()
-                form.error='نام کاربری در سیستم استفاده شده و قابل تکرار نمیباشد'
+            user = User.objects.filter(Q(username=form.data['username']) | Q(phone_number=form.data['phone_number']))
+            if user.exists():
+                form.error='نام کاربری یا شماره همراه در سیستم استفاده شده و قابل تکرار نمیباشد'
                 return render(request, 'accounts/signup.html', {'form': form})
-            except User.DoesNotExist:
-                if form.is_valid():
-                    user = User.objects.create_form_user(form)
-                    auth.login(request, user)
-                else:
-                    form.error = 'تمامی فیلد ها پر نشده اند'
-                    return render(request,'accounts/signup.html', {'form': form})
-                return redirect('edit_profile')
+            if form.is_valid():
+                user = User.objects.create_form_user(form)
+                auth.login(request, user)
+            else:
+                form.error = 'تمامی فیلد ها پر نشده اند'
+                return render(request,'accounts/signup.html', {'form': form})
+            return redirect('edit_profile')
         else:
             form.error =  'تکرار رمز صحیح نمیباشد '
             return render(request, 'accounts/signup.html', {'form': form})
@@ -36,7 +35,10 @@ def signup(request):
 def signin(request):
     if request.method == 'POST':
         if request.POST['username'].isdigit():
-            user1=User.objects.get(phone_number=request.POST['username'])
+            try:
+                user1=User.objects.get(phone_number=request.POST['username'])
+            except User.DoesNotExist:
+              return render(request, 'accounts/signin.html', {'error': 'نام کاربری یا رمز عبور اشتباه است'})  
             user = auth.authenticate(username=user1.username, password=request.POST['password'])
         else:
             user = auth.authenticate(username=request.POST['username'], password=request.POST['password'])
