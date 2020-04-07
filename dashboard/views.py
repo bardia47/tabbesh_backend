@@ -154,5 +154,9 @@ def getAllLessons(lesson_id, now):
 @login_required
 def filemanager(request,code):
     course = Course.objects.get(code=code) 
+    try :
+        request.user.payments.get(id=course.id)
+    except:
+         return shopping(request)
     documents=course.document_set.all()
     return render(request,'dashboard/filemanager.html',{'course': course, 'documents': documents})
