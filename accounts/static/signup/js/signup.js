@@ -11,6 +11,7 @@
 
 // 	  }
 // });
+// Check firstname & lastname contain persian character
 $('#first_name, #last_name').on('keyup', function () {
 	var p = /^[\u0600-\u06FF\s]+$/;
 	if ((p.test($('#first_name').val())|| !$('#first_name').val()) && (p.test($('#last_name').val()) || !$('#last_name').val())) {
