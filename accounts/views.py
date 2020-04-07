@@ -21,7 +21,7 @@ def signup(request):
                 api = Api(Sms.username.value,Sms.password.value)
                 sms = api.sms()
                 to = "0"+form.data['phone_number']
-                _from = '50001060690571'
+                _from = Sms._from.value
                 randPass = random.randint(1000, 9999) 
                 text = Sms.signupText.value.replace('{}',str(randPass))
                 response = sms.send(to,_from,text)
