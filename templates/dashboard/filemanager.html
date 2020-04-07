@@ -16,15 +16,21 @@
             <img src="{% static 'dashboard/images/default_profile.png'%}" width="50" height="50">
         </div>
         <div class="col-md-3 file-manager title">
-            <p class="m-0"><strong>شیمی دهم</strong></p>
-            <h6 class="p-0"><small>مهدی شهبازی</small></h6>
+            <p class="m-0"><strong>{{ course.title }}</strong></p>
+            <h6 class="p-0"><small>{{ course.teacher.get_full_name }}</small></h6>
         </div>
+
+
+        
+
+
     </div>
     <table class="table table-hover">
         <thead>
             <tr>
                 <th scope="col"><img src="{% static 'home/images/icons/folder.svg'%}" width="25" height="25"></th>
                 <th scope="col">عنوان</th>
+                <th scope="col">درس</th>
                 <th scope="col">فرستنده</th>
                 <th scope="col">تاریخ</th>
                 <th scope="col">توضیحات</th>
@@ -32,15 +38,17 @@
             </tr>
         </thead>
         <tbody>
-            {% for number in '12345678'|make_list %}
+            {% for doc in documents %}
             <tr>
                 <th style="font-family:'Yekan-Number'" scope="row">1</th>
-                <td>جزوه ی جلسه ی اول</td>
-                <td>آقای مهدی شهبازی</td>
-                <td>دوشنبه 18 اسفند</td>
-                <td>جزوات را دانلود کرده و در هنگام کلاس به همراه داشته باشید.</td>
-                <td style="text-align:center"><img src="{% static 'home/images/icons/download.svg'%}" width="20"
-                        height="20"></td>
+                <td>{{doc.title}}</td>
+                <td>{{doc.lesson}}</td>
+                <td>{{doc.sender.get_full_name}}</td>
+                <td>{{doc.upload_date_decorated}}</td>
+                <td> {{doc.description}}</td>
+                <td style="text-align:center"><a href="{{ doc.upload_document.url }}" target="_blank">
+                    <img src="{% static 'home/images/icons/download.svg'%}" width="20"
+                        height="20"></a></td>
             </tr>
             {% endfor %}
         </tbody>

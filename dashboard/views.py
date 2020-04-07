@@ -131,7 +131,10 @@ def getAllLessons(lesson_id,now):
     return query
 
 # File manager page 
-def filemanager(request):
-    return render(request,'dashboard/filemanager.html')
+@login_required
+def filemanager(request,code):
+    course = Course.objects.get(code=code) 
+    documents=course.document_set.all()
+    return render(request,'dashboard/filemanager.html',{'course': course, 'documents': documents})
 
     

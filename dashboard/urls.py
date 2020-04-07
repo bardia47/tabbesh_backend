@@ -9,7 +9,7 @@ urlpatterns = [
     path('lessons/', lessons, name="lessons"),
     path('edit_profile/', edit_profile, name="edit_profile"),
     path('shopping/', shopping, name="shopping"),
-    path('filemanager/' , filemanager , name="filemanager")
+    path('lessons/files/<str:code>' , filemanager )
 ]
 
 if settings.DEBUG:
