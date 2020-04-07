@@ -75,9 +75,11 @@
                             <img src="{% static 'home/images/icons/click.svg' %}" alt="button link to class">
                             ورود به کلاس
                         </button>
+                        {% ifnotequal course.document_set.count 0 %}
                         <button onclick="location.href='files/{{course.code}}'"  class="btn btn-success" type="button">
                             <img src="{% static 'home/images/icons/click.svg' %}" alt="button link to class">
                             جزوه ها</button>
+                            {% endifnotequal %}
                     </div>
                 </div>
             </div>
