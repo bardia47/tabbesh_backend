@@ -9,6 +9,7 @@ urlpatterns = [
     path('lessons/', lessons, name="lessons"),
     path('shopping/', shopping, name="shopping"),
     path('lessons/files/<str:code>' , filemanager ),
+    path('edit_profile/', edit_profile, name="edit_profile"),
     path('edit_profile/change-avatar', change_avatar, name="change_avatar"),
     path('edit_profile/change-profile', change_profile, name="change_profile"),
     path('edit_profile/change_password', change_password, name="change_password"),
