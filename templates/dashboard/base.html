@@ -10,7 +10,8 @@
     <title>{% block title %}{% endblock %}</title>
 
     <!-- CSS files -->
-    <link rel="stylesheet" href="{% static 'dashboard/css/bootstrap.min.css'%}">
+    <link rel="stylesheet" href="https://cdn.rtlcss.com/bootstrap/v4.2.1/css/bootstrap.min.css"
+        integrity="sha384-vus3nQHTD+5mpDiZ4rkEPlnkcyTP+49BhJ4wJeJunw06ZAp+wzzeBPUXr42fi8If" crossorigin="anonymous">
     <link rel="stylesheet" href="{% static 'home/css/fonts.css'%}">
     <link rel="stylesheet" href="{% static 'dashboard/css/base.css' %}">
     {% block CSSfiles %}
@@ -106,19 +107,38 @@
                     </div>
                 </div>
             </nav>
+            <!-- Contact us popup -->
+            <div class="d-inline-flex flex-row contact_us">
+                <!-- Contact us icon -->
+                <img id="contact_us_img" class="ml-3" src="{% static 'home/images/icons/support.svg'%}" width="70px"
+                    height="70px">
+                <!-- Popup content -->
+                <div id="contact_us_content" class="p-2 pt-3">
+                    <p class="text-nowrap mb-2">
+                        روابط عمومی
+                        <span class="ml-4">0912345678</span>
+                        <img src="{% static 'home/images/icons/call-24-hours.svg'%}" width="30" height="30">
+                    </p>
+                    <p class="text-nowrap mb-2">
+                        پشتیبانی فنی
+                        <span class="ml-4">0912345678</span>
+                        <img src="{% static 'home/images/icons/call-24-hours.svg'%}" width="30" height="30">
+                    </p>
+                </div>
+            </div>
 
             {% block content %}
 
             {% endblock %}
-
         </div>
     </div>
 
     <!-- JS files -->
     <!-- jQuery CDN for toggler button -->
-    <script src="{% static 'dashboard/js/jquery-3.3.1.slim.min.js' %}"></script>
+    <script src="https://code.jquery.com/jquery-3.4.1.js"
+        integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU=" crossorigin="anonymous"></script>
     <!-- JS file for timer -->
-    <script src="{% static 'dashboard/js/TweenMax.min.js' %}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/latest/TweenMax.min.js"></script>
     <!-- JS file for base.html  -->
     <script src="{% static 'dashboard/js/base.js' %}"></script>
     <!-- JS files for other page -->

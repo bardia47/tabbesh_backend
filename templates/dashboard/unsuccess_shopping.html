@@ -1,0 +1,55 @@
+{% extends 'dashboard/base.html' %} {% load static %} {% load jformat %}
+
+<!-- Title block of base.html -->
+{% block title %}پرداخت ناموفق{% endblock %}
+
+<!-- CSS files -->
+{% block CSSfiles %}
+<link rel="stylesheet" href="{% static 'dashboard/css/shopping.css' %}" />
+{% endblock %}
+
+<!-- Active menu of sidebar -->
+{% block shopping_active %}active-menu{% endblock %}
+
+<!-- Content of page -->
+{% block content %}
+<div class="container w-100 p-1 text-center" style="font-family: 'Vazir_Bold';">
+  <div class="col-md-12 mt-3 mb-3">
+    <img
+      src="{% static 'home/images/icons/failed.svg'%}"
+      width="100"
+      height="100"
+    />
+  </div>
+  <div class="col-md-12">
+    <p class="text-center" style="font-size: 25px;">
+      متاسفانه پرداخت انجام نشد.
+    </p>
+  </div>
+  <div class="col-md-12">
+    <p
+      class="mt-2 text-center"
+      style="font-family: 'Vazir_Light'; font-size: 20px;"
+    >
+      برای خرید دوباره درس به خرید درس و در صورت داشتن مشکل با پشتیبانی تماس
+      بگیرید.
+    </p>
+    <a class="btn btn-dark text-white m-1 mr-4" href="{% url 'shopping' %}"
+      >خرید درس</a
+    >
+    <a class="btn btn-dark text-white ml-1 mr-4" id="support_button"
+      >تماس با پشتیبانی</a
+    >
+  </div>
+</div>
+{% endblock %}
+
+<!-- JS files -->
+{% block JSfile %}
+<script src="{% static 'dashboard/js/shopping.js' %}"></script>
+<script>
+  $("#support_button").click(function () {
+    $("#contact_us_content").animate({ width: "toggle" }, "slow");
+  });
+</script>
+{% endblock %}

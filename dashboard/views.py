@@ -25,7 +25,8 @@ def dashboard(request):
             klass.end_date += datetime.timedelta(days=7)
             klass.save()
 
-    classes = Course_Calendar.objects.filter(course__in=courses, start_date__day=now.day)
+    classes = Course_Calendar.objects.filter(
+        course__in=courses, start_date__day=now.day)
 
     if classes.count() > 0:
         calendar_time = classes.first().start_date - now
@@ -90,41 +91,49 @@ def shopping(request):
     query = Q(end_date__gt=now)
     if request.GET.get("teacher") or request.GET.get("lesson") or request.GET.get("grade"):
         if request.GET.get("lesson"):
-          query &= getAllLessons(request.GET.get("lesson"),now)
+            query &= getAllLessons(request.GET.get("lesson"), now)
         if request.GET.get("grade"):
-             query &=Q(grade__id=request.GET.get("grade"))
+            query &= Q(grade__id=request.GET.get("grade"))
         if request.GET.get("teacher"):
-            query &=Q(teacher__id=request.GET.get("teacher"))               
-    else:  
+            query &= Q(teacher__id=request.GET.get("teacher"))
+    else:
         if (request.user.grades.count() > 0):
-               query &=Q(grade__id=request.user.grades.first().id)
-    if request.user.payments.all() :
-      queryNot = reduce(or_, (Q(id=course.id) for course in request.user.payments.all()))
-      query=query & ~queryNot
-                   
-               
-    courses=Course.objects.filter(query)           
+            query &= Q(grade__id=request.user.grades.first().id)
+    if request.user.payments.all():
+        queryNot = reduce(or_, (Q(id=course.id)
+                                for course in request.user.payments.all()))
+        query = query & ~queryNot
+
+    courses = Course.objects.filter(query)
 
     return render(request, 'dashboard/shopping.html', {'grades': grades, 'lessons': lessons, 'teachers': teachers,
                                                        'courses': courses})
-    
-def getAllLessons(lesson_id,now):
-    lessons = Lesson.objects.filter(id=lesson_id) 
-    whilelessons=lessons
+
+# Successful shopping page
+def success_shopping(request):
+    return render(request, 'dashboard/success_shopping.html')
+
+# Unsuccessful shopping page
+def unsuccess_shopping(request):
+    return render(request, 'dashboard/unsuccess_shopping.html')
+
+# File manager page
+def filemanager(request):
+    return render(request, 'dashboard/filemanager.html')
+
+
+def getAllLessons(lesson_id, now):
+    lessons = Lesson.objects.filter(id=lesson_id)
+    whilelessons = lessons
     while True:
-        extend_lesson=[]
-        query = reduce(or_, (Q(parent__id=lesson.id) for lesson in whilelessons))
-        extend_lesson=Lesson.objects.filter(query)
-        if  len(extend_lesson)==0 :
-            break 
+        extend_lesson = []
+        query = reduce(or_, (Q(parent__id=lesson.id)
+                             for lesson in whilelessons))
+        extend_lesson = Lesson.objects.filter(query)
+        if len(extend_lesson) == 0:
+            break
         else:
-            whilelessons=extend_lesson
-            lessons= lessons | whilelessons
+            whilelessons = extend_lesson
+            lessons = lessons | whilelessons
     query = reduce(or_, (Q(lesson__id=lesson.id) for lesson in lessons))
     return query
-
-# File manager page 
-def filemanager(request):
-    return render(request,'dashboard/filemanager.html')
-
-    

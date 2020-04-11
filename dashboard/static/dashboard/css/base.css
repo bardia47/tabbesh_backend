@@ -171,6 +171,32 @@ a, a:hover, a:focus {
     margin-right: 0px;
 }
 
+/* Contact us popup */
+
+.contact_us {
+    position: fixed;
+    bottom: 20px;
+    direction: ltr;
+    left: 40px;
+    z-index: 100;
+}
+
+#contact_us_content {
+    background-color: #FFCE00;
+    border-radius: 6px;
+    z-index: 1;
+    display: none;
+}
+
+#contact_us_content p {
+    font-family: 'Vazir_Bold';
+    font-size: 20px;
+}
+
+#contact_us_content span {
+    font-size: 18px;
+}
+
 /* ---------------------------------------------------
     MEDIAQUERIES for when screen width is lower than 900 pixels
 ----------------------------------------------------- */
@@ -202,5 +228,9 @@ a, a:hover, a:focus {
         bottom: 10px;
         left: 5px;
         position: absolute;
+    }
+    #contact_us_img {
+        width: 60px;
+        height: 60px;
     }
 }
