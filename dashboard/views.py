@@ -7,6 +7,7 @@ from operator import or_
 from functools import reduce
 from django.contrib.auth.decorators import login_required
 from .forms import ProfileForm
+from django.contrib.auth.hashers import make_password
 
 
 # Create your views here.
@@ -42,27 +43,50 @@ def dashboard(request):
 # Edit Profile Page
 @login_required
 def edit_profile(request):
-    if request.method == 'POST':
-        if request.POST.get("upload"):
-            avatar = request.user.compressImage(request.FILES.get("file"))
-            if avatar:
-                if not request.user.avatar.url.startswith("/media/defaults"):
-                    request.user.avatar.delete()
-                request.user.avatar = avatar
-                request.user.save()
-            return redirect('dashboard')
+    form = ProfileForm()
+    return render(request, 'dashboard/profile_page.html', {'form': form})
 
-        else:
-            form = ProfileForm(data=request.POST, instance=request.user)
-            if form.is_valid():
-                form.save()
-                return redirect('dashboard')
-            else:
-                form = ProfileForm()
-                return render(request, 'dashboard/profile_page.html', {'form': form, 'error': 'خطا در ثبت نام'})
-    else:
+# Edit profile page --> change avatar form
+@login_required
+def change_avatar(request):
+    if request.method == 'POST':
         form = ProfileForm()
-        return render(request, 'dashboard/profile_page.html', {'form': form})
+        avatar = request.user.compressImage(request.FILES.get("file"))
+        if avatar:
+            if not request.user.avatar.url.startswith("/media/defaults"):
+                request.user.avatar.delete()
+            request.user.avatar = avatar
+            request.user.save()
+        return redirect('dashboard')
+    else:
+        error = 'تغییر پروفایل با مشکل رو به رو شد'
+        return render(request, 'dashboard/profile_page.html', {'form': form, 'error': error})
+
+# Edit profile page --> change field except avatar field
+@login_required
+def change_profile(request):
+    if request.method == 'POST':
+        form = ProfileForm(data=request.POST, instance=request.user)
+        if form.is_valid():
+            form.save()
+            return redirect('dashboard')
+        else:
+            form = ProfileForm()
+            return render(request, 'dashboard/profile_page.html', {'form': form, 'error': 'خطا در ثبت نام'})
+
+# Edit profile page --> change password
+@login_required
+def change_password(request):
+    if request.method == 'POST':
+        form = ProfileForm()
+        if not request.user.check_password(request.POST['old_password']):
+            error = 'رمز وارد شده اشتباه است'
+            return render(request, 'dashboard/profile_page.html', {'form': form, 'error': error})
+        else:
+            error = 'تغییر رمز با موفقیت انجام شد'
+            request.user.password = make_password(request.POST['password'])
+            request.user.save()
+            return render(request, 'dashboard/profile_page.html', {'form': form, 'error': error})
 
 
 # Lessons Page
@@ -110,14 +134,20 @@ def shopping(request):
                                                        'courses': courses})
 
 # Successful shopping page
+
+
 def success_shopping(request):
     return render(request, 'dashboard/success_shopping.html')
 
 # Unsuccessful shopping page
+
+
 def unsuccess_shopping(request):
     return render(request, 'dashboard/unsuccess_shopping.html')
 
 # File manager page
+
+
 def filemanager(request):
     return render(request, 'dashboard/filemanager.html')
 
@@ -137,3 +167,9 @@ def getAllLessons(lesson_id, now):
             lessons = lessons | whilelessons
     query = reduce(or_, (Q(lesson__id=lesson.id) for lesson in lessons))
     return query
+
+# File manager page
+
+
+def filemanager(request):
+    return render(request, 'dashboard/filemanager.html')

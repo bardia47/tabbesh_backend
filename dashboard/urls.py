@@ -1,17 +1,24 @@
 from django.urls import path
 
-from .views import dashboard, edit_profile, lessons, shopping , filemanager , success_shopping , unsuccess_shopping
+from .views import dashboard, lessons, filemanager
+from .views import edit_profile, change_avatar, change_password, change_profile
+from .views import shopping, success_shopping, unsuccess_shopping
 from django.conf import settings
 from django.conf.urls.static import static
 
 urlpatterns = [
     path('', dashboard, name='dashboard'),
     path('lessons/', lessons, name="lessons"),
-    path('edit-profile/', edit_profile, name="edit_profile"),
+    path('edit_profile/', edit_profile, name="edit_profile"),
+    path('edit_profile/change-avatar', change_avatar, name="change_avatar"),
+    path('edit_profile/change-profile', change_profile, name="change_profile"),
+    path('edit_profile/change_password',
+         change_password, name="change_password"),
     path('shopping/', shopping, name="shopping"),
-    path('shopping/success-shopping' , success_shopping , name="success_shopping"),
-    path('shopping/unsuccess-shopping' , unsuccess_shopping , name="unsuccess_shopping"),
-    path('shopping/filemanager/' , filemanager , name="filemanager"),
+    path('shopping/success-shopping', success_shopping, name="success_shopping"),
+    path('shopping/unsuccess-shopping',
+         unsuccess_shopping, name="unsuccess_shopping"),
+    path('filemanager/', filemanager, name="filemanager"),
 ]
 
 if settings.DEBUG:

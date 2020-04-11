@@ -1,16 +1,17 @@
-$('#password, #password2').on('keyup', function () {
-  if ($('#password').val() == $('#password2').val()) {
-	  $('#password_message').html('');
-	  if (check())
-	  {
-	  $("#submit").prop("disabled",false);
-	  }
-  } else {
-	  $('#password_message').html('تکرار رمز صحیح نمیباشد');
-	    $("#submit").prop("disabled",true);
+// $('#password, #password2').on('keyup', function () {
+//   if ($('#password').val() == $('#password2').val()) {
+// 	  $('#password_message').html('');
+// 	  if (check())
+// 	  {
+// 	  $("#submit").prop("disabled",false);
+// 	  }
+//   } else {
+// 	  $('#password_message').html('تکرار رمز صحیح نمیباشد');
+// 	    $("#submit").prop("disabled",true);
 
-	  }
-});
+// 	  }
+// });
+// Check firstname & lastname contain persian character
 $('#first_name, #last_name').on('keyup', function () {
 	var p = /^[\u0600-\u06FF\s]+$/;
 	if ((p.test($('#first_name').val())|| !$('#first_name').val()) && (p.test($('#last_name').val()) || !$('#last_name').val())) {
@@ -45,8 +46,7 @@ $('#username').on('keyup', function () {
 function check() {
 	var username=document.getElementById('username_message').innerHTML;
 	var name=document.getElementById('name_message').innerHTML;
-	var password=document.getElementById('password_message').innerHTML;
-	if (username=="" && name==""  && password=="") {
+	if (username=="" && name==""  ) {
 		return true;
 	}
 	return false;
