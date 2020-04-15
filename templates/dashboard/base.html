@@ -14,6 +14,8 @@
         integrity="sha384-vus3nQHTD+5mpDiZ4rkEPlnkcyTP+49BhJ4wJeJunw06ZAp+wzzeBPUXr42fi8If" crossorigin="anonymous">
     <link rel="stylesheet" href="{% static 'home/css/fonts.css'%}">
     <link rel="stylesheet" href="{% static 'dashboard/css/base.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.2/animate.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css">
     {% block CSSfiles %}
     {% endblock %}
 
@@ -87,7 +89,7 @@
         <div id="content">
 
             <!-- Navigation bar -->
-            <nav class="navbar navbar-inverse sticky-top">
+            <nav id="nav" class="navbar navbar-inverse sticky-top">
                 <div class="container-fluid ">
                     <!-- Toggle button -->
                     <button type="button" id="sidebarCollapse" class="btn btn-warning">
@@ -110,8 +112,8 @@
             <!-- Contact us popup -->
             <div class="d-inline-flex flex-row contact_us">
                 <!-- Contact us icon -->
-                <img id="contact_us_img" class="ml-3" src="{% static 'home/images/icons/support.svg'%}" width="70px"
-                    height="70px">
+                <img id="contact_us_img" class="ml-3 animated pulse infinite"" src="
+                    {% static 'home/images/icons/support.svg'%}" width="70px" height="70px">
                 <!-- Popup content -->
                 <div id="contact_us_content" class="p-2 pt-3">
                     <p class="text-nowrap mb-2">
@@ -141,7 +143,16 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/latest/TweenMax.min.js"></script>
     <!-- JS file for base.html  -->
     <script src="{% static 'dashboard/js/base.js' %}"></script>
-    <!-- JS files for other page -->
+    <!-- Bootstrap JS file -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js"
+        integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous">
+    </script>
+    <script src="https://cdn.rtlcss.com/bootstrap/v4.2.1/js/bootstrap.min.js"
+        integrity="sha384-a9xOd0rz8w0J8zqj1qJic7GPFfyMfoiuDjC9rqXlVOcGO/dmRqzMn34gZYDTel8k" crossorigin="anonymous">
+    </script>
+    <!-- Fontawesome icons -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js">
+    </script>
     {% block JSfile %}
     {% endblock %}
 

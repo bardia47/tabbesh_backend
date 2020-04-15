@@ -99,7 +99,7 @@
             <!-- Loop for courses -->
             {% for course in courses %}
             <div class="col-md-4">
-                <div class="card course-card">
+                <div class="card course-card h-100">
                     <!-- Course poster -->
                     <img class="card-img-top" src="{{ course.image.url }}">
                     <!-- Course content -->
@@ -124,7 +124,8 @@
                             <!-- Loop for course calender times -->
                             {% for cc in course.course_calendar_set.all %}
                             <p class="course-calender-time">
-                                <img src="{% static 'home/images/icons/add-time.svg'%}" alt="">
+                                <img src="{% static 'home/images/icons/add-time.svg'%}" class="animated"
+                                    alt="time icon">
                                 {{cc.start_date|date:"l"}} ها ساعت {{cc.start_date|date:"H:i"}}
                             </p>
                             {% endfor %}
@@ -179,6 +180,31 @@
     </div>
     <!-- Total cart items code for pass to back-end -->
     <input type="hidden" name="total_code">
+
+    <!-- Modal Eror for duplicate course in cart -->
+    <div class="modal fade" id="errorModalForCart" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title text-danger" id="exampleModalLabel" style="font-family: 'Vazir_Bold';">مشکل
+                        در خرید دوره</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <strong>
+                        <p id="modal-body"></p>
+                    </strong>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger w-100" data-dismiss="modal">فهمیدم!</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
 </section>
 {% endblock %}
 

@@ -1,5 +1,6 @@
 /* Scroll Bar CSS */
 ::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
   -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
   background-color: #F5F5F5;
 }
@@ -70,7 +71,8 @@
   color: #ffc107;
 }
 
-.countdown .figure .top:after, .countdown .figure .bottom-back:after {
+.countdown .figure .top:after,
+.countdown .figure .bottom-back:after {
   content: "";
   position: absolute;
   z-index: -1;
@@ -135,7 +137,8 @@
   margin: auto;
 }
 
-.countdown .figure .top, .countdown .figure .top-back {
+.countdown .figure .top,
+.countdown .figure .top-back {
   height: 50%;
   overflow: hidden;
   -moz-backface-visibility: hidden;
@@ -222,60 +225,70 @@ time.icon span {
 
 /* Cards section CSS */
 .card-section {
-  min-height: 250px;
-  max-height: 250px;
+  min-height: 220px;
+  max-height: 300px;
   overflow-y: scroll;
   text-align: center;
 }
+
 .card-title {
-  text-align:center;
+  text-align: center;
   background-color: #10375c;
   color: white;
-  padding:20px;
+  padding: 20px;
   border-radius: 4px;
 }
-.card-title h4{
+
+.card-title h4 {
   font-family: 'Vazir_Medium';
-  margin : 0;
+  margin: 0;
 }
-.course-image img{
-  width:  60px;
+
+.course-image img {
+  width: 60px;
   height: 60px;
   border-radius: 4px;
   margin-top: -5px;
 }
-.course-title p{
-  font-family: 'Vazir_Medium' , sans-serif;
+
+.course-title p {
+  font-family: 'Vazir_Medium', sans-serif;
   font-size: 20px;
   padding: 6px;
 }
-.course-teacher-name p{
-  font-family: 'Vazir_light' , sans-serif;
+
+.course-teacher-name p {
+  font-family: 'Vazir_light', sans-serif;
   font-size: 15px;
   padding: 10px 6px 6px 6px;
 
 }
-.course-date img{
+
+.course-date img {
   width: 20px;
   height: 20px;
   margin-left: 5px;
 }
-.course-date p{
-  font-family: 'Vazir_light' , sans-serif;
+
+.course-date p {
+  font-family: 'Vazir_light', sans-serif;
   font-size: 15px;
   padding: 10px 6px 6px 6px;
 }
+
 .button-to-class {
   direction: ltr;
-  height:50px;
+  height: 50px;
   margin-top: -5px;
 }
-.button-to-class img{
+
+.button-to-class img {
   width: 20px;
   height: 20px;
-  margin-right: 5px;  
+  margin-right: 5px;
 }
-.button-to-class button{
+
+.button-to-class button {
   background-color: #ffc107;
   border: none;
   color: white;
@@ -284,6 +297,7 @@ time.icon span {
   height: 50px;
   text-align: center;
 }
+
 .button-to-class button:hover {
   background-color: #10375c;
   border: none;
@@ -303,11 +317,17 @@ time.icon span {
   .countdown {
     padding-left: 50px;
   }
+
   #second-block {
     display: none;
   }
+
   .calender {
     margin-top: 20px;
+  }
+
+  .card-section {
+    min-height: auto;
   }
 
 }

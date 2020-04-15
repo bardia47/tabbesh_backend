@@ -14,6 +14,7 @@
     <script src="{% static 'dashboard/js/jquery-3.3.1.slim.min.js' %}"></script>
     <link rel="stylesheet" href="{% static 'signup/css/signup.css' %}">
     <link rel="stylesheet" href="{% static 'home/css/fonts.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css">
 </head>
 
 <body class="text-center">
@@ -39,6 +40,11 @@
                 </div>
                 <div class="col-md-4">
                     <input type="text" id="first_name" name="first_name" required>
+                    <small id="firstname-check-alert" class="form-text text-nowrap mt-2 text-left ml-3"
+                        style="display: none;">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        تنها حروف فارسی مجاز است.
+                    </small>
                 </div>
                 <!-- Gender field -->
                 <div class="col-md-6">
@@ -73,8 +79,12 @@
                 </div>
                 <div class="col-md-4">
                     <input type="text" id="last_name" name="last_name" required>
+                    <small id="lastname-check-alert" class="form-text text-nowrap mt-2 text-left ml-3"
+                        style="display: none;">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        تنها حروف فارسی مجاز است.
+                    </small>
                 </div>
-                <p id="name_message" style="color: #7c0001"></p>
             </div>
             <!-- Username field -->
             <div class="row mb-2">
@@ -83,38 +93,21 @@
                 </div>
                 <div class="col-md-4">
                     <input type="text" id="username" name="username" required>
+                    <small id="username-check-alert" class="form-text text-nowrap mt-2 text-left ml-3"
+                        style="display: none;">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        نام کاربری تنها باید شامل حروف و اعداد انگلیسی باشد.
+                    </small>
                 </div>
-                <p id="username_message" style="color: #7c0001"></p>
-
             </div>
-            <!-- Password1 field -->
-            <!-- <div class="row mb-2">
-                <div class="col-md-2 field-label">
-                    <label for="password">رمز عبور</label>
-                </div>
-                <div class="col-md-4">
-                    <input type="password" id="password" name="password" required>
-                </div>
-            </div> -->
-            <!-- Password2 field -->
-            <!-- <div class="row mb-3">
-                <div class="col-md-2 field-label ml-0 pr-0">
-                    <label for="password2">تکرار رمز عبور</label>
-                </div>
-                <div class="col-md-4">
-                    <input type="password" id="password2" name="password2" required>
-                </div>
-                <p id="password_message" style="color: #7c0001"></p>
-
-            </div> -->
             <!-- Grade field -->
             <div class="row mb-2">
                 <div class="col-md-2 field-label">
                     <label for="grade">پایه</label>
                 </div>
                 <div class="col-md-4">
-                    <select data-placeholder="پایه تحصیلی" class="grade-choicen" tabindex="4">
-                        <option value=""></option>
+                    <select data-placeholder="پایه تحصیلی" id="grade" class="grade-choicen" tabindex="5" required>
+                        <option value="">پایه تحصیلی</option>
                         {% for element in form.fields.grades.queryset %}
                         <option value="{{ element.id }}">{{ element.title }}</option>
                         {% endfor %}
@@ -123,28 +116,35 @@
                 </div>
             </div>
             <!-- Phone number field -->
-            <div class="row mb-4 ">
+            <div class="row mb-4 mt-4">
                 <div class="col-md-2 field-label">
                     <label for="defaultInline10">شماره تماس</label>
                 </div>
                 <div class="phone-number-field col-md-10">
                     <!-- pattern check phone number is valid or not -->
                     <input type="text" class="phone-number" pattern="[9][0-9]{9}" id="defaultInline10"
-                        name="phone_number">
+                        name="phone_number" required>
                     <input type="text" value="+98" class="area-code" readonly>
-                    <p>نکته : شماره تلفن را بدون صفر وارد کنید . مثال : 9121111111</p>
+                    <p>
+                        <i class="fas fa-info-circle"></i>
+                        شماره تلفن را بدون صفر وارد کنید . مثال : 9121111111
+                    </p>
                 </div>
             </div>
             <button id="submit" class="btn btn-lg btn-warning btn-block sign-up-button" type="submit">ثبت نام</button>
-            <p id="message" style="color: #7c0001"></p>
             {% if form.error %}
-            <p style="color: #7c0001">{{ form.error }}</p>
+            <small id="error" class="h6 form-text text-nowrap mt-n3" style="font-weight: bolder;">
+                <i class="fas fa-exclamation-triangle"></i>
+                {{ form.error }}
+            </small>
             {% endif %}
         </div>
     </form>
     {% block JSfile %}
     <script src="{% static 'signup/js/signup.js' %}"></script>
     <script src="{% static 'home/chosen/js/jquery-3.2.1.min.js' %}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js">
+    </script>
     {% endblock %}
 </body>
 
