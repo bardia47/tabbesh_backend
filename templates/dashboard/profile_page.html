@@ -120,7 +120,7 @@
                 <div class="form-group">
                     <label for="grades" class="control-label">پایه تحصیلی</label>
                     <div class="col-md-8">
-                        <select id="grades" name="grades" class="custom-select w-25 ml-n3 text-center" required
+                        <select id="grades" name="grades" class="custom-select w-50 ml-n3 text-center" required
                             size="3">
                             {% for element in form.fields.grades.queryset %}
                             <option value="{{ element.id }}" {% ifequal user.grades.first.id element.id %} selected

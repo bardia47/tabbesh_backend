@@ -20,13 +20,13 @@ class PaymentInline(admin.StackedInline):
     def get_formset(self, request, obj=None, **kwargs):
         formset = super(PaymentInline, self).get_formset(request, obj, **kwargs)
         form = formset.form
-        form.base_fields['course'].label="درس"
+        form.base_fields['course'].label="دوره"
         widget = form.base_fields['course'].widget
         widget.can_add_related = False
         widget.can_change_related = False
         widget.can_add_related = False
         widget.can_change_related = False
-        widget.label='درس'
+        widget.label='دوره'
         return formset
     
 class UserCreationForm(forms.ModelForm):
@@ -229,9 +229,9 @@ class DocumentAdmin(admin.ModelAdmin):
         }
         readonly_fields = ('upload_date_decorated','sender')
         fields = (
-            'title','upload_date_decorated','sender','course','lesson','upload_document','description')
-        list_display = ['title','course','lesson','upload_date_decorated']    
-        search_fields =  ['title','course','lesson'] 
+            'title','upload_date_decorated','sender','course','upload_document','description')
+        list_display = ['title','course','upload_date_decorated']    
+        search_fields =  ['title','course'] 
         def save_model(self, request, obj, form, change):
             obj.sender = request.user
             obj.upload_date = datetime.datetime.now()
@@ -242,7 +242,6 @@ class DocumentAdmin(admin.ModelAdmin):
 
     
 admin.site.register(User, UserAdmin)
-admin.site.register(Role)
 admin.site.register(City, CityAdmin)
 admin.site.register(Grade, GradeAdmin)
 admin.site.register(Lesson, LessonAdmin)

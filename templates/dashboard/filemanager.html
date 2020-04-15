@@ -30,7 +30,6 @@
             <tr>
                 <th scope="col"><img src="{% static 'home/images/icons/folder.svg'%}" width="25" height="25"></th>
                 <th scope="col">عنوان</th>
-                <th scope="col">درس</th>
                 <th scope="col">فرستنده</th>
                 <th scope="col">تاریخ</th>
                 <th scope="col">توضیحات</th>
@@ -42,7 +41,6 @@
             <tr>
                 <th style="font-family:'Yekan-Number'" scope="row">1</th>
                 <td>{{doc.title}}</td>
-                <td>{{doc.lesson}}</td>
                 <td>{{doc.sender.get_full_name}}</td>
                 <td>{{doc.upload_date_decorated}}</td>
                 <td> {{doc.description}}</td>

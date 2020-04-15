@@ -131,7 +131,7 @@ class Grade(models.Model):
 class Lesson(models.Model):
     code = models.CharField("کد", max_length=10)
     title = models.CharField("عنوان", max_length=30)
-   # grades = models.ManyToManyField('Grade', blank=True, verbose_name="پایه")
+    grades = models.ManyToManyField('Grade', blank=True, verbose_name="پایه")
     parent = models.ForeignKey('self', blank=True, null=True, on_delete=models.DO_NOTHING, verbose_name="درس پدر")
     unique_together = [['title', 'grade']]
 
@@ -215,7 +215,6 @@ def document_directory_path(instance, filename):
 # Documents_model
 class Document(models.Model):
     course = models.ForeignKey('Course', on_delete=models.DO_NOTHING, verbose_name="دوره")
-    lesson = models.ForeignKey('Lesson', on_delete=models.DO_NOTHING, verbose_name="درس")
     upload_document= models.FileField('فایل',upload_to=document_directory_path, null=True, blank=True)
     upload_date = models.DateTimeField("تاریخ بارگذاری")
     title = models.CharField("عنوان", max_length=30)

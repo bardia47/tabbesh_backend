@@ -12,5 +12,5 @@ def home(request):
 # 404 page not found
 
 
-def page_not_found(request):
+def page_not_found(request, exception):
     return render(request, 'home/404-page.html')
