@@ -1,5 +1,4 @@
 from django.urls import path
-
 from .views import dashboard, lessons, filemanager
 from .views import edit_profile, change_avatar, change_password, change_profile
 from .views import shopping, success_shopping, unsuccess_shopping
@@ -18,7 +17,7 @@ urlpatterns = [
     path('shopping/success-shopping', success_shopping, name="success_shopping"),
     path('shopping/unsuccess-shopping',
          unsuccess_shopping, name="unsuccess_shopping"),
-    path('filemanager/', filemanager, name="filemanager"),
+    path('lessons/files/<str:code>', filemanager),
 ]
 
 if settings.DEBUG:

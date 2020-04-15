@@ -6,8 +6,7 @@ $('#first_name').on('keyup', function () {
 		if (check()) {
 			$("#submit").prop("disabled", false);
 		}
-	} 
-	else {
+	} else {
 		$('#firstname-check-alert').show();
 		$("#submit").prop("disabled", true);
 
@@ -49,7 +48,7 @@ $('#username').on('keyup', function () {
 function check() {
 	if (!$('#username-check-alert').is(':visible') &&
 		!$('#firstname-check-alert').is(':visible') &&
-		!$('#lastname-check-alert').is(':visible') ){
+		!$('#lastname-check-alert').is(':visible')) {
 		return true;
 	}
 	return false;

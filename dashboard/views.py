@@ -145,12 +145,6 @@ def success_shopping(request):
 def unsuccess_shopping(request):
     return render(request, 'dashboard/unsuccess_shopping.html')
 
-# File manager page
-
-
-def filemanager(request):
-    return render(request, 'dashboard/filemanager.html')
-
 
 def getAllLessons(lesson_id, now):
     lessons = Lesson.objects.filter(id=lesson_id)
@@ -169,7 +163,12 @@ def getAllLessons(lesson_id, now):
     return query
 
 # File manager page
-
-
-def filemanager(request):
-    return render(request, 'dashboard/filemanager.html')
+@login_required
+def filemanager(request, code):
+    course = Course.objects.get(code=code)
+    try:
+        request.user.payments.get(id=course.id)
+    except:
+        return shopping(request)
+    documents = course.document_set.all()
+    return render(request, 'dashboard/filemanager.html', {'course': course, 'documents': documents})
