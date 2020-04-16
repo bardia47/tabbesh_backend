@@ -1,6 +1,5 @@
-html *
-{
-    font-family: 'Iransense' !important;
+html * {
+  font-family: 'Iransense' !important;
 }
 
 body {
@@ -28,6 +27,11 @@ a {
   text-decoration: none;
 }
 
+small {
+  color: #9d0b0b !important;
+  font-weight: bolder;
+}
+
 
 /* Select input CSS */
 select {
@@ -45,7 +49,7 @@ select {
 .chosen-single span {
   font-family: 'Iransense';
   height: 36px;
-} 
+}
 
 .container {
   margin: 0px;
@@ -69,14 +73,17 @@ select {
 .field-label {
   text-align: right;
 }
+
 .field-label label {
   width: 100%;
 }
+
 .field-label span {
-  margin-left:20px;
+  margin-left: 20px;
 }
+
 .field-label-gender {
-  margin-left:20px;
+  margin-left: 20px;
 }
 
 
@@ -89,15 +96,18 @@ select {
   box-shadow: 0 0 0 1px transparent, 0 0 0 0.2rem rgba(68, 68, 68, 0.1);
 
 }
-custom-control-inline{
+
+custom-control-inline {
   margin: 0px;
 }
-.custom-radio{
+
+.custom-radio {
   margin: 0;
   padding: auto;
 }
-.custom-radio span{
-  margin-left:20px;
+
+.custom-radio span {
+  margin-left: 20px;
 }
 
 
@@ -182,18 +192,21 @@ custom-control-inline{
 
 /* Phone number field CSS */
 .phone-number-field {
-  display: inline-flex ;
+  display: inline-flex;
   text-align: center;
 }
-.phone-number-field input{
+
+.phone-number-field input {
   direction: ltr;
 }
-.phone-number-field p{
+
+.phone-number-field p {
   margin-top: 10px;
   margin-right: 10px;
   font-family: 'Iransense';
   font-size: 15px;
 }
+
 .area-code {
   max-width: 45px;
   margin-right: 5px;
@@ -223,10 +236,11 @@ custom-control-inline{
   margin-left: 26px;
   direction: rtl;
 }
+
 /* if the width of screen is lower 768 override this css attribute */
 @media (max-width: 768px) {
   .custom-radio {
-     margin-right: 40%;
+    margin-right: 40%;
   }
-  
+
 }
