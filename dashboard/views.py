@@ -27,7 +27,7 @@ def dashboard(request):
             klass.save()
 
     classes = Course_Calendar.objects.filter(
-        course__in=courses, start_date__day=now.day)
+        Q(start_date__day=now.day) | Q(start_date__day=now.day + 1), course__in=courses)
 
     if classes.count() > 0:
         calendar_time = classes.first().start_date - now
@@ -46,6 +46,7 @@ def edit_profile(request):
     form = ProfileForm()
     return render(request, 'dashboard/profile_page.html', {'form': form})
 
+
 # Edit profile page --> change avatar form
 @login_required
 def change_avatar(request):
@@ -62,6 +63,7 @@ def change_avatar(request):
         error = 'تغییر پروفایل با مشکل رو به رو شد'
         return render(request, 'dashboard/profile_page.html', {'form': form, 'error': error})
 
+
 # Edit profile page --> change field except avatar field
 @login_required
 def change_profile(request):
@@ -73,6 +75,7 @@ def change_profile(request):
         else:
             form = ProfileForm()
             return render(request, 'dashboard/profile_page.html', {'form': form, 'error': 'خطا در ثبت نام'})
+
 
 # Edit profile page --> change password
 @login_required
@@ -133,11 +136,13 @@ def shopping(request):
     return render(request, 'dashboard/shopping.html', {'grades': grades, 'lessons': lessons, 'teachers': teachers,
                                                        'courses': courses})
 
+
 # Successful shopping page
 
 
 def success_shopping(request):
     return render(request, 'dashboard/success_shopping.html')
+
 
 # Unsuccessful shopping page
 
@@ -161,6 +166,7 @@ def getAllLessons(lesson_id, now):
             lessons = lessons | whilelessons
     query = reduce(or_, (Q(lesson__id=lesson.id) for lesson in lessons))
     return query
+
 
 # File manager page
 @login_required

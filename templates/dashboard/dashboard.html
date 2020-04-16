@@ -176,7 +176,12 @@
                             </p>
                             {% else %}
                             <p><img src="{% static 'home/images/icons/calendar.svg' %}" alt="calender icon">
-                                ساعت {{ klass.start_date|date:"H:i" }} شروع میشه
+                                {% if klass.start_date|date:"d" == now|date:"d" %}
+                                    امروز
+                                    {% else %}
+                                    فردا
+                                    {% endif %}
+                                    ساعت {{ klass.start_date|date:"H:i" }} شروع میشه
                             </p>
                             {% endif %}
                         </div>
