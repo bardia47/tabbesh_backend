@@ -9,7 +9,7 @@ from django.db.transaction import commit
 class UserManager(BaseUserManager):
     use_in_migrations = True
     
-    def create_form_user(self,form):
+    def create_form_user(self,form,password):
 
         user=form.save(commit=False)
         try:
@@ -18,7 +18,7 @@ class UserManager(BaseUserManager):
             role = apps.get_model(app_label='accounts', model_name='Role')
             user.role = role.objects.get(code=RoleCodes.STUDENT.value)
         user.set_default_avatar()  
-        user.password = make_password(user.password)
+        user.password = make_password(password)
         user.save(using=self._db)
 
         return user

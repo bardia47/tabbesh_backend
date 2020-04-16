@@ -29,6 +29,12 @@
          url('../fonts/Yekan/Yekan.ttf') format('ttf'),
          url('../fonts/Yekan/Yekan.eot') format('eot');
 }
+@font-face {
+  font-family: 'Yekan-Number';
+  src: url('../fonts/Yekan/Yekan-number.woff') format('woff'),
+         url('../fonts/Yekan/Yekan-number.ttf') format('ttf'),
+         url('../fonts/Yekan/Yekan-number.eot') format('eot');
+}
 
 @font-face {
   font-family: 'Dana_Regular';

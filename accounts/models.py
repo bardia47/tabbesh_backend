@@ -75,7 +75,6 @@ class User(AbstractBaseUser, PermissionsMixin):
         send_mail(subject, message, from_email, [self.email], **kwargs)
 
     def date_joined_decorated(self):
-        print(self.date_joined)
         return jdatetime.datetime.fromgregorian(datetime=self.date_joined).strftime("%a, %d %b %Y %H:%M:%S")
     
     def set_default_avatar(self):
@@ -132,7 +131,7 @@ class Grade(models.Model):
 class Lesson(models.Model):
     code = models.CharField("کد", max_length=10)
     title = models.CharField("عنوان", max_length=30)
-   # grades = models.ManyToManyField('Grade', blank=True, verbose_name="پایه")
+    grades = models.ManyToManyField('Grade', blank=True, verbose_name="پایه")
     parent = models.ForeignKey('self', blank=True, null=True, on_delete=models.DO_NOTHING, verbose_name="درس پدر")
     unique_together = [['title', 'grade']]
 
@@ -146,7 +145,7 @@ class Lesson(models.Model):
 
 # Course Model
 class Course(models.Model):
-    code = models.CharField("کد", max_length=10)
+    code = models.CharField("کد", max_length=10,unique=True)
     title = models.CharField("عنوان", max_length=30)
     lesson = models.ForeignKey('Lesson', on_delete=models.DO_NOTHING, verbose_name="درس")
     grade = models.ForeignKey('Grade',  blank=True, null=True, on_delete=models.DO_NOTHING, verbose_name="پایه")
@@ -208,4 +207,29 @@ class Course_Calendar(models.Model):
         super().clean_fields(exclude=exclude)
         if not self.start_date or not self.end_date or self.end_date < self.start_date :
             raise ValidationError("تاریخ پایان باید پس از تاریخ شروع باشد")
-        
+
+
+def document_directory_path(instance, filename):
+    return 'documents/{0}/{1}'.format(instance.course.code, filename)
+
+# Documents_model
+class Document(models.Model):
+    course = models.ForeignKey('Course', on_delete=models.DO_NOTHING, verbose_name="دوره")
+    upload_document= models.FileField('فایل',upload_to=document_directory_path, null=True, blank=True)
+    upload_date = models.DateTimeField("تاریخ بارگذاری")
+    title = models.CharField("عنوان", max_length=30)
+    description = models.TextField("توضیحات",null=True, blank=True)
+    sender = models.ForeignKey(User, on_delete=models.DO_NOTHING, verbose_name="فرد بارگذار")
+
+    class Meta:
+        ordering = ['-upload_date']
+        verbose_name_plural = "فایل ها"
+        verbose_name = "فایل ها"
+
+
+    def __str__(self):
+        return self.title
+
+    def upload_date_decorated(self):
+        self.short_description='تاریخ بارگذاری'
+        return jdatetime.datetime.fromgregorian(datetime=self.upload_date).strftime("%a, %d %b %Y %H:%M:%S")

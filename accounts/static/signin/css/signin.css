@@ -57,7 +57,6 @@ a {
   max-height: 50px;
   border-radius: 0;
   background-color: #FFDE03;
-  margin-bottom: 30px;
   border: #FFDE03;
   font-family: 'Vazir_Bold';
   color: rgb(46, 46, 46, 0.79);
@@ -65,7 +64,11 @@ a {
 
 /* Chage Hover of btn class of bootstrap */
 
-.btn-primary:hover, .btn-primary:focus, .btn-primary:active, .btn-primary.active, .open>.dropdown-toggle.btn-primary {
+.btn-primary:hover,
+.btn-primary:focus,
+.btn-primary:active,
+.btn-primary.active,
+.open>.dropdown-toggle.btn-primary {
   color: #000000;
   background-color: #E4E4E4;
 }
@@ -96,6 +99,17 @@ a {
 }
 
 .footer-p {
-  font-family: Vazir_Medium;
-  font-size: 12px
+  font-family: 'Vazir_Medium';
+  font-size: 12px;
+}
+
+.footer-p-forget {
+  font-family: 'Vazir_Medium';
+  margin-top: -5px;
+}
+
+.footer-p-forget a {
+  font-family: 'Vazir_Light';
+  font-size: 12px;
+  color: #263f44;
 }

@@ -1,0 +1,67 @@
+{% extends 'dashboard/base.html' %}
+{% load static %}
+<!-- Title block of base.html -->
+{% block title %}جزوات{% endblock %}
+
+<!-- CSS files -->
+{% block CSSfiles %}
+<link rel="stylesheet" href="{% static 'dashboard/css/filemanager.css' %}">
+{% endblock %}
+
+<!-- Content of page -->
+{% block content %}
+<div class="container">
+    <div class="row mb-2">
+        <div class="col-md-1 file-manager-image">
+            <img src="{% static 'dashboard/images/default_profile.png'%}" width="50" height="50">
+        </div>
+        <div class="col-md-3 file-manager title">
+            <p class="m-0"><strong>{{ course.title }}</strong></p>
+            <h6 class="p-0"><small>{{ course.teacher.get_full_name }}</small></h6>
+        </div>
+
+
+        
+
+
+    </div>
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th scope="col"><img src="{% static 'home/images/icons/folder.svg'%}" width="25" height="25"></th>
+                <th scope="col">عنوان</th>
+                <th scope="col">فرستنده</th>
+                <th scope="col">تاریخ</th>
+                <th scope="col">توضیحات</th>
+                <th scope="col">دانلود</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for doc in documents %}
+            <tr>
+                <th style="font-family:'Yekan-Number'" scope="row">1</th>
+                <td>{{doc.title}}</td>
+                <td>{{doc.sender.get_full_name}}</td>
+                <td>{{doc.upload_date_decorated}}</td>
+                <td> {{doc.description}}</td>
+                <td style="text-align:center"><a href="{{ doc.upload_document.url }}" target="_blank">
+                    <img src="{% static 'home/images/icons/download.svg'%}" width="20"
+                        height="20"></a></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}
+
+<!-- JS files -->
+{% block JSfile %}
+<!-- Bootstrap Javascript -->
+<script src="{% static 'home/chosen/js/jquery-3.2.1.min.js' %}"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+    integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+    crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+    integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+    crossorigin="anonymous"></script>
+{% endblock %}

@@ -9,6 +9,8 @@ from django.contrib.auth.models import Group
 from accounts.enums import RoleCodes
 from django.contrib import messages
 from django.contrib.admin.options import InlineModelAdmin
+import datetime
+
 
 class PaymentInline(admin.StackedInline):
     model = User.payments.through
@@ -18,13 +20,13 @@ class PaymentInline(admin.StackedInline):
     def get_formset(self, request, obj=None, **kwargs):
         formset = super(PaymentInline, self).get_formset(request, obj, **kwargs)
         form = formset.form
-        form.base_fields['course'].label="درس"
+        form.base_fields['course'].label="دوره"
         widget = form.base_fields['course'].widget
         widget.can_add_related = False
         widget.can_change_related = False
         widget.can_add_related = False
         widget.can_change_related = False
-        widget.label='درس'
+        widget.label='دوره'
         return formset
     
 class UserCreationForm(forms.ModelForm):
@@ -214,40 +216,37 @@ class CourseCalendarAdmin(ModelAdminJalaliMixin, admin.ModelAdmin):
 class CityAdmin(admin.ModelAdmin):
         list_display = ['code', 'title']
 
-# class LessonInline(admin.StackedInline):
-#     model = Lesson.grades.through
-#     verbose_name_plural = "پایه مرتبط"
-#     verbose_name = "پایه مرتبط"
-#     extra=0
-#     def get_formset(self, request, obj=None, **kwargs):
-#         formset = super(LessonInline, self).get_formset(request, obj, **kwargs)
-#         form = formset.form
-#         form.base_fields['grade'].label="پایه"
-#         widget = form.base_fields['grade'].widget
-#         widget.can_add_related = False
-#         widget.can_change_related = False
-#         widget.can_add_related = False
-#         widget.can_change_related = False
-#         widget.label='پایه'
-#         return formset
-
-
 class LessonAdmin(admin.ModelAdmin):
         list_display = ['code', 'title']
-#        exclude = ('grades',)
-#         inlines = [
-#         LessonInline,
-#     ]
-        
+
 class GradeAdmin(admin.ModelAdmin):
         list_display = ['code', 'title']        
 
+class DocumentAdmin(admin.ModelAdmin):
+        class Meta:
+            labels = {
+            'upload_date_decorated': 'تاریخ بارگذاری',
+        }
+        readonly_fields = ('upload_date_decorated','sender')
+        fields = (
+            'title','upload_date_decorated','sender','course','upload_document','description')
+        list_display = ['title','course','upload_date_decorated']    
+        search_fields =  ['title','course'] 
+        def save_model(self, request, obj, form, change):
+            obj.sender = request.user
+            obj.upload_date = datetime.datetime.now()
+            super().save_model(request, obj, form, change)
+        
+
+   
+
     
 admin.site.register(User, UserAdmin)
-admin.site.register(Role)
 admin.site.register(City, CityAdmin)
 admin.site.register(Grade, GradeAdmin)
 admin.site.register(Lesson, LessonAdmin)
 admin.site.register(Course, CourseAdmin)
 admin.site.register(Course_Calendar, CourseCalendarAdmin)
 admin.site.unregister(Group)
+admin.site.register(Document,DocumentAdmin)
+

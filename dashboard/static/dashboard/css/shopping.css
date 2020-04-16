@@ -62,7 +62,8 @@
   text-align: center;
 }
 
-.cart-footer button:focus, .cart-footer button:hover {
+.cart-footer button:focus,
+.cart-footer button:hover {
   background-color: #527318;
   border: none;
   color: white;
@@ -72,21 +73,23 @@
   text-align: center;
   box-shadow: none;
 }
-.cart-total-price{
+
+.cart-total-price {
   font-family: 'Vazir_light';
   margin-top: 5px;
 }
 
 /* Shopping card with filter CSS */
 
-.shopping-search-title h1{
+.shopping-search-title h1 {
   text-align: center;
   padding: 5px;
   margin: 30px;
 }
-.shopping-search-title img{
+
+.shopping-search-title img {
   height: 50px;
-  width:50px;
+  width: 50px;
   margin-left: 5px;
 }
 
@@ -100,10 +103,11 @@
   text-align: center;
   text-align-last: center;
 }
-.form-search input[type="submit"]{
-  background-color:#527318;
+
+.form-search input[type="submit"] {
+  background-color: #527318;
   border: none;
-  color:#fff;
+  color: #fff;
 }
 
 /* Shopping Cards CSS */
@@ -190,6 +194,11 @@
 .course-calender-time {
   margin-right: 20px;
   font-family: 'Vazir_light' !important;
+}
+
+.course-calender-time img:hover {
+  animation-name: swing;
+  animation-duration: 1s;
 }
 
 /* Course start date */
@@ -365,6 +374,7 @@
   height: 50px;
   text-align: center;
 }
+
 .btn-remove {
   background-color: #da2d2d;
   border: none;
@@ -375,7 +385,8 @@
   text-align: center;
 }
 
-.btn-remove:focus, .btn-remove:hover {
+.btn-remove:focus,
+.btn-remove:hover {
   background-color: #da2d2d;
   border: none;
   color: white;
