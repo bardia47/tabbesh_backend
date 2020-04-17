@@ -5,9 +5,9 @@ $(document).ready(function () {
         readURL(this);
     });
     // function to read input file
-    var readURL = function (input) {
+    let readURL = function (input) {
         if (input.files && input.files[0]) {
-            var reader = new FileReader();
+            let reader = new FileReader();
             reader.onload = function (e) {
                 let image = new Image();
                 image.src = e.target.result;
@@ -67,7 +67,7 @@ $(document).ready(function () {
 
     // Check firstname contain persian character
     $('#first_name').on('keyup', function () {
-        var p = /^[\u0600-\u06FF\s]+$/;
+        let p = /^[\u0600-\u06FF\s]+$/;
         if ((p.test($('#first_name').val()) || !$('#first_name').val())) {
             $('#name-check-alert').hide()
         } else {
@@ -77,7 +77,7 @@ $(document).ready(function () {
 
     // Check lastname contain persian character
     $('#last_name').on('keyup', function () {
-        var p = /^[\u0600-\u06FF\s]+$/;
+        let p = /^[\u0600-\u06FF\s]+$/;
         if ((p.test($('#last_name').val()) || !$('#last_name').val())) {
             $('#lastname-check-alert').hide()
         } else {
@@ -87,11 +87,69 @@ $(document).ready(function () {
 
     // Username valid check
     $('#username').on('keyup', function () {
-        var p = /^[a-zA-Z0-9]+$/;
+        let p = /^[a-zA-Z0-9]+$/;
         if (p.test($('#username').val())) {
             $('#username-check-alert').hide();
         } else {
             $('#username-check-alert').show();
         }
     });
+
+    $('#national-code').on('keyup', function () {
+        if (isValidIranianNationalCode($('#national-code').val())) {
+            $('#national-code-check-alert').hide();
+        } else {
+            $('#national-code-check-alert').show();
+        }
+    });
+
+
+    // Check valid iranian national code 
+    function isValidIranianNationalCode(input) {
+        if (!/^\d{10}$/.test(input))
+            return false;
+
+        var check = parseInt(input[9]);
+        var sum = 0;
+        var i;
+        for (i = 0; i < 9; ++i) {
+            sum += parseInt(input[i]) * (10 - i);
+        }
+        sum %= 11;
+
+        return (sum < 2 && check == sum) || (sum >= 2 && check + sum == 11);
+    }
+
+});
+
+
+document.addEventListener("DOMContentLoaded", function () {
+    var elements = document.getElementsByTagName("INPUT");
+    for (var i = 0; i < elements.length; i++) {
+        elements[i].oninvalid = function (e) {
+            e.target.setCustomValidity("");
+            if (!e.target.validity.valid) {
+                e.target.setCustomValidity("این مورد اجباری می باشد.");
+            }
+        };
+        elements[i].oninput = function (e) {
+            e.target.setCustomValidity("");
+        };
+    }
+});
+
+
+document.addEventListener("DOMContentLoaded", function () {
+    let elements = document.getElementsByTagName("SELECT");
+    for (let i = 0; i < elements.length; i++) {
+        elements[i].oninvalid = function (e) {
+            e.target.setCustomValidity("");
+            if (!e.target.validity.valid) {
+                e.target.setCustomValidity("لطفا یکی از موارد را انتخاب کنید.");
+            }
+        };
+        elements[i].oninput = function (e) {
+            e.target.setCustomValidity("");
+        };
+    }
 });

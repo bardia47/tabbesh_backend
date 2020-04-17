@@ -53,3 +53,35 @@ function check() {
 	}
 	return false;
 }
+
+
+document.addEventListener("DOMContentLoaded", function () {
+	let elements = document.getElementsByTagName("INPUT");
+	for (let i = 0; i < elements.length; i++) {
+		elements[i].oninvalid = function (e) {
+			e.target.setCustomValidity("");
+			if (!e.target.validity.valid) {
+				e.target.setCustomValidity("این مورد اجباری می باشد.");
+			}
+		};
+		elements[i].oninput = function (e) {
+			e.target.setCustomValidity("");
+		};
+	}
+});
+
+
+document.addEventListener("DOMContentLoaded", function () {
+	let elements = document.getElementsByTagName("SELECT");
+	for (let i = 0; i < elements.length; i++) {
+		elements[i].oninvalid = function (e) {
+			e.target.setCustomValidity("");
+			if (!e.target.validity.valid) {
+				e.target.setCustomValidity("لطفا یکی از موارد را انتخاب کنید.");
+			}
+		};
+		elements[i].oninput = function (e) {
+			e.target.setCustomValidity("");
+		};
+	}
+});

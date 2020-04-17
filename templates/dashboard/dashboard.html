@@ -148,7 +148,20 @@
                 <h4>کلاس های امروز شما</h4>
             </div>
             {% if no_class_today_text %}
-            <p>امروز هیچ کلاسی نداری</p>
+            <div class="shadow-lg container w-100 my-n2 text-center rounded" style="font-family: 'Vazir_Bold';">
+                <div class="col-md-12 mb-1">
+                    <img class="m-auto" src="{% static 'home/images/icons/no-class.svg'%}" width="90" height="90">
+                </div>
+                <div class="col-md-12">
+                    <p class="text-center" style="font-size: 20px;">تا آخر هفته کلاسی نداری :(</p>
+                </div>
+                <div class="col-md-12 my-n2">
+                    <p class="text-center" style="font-family: 'Vazir_Light'; font-size: 15px;">
+                        می خوای کلاس جدید ثبت نام کنی ؟
+                    </p>
+                    <a class="btn btn-dark text-white mb-2" href="{% url 'shopping' %}">آره بزن بریم </a>
+                </div>
+            </div>
             {% endif %}
             <!-- Loop for Courses  -->
             {% for klass in classes %}

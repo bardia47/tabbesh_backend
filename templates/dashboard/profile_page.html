@@ -87,9 +87,13 @@
                     </small>
                 </div>
                 <div class="form-group">
-                    <label class="control-label" for="national_code">کد ملی</label>
-                    <input class="form-control w-25" type="text" id="national_code" name="national_code"
+                    <label class="control-label" for="national-code">کد ملی</label>
+                    <input class="form-control w-25" type="text" id="national-code" name="national_code"
                         value="{{ user.national_code |default_if_none:'' }}" maxlength="10" required>
+                    <small id="national-code-check-alert" class="form-text text-danger mt-1" style="display: none;">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        کد ملی وارد شده معتبر نمی باشد.
+                    </small>
                 </div>
                 <div class="form-group">
                     <label for="gender" class="control-label">جنسیت</label>

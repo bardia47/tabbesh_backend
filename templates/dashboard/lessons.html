@@ -15,22 +15,34 @@
 <!-- Content of page -->
 {% block content %}
 <!-- Course Rows -->
-<div class="row">
+{% if not courses %}
+<div class="container w-100 p-1 text-center" style="font-family: 'Vazir_Bold';">
+    <div class="col-md-12 mt-3 mb-3">
+        <img class="m-auto" src="{% static 'home/images/icons/sad-emoji.svg'%}" width="130" height="130">
+    </div>
+    <div class="col-md-12">
+        <p class="text-center" style="font-size: 25px;">در حال حاضر هیچ کلاسی برای حضور در اون نداری!</p>
+    </div>
+    <div class="col-md-12">
+        <p class="mt-2 text-center" style="font-family: 'Vazir_Light'; font-size: 20px;">
+            می خوای کلاس جدید ثبت نام کنی ؟
+        </p>
+        <a class="btn btn-dark text-white m-1 mr-4" href="{% url 'shopping' %}">آره بزن بریم</a>
+    </div>
+</div>
+{% endif %}
+<div class="card-group">
     {% for course in courses %}
     <!-- Course Cards -->
-    <div class="col-md-4">
+    <div class="col-md-4 mb-3">
         <!-- Course Card  -->
-        <div class="card course-card">
+        <div class="card course-card h-100">
             <!-- Course poster -->
             <img class="card-img-top course-card-image" src="{{ course.image.url }}">
             <!-- Course content -->
-            <div class="card-block course-card-block">
-                <!-- Teacher profile  -->
-                <figure class="teacher-profile">
-                    <img src="{{ course.teacher.avatar.url }}" class="profile-avatar" alt="course teacher profile">
-                </figure>
+            <div class="card-body course-card-block">
                 <!-- Course title  -->
-                <h4 class="card-title mt-3">{{ course.title }}</h4>
+                <h4 class="card-title">{{ course.title }}</h4>
                 <!-- Course teacher  -->
                 <div class="course-teacher-name">
                     <h6>استاد {{ course.teacher.get_full_name }}</h6>
@@ -56,7 +68,7 @@
                     <p>
                         <img src="{% static 'home/images/icons/calendar.svg' %}" alt="">
                         اتمام دوره:
-                        <span>{{ course.end_date|jformat:" %B %d %A " }}</span>
+                        <span>{{ course.end_date|jformat:" %A %d %B " }}</span>
                     </p>
                 </div>
                 <!-- Description of the course  -->
@@ -69,16 +81,22 @@
                 </div>
             </div>
             <!-- Button link to class -->
-            <div class="card-footer button-to-class">
-                <button class="btn btn-success">
+            <div class="card-footer button-to-class p-0 py-3">
+                {% if course.is_class_active %}
+                <button class="btn btn-success mb-1">
                     <img src="{% static 'home/images/icons/click.svg' %}" alt="button link to class">
                     ورود به کلاس
                 </button>
-                {% ifnotequal course.document_set.count 0 %}
-                <button onclick="location.href='files/{{course.code}}'" class="btn btn-dark mr-3" type="button">
+                {% else %}
+                <button class="btn btn-danger mb-1" disabled>
+                    <img src="{% static 'home/images/icons/delete-2.svg' %}" alt="button link to class">
+                    کلاس شروع نشده
+                </button>
+                {% endif %}
+                <button onclick="location.href='files/{{course.code}}'" class="btn btn-dark mr-2" type="button">
                     <img src="{% static 'home/images/icons/document.svg' %}" alt="button link to class">
-                    جزوه ها</button>
-                {% endifnotequal %}
+                    جزوه ها
+                </button>
             </div>
         </div>
     </div>
