@@ -61,4 +61,5 @@ pip install requests
 //following for async
 pip install aiohttp
 pip install asyncio
-راه اندازی سامانه پیامکی
+pip install Pillow
+راه اندازی سامانهپیامکی
