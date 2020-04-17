@@ -145,7 +145,7 @@
         <div class="col-md-12 card-section">
             <!-- Course cards title -->
             <div class="card-title">
-                <h4>کلاس های امروز شما</h4>
+                <h4>کلاس های امروز و فردای شما</h4>
             </div>
             {% if no_class_today_text %}
             <div class="shadow-lg container w-100 my-n2 text-center rounded" style="font-family: 'Vazir_Bold';">
@@ -153,7 +153,7 @@
                     <img class="m-auto" src="{% static 'home/images/icons/no-class.svg'%}" width="90" height="90">
                 </div>
                 <div class="col-md-12">
-                    <p class="text-center" style="font-size: 20px;">تا آخر هفته کلاسی نداری :(</p>
+                    <p class="text-center" style="font-size: 20px;">امروز و فردا کلاسی نداری :(</p>
                 </div>
                 <div class="col-md-12 my-n2">
                     <p class="text-center" style="font-family: 'Vazir_Light'; font-size: 15px;">
@@ -190,11 +190,11 @@
                             {% else %}
                             <p><img src="{% static 'home/images/icons/calendar.svg' %}" alt="calender icon">
                                 {% if klass.start_date|date:"d" == now|date:"d" %}
-                                    امروز
-                                    {% else %}
-                                    فردا
-                                    {% endif %}
-                                    ساعت {{ klass.start_date|date:"H:i" }} شروع میشه
+                                امروز
+                                {% else %}
+                                فردا
+                                {% endif %}
+                                ساعت {{ klass.start_date|date:"H:i" }} شروع میشه
                             </p>
                             {% endif %}
                         </div>
