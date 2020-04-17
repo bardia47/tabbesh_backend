@@ -24,7 +24,7 @@ SECRET_KEY = 'nan_@dp+&g%75ke-ac%yn(8@2su8r9fn0!-hlzdmz1ia0!-f$x'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+#ALLOWED_HOSTS = ['tabbesh.ir', '185.4.31.70']
 
 # Application definition
 
@@ -111,7 +111,7 @@ PASSWORD_HASHERS = (
 
 
 JALALI_DATE_DEFAULTS = {
-   'Strftime': {
+    'Strftime': {
         'date': '%y/%m/%d',
         'datetime': '%H:%M:%S _ %y/%m/%d',
     },
@@ -141,8 +141,6 @@ USE_L10N = True
 
 USE_TZ = False
 
-import locale
-locale.setlocale(locale.LC_ALL, "fa_IR.UTF-8")
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
@@ -151,9 +149,9 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'home/static/'),
     os.path.join(BASE_DIR, 'accounts/static/'),
     os.path.join(BASE_DIR, 'dashboard/static/'),
-    
+
 ]
-LOGIN_URL='/signin/'
+LOGIN_URL = '/signin/'
 AUTH_USER_MODEL = 'accounts.User'
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
@@ -161,6 +159,3 @@ STATIC_URL = '/static/'
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
-
-
-

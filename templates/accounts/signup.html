@@ -11,7 +11,6 @@
     <!-- CSS Files -->
     <link rel="stylesheet" href="https://cdn.rtlcss.com/bootstrap/v4.2.1/css/bootstrap.min.css"
         integrity="sha384-vus3nQHTD+5mpDiZ4rkEPlnkcyTP+49BhJ4wJeJunw06ZAp+wzzeBPUXr42fi8If" crossorigin="anonymous">
-    <script src="{% static 'dashboard/js/jquery-3.3.1.slim.min.js' %}"></script>
     <link rel="stylesheet" href="{% static 'signup/css/signup.css' %}">
     <link rel="stylesheet" href="{% static 'home/css/fonts.css' %}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css">
@@ -141,10 +140,10 @@
         </div>
     </form>
     {% block JSfile %}
+    <script src="https://code.jquery.com/jquery-3.4.1.js"
+        integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU=" crossorigin="anonymous"></script>
     <script src="{% static 'signup/js/signup.js' %}"></script>
-    <script src="{% static 'home/chosen/js/jquery-3.2.1.min.js' %}"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js">
-    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js"></script>
     {% endblock %}
 </body>
 

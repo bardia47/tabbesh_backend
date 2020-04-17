@@ -1,3 +1,20 @@
+/* Scroll Bar CSS */
+::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+  background-color: #F5F5F5;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+  background-color: #F5F5F5;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #F90;
+  background-image: -webkit-linear-gradient(45deg, rgba(255, 255, 255, .2) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, .2) 50%, rgba(255, 255, 255, .2) 75%, transparent 75%, transparent)
+}
+
 /* Lesson page CSS */
 
 .course-card {
@@ -9,7 +26,7 @@
   box-shadow: 0 1px 3px 0 #d4d4d5, 0 0 0 1px #d4d4d5;
 }
 
-.card-block {
+.card-body {
   font-size: 1em;
   position: relative;
   margin: 0;
@@ -17,12 +34,6 @@
   border: none;
   border-top: 1px solid rgba(34, 36, 38, .1);
   box-shadow: none;
-}
-
-.card-img-top {
-  display: block;
-  width: 100%;
-  height: auto;
 }
 
 .card-title {
@@ -37,27 +48,6 @@
   color: rgba(0, 0, 0, .68);
 }
 
-/* Teacher profile image */
-
-.teacher-profile {
-  position: absolute;
-  top: -30px;
-  display: inline-block;
-  overflow: hidden;
-  box-sizing: border-box;
-  width: 60px;
-  height: 60px;
-  margin: 0;
-  border: 1px solid #fff;
-  border-radius: 50%;
-}
-
-.profile-avatar {
-  display: block;
-  width: 100%;
-  height: 100%;
-  border-radius: 50%;
-}
 
 /* Course grade */
 

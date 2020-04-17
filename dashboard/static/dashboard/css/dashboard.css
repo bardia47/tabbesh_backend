@@ -225,9 +225,6 @@ time.icon span {
 
 /* Cards section CSS */
 .card-section {
-  min-height: 220px;
-  max-height: 300px;
-  overflow-y: scroll;
   text-align: center;
 }
 

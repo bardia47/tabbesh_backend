@@ -95,22 +95,17 @@
         </form>
 
         <!-- Shopping Cards -->
-        <div class="row">
+        <div class="card-group">
             <!-- Loop for courses -->
             {% for course in courses %}
-            <div class="col-md-4">
+            <div class="col-md-4 mb-3">
                 <div class="card course-card h-100">
                     <!-- Course poster -->
                     <img class="card-img-top" src="{{ course.image.url }}">
                     <!-- Course content -->
-                    <div class="card-block">
-                        <!-- Course teacher profile  -->
-                        <figure class="teacher-profile">
-                            <img src="{{ course.teacher.avatar.url }}" class="profile-avatar"
-                                alt="course teacher profile">
-                        </figure>
+                    <div class="card-body">
                         <!-- Course title  -->
-                        <h4 class="title mt-3">{{ course.title }}</h4>
+                        <h4 class="title ">{{ course.title }}</h4>
                         <!-- Course teacher name  -->
                         <div class="course-teacher-name">
                             <h6 class="teacher-name">استاد {{ course.teacher.get_full_name }}</h6>
@@ -135,7 +130,7 @@
                             <p>
                                 <img src="{% static 'home/images/icons/start-date.svg'%}" alt="">
                                 شروع دوره:
-                                <span>{{ course.start_date|jformat:" %B %d %A " }}</span>
+                                <span>{{ course.start_date|jformat:" %A %d %B " }}</span>
                             </p>
                         </div>
                         <!-- End of the course  -->
@@ -143,7 +138,7 @@
                             <p>
                                 <img src="{% static 'home/images/icons/end-date.svg'%}" alt="">
                                 اتمام دوره:
-                                <span>{{ course.end_date|jformat:" %B %d %A " }}</span>
+                                <span>{{ course.end_date|jformat:" %A %d %B " }}</span>
                             </p>
                         </div>
                         <!-- Description of the course  -->

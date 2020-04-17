@@ -1,5 +1,21 @@
-/* Shopping CSS */
+/* Scroll Bar CSS */
+::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+  background-color: #F5F5F5;
+}
 
+::-webkit-scrollbar {
+  width: 10px;
+  background-color: #F5F5F5;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #527318;
+  background-image: -webkit-linear-gradient(45deg, rgba(255, 255, 255, .2) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, .2) 50%, rgba(255, 255, 255, .2) 75%, transparent 75%, transparent)
+}
+
+/* Shopping CSS */
 .shopping {
   height: 76%;
   width: 100%;
@@ -121,7 +137,7 @@
   box-shadow: 0 1px 3px 0 #d4d4d5, 0 0 0 1px #d4d4d5;
 }
 
-.card-block {
+.card-body {
   font-size: 1em;
   position: relative;
   margin: 0;
@@ -143,28 +159,6 @@
   font-size: 1.28571429em;
   font-weight: 700;
   line-height: 1.2857em;
-}
-
-/* Course teacher profile image */
-
-.teacher-profile {
-  position: absolute;
-  top: -30px;
-  display: inline-block;
-  overflow: hidden;
-  box-sizing: border-box;
-  width: 60px;
-  height: 60px;
-  margin: 0;
-  border: 1px solid #fff;
-  border-radius: 50%;
-}
-
-.profile-avatar {
-  display: block;
-  width: 100%;
-  height: 100%;
-  border-radius: 50%;
 }
 
 /* Course teacher name  */
