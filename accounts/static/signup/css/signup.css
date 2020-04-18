@@ -1,7 +1,3 @@
-html * {
-  font-family: 'Iransense' !important;
-}
-
 body {
   display: -ms-flexbox;
   display: flex;
@@ -12,6 +8,7 @@ body {
   background: url('../images/sign_up_poster.jpg') no-repeat center center fixed;
   background-size: cover;
   height: 100%;
+  font-family: 'Iransense', sans-serif;
 }
 
 p {
