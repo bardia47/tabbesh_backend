@@ -96,8 +96,8 @@
                     <div class="col-lg-8">
                         <select id="gender" name="gender" class="custom-select w-25 ml-n3 text-center" size="2"
                             required>
-                            <option value="True" {% ifequal user.gender
-								True %} selected="selected"{% endifequal %}>پسر</option>
+                            <option value="True" {% ifequal user.gender True %} selected="selected" {% endifequal %}>
+                                پسر</option>
                             <option value="False" {% ifequal user.gender False %} selected="selected" {% endifequal %}>
                                 دختر
                             </option>
