@@ -40,7 +40,7 @@
                 </div>
                 <div class="col-md-4">
                     <input type="text" id="first_name" name="first_name" required>
-                    <small id="firstname-check-alert" class="form-text text-nowrap mt-2 text-left ml-3"
+                    <small id="firstname-check-alert" class="form-text text-nowrap mt-2 text-md-left ml-3"
                         style="display: none;">
                         <i class="fas fa-exclamation-triangle"></i>
                         تنها حروف فارسی مجاز است.
@@ -55,14 +55,14 @@
                         <!-- Radio buttons -->
                         <div class="col-md-8">
                             <div class="row">
-                                <div class="col-md-6 custom-radio custom-control-inline">
-                                    <span> پسر </span>
+                                <div class="col-md-6 col-sm-6 custom-radio custom-control-inline">
+                                    <span style="color: #fff;"> پسر </span>
                                     <input type="radio" class="custom-control-input" id="gender_boy" name="gender"
                                         value="True" checked="checked">
                                     <label class="custom-control-label yellow " for="gender_boy"></label>
                                 </div>
-                                <div class="col-md-6 custom-radio custom-control-inline">
-                                    <span> دختر </span>
+                                <div class="col-md-6 col-sm-6 custom-radio custom-control-inline">
+                                    <span style="color: #fff;"> دختر </span>
                                     <input type="radio" class="custom-control-input" id="gender_girl" name="gender"
                                         value="False">
                                     <label class="custom-control-label yellow" for="gender_girl"></label>
@@ -79,7 +79,7 @@
                 </div>
                 <div class="col-md-4">
                     <input type="text" id="last_name" name="last_name" required>
-                    <small id="lastname-check-alert" class="form-text text-nowrap mt-2 text-left ml-3"
+                    <small id="lastname-check-alert" class="form-text text-nowrap mt-2 text-md-left ml-3"
                         style="display: none;">
                         <i class="fas fa-exclamation-triangle"></i>
                         تنها حروف فارسی مجاز است.
@@ -93,7 +93,7 @@
                 </div>
                 <div class="col-md-4">
                     <input type="text" id="username" name="username" required>
-                    <small id="username-check-alert" class="form-text text-nowrap mt-2 text-left ml-3"
+                    <small id="username-check-alert" class="form-text text-nowrap mt-2 text-md-left ml-3"
                         style="display: none;">
                         <i class="fas fa-exclamation-triangle"></i>
                         نام کاربری تنها باید شامل حروف و اعداد انگلیسی باشد.
@@ -118,17 +118,16 @@
             <!-- Phone number field -->
             <div class="row mb-4 mt-4">
                 <div class="col-md-2 field-label">
-                    <label for="defaultInline10">شماره تماس</label>
+                    <label for="phone-number">شماره تماس</label>
                 </div>
-                <div class="phone-number-field col-md-10">
+                <div class="phone-number-field col-md-4 ">
                     <!-- pattern check phone number is valid or not -->
-                    <input type="text" class="phone-number" pattern="[9][0-9]{9}" id="defaultInline10"
-                        name="phone_number" required>
-                    <input type="text" value="+98" class="area-code" readonly>
-                    <p>
+                    <input type="text" class="phone-number" pattern="[9][0-9]{9}" id="phone-number" name="phone_number"
+                        required>
+                    <small id="username-check-alert" class="form-text text-nowrap mt-2 text-md-left ml-3 text-white">
                         <i class="fas fa-info-circle"></i>
                         شماره تلفن را بدون صفر وارد کنید . مثال : 9121111111
-                    </p>
+                    </small>
                 </div>
             </div>
             <button id="submit" class="btn btn-lg btn-warning btn-block sign-up-button" type="submit">ثبت نام</button>

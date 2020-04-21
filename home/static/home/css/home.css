@@ -1,51 +1,90 @@
-/* Home page CSS */
-
-html, body {
-  height: 100%;
-  overflow: hidden;
-}
-
-body {
-  position: relative;
-  align-items: center;
-  padding-top: 40px;
-  padding-bottom: 40px;
-  background-color: #EFEFEF;
-  background-image: url('../images/poster.svg');
-  background-repeat: no-repeat;
-  background-size: 100% 100%;
-}
-
-/* Content CSS */
-
-.container {
-  position: absolute;
-  top: 30%;
-  padding: 20px;
-  right: 150px;
-}
-
-.container p {
-  font-family: 'Vazir_Bold';
-  font-size: 40px;
-  width: 100%;
-}
-
-.container a {
-  font-family: 'Vazir_Bold';
-  text-align: center;
-  font-size: 20px;
-  margin-right: 10px;
-}
-
 /* Footer CSS */
+body,
+html {
+  height: 100%;
+  background-color: #FAFAFA;
+}
+
+.poster {
+  background-image: url('../images/poster.svg');
+  background-position: center;
+  background-size: cover;
+  padding: 100px;
+}
+
+.btn-sign-up {
+  color: #fff;
+  background-color: #f3826f;
+  border-color: #f3826f;
+  font-family: 'Vazir_Bold';
+}
+
+.btn-sign-up:hover {
+  color: #000000;
+  background-color: transparent;
+  border-color: #f3826f
+}
+
+.btn-sign-up.focus,
+.btn-sign-up:focus {
+  box-shadow: 0 0 0 .2rem rgba(243, 130, 111, .5)
+}
+
+
+.btn-sign-up:not(:disabled):not(.disabled).active,
+.btn-sign-up:not(:disabled):not(.disabled):active,
+.show>.btn-sign-up.dropdown-toggle {
+  color: #fff;
+  background-color: #f3826f;
+  border-color: #f3826f
+}
+
+.btn-sign-up:not(:disabled):not(.disabled).active:focus,
+.btn-sign-up:not(:disabled):not(.disabled):active:focus,
+.show>.btn-sign-up.dropdown-toggle:focus {
+  box-shadow: 0 0 0 .2rem rgba(243, 130, 111, .5)
+}
+
+
+.btn-sign-in {
+  color: #fff;
+  background-color: #2d3561;
+  border-color: #2d3561;
+  font-family: 'Vazir_Bold';
+}
+
+.btn-sign-in:hover {
+  color: #000000;
+  background-color: transparent;
+  border-color: #2d3561
+}
+
+.btn-sign-in.focus,
+.btn-sign-in:focus {
+  box-shadow: 0 0 0 .2rem rgba(45, 53, 97, .5)
+}
+
+
+.btn-sign-in:not(:disabled):not(.disabled).active,
+.btn-sign-in:not(:disabled):not(.disabled):active,
+.show>.btn-sign-in.dropdown-toggle {
+  color: #fff;
+  background-color: #2d3561;
+  border-color: #2d3561
+}
+
+.btn-sign-in:not(:disabled):not(.disabled).active:focus,
+.btn-sign-in:not(:disabled):not(.disabled):active:focus,
+.show>.btn-sign-in.dropdown-toggle:focus {
+  box-shadow: 0 0 0 .2rem rgba(45, 53, 97, .5)
+}
 
 .footer {
   position: fixed;
   left: 0;
   bottom: 0;
   width: 100%;
-  background-color: #23374d;
+  background-color: #543864;
   color: white;
   text-align: center;
 }
@@ -55,4 +94,13 @@ body {
   margin-top: 5px;
   font-family: 'Vazir_bold';
   font-size: 15px;
+}
+
+@media (max-width: 768px) {
+
+  .poster {
+    background-image: url('../images/poster-mobile.svg');
+
+  }
+
 }
