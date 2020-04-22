@@ -24,7 +24,7 @@ SECRET_KEY = 'nan_@dp+&g%75ke-ac%yn(8@2su8r9fn0!-hlzdmz1ia0!-f$x'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-#ALLOWED_HOSTS = ['tabbesh.ir', '185.4.31.70']
+ALLOWED_HOSTS = ['*']
 
 LOGGING = {
     'version': 1,
