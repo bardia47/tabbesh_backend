@@ -16,13 +16,8 @@
 }
 
 /* Count down CSS */
-.wrap {
-  height: 100px;
-  text-align: center;
-  font-size: 20px;
-}
 
-.wrap h1 {
+h1 {
   font-size: 20px;
   font-family: 'Vazir_Medium', sans-serif;
   text-align: center;
@@ -35,8 +30,8 @@
 }
 
 .countdown .bloc-time {
-  float: left;
-  margin-right: 20px;
+  float: right;
+  margin-left: 20px;
   text-align: center;
 }
 
@@ -310,21 +305,16 @@ time.icon span {
     MEDIAQUERIES for when dashoard screen width is lower than 768 pixels
 ----------------------------------------------------- */
 
-@media (max-width: 900px) {
-  .countdown {
-    padding-left: 50px;
-  }
-
-  #second-block {
-    display: none;
-  }
-
+@media (max-width: 767px) {
   .calender {
-    margin-top: 20px;
+    justify-content: center !important;
+    margin-right: auto;
+    margin-left: 10px;
   }
 
-  .card-section {
-    min-height: auto;
+  h1 {
+    margin-right: -25px;
+    margin-bottom: 20px;
   }
 
 }
