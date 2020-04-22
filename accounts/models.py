@@ -83,8 +83,7 @@ class User(AbstractBaseUser, PermissionsMixin):
                 self.avatar = "defaults/teacher.png"
             else :
                 self.avatar = "defaults/student.png"
-    
-        print(self.avatar)        
+        
 
 
 # Roles Model
