@@ -16,19 +16,26 @@
 </head>
 
 <body>
-    <div class="container" style="width: 100%;">
-        <p> همین امروز آنــــــلاین شو </p>
-        <div class="buttons" style="margin-right: 100px;">
-            <a href="{% url 'signin' %}" class="btn btn-dark">ورود</a>
-            <a href="{% url 'signup' %}" class="btn btn-dark">ثبت نام</a>
+    <div class="d-flex container-fluied flex-column align-items-center justify-content-center" style="height: 100%;">
+        <div class="bg-dark  mb-2 poster" style="border-radius: 20px;">
+            <div class="mb-2 p-1">
+                <p class="text-center mb-1" style="font-family: 'Vazir_Bold'; font-size: 40px;">
+                    حس <span style="color: #ad1d45;">خـــــوب</span>
+                    <br>
+                    آنلاین <span style="color: #f9d276;">بـــــودن</span>
+                </p>
+            </div>
+            <div class="row justify-content-center">
+                <a href="{% url 'signin' %}" class="btn btn-sign-up mr-2">ورود</a>
+                <a href="{% url 'signup' %}" class="btn btn-sign-in">ثبت نام</a>
+            </div>
         </div>
     </div>
-    <!-- Footer -->
     <!-- Footer -->
     <footer class="footer">
         <p>
             © کلیه حقوق متعلق به تیم
-            <a href="mailto:tetha.nine@gmail.com">تتا</a>
+            <a href="mailto:tetha.nine@gmail.com" style="color: #ffb961;">تتا</a>
             می باشد.
         </p>
     </footer>

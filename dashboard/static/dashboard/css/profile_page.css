@@ -18,3 +18,22 @@
 .custom-file-input~.custom-file-label::after {
     content: "آپلود";
 }
+
+
+/* ---------------------------------------------------
+    MEDIAQUERIES for when screen width is lower than 900 pixels
+----------------------------------------------------- */
+
+@media (min-width: 900px) {
+    .username-field {
+        width: 25%;
+    }
+
+    #national-code {
+        width: 25%;
+    }
+
+    #phone_number {
+        width: 25%;
+    }
+}

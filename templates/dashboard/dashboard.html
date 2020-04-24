@@ -19,123 +19,119 @@
     <!-- Countdown & date section -->
     <div class="row">
         <!-- Countdown to first class -->
-        <div class="col-md-6">
-            <div class="wrap">
-                <!-- Title of countdown -->
-                <h1> زمان تا شروع کلاس بعدی </h1>
-                <div class="countdown">
-                    <!-- Days section of countdown -->
-                    <div class="bloc-time days ">
-                        <h6> روز </h6>
-                        <div class="figure days days-1">
-                            <span class="top">-</span>
-                            <span class="top-back">
-                                <span>-</span>
-                            </span>
-                            <span class="bottom">-</span>
-                            <span class="bottom-back">
-                                <span>-</span>
-                            </span>
-                        </div>
-                        <div class="figure days days-2">
-                            <span class="top">-</span>
-                            <span class="top-back">
-                                <span>-</span>
-                            </span>
-                            <span class="bottom">-</span>
-                            <span class="bottom-back">
-                                <span>-</span>
-                            </span>
-                        </div>
+        <div class="col-md-7">
+            <!-- Title of countdown -->
+            <h1> زمان تا شروع کلاس بعدی </h1>
+            <div class="row countdown justify-content-center">
+                <!-- Days section of countdown -->
+                <div class="bloc-time days mb-3 ">
+                    <h6> روز </h6>
+                    <div class="figure days days-1">
+                        <span class="top">-</span>
+                        <span class="top-back">
+                            <span>-</span>
+                        </span>
+                        <span class="bottom">-</span>
+                        <span class="bottom-back">
+                            <span>-</span>
+                        </span>
                     </div>
-                    <!-- Hours section of countdown -->
-                    <div class="bloc-time hours">
-                        <h6> ساعت </h6>
-                        <div class="figure hours hours-1">
-                            <span class="top">-</span>
-                            <span class="top-back">
-                                <span>2</span>
-                            </span>
-                            <span class="bottom">-</span>
-                            <span class="bottom-back">
-                                <span>-</span>
-                            </span>
-                        </div>
-
-                        <div class="figure hours hours-2">
-                            <span class="top">-</span>
-                            <span class="top-back">
-                                <span>-</span>
-                            </span>
-                            <span class="bottom">-</span>
-                            <span class="bottom-back">
-                                <span>-</span>
-                            </span>
-                        </div>
+                    <div class="figure days days-2">
+                        <span class="top">-</span>
+                        <span class="top-back">
+                            <span>-</span>
+                        </span>
+                        <span class="bottom">-</span>
+                        <span class="bottom-back">
+                            <span>-</span>
+                        </span>
                     </div>
-                    <!-- Minutes section of countdown -->
-                    <div id="minutes-block" class="bloc-time min">
-                        <h6> دقیقه </h6>
-                        <div class="figure min min-1">
-                            <span class="top">-</span>
-                            <span class="top-back">
-                                <span>-</span>
-                            </span>
-                            <span class="bottom">-</span>
-                            <span class="bottom-back">
-                                <span>-</span>
-                            </span>
-                        </div>
-
-                        <div class="figure min min-2">
-                            <span class="top">-</span>
-                            <span class="top-back">
-                                <span>-</span>
-                            </span>
-                            <span class="bottom">-</span>
-                            <span class="bottom-back">
-                                <span>-</span>
-                            </span>
-                        </div>
+                </div>
+                <!-- Hours section of countdown -->
+                <div class="bloc-time hours mb-3">
+                    <h6> ساعت </h6>
+                    <div class="figure hours hours-1">
+                        <span class="top">-</span>
+                        <span class="top-back">
+                            <span>2</span>
+                        </span>
+                        <span class="bottom">-</span>
+                        <span class="bottom-back">
+                            <span>-</span>
+                        </span>
                     </div>
-                    <!-- Seconds section of countdown -->
-                    <div id="second-block" class="bloc-time sec" data-init-value="{{ calendar_time.total_seconds }}">
-                        <h6> ثانیه </h6>
-                        <div class="figure sec sec-1">
-                            <span class="top">-</span>
-                            <span class="top-back">
-                                <span>-</span>
-                            </span>
-                            <span class="bottom">-</span>
-                            <span class="bottom-back">
-                                <span>-</span>
-                            </span>
-                        </div>
 
-                        <div class="figure sec sec-2">
-                            <span class="top">-</span>
-                            <span class="top-back">
-                                <span>-</span>
-                            </span>
-                            <span class="bottom">-</span>
-                            <span class="bottom-back">
-                                <span>-</span>
-                            </span>
-                        </div>
+                    <div class="figure hours hours-2 ">
+                        <span class="top">-</span>
+                        <span class="top-back">
+                            <span>-</span>
+                        </span>
+                        <span class="bottom">-</span>
+                        <span class="bottom-back">
+                            <span>-</span>
+                        </span>
+                    </div>
+                </div>
+                <!-- Minutes section of countdown -->
+                <div id="minutes-block" class="bloc-time min mb-3">
+                    <h6> دقیقه </h6>
+                    <div class="figure min min-1">
+                        <span class="top">-</span>
+                        <span class="top-back">
+                            <span>-</span>
+                        </span>
+                        <span class="bottom">-</span>
+                        <span class="bottom-back">
+                            <span>-</span>
+                        </span>
+                    </div>
+
+                    <div class="figure min min-2">
+                        <span class="top">-</span>
+                        <span class="top-back">
+                            <span>-</span>
+                        </span>
+                        <span class="bottom">-</span>
+                        <span class="bottom-back">
+                            <span>-</span>
+                        </span>
+                    </div>
+                </div>
+                <!-- Seconds section of countdown -->
+                <div id="second-block" class="bloc-time sec mb-3" data-init-value="{{ calendar_time.total_seconds }}">
+                    <h6> ثانیه </h6>
+                    <div class="figure sec sec-1">
+                        <span class="top">-</span>
+                        <span class="top-back">
+                            <span>-</span>
+                        </span>
+                        <span class="bottom">-</span>
+                        <span class="bottom-back">
+                            <span>-</span>
+                        </span>
+                    </div>
+
+                    <div class="figure sec sec-2">
+                        <span class="top">-</span>
+                        <span class="top-back">
+                            <span>-</span>
+                        </span>
+                        <span class="bottom">-</span>
+                        <span class="bottom-back">
+                            <span>-</span>
+                        </span>
                     </div>
                 </div>
             </div>
         </div>
         <!-- Responsive date with jformat -->
-        <div class="col-md-6">
-            <div class="row">
-                <div class="col-md-6 calender">
-                    <time class="icon">
-                        <em>{{ now |jformat:"%A" }}</em>
-                        <strong>{{ now |jformat:"%B" }}</strong>
-                        <span> {{ now |jformat:"%d" }} </span>
-                    </time>
-                </div>
+        <div class="col-md-5">
+            <div class="row calender justify-content-start mt-3">
+                <time class="icon">
+                    <em>{{ now |jformat:"%A" }}</em>
+                    <strong>{{ now |jformat:"%B" }}</strong>
+                    <span> {{ now |jformat:"%d" }} </span>
+                </time>
             </div>
         </div>
     </div>

@@ -27,7 +27,6 @@ def signup(request):
             randPass = random.randint(10000000, 99999999)
             text = Sms.signupText.value.replace('{}', str(randPass))
             response = sms.send(to, _from, text)
-            print(response)
             if response['Value'] == Sms.wrongNumber.value:
                 form.error = 'شماره وارد شده نامعتبر است'
             elif (len(response['Value']) == 1):

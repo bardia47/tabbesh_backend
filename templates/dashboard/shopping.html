@@ -61,7 +61,7 @@
         <form action="{% url 'shopping' %}">
             <div class="row form-search">
                 <!-- Select Grade -->
-                <div class="col-md-3">
+                <div class="col-md-3 mb-2">
                     <select class="custom-select" name="grade">
                         <option selected disabled>پایه</option>
                         {% for grade in grades %}
@@ -70,7 +70,7 @@
                     </select>
                 </div>
                 <!-- Select Lessons -->
-                <div class="col-md-3 ">
+                <div class="col-md-3 mb-2">
                     <select class="custom-select" name="lesson">
                         <option selected disabled>دروس</option>
                         {% for lesson in lessons %}
@@ -79,7 +79,7 @@
                     </select>
                 </div>
                 <!-- Select teachers -->
-                <div class="col-md-3 ">
+                <div class="col-md-3 mb-2">
                     <select class="custom-select" name="teacher">
                         <option selected disabled>استاد</option>
                         {% for teacher in teachers %}

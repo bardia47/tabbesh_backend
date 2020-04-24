@@ -189,7 +189,6 @@ custom-control-inline {
 
 /* Phone number field CSS */
 .phone-number-field {
-  display: inline-flex;
   text-align: center;
 }
 
@@ -240,4 +239,27 @@ custom-control-inline {
     margin-right: 40%;
   }
 
+  label {
+    text-align: center;
+  }
+
+  small {
+    color: #f3826f !important;
+  }
+
+  .phone-number-field {
+    justify-content: center;
+  }
+
+  html,
+  body {
+    overflow-x: hidden;
+  }
+
+  .form-signup {
+    background-color: transparent;
+    border-radius: 0px;
+    margin-right: 0px;
+    margin-left: 0;
+  }
 }
