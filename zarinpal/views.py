@@ -9,10 +9,13 @@ amount = 1000  # Toman / Required
 description = "توضیحات مربوط به تراکنش را در این قسمت وارد کنید"  # Required
 email = 'email@example.com'  # Optional
 mobile = '09123456789'  # Optional
-CallbackURL = 'http://localhost:8000/zarinpal/verify/'  # Important: need to edit for really server.
+CallbackURL = 'http://localhost:8000/payment/verify/'  # Important: need to edit for really server.
 
 
 def send_request(request):
+    # amount
+    # courses id
+    # user id
     result = client.service.PaymentRequest(MERCHANT, amount, description, email, mobile, CallbackURL)
     if result.Status == 100:
         return redirect('https://www.zarinpal.com/pg/StartPay/' + str(result.Authority))

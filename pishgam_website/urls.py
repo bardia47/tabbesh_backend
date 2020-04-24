@@ -28,7 +28,7 @@ urlpatterns = [
     path('signin/', signin, name='signin'),
     path('signout/', signout, name='signout'),
     path('dashboard/', include('dashboard.urls')),
-    path('zarinpal/', include('zarinpal.urls')),
+    path('payment/', include('zarinpal.urls')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 handler404 = 'home.views.page_not_found'
