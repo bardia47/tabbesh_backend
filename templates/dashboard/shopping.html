@@ -40,7 +40,14 @@
         <div class="card cart-footer">
             <!-- Cart purchase button -->
             <div>
-                <button href="#" class="btn">پرداخت</button>
+{#                <button href="#" class="btn">پرداخت</button>#}
+                <form action="{% url 'payment_request' %}" method="post">
+                    {% csrf_token %}
+                    <!-- Total cart items id and price for pass to back-end -->
+                    <input id="total_id" type="hidden" name="total_id" value="">
+                    <input id="total_pr" type="hidden" name="total_pr" value="">
+                    <input type="submit" class="btn btn-success" value="پرداخت">
+                </form>
             </div>
             <div class="cart-total-price">
                 مبلغ قابل پرداخت : <b class="total-price">0</b> تومان
@@ -166,15 +173,15 @@
                             اضافه به سبد خرید
                         </button>
                     </div>
-                    <!-- hidden lesson code for handel total buy code in shopping.js -->
-                    <input type="hidden" class="course-code" value="{{ course.code }}">
+                    <!-- hidden lesson id for handel total buy id in shopping.js -->
+                    <input type="hidden" class="course-id" value="{{ course.id }}">
                 </div>
             </div>
             {% endfor %}
         </div>
     </div>
-    <!-- Total cart items code for pass to back-end -->
-    <input type="hidden" name="total_code">
+
+
 
     <!-- Modal Eror for duplicate course in cart -->
     <div class="modal fade" id="errorModalForCart" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"

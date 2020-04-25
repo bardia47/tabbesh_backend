@@ -24,6 +24,12 @@
     </div>
     <div class="col-md-12">
         <p class="mt-2 text-center" style="font-family: 'Vazir_Light'; font-size: 20px;">
+            {% if RefID %}
+                شناسه ارجاع :
+                {{ RefID }}
+            {% endif %}
+        </p>
+        <p class="mt-2 text-center" style="font-family: 'Vazir_Light'; font-size: 20px;">
             برای مشاهده دروس خریداری شده به بخش دروس من مراجعه کنید
         </p>
         <a class="btn btn-dark text-white m-1 mr-4" href="{% url 'lessons' %}">ورود به دروس من</a>

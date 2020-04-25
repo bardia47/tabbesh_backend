@@ -39,13 +39,13 @@ function addToCartClicked(event) {
   let price = shopItem.getElementsByClassName('price')[0].textContent;
   let teacher = shopItem.getElementsByClassName('teacher-name')[0].textContent;
   let imageSrc = shopItem.getElementsByClassName('card-img-top')[0].src;
-  let code = shopItem.getElementsByClassName('course-code')[0].value;
-  addItemToCart(title, price, teacher, imageSrc, code)
+  let id = shopItem.getElementsByClassName('course-id')[0].value;
+  addItemToCart(title, price, teacher, imageSrc, id)
   updateCartTotal()
 }
 
 // Create cart item
-function addItemToCart(title, price, teacher, imageSrc, code) {
+function addItemToCart(title, price, teacher, imageSrc, id) {
   let cartRow = document.createElement('div')
   cartRow.classList.add('row')
   cartRow.classList.add('card-row')
@@ -89,7 +89,7 @@ function addItemToCart(title, price, teacher, imageSrc, code) {
       </div>
     </div>
   </div>
-  <input type="hidden" class="cart-course-code" value="${code}">
+  <input type="hidden" class="cart-course-id" value="${id}">
   </div>`
   cartRow.innerHTML = cartRowContents
   cartItems.append(cartRow)
@@ -101,17 +101,18 @@ function addItemToCart(title, price, teacher, imageSrc, code) {
 function updateCartTotal() {
   let cartRows = document.getElementsByClassName('cart-item')
   let total = 0
-  let total_code = ""
+  let total_id = ""
   for (let i = 0; i < cartRows.length; i++) {
     let cartRow = cartRows[i]
     let priceElement = cartRow.getElementsByClassName('cart-price-text')[0]
     let price = parseFloat(priceElement.innerText)
-    let code = cartRow.getElementsByClassName('cart-course-code')[0].value
+    let id = cartRow.getElementsByClassName('cart-course-id')[0].value
     total = total + price
-    total_code = total_code + code + ","
+    total_id = total_id + id + " "
   }
-  total = Math.round(total * 100) / 100
+   total = Math.round(total * 100) / 100
   document.getElementsByClassName('total-price')[0].innerText = total.toLocaleString()
-  // send total code to input
-  document.getElementsByName('total_code').value = total_code
+  // send total id to input
+  document.getElementById('total_id').value = total_id
+  document.getElementById('total_pr').value = total
 }
