@@ -63,3 +63,8 @@ pip install aiohttp
 pip install asyncio
 pip install Pillow
 راه اندازی سامانهپیامکی
+
+
+pip install zeep
+pip install soap
+راه اندازی درگاه بانکی زرین پال
