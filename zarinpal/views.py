@@ -7,12 +7,9 @@ from accounts.models import Course,Pay_History
 import datetime
 MERCHANT = '0c5db223-a20f-4789-8c88-56d78e29ff63'
 client = Client('https://www.zarinpal.com/pg/services/WebGate/wsdl')
-description = "توضیحات مربوطه"  # Required
 email = ''  # Optional
 mobile = ''  # Optional
 CallbackURL = '/payment/verify/'
-amount = 1  # Toman / Required
-user = None
 
 
 def is_valid(courses_id_list, amount):
@@ -67,9 +64,10 @@ def verify(request):
             MERCHANT, request.GET['Authority'], new_pay.amount)
         if result.Status == 100:
             courses_id_list=new_pay.courses.split()
+            user = request.user
             for course_id in courses_id_list:
-                request.user.courses.add(course_id)
-            request.user.save()
+                user.courses.add(course_id)
+            user.save()
             new_pay.is_successful=True
             new_pay.payment_code=str(result.RefID)
             new_pay.save()
