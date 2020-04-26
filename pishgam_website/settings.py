@@ -150,11 +150,12 @@ JALALI_DATE_DEFAULTS = {
 # Internationalization
 # https://docs.djangoproject.com/en/2.2/topics/i18n/
 
-LANGUAGE_CODE = 'fa-ir'
+LANGUAGE_CODE = 'fa'
+
+import locale
+locale.setlocale(locale.LC_ALL, "fa_IR.UTF-8")
 
 TIME_ZONE = 'Asia/Tehran'
-
-USE_I18N = True
 
 USE_L10N = True
 

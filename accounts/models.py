@@ -232,3 +232,24 @@ class Document(models.Model):
     def upload_date_decorated(self):
         self.short_description='تاریخ بارگذاری'
         return jdatetime.datetime.fromgregorian(datetime=self.upload_date).strftime("%a, %d %b %Y %H:%M:%S")
+    
+
+class Pay_History(models.Model):
+    purchaser = models.ForeignKey(User, on_delete=models.DO_NOTHING, verbose_name="خریدار")
+    amount = models.FloatField("هزینه", default=float(0))    
+    is_successful = models.BooleanField('موفق', default=False)   
+    submit_date = models.DateTimeField("تاریخ ثبت",null=True)
+    courses = models.TextField()
+    payment_code= models.CharField("شناسه پرداخت", max_length=20)
+
+    class Meta:
+        ordering = ['-id']
+        verbose_name_plural = "تاریخ خرید"
+        verbose_name = "تاریخ خرید"
+
+
+
+    def submit_date_decorated(self):
+        self.short_description='تاریخ بارگذاری'
+        return jdatetime.datetime.fromgregorian(datetime=self.submit_date).strftime("%a, %d %b %Y %H:%M:%S")
+   
