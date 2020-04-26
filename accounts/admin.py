@@ -13,7 +13,7 @@ import datetime
 
 
 class PaymentInline(admin.StackedInline):
-    model = User.payments.through
+    model = User.courses.through
     verbose_name_plural = "پرداختی ها"
     verbose_name = "پرداختی"
     extra=0
@@ -75,7 +75,7 @@ class UserChangeForm(UserCreationForm):
         fields = (
             'username', 'role', 'email', 'city', 'grades', 'avatar', 'first_name', 'last_name', 'national_code',
             'address',
-            'gender', 'phone_number', 'payments')
+            'gender', 'phone_number', 'courses')
         labels = {
             'date_joined_decorated': "تاریخ عضویت",
         }

@@ -38,7 +38,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     address = models.CharField("آدرس", max_length=255, null=True, blank=True)
     phone_number = models.CharField("تلفن همراه", max_length=12, unique=True)
     grades = models.ManyToManyField('Grade', blank=True, verbose_name="پایه")
-    payments = models.ManyToManyField('Course', blank=True)
+    courses = models.ManyToManyField('Course', blank=True)
     is_superuser = models.BooleanField(default=False)
     is_staff = models.BooleanField(default=True)
 

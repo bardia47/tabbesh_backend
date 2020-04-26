@@ -15,7 +15,7 @@ from django.contrib.auth.hashers import make_password
 def dashboard(request):
     now = datetime.datetime.now()
     user = get_object_or_404(User, pk=request.user.id)
-    courses = user.payments.filter(end_date__gt=now)
+    courses = user.courses.filter(end_date__gt=now)
     classes = Course_Calendar.objects.filter(course__in=courses)
     no_class_today_text = None
 
@@ -97,7 +97,7 @@ def change_password(request):
 def lessons(request):
     now = datetime.datetime.now()
     user = get_object_or_404(User, pk=request.user.id)
-    courses = user.payments.filter(end_date__gt=now)
+    courses = user.courses.filter(end_date__gt=now)
     classes = Course_Calendar.objects.filter(course__in=courses)
     # update all classes time
     for klass in classes:
@@ -126,9 +126,9 @@ def shopping(request):
     else:
         if (request.user.grades.count() > 0):
             query &= Q(grade__id=request.user.grades.first().id)
-    if request.user.payments.all():
+    if request.user.courses.all():
         queryNot = reduce(or_, (Q(id=course.id)
-                                for course in request.user.payments.all()))
+                                for course in request.user.courses.all()))
         query = query & ~queryNot
 
     courses = Course.objects.filter(query)
@@ -173,7 +173,7 @@ def getAllLessons(lesson_id, now):
 def filemanager(request, code):
     course = Course.objects.get(code=code)
     try:
-        request.user.payments.get(id=course.id)
+        request.user.courses.get(id=course.id)
     except:
         return shopping(request)
     documents = course.document_set.all()

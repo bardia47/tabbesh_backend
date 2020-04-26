@@ -43,7 +43,7 @@ def send_request(request):
         # handel free courses
         if amount == 0:
             for course_id in courses_id_list:
-                user.payments.add(course_id)
+                user.courses.add(course_id)
             user.save()
             return redirect('success_shopping')
 
@@ -67,7 +67,7 @@ def verify(request):
         if result.Status == 100:
             # return HttpResponse('Transaction success.\nRefID: ' + str(result.RefID))
             for course_id in courses_id_list:
-                user.payments.add(course_id)
+                user.courses.add(course_id)
             user.save()
             return render(request, 'dashboard/success_shopping.html', {'RefID': str(result.RefID)})
         elif result.Status == 101:
