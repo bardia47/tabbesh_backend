@@ -9,18 +9,19 @@ client = Client('https://www.zarinpal.com/pg/services/WebGate/wsdl')
 description = "توضیحات مربوطه"  # Required
 email = ''   # Optional
 mobile = ''   # Optional
-CallbackURL = 'http://tabbesh.ir/payment/verify/'  # 'http://localhost:8000/payment/verify/'  # Important: need to edit for really server.
-amount = 1000  # Toman / Required
+# 'http://localhost:8000/payment/verify/'  # Important: need to edit for really server.
+CallbackURL = 'http://localhost:8000/payment/verify/'
+amount = 1  # Toman / Required
 user = None
 courses_id_list = []
 
 
-def is_valid(c, a):
-    courses = Course.objects.filter(id__in=c)
+def is_valid(courses_id_list, amount):
+    courses = Course.objects.filter(id__in=courses_id_list)
     total_price = 0
     for course in courses:
         total_price += course.amount
-    return True if total_price == a else False
+    return True if total_price == amount else False
 
 
 def send_request(request):
@@ -30,10 +31,14 @@ def send_request(request):
     global description
     user = request.user
     courses_id_list = request.POST.get("total_id").split()
-
-    if courses_id_list and is_valid(c=courses_id_list, a=amount):
+    try:
         amount = int(request.POST.get("total_pr"))
-        description = "List of courses id ==> " + str(courses_id_list) + " Total price ==> " + str(amount)
+    except:
+        return redirect('unsuccess_shopping')
+
+    if courses_id_list and is_valid(courses_id_list, amount):
+        description = "List of courses id ==> " + \
+            str(courses_id_list) + " Total price ==> " + str(amount)
 
         # handel free courses
         if amount == 0:
@@ -44,7 +49,8 @@ def send_request(request):
 
         # request to zarinpal
         else:
-            result = client.service.PaymentRequest(MERCHANT, amount, description, email, mobile, CallbackURL)
+            result = client.service.PaymentRequest(
+                MERCHANT, amount, description, email, mobile, CallbackURL)
             if result.Status == 100:
                 return redirect('https://www.zarinpal.com/pg/StartPay/' + str(result.Authority))
             else:
@@ -56,7 +62,8 @@ def send_request(request):
 
 def verify(request):
     if request.GET.get('Status') == 'OK':
-        result = client.service.PaymentVerification(MERCHANT, request.GET['Authority'], amount)
+        result = client.service.PaymentVerification(
+            MERCHANT, request.GET['Authority'], amount)
         if result.Status == 100:
             # return HttpResponse('Transaction success.\nRefID: ' + str(result.RefID))
             for course_id in courses_id_list:

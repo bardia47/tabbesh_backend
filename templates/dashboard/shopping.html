@@ -40,8 +40,7 @@
         <div class="card cart-footer">
             <!-- Cart purchase button -->
             <div>
-{#                <button href="#" class="btn">پرداخت</button>#}
-                <form action="{% url 'payment_request' %}" method="post">
+                <form id="shopping-cart-form" action="{% url 'payment_request' %}" method="post">
                     {% csrf_token %}
                     <!-- Total cart items id and price for pass to back-end -->
                     <input id="total_id" type="hidden" name="total_id" value="">
@@ -137,7 +136,7 @@
                             <p>
                                 <img src="{% static 'home/images/icons/start-date.svg'%}" alt="">
                                 شروع دوره:
-                                <span>{{ course.start_date|jformat:" %A %d %B " }}</span>
+                                <span>{{ course.start_date|jformat:" %A %-d %B " }}</span>
                             </p>
                         </div>
                         <!-- End of the course  -->
@@ -145,7 +144,7 @@
                             <p>
                                 <img src="{% static 'home/images/icons/end-date.svg'%}" alt="">
                                 اتمام دوره:
-                                <span>{{ course.end_date|jformat:" %A %d %B " }}</span>
+                                <span>{{ course.end_date|jformat:" %A %-d %B " }}</span>
                             </p>
                         </div>
                         <!-- Description of the course  -->
@@ -161,8 +160,14 @@
                             <p>
                                 <img src="{% static 'home/images/icons/price.svg'%}" alt="">
                                 قیمت:
-                                <span class="price">{{course.amount|floatformat:"-3"}}</span>
-                                <span class="currency">تومان</span>
+                                <span class="price">
+                                    {% if course.amount ==  0 %}
+                                    رایگان!
+                                    {% else %}
+                                    {{course.amount|floatformat:"-3"}}
+                                    <span class="currency">تومان</span>
+                                    {% endif %}
+                                </span>
                             </p>
                         </div>
                     </div>

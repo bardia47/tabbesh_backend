@@ -21,8 +21,8 @@
         <!-- Countdown to first class -->
         <div class="col-md-7">
             <!-- Title of countdown -->
-            <h1> زمان تا شروع کلاس بعدی </h1>
-            <div class="row countdown justify-content-center">
+            <h1 class="text-center"> زمان تا شروع کلاس بعدی </h1>
+            <div class="row flex-row-reverse countdown justify-content-center">
                 <!-- Days section of countdown -->
                 <div class="bloc-time days mb-3 ">
                     <h6> روز </h6>
@@ -130,7 +130,7 @@
                 <time class="icon">
                     <em>{{ now |jformat:"%A" }}</em>
                     <strong>{{ now |jformat:"%B" }}</strong>
-                    <span> {{ now |jformat:"%d" }} </span>
+                    <span> {{ now |jformat:"%-d" }} </span>
                 </time>
             </div>
         </div>
@@ -221,4 +221,6 @@
 <!-- JS files -->
 {% block JSfile %}
 <script src="{% static 'dashboard/js/dashboard-timer.js' %}"></script>
+<!-- JS file for timer -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/latest/TweenMax.min.js"></script>
 {% endblock %}

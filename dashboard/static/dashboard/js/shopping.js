@@ -21,6 +21,17 @@ function ready() {
     button.addEventListener('click', addToCartClicked)
   }
 
+  $("#shopping-cart-form").submit(function (event) {
+    let cartRows = document.getElementsByClassName('cart-item')
+    if (cartRows.length === 0) {
+      $("#errorModalForCart").modal();
+      $("#modal-body").text("سبد خرید شما خالی می باشد، یک درس را انتخاب کنید.")
+      event.preventDefault();
+    } else {
+      $("#shopping-cart-form").submit()
+    }
+  });
+
 }
 
 // Remove Cart Item 
@@ -105,12 +116,16 @@ function updateCartTotal() {
   for (let i = 0; i < cartRows.length; i++) {
     let cartRow = cartRows[i]
     let priceElement = cartRow.getElementsByClassName('cart-price-text')[0]
-    let price = parseFloat(priceElement.innerText)
+    if (priceElement.innerText == "رایگان!") {
+      price = 0;
+    } else {
+      price = parseFloat(priceElement.innerText)
+    }
     let id = cartRow.getElementsByClassName('cart-course-id')[0].value
     total = total + price
     total_id = total_id + id + " "
   }
-   total = Math.round(total * 100) / 100
+  total = Math.round(total * 100) / 100
   document.getElementsByClassName('total-price')[0].innerText = total.toLocaleString()
   // send total id to input
   document.getElementById('total_id').value = total_id

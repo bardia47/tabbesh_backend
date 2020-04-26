@@ -91,13 +91,13 @@
 
             <!-- Navigation bar -->
             <nav id="nav" class="navbar navbar-inverse sticky-top">
-                <div class="container-fluid ">
+                <div id="nav-items" class="container-fluid ">
                     <!-- Toggle button -->
                     <button type="button" id="sidebarCollapse" class="btn btn-warning">
                         <img class="navbar-full-screen" src="{% static 'home/images/icons/full-screen.svg'%}">
                     </button>
                     <!-- Nav menus -->
-                    <div style="display: inline-block;">
+                    <div id="nav-menu" style="display: inline-block;">
                         <ul class="nav navbar-nav navbar-right ">
                             <li class="text-nowrap"><a href="{% url 'edit_profile' %}"><span><img
                                             src="{% static 'home/images/icons/profile.svg'%}" alt="آیکون"></span> صفحه ی
@@ -140,13 +140,12 @@
     <!-- jQuery CDN for toggler button -->
     <script src="https://code.jquery.com/jquery-3.4.1.js"
         integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU=" crossorigin="anonymous"></script>
-    <!-- JS file for timer -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/latest/TweenMax.min.js"></script>
     <!-- JS file for base.html  -->
     <script src="{% static 'dashboard/js/base.js' %}"></script>
     <!-- Bootstrap JS file -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js"
-        integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous">
+    </script>
     </script>
     <script src="https://cdn.rtlcss.com/bootstrap/v4.2.1/js/bootstrap.min.js"
         integrity="sha384-a9xOd0rz8w0J8zqj1qJic7GPFfyMfoiuDjC9rqXlVOcGO/dmRqzMn34gZYDTel8k" crossorigin="anonymous">

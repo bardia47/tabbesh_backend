@@ -34,6 +34,13 @@ a:focus {
     margin-right: -250px;
 }
 
+#sidebar.mobile {
+    z-index: 1111111 !important;
+    position: fixed !important;
+    height: 100% !important;
+    transition: all 0.8s !important;
+}
+
 .brand-title h1 {
     margin-right: 15px;
     font-size: 39px;
@@ -159,6 +166,10 @@ a:focus {
     margin-right: 5px;
 }
 
+.navbar-mobile-view {
+    display: none !important;
+}
+
 /* Wrapper content of page CSS */
 
 #content {
@@ -200,10 +211,10 @@ a:focus {
 }
 
 /* ---------------------------------------------------
-    MEDIAQUERIES for when screen width is lower than 900 pixels
+    MEDIAQUERIES for when screen width is lower than 768 pixels
 ----------------------------------------------------- */
 
-@media (max-width: 900px) {
+@media (max-width: 768px) {
     #sidebar {
         margin-right: -250px;
         text-align: center;

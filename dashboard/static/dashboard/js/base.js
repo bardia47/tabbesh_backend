@@ -11,6 +11,11 @@ function ready() {
         $("#sidebarCollapse").click(function () {
             $("#sidebar").toggleClass('active');
             $("#content").toggleClass('active');
+            if ($(window).width() < 768) {
+                $("#nav-menu").toggleClass('navbar-mobile-view');
+                $("#sidebar").toggleClass('mobile');
+                $("#nav-items").toggleClass('flex-row-reverse');
+            }
         });
     });
 
@@ -23,10 +28,11 @@ function ready() {
 
     // remove sticky nav bar in mobile
     $(window).resize(function () {
-        if ($(window).width() < 900) {
+        if ($(window).width() < 768) {
             $('#nav').removeClass('sticky-top');
         } else {
             $('#nav').addClass('sticky-top');
         }
     });
+
 }
