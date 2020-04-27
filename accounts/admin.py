@@ -31,9 +31,11 @@ class CourseInline(admin.StackedInline):
 
 class PayHistoryInline(admin.TabularInline):
     model = Pay_History
-    fields = ('amount', 'is_successful', 'submit_date','payment_code')
+    readonly_fields = ('submit_date_decorated',)
+    fields = ('amount', 'is_successful', 'submit_date_decorated','payment_code')
     verbose_name_plural = "پرداختی ها"
     verbose_name = "پرداختی"
+
     def has_change_permission(self, request, obj=None):
         return False
 
@@ -42,6 +44,8 @@ class PayHistoryInline(admin.TabularInline):
 
     def has_delete_permission(self, request, obj=None):
         return False
+    
+
     
 class UserCreationForm(forms.ModelForm):
     GENDERS = [(True, "پسر"), (False, "دختر")]
@@ -250,8 +254,26 @@ class DocumentAdmin(admin.ModelAdmin):
             obj.sender = request.user
             obj.upload_date = datetime.datetime.now()
             super().save_model(request, obj, form, change)
+                    
+class PayHistoryAdmin(admin.ModelAdmin):
+    list_display = ['purchaser','amount', 'is_successful', 'get_submit_date_decorated','payment_code',]  
+    exclude=['courses',]
+    def get_submit_date_decorated(self, obj):
+        if obj.submit_date:
+            return datetime2jalali(obj.submit_date).strftime('%y/%m/%d , %H:%M:%S')
+        else:
+             "-"
         
+    get_submit_date_decorated.short_description='تاریخ ثبت'
+    
+    def has_change_permission(self, request, obj=None):
+        return False
 
+    def has_add_permission(self, request, obj=None):
+        return False
+
+    def has_delete_permission(self, request, obj=None):
+        return False
    
 
     
@@ -263,4 +285,5 @@ admin.site.register(Course, CourseAdmin)
 admin.site.register(Course_Calendar, CourseCalendarAdmin)
 admin.site.unregister(Group)
 admin.site.register(Document,DocumentAdmin)
+admin.site.register(Pay_History,PayHistoryAdmin)
 

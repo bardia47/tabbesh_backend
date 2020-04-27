@@ -230,9 +230,9 @@ class Document(models.Model):
         return self.title
 
     def upload_date_decorated(self):
-        self.short_description='تاریخ بارگذاری'
         return jdatetime.datetime.fromgregorian(datetime=self.upload_date).strftime("%a, %d %b %Y %H:%M:%S")
     
+    upload_date_decorated.short_description='تاریخ بارگذاری'
 
 class Pay_History(models.Model):
     purchaser = models.ForeignKey(User, on_delete=models.DO_NOTHING, verbose_name="خریدار")
@@ -244,12 +244,14 @@ class Pay_History(models.Model):
 
     class Meta:
         ordering = ['-id']
-        verbose_name_plural = "تاریخ خرید"
-        verbose_name = "تاریخ خرید"
+        verbose_name_plural = "سوابق خرید"
+        verbose_name = "سوابق خرید"
 
 
 
     def submit_date_decorated(self):
-        self.short_description='تاریخ بارگذاری'
         return jdatetime.datetime.fromgregorian(datetime=self.submit_date).strftime("%a, %d %b %Y %H:%M:%S")
+    
+    submit_date_decorated.short_description='تاریخ ثبت'
+
    
