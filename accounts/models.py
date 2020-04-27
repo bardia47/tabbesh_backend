@@ -38,7 +38,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     address = models.CharField("آدرس", max_length=255, null=True, blank=True)
     phone_number = models.CharField("تلفن همراه", max_length=12, unique=True)
     grades = models.ManyToManyField('Grade', blank=True, verbose_name="پایه")
-    payments = models.ManyToManyField('Course', blank=True)
+    courses = models.ManyToManyField('Course', blank=True)
     is_superuser = models.BooleanField(default=False)
     is_staff = models.BooleanField(default=True)
 
@@ -230,5 +230,28 @@ class Document(models.Model):
         return self.title
 
     def upload_date_decorated(self):
-        self.short_description='تاریخ بارگذاری'
         return jdatetime.datetime.fromgregorian(datetime=self.upload_date).strftime("%a, %d %b %Y %H:%M:%S")
+    
+    upload_date_decorated.short_description='تاریخ بارگذاری'
+
+class Pay_History(models.Model):
+    purchaser = models.ForeignKey(User, on_delete=models.DO_NOTHING, verbose_name="خریدار")
+    amount = models.FloatField("هزینه", default=float(0))    
+    is_successful = models.BooleanField('موفق', default=False)   
+    submit_date = models.DateTimeField("تاریخ ثبت",null=True)
+    courses = models.TextField()
+    payment_code= models.CharField("شناسه پرداخت", max_length=20)
+
+    class Meta:
+        ordering = ['-id']
+        verbose_name_plural = "سوابق خرید"
+        verbose_name = "سوابق خرید"
+
+
+
+    def submit_date_decorated(self):
+        return jdatetime.datetime.fromgregorian(datetime=self.submit_date).strftime("%a, %d %b %Y %H:%M:%S")
+    
+    submit_date_decorated.short_description='تاریخ ثبت'
+
+   

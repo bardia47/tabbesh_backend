@@ -12,13 +12,13 @@ from django.contrib.admin.options import InlineModelAdmin
 import datetime
 
 
-class PaymentInline(admin.StackedInline):
-    model = User.payments.through
-    verbose_name_plural = "پرداختی ها"
-    verbose_name = "پرداختی"
+class CourseInline(admin.StackedInline):
+    model = User.courses.through
+    verbose_name_plural = "دوره ها"
+    verbose_name = "دوره ها"
     extra=0
     def get_formset(self, request, obj=None, **kwargs):
-        formset = super(PaymentInline, self).get_formset(request, obj, **kwargs)
+        formset = super(CourseInline, self).get_formset(request, obj, **kwargs)
         form = formset.form
         form.base_fields['course'].label="دوره"
         widget = form.base_fields['course'].widget
@@ -28,6 +28,24 @@ class PaymentInline(admin.StackedInline):
         widget.can_change_related = False
         widget.label='دوره'
         return formset
+
+class PayHistoryInline(admin.TabularInline):
+    model = Pay_History
+    readonly_fields = ('submit_date_decorated',)
+    fields = ('amount', 'is_successful', 'submit_date_decorated','payment_code')
+    verbose_name_plural = "پرداختی ها"
+    verbose_name = "پرداختی"
+
+    def has_change_permission(self, request, obj=None):
+        return False
+
+    def has_add_permission(self, request, obj=None):
+        return False
+
+    def has_delete_permission(self, request, obj=None):
+        return False
+    
+
     
 class UserCreationForm(forms.ModelForm):
     GENDERS = [(True, "پسر"), (False, "دختر")]
@@ -75,7 +93,7 @@ class UserChangeForm(UserCreationForm):
         fields = (
             'username', 'role', 'email', 'city', 'grades', 'avatar', 'first_name', 'last_name', 'national_code',
             'address',
-            'gender', 'phone_number', 'payments')
+            'gender', 'phone_number', 'courses')
         labels = {
             'date_joined_decorated': "تاریخ عضویت",
         }
@@ -127,7 +145,7 @@ class UserAdmin(BaseUserAdmin):
     search_fields = ('username',)
     ordering = ('username',)
     inlines = [
-        PaymentInline,
+        CourseInline,PayHistoryInline
     ]
 class CourseCalendarFormSetInline(forms.models.BaseInlineFormSet):
     def clean(self):
@@ -236,8 +254,26 @@ class DocumentAdmin(admin.ModelAdmin):
             obj.sender = request.user
             obj.upload_date = datetime.datetime.now()
             super().save_model(request, obj, form, change)
+                    
+class PayHistoryAdmin(admin.ModelAdmin):
+    list_display = ['purchaser','amount', 'is_successful', 'get_submit_date_decorated','payment_code',]  
+    exclude=['courses',]
+    def get_submit_date_decorated(self, obj):
+        if obj.submit_date:
+            return datetime2jalali(obj.submit_date).strftime('%y/%m/%d , %H:%M:%S')
+        else:
+             "-"
         
+    get_submit_date_decorated.short_description='تاریخ ثبت'
+    
+    def has_change_permission(self, request, obj=None):
+        return False
 
+    def has_add_permission(self, request, obj=None):
+        return False
+
+    def has_delete_permission(self, request, obj=None):
+        return False
    
 
     
@@ -249,4 +285,5 @@ admin.site.register(Course, CourseAdmin)
 admin.site.register(Course_Calendar, CourseCalendarAdmin)
 admin.site.unregister(Group)
 admin.site.register(Document,DocumentAdmin)
+admin.site.register(Pay_History,PayHistoryAdmin)
 

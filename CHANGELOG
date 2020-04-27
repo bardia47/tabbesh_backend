@@ -32,7 +32,7 @@ modify "models.py, dashboard.html, base.html, view.py"
 1399/01/5 - amirali
 modify : "models.py, dashboard.html, base.html, view.py"
 - in "moodels.py" :
-payments and grades of User class can be null now.
+courses and grades of User class can be null now.
 "Meta" class has added to Course and Course_Calendar for ordering
 "now" in "is_active_course" and "is_active_class" is calculating in utc now.
 __str__ method has added to Course_Calendar
