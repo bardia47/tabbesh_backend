@@ -12,13 +12,13 @@ from django.contrib.admin.options import InlineModelAdmin
 import datetime
 
 
-class PaymentInline(admin.StackedInline):
+class CourseInline(admin.StackedInline):
     model = User.courses.through
-    verbose_name_plural = "پرداختی ها"
-    verbose_name = "پرداختی"
+    verbose_name_plural = "دوره ها"
+    verbose_name = "دوره ها"
     extra=0
     def get_formset(self, request, obj=None, **kwargs):
-        formset = super(PaymentInline, self).get_formset(request, obj, **kwargs)
+        formset = super(CourseInline, self).get_formset(request, obj, **kwargs)
         form = formset.form
         form.base_fields['course'].label="دوره"
         widget = form.base_fields['course'].widget
@@ -28,6 +28,20 @@ class PaymentInline(admin.StackedInline):
         widget.can_change_related = False
         widget.label='دوره'
         return formset
+
+class PayHistoryInline(admin.TabularInline):
+    model = Pay_History
+    fields = ('amount', 'is_successful', 'submit_date','payment_code')
+    verbose_name_plural = "پرداختی ها"
+    verbose_name = "پرداختی"
+    def has_change_permission(self, request, obj=None):
+        return False
+
+    def has_add_permission(self, request, obj=None):
+        return False
+
+    def has_delete_permission(self, request, obj=None):
+        return False
     
 class UserCreationForm(forms.ModelForm):
     GENDERS = [(True, "پسر"), (False, "دختر")]
@@ -127,7 +141,7 @@ class UserAdmin(BaseUserAdmin):
     search_fields = ('username',)
     ordering = ('username',)
     inlines = [
-        PaymentInline,
+        CourseInline,PayHistoryInline
     ]
 class CourseCalendarFormSetInline(forms.models.BaseInlineFormSet):
     def clean(self):
