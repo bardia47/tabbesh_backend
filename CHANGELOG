@@ -67,4 +67,6 @@ pip install Pillow
 
 pip install zeep
 pip install soap
+
 راه اندازی درگاه بانکی زرین پال
+pip install html-json-forms

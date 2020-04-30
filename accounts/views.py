@@ -1,50 +1,53 @@
 from django.shortcuts import render, redirect
-from .models import User
 from django.contrib import auth
-from accounts.forms import UserForm
-from accounts.models import City
+from accounts.models import *
+from accounts.serializers import *
+from rest_framework.parsers import JSONParser
 from django.db.models import Q
-from melipayamak import Api
-from .enums import Sms
-import random
+from rest_framework.views import APIView
+from rest_framework.renderers import TemplateHTMLRenderer, JSONRenderer
+from rest_framework.response import Response
+from rest_framework.permissions import AllowAny, IsAuthenticated
+from rest_framework.decorators import api_view, permission_classes
+from zeep.xsd.elements import element
 # Create your views here.
 
 
-def signup(request):
-    if request.method == 'POST':
-        form = UserForm(request.POST)
-        form.gender = request.POST['gender']
-        user = User.objects.filter(Q(username=form.data['username']) | Q(
-            phone_number=form.data['phone_number']))
-        if user.exists():
-            form.error = 'نام کاربری یا شماره همراه در سیستم استفاده شده و قابل تکرار نمیباشد'
-            return render(request, 'accounts/signup.html', {'form': form})
-        if form.is_valid():
-            api = Api(Sms.username.value, Sms.password.value)
-            sms = api.sms()
-            to = "0"+form.data['phone_number']
-            _from = Sms._from.value
-            randPass = random.randint(10000000, 99999999)
-            text = Sms.signupText.value.replace('{}', str(randPass))
-            response = sms.send(to, _from, text)
-            if response['Value'] == Sms.wrongNumber.value:
-                form.error = 'شماره وارد شده نامعتبر است'
-            elif (len(response['Value']) == 1):
-                form.error = 'خطایی رخ داده است . لطفا یک بار دیگر تلاش کنید یا با پشتیبان تماس بگیرید'
-            else:
-                user = User.objects.create_form_user(form, randPass)
-                return render(request, 'accounts/signin.html', {'signup_success': 'ثبت نام با موفقیت انجام شد.'})
-        else:
-            form.error = 'تمامی فیلد ها پر نشده اند'
-        return render(request, 'accounts/signup.html', {'form': form})
-
-    else:
-        form = UserForm()
-        return render(request, 'accounts/signup.html', {'form': form})
+@permission_classes((AllowAny,))
+class SignUp(APIView):
+    renderer_classes = [TemplateHTMLRenderer, JSONRenderer]
+    
+    def get(self, request):
+        grades = Grade.objects.all()
+        if request.accepted_renderer.format == 'html':
+            return Response({'grades' : grades}, template_name='accounts/signup.html')        
+        grades = GradeSerializer(instance=grades, many=True)
+        return Response(grades.data)
+    
+    def post(self, request):
+        serializer = UserSerializer(data=request.data)
+        grades = Grade.objects.all()
+        if not serializer.is_valid():
+            if request.accepted_renderer.format == 'html':
+                return Response({'serializer': serializer, 'grades' : grades}, template_name='accounts/signup.html')
+            return Response(serializer.errors)
+        serializer.save()
+        if request.accepted_renderer.format == 'html':
+             return render(request, 'accounts/signin.html', {'signup_success': 'ثبت نام با موفقیت انجام شد.'}) 
+        return Response({'signup_success': 'ثبت نام با موفقیت انجام شد.'})
+ 
+        
 
 
-def signin(request):
-    if request.method == 'POST':
+@permission_classes((AllowAny,))
+class SignIn(APIView):
+    renderer_classes = [TemplateHTMLRenderer, JSONRenderer]
+    
+    def get(self, request):
+        if request.accepted_renderer.format == 'html':
+            return render(request, 'accounts/signin.html')
+    
+    def post(self, request):
         if request.POST['username'].isdigit():
             try:
                 user1 = User.objects.get(phone_number=request.POST['username'])
@@ -60,8 +63,6 @@ def signin(request):
             return redirect('dashboard')
         else:
             return render(request, 'accounts/signin.html', {'error': 'نام کاربری یا رمز عبور اشتباه است'})
-    else:
-        return render(request, 'accounts/signin.html')
 
 
 def signout(request):

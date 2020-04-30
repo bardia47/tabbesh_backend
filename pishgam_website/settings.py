@@ -1,3 +1,4 @@
+
 """
 Django settings for pishgam_website project.
 
@@ -48,6 +49,7 @@ LOGGING = {
 # Application definition
 
 INSTALLED_APPS = [
+    'rest_framework',
     'jalali_date',
     'accounts',
     'zarinpal',
@@ -145,6 +147,28 @@ JALALI_DATE_DEFAULTS = {
             ]
         }
     },
+}
+
+REST_FRAMEWORK = {
+        'DEFAULT_RENDERER_CLASSES': [
+          'rest_framework.renderers.JSONRenderer',
+    'rest_framework.renderers.BrowsableAPIRenderer',
+    ],
+    'DEFAULT_PARSER_CLASSES': [
+        'rest_framework.parsers.JSONParser',
+        'rest_framework.parsers.FormParser',
+    'rest_framework.parsers.MultiPartParser'
+    ],
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.BasicAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+    ),
+    'DEFAULT_PERMISSION_CLASSES': ('rest_framework.permissions.IsAuthenticated',),
+
+    'DEFAULT_FILTER_BACKENDS': ('django_filters.rest_framework.DjangoFilterBackend',
+                                'rest_framework.filters.SearchFilter',
+                                'rest_framework.filters.OrderingFilter'),
+
 }
 
 # Internationalization

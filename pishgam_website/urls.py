@@ -16,7 +16,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from home.views import home, page_not_found
-from accounts.views import signup, signin, signout
+from accounts.views import *
 from django.conf import settings
 from django.conf.urls.static import static
 
@@ -24,8 +24,8 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', home, name='home'),
     path('404-page-not-found/', page_not_found, name="page-not-found"),
-    path('signup/', signup, name='signup'),
-    path('signin/', signin, name='signin'),
+    path('signup/', SignUp.as_view(), name="signup"),
+    path('signin/', SignIn, name='signin'),
     path('signout/', signout, name='signout'),
     path('dashboard/', include('dashboard.urls')),
     path('payment/', include('zarinpal.urls')),
