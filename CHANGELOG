@@ -70,3 +70,6 @@ pip install soap
 
 راه اندازی درگاه بانکی زرین پال
 pip install html-json-forms
+pip install django-oauth-toolkit
+python manage.py migrate oauth2_provider
+pip install django-oauth-toolkit djangorestframework

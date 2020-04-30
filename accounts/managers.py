@@ -9,21 +9,6 @@ from django.db.transaction import commit
 class UserManager(BaseUserManager):
     use_in_migrations = True
     
-    def create_form_user(self,form,password):
-
-        user=form.save(commit=False)
-        try:
-            user.role
-        except :
-            role = apps.get_model(app_label='accounts', model_name='Role')
-            user.role = role.objects.get(code=RoleCodes.STUDENT.value)
-        user.set_default_avatar()  
-        user.password = make_password(password)
-        user.save(using=self._db)
-
-        return user
-
-
     def _create_user(self, username, email, password, **extra_fields):
         if not email:
             raise ValueError('The given email must be set')

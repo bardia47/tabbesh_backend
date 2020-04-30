@@ -8,37 +8,41 @@ from functools import reduce
 from django.contrib.auth.decorators import login_required
 from .forms import ProfileForm
 from django.contrib.auth.hashers import make_password
+from rest_framework.views import APIView
+from rest_framework.renderers import TemplateHTMLRenderer, JSONRenderer
+from rest_framework.response import Response
+from .serializers  import *
 
 
-# Create your views here.
-@login_required
-def dashboard(request):
-    now = datetime.datetime.now()
-    user = get_object_or_404(User, pk=request.user.id)
-    courses = user.courses.filter(end_date__gt=now)
-    classes = Course_Calendar.objects.filter(course__in=courses)
-    no_class_today_text = None
+class Dashboard(APIView):
+    renderer_classes = [TemplateHTMLRenderer, JSONRenderer]
+    
+    def get(self, request):
+        now = datetime.datetime.now()
+        user = get_object_or_404(User, pk=request.user.id)
+        courses = user.courses.filter(end_date__gt=now)
+        classes = Course_Calendar.objects.filter(course__in=courses)
 
-    # update all classes time
-    for klass in classes:
-        while klass.end_date < now:
-            klass.start_date += datetime.timedelta(days=7)
-            klass.end_date += datetime.timedelta(days=7)
-            klass.save()
-
-    classes = Course_Calendar.objects.filter(
+        # update all classes time
+        for klass in classes:
+            while klass.end_date < now:
+                klass.start_date += datetime.timedelta(days=7)
+                klass.end_date += datetime.timedelta(days=7)
+                klass.save()
+        classes = Course_Calendar.objects.filter(
         Q(start_date__day=now.day) | Q(start_date__day=now.day + 1), course__in=courses)
-
-    if classes.count() > 0:
-        calendar_time = classes.first().start_date - now
-    else:
-        calendar_time = ''
-        no_class_today_text = True
-
-    return render(request, 'dashboard/dashboard.html', {'now': now, 'classes': classes,
-                                                        'calendar_time': calendar_time,
-                                                        'no_class_today_text': no_class_today_text})
-
+        if classes.count() > 0:
+            calendar_time = classes.first().start_date - now
+        else:
+            calendar_time = None
+        if request.accepted_renderer.format == 'html':
+            return render(request, 'dashboard/dashboard.html', {'now': now, 'classes': classes,
+                                                        'calendar_time': calendar_time})
+        ser = DashboardSerializer(data={'now': now, 'course_calendars': classes, 'calendar_time': calendar_time})
+        if ser.is_valid():
+            return Response(ser.data)
+        else :
+             return Response(ser.errors)
 
 # Edit Profile Page
 @login_required
@@ -136,13 +140,11 @@ def shopping(request):
     return render(request, 'dashboard/shopping.html', {'grades': grades, 'lessons': lessons, 'teachers': teachers,
                                                        'courses': courses})
 
-
 # Successful shopping page
 
 
 def success_shopping(request):
     return render(request, 'dashboard/success_shopping.html')
-
 
 # Unsuccessful shopping page
 

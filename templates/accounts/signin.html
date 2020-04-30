@@ -1,4 +1,4 @@
-<!doctype html>
+	<!doctype html>
 <html lang="en" dir="rtl">
 {% load static %}
 
@@ -18,7 +18,7 @@
 </head>
 
 <body class="text-center">
-   <form class="form-signin" method="POST" action="{% url 'signin' %}">
+   <form class="form-signin" method="POST" action="{% url 'signin' %}"  enctype='application/json'>
       {% csrf_token %}
       <h1 class="title">ورود</h1>
       <div class="container">

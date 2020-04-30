@@ -8,7 +8,7 @@ from rest_framework.views import APIView
 from rest_framework.renderers import TemplateHTMLRenderer, JSONRenderer
 from rest_framework.response import Response
 from rest_framework.permissions import AllowAny, IsAuthenticated
-from rest_framework.decorators import api_view, permission_classes
+from rest_framework.decorators import  permission_classes
 from zeep.xsd.elements import element
 # Create your views here.
 
@@ -48,22 +48,25 @@ class SignIn(APIView):
             return render(request, 'accounts/signin.html')
     
     def post(self, request):
-        if request.POST['username'].isdigit():
+        if request.data['username'].isdigit():
             try:
-                user1 = User.objects.get(phone_number=request.POST['username'])
+                user1 = User.objects.get(phone_number=request.data['username'])
             except User.DoesNotExist:
-                return render(request, 'accounts/signin.html', {'error': 'نام کاربری یا رمز عبور اشتباه است'})
+                if request.accepted_renderer.format == 'html':
+                    return render(request, 'accounts/signin.html', {'error': 'نام کاربری یا رمز عبور اشتباه است'})
+                return Response({'error': 'نام کاربری یا رمز عبور اشتباه است'})
             user = auth.authenticate(
-                username=user1.username, password=request.POST['password'])
+                username=user1.username, password=request.data['password'])
         else:
             user = auth.authenticate(
-                username=request.POST['username'], password=request.POST['password'])
+                username=request.data['username'], password=request.data['password'])
         if user is not None:
             auth.login(request, user)
             return redirect('dashboard')
         else:
-            return render(request, 'accounts/signin.html', {'error': 'نام کاربری یا رمز عبور اشتباه است'})
-
+            if request.accepted_renderer.format == 'html':
+                return render(request, 'accounts/signin.html', {'error': 'نام کاربری یا رمز عبور اشتباه است'})
+            return Response({'error': 'نام کاربری یا رمز عبور اشتباه است'})
 
 def signout(request):
     auth.logout(request)

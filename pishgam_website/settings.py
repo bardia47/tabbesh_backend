@@ -49,6 +49,7 @@ LOGGING = {
 # Application definition
 
 INSTALLED_APPS = [
+    'oauth2_provider',
     'rest_framework',
     'jalali_date',
     'accounts',
@@ -162,6 +163,8 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework.authentication.BasicAuthentication',
         'rest_framework.authentication.SessionAuthentication',
+        'oauth2_provider.contrib.rest_framework.OAuth2Authentication',
+
     ),
     'DEFAULT_PERMISSION_CLASSES': ('rest_framework.permissions.IsAuthenticated',),
 
@@ -170,6 +173,14 @@ REST_FRAMEWORK = {
                                 'rest_framework.filters.OrderingFilter'),
 
 }
+
+OAUTH2_PROVIDER = {
+    # this is the list of available scopes
+    'SCOPES': {'read': 'Read scope', 'write': 'Write scope', 'groups': 'Access to your groups'}
+}
+
+
+
 
 # Internationalization
 # https://docs.djangoproject.com/en/2.2/topics/i18n/

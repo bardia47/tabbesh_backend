@@ -1,12 +1,10 @@
 from django.urls import path
-from .views import dashboard, lessons, filemanager
-from .views import edit_profile, change_avatar, change_password, change_profile
-from .views import shopping, success_shopping, unsuccess_shopping
+from .views import  *
 from django.conf import settings
 from django.conf.urls.static import static
 
 urlpatterns = [
-    path('', dashboard, name='dashboard'),
+    path('', Dashboard.as_view(), name='dashboard'),
     path('lessons/', lessons, name="lessons"),
     path('edit_profile/', edit_profile, name="edit_profile"),
     path('edit_profile/change-avatar', change_avatar, name="change_avatar"),
