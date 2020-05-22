@@ -110,7 +110,7 @@
                     <select data-placeholder="پایه تحصیلی" name="grades[0]" class="grade-choicen" tabindex="5" required>
                         <option value="">پایه تحصیلی</option>
                         {% for element in grades %}
-                        <option value="{{ element.code }}">{{ element.title }}</option>
+                        <option value="{{ element.id }}">{{ element.title }}</option>
                         {% endfor %}
                     </select>
 

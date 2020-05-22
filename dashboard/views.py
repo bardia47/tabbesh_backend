@@ -36,13 +36,10 @@ class Dashboard(APIView):
         else:
             calendar_time = None
         if request.accepted_renderer.format == 'html':
-            return render(request, 'dashboard/dashboard.html', {'now': now, 'classes': classes,
-                                                        'calendar_time': calendar_time})
-        ser = DashboardSerializer(data={'now': now, 'course_calendars': classes, 'calendar_time': calendar_time})
-        if ser.is_valid():
-            return Response(ser.data)
-        else :
-             return Response(ser.errors)
+            return Response({'now': now, 'classes': classes, 'calendar_time': calendar_time}, template_name='dashboard/dashboard.html')
+        ser = DashboardSerializer(instance={'course_calendars': classes, 'now': now, 'calendar_time': calendar_time})
+        return Response(ser.data)
+        
 
 # Edit Profile Page
 @login_required
@@ -97,60 +94,54 @@ def change_password(request):
 
 
 # Lessons Page
-@login_required
-def lessons(request):
-    now = datetime.datetime.now()
-    user = get_object_or_404(User, pk=request.user.id)
-    courses = user.courses.filter(end_date__gt=now)
-    classes = Course_Calendar.objects.filter(course__in=courses)
-    # update all classes time
-    for klass in classes:
-        while klass.end_date < now:
-            klass.start_date += datetime.timedelta(days=7)
-            klass.end_date += datetime.timedelta(days=7)
-            klass.save()
-    return render(request, 'dashboard/lessons.html', {'courses': courses})
+class Lessons(APIView):
+    renderer_classes = [TemplateHTMLRenderer, JSONRenderer]
+
+    def get(self, request):
+        now = datetime.datetime.now()
+        user = get_object_or_404(User, pk=request.user.id)
+        courses = user.courses.filter(end_date__gt=now)
+        classes = Course_Calendar.objects.filter(course__in=courses)
+        # update all classes time
+        for klass in classes:
+            while klass.end_date < now:
+                klass.start_date += datetime.timedelta(days=7)
+                klass.end_date += datetime.timedelta(days=7)
+                klass.save()
+        if request.accepted_renderer.format == 'html':
+            return Response({'courses': courses} , template_name='dashboard/lessons.html')
+        ser = CourseLessonsSerializer(instance=courses, many=True)
+        return Response(ser.data)    
 
 
 # Shopping Page
-@login_required
-def shopping(request):
-    now = datetime.datetime.now()
-    grades = Grade.objects.all()
-    lessons = Lesson.objects.all()
-    teachers = User.objects.filter(role__code=RoleCodes.TEACHER.value)
-    query = Q(end_date__gt=now)
-    if request.GET.get("teacher") or request.GET.get("lesson") or request.GET.get("grade"):
-        if request.GET.get("lesson"):
-            query &= getAllLessons(request.GET.get("lesson"), now)
-        if request.GET.get("grade"):
-            query &= Q(grade__id=request.GET.get("grade"))
-        if request.GET.get("teacher"):
-            query &= Q(teacher__id=request.GET.get("teacher"))
-    else:
-        if (request.user.grades.count() > 0):
-            query &= Q(grade__id=request.user.grades.first().id)
-    if request.user.courses.all():
-        queryNot = reduce(or_, (Q(id=course.id)
+class Shopping(APIView):
+    renderer_classes = [TemplateHTMLRenderer, JSONRenderer]
+    def get(self, request):
+        now = datetime.datetime.now()
+        grades = Grade.objects.all()
+        lessons = Lesson.objects.all()
+        teachers = User.objects.filter(role__code=RoleCodes.TEACHER.value)
+        query = Q(end_date__gt=now)
+        if request.GET.get("teacher") or request.GET.get("lesson") or request.GET.get("grade"):
+            if request.GET.get("lesson"):
+                query &= getAllLessons(request.GET.get("lesson"), now)
+            if request.GET.get("grade"):
+                query &= Q(grade__id=request.GET.get("grade"))
+            if request.GET.get("teacher"):
+                query &= Q(teacher__id=request.GET.get("teacher"))
+        else:
+            if (request.user.grades.count() > 0):
+                query &= Q(grade__id=request.user.grades.first().id)
+            if request.user.courses.all():
+                queryNot = reduce(or_, (Q(id=course.id)
                                 for course in request.user.courses.all()))
-        query = query & ~queryNot
-
-    courses = Course.objects.filter(query)
-
-    return render(request, 'dashboard/shopping.html', {'grades': grades, 'lessons': lessons, 'teachers': teachers,
-                                                       'courses': courses})
-
-# Successful shopping page
-
-
-def success_shopping(request):
-    return render(request, 'dashboard/success_shopping.html')
-
-# Unsuccessful shopping page
-
-
-def unsuccess_shopping(request):
-    return render(request, 'dashboard/unsuccess_shopping.html')
+                query = query & ~queryNot
+        courses = Course.objects.filter(query)
+        if request.accepted_renderer.format == 'html':
+            return Response({'grades': grades, 'lessons': lessons, 'teachers': teachers, 'courses': courses}, template_name='dashboard/shopping.html')  
+        ser = ShoppingSerializer(instance={'grades': grades, 'lessons': lessons, 'teachers': teachers, 'courses': courses})
+        return Response(ser.data)  
 
 
 def getAllLessons(lesson_id, now):

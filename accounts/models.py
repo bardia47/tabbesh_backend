@@ -177,8 +177,11 @@ class Course(models.Model):
         super().clean_fields(exclude=exclude)
         if self.end_date < self.start_date :
             raise ValidationError("تاریخ پایان باید پس از تاریخ شروع باشد")
-
-
+        
+    
+    def get_first_class(self, exclude=None):
+        return  self.course_calendar_set.first().start_date
+       
 # Course_Calendar Model
 class Course_Calendar(models.Model):
     course = models.ForeignKey('Course', on_delete=models.DO_NOTHING, verbose_name="دوره")

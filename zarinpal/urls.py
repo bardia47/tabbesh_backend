@@ -1,8 +1,9 @@
+
 from django.conf.urls import url
-from . import views
+from .views import *
 
 
 urlpatterns = [
-    url(r'^request/$', views.send_request, name='payment_request'),
-    url(r'^verify/$', views.verify, name='payment_verify'),
+    url(r'^request/$', SendRequest.as_view(), name='payment_request'),
+    url(r'^verify/$', verify, name='payment_verify'),
 ]

@@ -28,12 +28,12 @@ class SignUp(APIView):
         serializer = UserSerializer(data=request.data)
         grades = Grade.objects.all()
         if not serializer.is_valid():
-            if request.accepted_renderer.format == 'html':
+             if request.accepted_renderer.format == 'html':
                 return Response({'serializer': serializer, 'grades' : grades}, template_name='accounts/signup.html')
-            return Response(serializer.errors)
+             return Response(serializer.errors)
         serializer.save()
         if request.accepted_renderer.format == 'html':
-             return render(request, 'accounts/signin.html', {'signup_success': 'ثبت نام با موفقیت انجام شد.'}) 
+              return render(request, 'accounts/signin.html', {'signup_success': 'ثبت نام با موفقیت انجام شد.'}) 
         return Response({'signup_success': 'ثبت نام با موفقیت انجام شد.'})
  
         
