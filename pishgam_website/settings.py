@@ -49,7 +49,6 @@ LOGGING = {
 # Application definition
 
 INSTALLED_APPS = [
-    'oauth2_provider',
     'rest_framework',
     'jalali_date',
     'accounts',
