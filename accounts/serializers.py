@@ -17,7 +17,7 @@ class UserSerializer(JSONFormSerializer,serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ('username',  'email','first_name',
-                  'last_name', 'grades', 'gender', 'phone_number','password','role')
+                  'last_name', 'grades', 'gender', 'phone_number','password','role','city')
 
         
     def validate(self,data):
@@ -51,3 +51,13 @@ class GradeSerializer(JSONFormSerializer,serializers.ModelSerializer):
     class Meta:
         model = Grade
         fields = '__all__'
+
+class CitySerializer(JSONFormSerializer,serializers.ModelSerializer):
+    class Meta:
+        model = City
+        fields = '__all__'      
+        
+class SignUpSerializer(serializers.Serializer):
+    grades = GradeSerializer(many=True)
+    cities = CitySerializer(many=True)     
+        

@@ -113,7 +113,21 @@
                         <option value="{{ element.id }}">{{ element.title }}</option>
                         {% endfor %}
                     </select>
-
+                </div>
+            </div>
+                        <!-- City field -->
+            <div class="row mb-2">
+                <div class="col-md-2 field-label">
+                    <label for="grade">شهر</label>
+                </div>
+                <div class="col-md-4">
+                    <select data-placeholder="شهر" name="city" class="city-choicen" tabindex="5" >
+                        <option value="">شهر</option>
+                        {% for element in city %}
+                        {# if dont work if you can fix it :) #}
+                        <option value="{{ element.id }}" {% if element.id == serializer.data.city %} selected {% endif %}>{{ element.title }}</option>
+                        {% endfor %}
+                    </select>
                 </div>
             </div>
             <!-- Phone number field -->

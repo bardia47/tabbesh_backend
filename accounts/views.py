@@ -10,6 +10,7 @@ from rest_framework.response import Response
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.decorators import  permission_classes
 from zeep.xsd.elements import element
+from django.core.serializers import serialize
 # Create your views here.
 
 
@@ -19,17 +20,19 @@ class SignUp(APIView):
     
     def get(self, request):
         grades = Grade.objects.all()
+        cities = City.objects.all()
         if request.accepted_renderer.format == 'html':
-            return Response({'grades' : grades}, template_name='accounts/signup.html')        
-        grades = GradeSerializer(instance=grades, many=True)
-        return Response(grades.data)
+            return Response({'grades' : grades ,'city' : cities}, template_name='accounts/signup.html')        
+        ser = SignUpSerializer(instance={'grades': grades, 'cities': cities})
+        return Response(ser.data)
     
     def post(self, request):
         serializer = UserSerializer(data=request.data)
-        grades = Grade.objects.all()
         if not serializer.is_valid():
              if request.accepted_renderer.format == 'html':
-                return Response({'serializer': serializer, 'grades' : grades}, template_name='accounts/signup.html')
+                grades = Grade.objects.all()
+                cities = City.objects.all()
+                return Response({'serializer': serializer, 'grades' : grades ,'city' : cities}, template_name='accounts/signup.html')
              return Response(serializer.errors)
         serializer.save()
         if request.accepted_renderer.format == 'html':
