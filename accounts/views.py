@@ -11,6 +11,8 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.decorators import  permission_classes
 from zeep.xsd.elements import element
 from django.core.serializers import serialize
+from rest_framework import status
+
 # Create your views here.
 
 
@@ -33,7 +35,7 @@ class SignUp(APIView):
                 grades = Grade.objects.all()
                 cities = City.objects.all()
                 return Response({'serializer': serializer, 'grades' : grades ,'city' : cities}, template_name='accounts/signup.html')
-             return Response(serializer.errors)
+             return Response(serializer.errors , status=status.HTTP_406_NOT_ACCEPTABLE)
         serializer.save()
         if request.accepted_renderer.format == 'html':
               return render(request, 'accounts/signin.html', {'signup_success': 'ثبت نام با موفقیت انجام شد.'}) 
