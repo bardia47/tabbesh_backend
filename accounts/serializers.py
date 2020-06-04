@@ -33,7 +33,7 @@ class UserSerializer(JSONFormSerializer,serializers.ModelSerializer):
         text = Sms.signupText.value.replace('{}', str(randPass))
         response = sms.send(to, _from, text)
         if response['Value'] == Sms.wrongNumber.value:
-            raise serializers.ValidationError('شماره وارد شده نامعتبر است') 
+            raise serializers.ValidationError({"phone_number":'شماره وارد شده نامعتبر است'}) 
         elif (len(response['Value']) == 1):
             raise serializers.ValidationError('خطایی رخ داده است . لطفا یک بار دیگر تلاش کنید یا با پشتیبان تماس بگیرید')
         data['password']=make_password(randPass)

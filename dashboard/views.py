@@ -42,10 +42,15 @@ class Dashboard(APIView):
         
 
 # Edit Profile Page
-@login_required
-def edit_profile(request):
-    form = ProfileForm()
-    return render(request, 'dashboard/profile_page.html', {'form': form})
+class EditProfile(APIView):
+    renderer_classes = [TemplateHTMLRenderer, JSONRenderer]
+    
+    def get(self, request):
+        form = ProfileForm()
+        if request.accepted_renderer.format == 'html':
+            return render(request, 'dashboard/profile_page.html', {'form': form})
+        ser = UserProfileSerializer(request.user)
+        return Response(ser.data)
 
 
 # Edit profile page --> change avatar form
@@ -74,8 +79,7 @@ def change_profile(request):
             form.save()
             return redirect('dashboard')
         else:
-            form = ProfileForm()
-            return render(request, 'dashboard/profile_page.html', {'form': form, 'error': 'خطا در ثبت نام'})
+            return render(request, 'dashboard/profile_page.html', {'form': form})
 
 
 # Edit profile page --> change password
@@ -133,9 +137,10 @@ class Shopping(APIView):
         else:
             if (request.user.grades.count() > 0):
                 query &= Q(grade__id=request.user.grades.first().id)
-            if request.user.courses.all():
+        
+        if request.user.courses.all():
                 queryNot = reduce(or_, (Q(id=course.id)
-                                for course in request.user.courses.all()))
+                        for course in request.user.courses.all()))
                 query = query & ~queryNot
         courses = Course.objects.filter(query)
         if request.accepted_renderer.format == 'html':

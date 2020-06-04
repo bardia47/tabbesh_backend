@@ -12,7 +12,8 @@ from rest_framework.decorators import  permission_classes
 from zeep.xsd.elements import element
 from django.core.serializers import serialize
 from rest_framework import status
-
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+from rest_framework_simplejwt.views import TokenObtainPairView
 # Create your views here.
 
 
@@ -51,15 +52,14 @@ class SignIn(APIView):
     def get(self, request):
         if request.accepted_renderer.format == 'html':
             return render(request, 'accounts/signin.html')
+        return Response({},status.HTTP_405_METHOD_NOT_ALLOWED)
     
     def post(self, request):
         if request.data['username'].isdigit():
             try:
                 user1 = User.objects.get(phone_number=request.data['username'])
             except User.DoesNotExist:
-                if request.accepted_renderer.format == 'html':
-                    return render(request, 'accounts/signin.html', {'error': 'نام کاربری یا رمز عبور اشتباه است'})
-                return Response({'error': 'نام کاربری یا رمز عبور اشتباه است'})
+                return render(request, 'accounts/signin.html', {'error': 'نام کاربری یا رمز عبور اشتباه است'})
             user = auth.authenticate(
                 username=user1.username, password=request.data['password'])
         else:
@@ -69,9 +69,28 @@ class SignIn(APIView):
             auth.login(request, user)
             return redirect('dashboard')
         else:
-            if request.accepted_renderer.format == 'html':
-                return render(request, 'accounts/signin.html', {'error': 'نام کاربری یا رمز عبور اشتباه است'})
-            return Response({'error': 'نام کاربری یا رمز عبور اشتباه است'})
+            return render(request, 'accounts/signin.html', {'error': 'نام کاربری یا رمز عبور اشتباه است'})
+ 
+ 
+class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
+    def validate(self, attrs):
+        try:
+            if attrs.get('username').isdigit():
+                try:
+                    user1 = User.objects.get(phone_number=attrs.get('username'))
+                except User.DoesNotExist:
+                        raise exceptions.AuthenticationFailed("error", "authentication field")
+                attrs['username']=user1.username
+        finally:
+            return super().validate(attrs)
+
+
+class MyTokenObtainPairView(TokenObtainPairView):
+    serializer_class = MyTokenObtainPairSerializer
+
+ 
+ 
+       
 
 def signout(request):
     auth.logout(request)

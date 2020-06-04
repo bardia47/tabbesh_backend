@@ -206,9 +206,7 @@ class CourseCalendarAdmin(ModelAdminJalaliMixin, admin.ModelAdmin):
         return datetime2jalali(obj.end_date).strftime('%y/%m/%d , %H:%M:%S')
     
     get_start_jalali.short_description = 'تاریخ شروع'
-    get_start_jalali.admin_order_field = 'start_date'
     get_end_jalali.short_description = 'تاریخ پایان'
-    get_end_jalali.admin_order_field = 'end_date'
     
 
     def delete_model(self, request, obj):

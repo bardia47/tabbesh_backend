@@ -27,7 +27,7 @@ class GradeSerializer(JSONFormSerializer,serializers.ModelSerializer):
         fields = ('id','title')
 
 class CourseBriefSerializer(JSONFormSerializer,serializers.ModelSerializer):
-    teacher = TeacherSerializer()
+    teacher = serializers.SerializerMethodField('get_user_full_name')
 
     class Meta:
         model = Course
@@ -67,6 +67,13 @@ class ShoppingSerializer(serializers.Serializer):
     teachers = TeacherSerializer(many=True)
     lessons = LessonSerializer(many=True)
     grades =  GradeSerializer(many=True)
+    
+    
+class UserProfileSerializer(JSONFormSerializer,serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ( 'first_name',
+                  'last_name','username','email' ,'grades', 'gender', 'phone_number','city','avatar')    
         
        
     

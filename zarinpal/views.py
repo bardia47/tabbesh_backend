@@ -7,6 +7,8 @@ from accounts.models import Course,Pay_History
 from rest_framework.views import APIView
 from rest_framework.renderers import TemplateHTMLRenderer, JSONRenderer
 from rest_framework.response import Response
+from rest_framework import status
+
 import datetime
 MERCHANT = '0c5db223-a20f-4789-8c88-56d78e29ff63'
 client = Client('https://www.zarinpal.com/pg/services/WebGate/wsdl')
@@ -34,7 +36,7 @@ class SendRequest(APIView):
         except:
             if request.accepted_renderer.format == 'html':
                 return render(request, 'dashboard/unsuccess_shopping.html')
-            return Response({'massage':'خرید ناموفق'})
+            return Response({'massage':'خرید ناموفق'}, status=status.HTTP_406_NOT_ACCEPTABLE)
         if courses_id_list and is_valid(courses_id_list, amount):
             description = "List of courses id ==> " + \
                 str(courses_id_list) + " Total price ==> " + str(amount)
@@ -49,48 +51,57 @@ class SendRequest(APIView):
                
         # request to zarinpal
             else:
-                url = request.scheme+"://"+request.get_host() + CallbackURL
-                result = client.service.PaymentRequest(
-                    MERCHANT, amount, description, email, mobile, url)
-                if result.Status == 100:
-                    new_pay = Pay_History.objects.create(purchaser=request.user, amount=amount, courses=request.POST.get("total_id"))
-                    return redirect('https://www.zarinpal.com/pg/StartPay/' + str(result.Authority))
+                if request.accepted_renderer.format == 'html':
+                    url = request.scheme+"://"+request.get_host() + CallbackURL
+                    result = client.service.PaymentRequest(
+                        MERCHANT, amount, description, email, mobile, url)
+                    if result.Status == 100:
+                        new_pay = Pay_History.objects.create(purchaser=request.user, amount=amount, courses=request.POST.get("total_id"))
+                        return redirect('https://www.zarinpal.com/pg/StartPay/' + str(result.Authority))
+                    else:
+                        return render(request, 'dashboard/unsuccess_shopping.html', {'error': str(result.Status)})
                 else:
-                    return render(request, 'dashboard/unsuccess_shopping.html', {'error': str(result.Status)})
+                    new_pay = Pay_History.objects.create(purchaser=request.user, amount=amount, courses=request.POST.get("total_id"))
+                    return Response({'massage':''})
         else:
             return redirect('shopping')  # what's up noob :)
 
 
-def verify(request):
-    try:
-        new_pay = Pay_History.objects.filter(purchaser=request.user,submit_date__isnull=True).first()
-    except:
-        return render(request, 'dashboard/success_shopping.html', {'RefID': "تراکنش انجام شده"})
-    now = datetime.datetime.now()
-    new_pay.submit_date=now
-    if request.GET.get('Status') == 'OK':
-        result = client.service.PaymentVerification(
-            MERCHANT, request.GET['Authority'], new_pay.amount)
-        if result.Status == 100:
-            courses_id_list=new_pay.courses.split()
-            user = request.user
-            for course_id in courses_id_list:
-                user.courses.add(course_id)
-            user.save()
-            new_pay.is_successful=True
-            new_pay.payment_code=str(result.RefID)
-            new_pay.save()
-            return render(request, 'dashboard/success_shopping.html', {'RefID': str(result.RefID)})
-        elif result.Status == 101:
-            # return HttpResponse('Transaction submitted : ' + str(result.Status))
-            new_pay.is_successful=True
-            new_pay.save()
+
+class Verify(APIView):
+    renderer_classes = [TemplateHTMLRenderer, JSONRenderer]
+    
+    def get(self, request):
+        #json
+        try:
+            new_pay = Pay_History.objects.filter(purchaser=request.user,submit_date__isnull=True).first()
+        except:
             return render(request, 'dashboard/success_shopping.html', {'RefID': "تراکنش انجام شده"})
+        now = datetime.datetime.now()
+        new_pay.submit_date=now
+        if request.GET.get('Status') == 'OK':
+            result = client.service.PaymentVerification(
+                MERCHANT, request.GET['Authority'], new_pay.amount)
+            if result.Status == 100:
+                courses_id_list=new_pay.courses.split()
+                user = request.user
+                for course_id in courses_id_list:
+                    user.courses.add(course_id)
+                    user.save()
+                    new_pay.is_successful=True
+                    new_pay.payment_code=str(result.RefID)
+                    new_pay.save()
+                return render(request, 'dashboard/success_shopping.html', {'RefID': str(result.RefID)})
+            elif result.Status == 101:
+            # return HttpResponse('Transaction submitted : ' + str(result.Status))
+                new_pay.is_successful=True
+                new_pay.save()
+                return render(request, 'dashboard/success_shopping.html', {'RefID': "تراکنش انجام شده"})
+            else:
+                new_pay.save()
+            # return HttpResponse('Transaction failed.\nStatus: ' + str(result.Status))
+                return render(request, 'dashboard/unsuccess_shopping.html', {'error': str(result.Status)})
         else:
             new_pay.save()
-            # return HttpResponse('Transaction failed.\nStatus: ' + str(result.Status))
-            return render(request, 'dashboard/unsuccess_shopping.html', {'error': str(result.Status)})
-    else:
-        new_pay.save()
         # return HttpResponse('Transaction failed or canceled by user')
-        return redirect('unsuccess_shopping')
+            return render(request, 'dashboard/success_shopping.html')

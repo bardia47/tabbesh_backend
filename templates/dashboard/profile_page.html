@@ -36,8 +36,15 @@
         <div class="alert alert-info alert-dismissable">
             <a class="panel-close close" data-dismiss="alert">×</a>
             <i class="fa fa-coffee"></i>
-            {% if error %}
-            <strong>{{ error }}</strong>
+ {% if form.errors %}
+            {% for field in form %}
+                {% for error in field.errors %}
+           <strong>  {{ error|escape }} </strong>
+                {% endfor %}
+            {% endfor %}
+            {% for error in form.non_field_errors %}
+              <strong>   {{ error|escape }}</strong>
+            {% endfor %}
             {% else %}
             <strong>تمامی فیلد ها ضروری است و در صورت تغییر دادن چند مورد فقط آن موارد را تغییر دهید.</strong>
             {% endif %}
