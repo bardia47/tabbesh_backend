@@ -47,7 +47,7 @@ class SendRequest(APIView):
                 user.save()
                 if request.accepted_renderer.format == 'html':
                     return render(request, 'dashboard/success_shopping.html')
-                return Response({'massage':'خرید موفق'})
+                return Response({'massage':'خرید موفق'},status=status.HTTP_201_CREATED)
                
         # request to zarinpal
             else:
@@ -62,7 +62,7 @@ class SendRequest(APIView):
                         return render(request, 'dashboard/unsuccess_shopping.html', {'error': str(result.Status)})
                 else:
                     new_pay = Pay_History.objects.create(purchaser=request.user, amount=amount, courses=request.POST.get("total_id"))
-                    return Response({'massage':''})
+                    return Response({'massage':'payment'})
         else:
             return redirect('shopping')  # what's up noob :)
 
@@ -72,11 +72,12 @@ class Verify(APIView):
     renderer_classes = [TemplateHTMLRenderer, JSONRenderer]
     
     def get(self, request):
-        #json
         try:
             new_pay = Pay_History.objects.filter(purchaser=request.user,submit_date__isnull=True).first()
         except:
-            return render(request, 'dashboard/success_shopping.html', {'RefID': "تراکنش انجام شده"})
+            if request.accepted_renderer.format == 'html':
+                return render(request, 'dashboard/success_shopping.html', {'RefID': "تراکنش انجام شده"})
+            return Response({'RefID': "تراکنش انجام شده"},status=status.HTTP_226_IM_USED)
         now = datetime.datetime.now()
         new_pay.submit_date=now
         if request.GET.get('Status') == 'OK':
@@ -91,17 +92,27 @@ class Verify(APIView):
                     new_pay.is_successful=True
                     new_pay.payment_code=str(result.RefID)
                     new_pay.save()
-                return render(request, 'dashboard/success_shopping.html', {'RefID': str(result.RefID)})
+                if request.accepted_renderer.format == 'html':
+                    return render(request, 'dashboard/success_shopping.html', {'RefID': str(result.RefID)})
+                return Response({'RefID': str(result.RefID)})
             elif result.Status == 101:
             # return HttpResponse('Transaction submitted : ' + str(result.Status))
                 new_pay.is_successful=True
                 new_pay.save()
-                return render(request, 'dashboard/success_shopping.html', {'RefID': "تراکنش انجام شده"})
+                if request.accepted_renderer.format == 'html':
+                    return render(request, 'dashboard/success_shopping.html', {'RefID': "تراکنش انجام شده"})
+                return Response({'RefID': "تراکنش انجام شده"},status=status.HTTP_226_IM_USED)
             else:
                 new_pay.save()
             # return HttpResponse('Transaction failed.\nStatus: ' + str(result.Status))
-                return render(request, 'dashboard/unsuccess_shopping.html', {'error': str(result.Status)})
+                if request.accepted_renderer.format == 'html':
+                    return render(request, 'dashboard/unsuccess_shopping.html', {'error': str(result.Status)})
+                return Response({'error': str(result.Status)},status.HTTP_406_NOT_ACCEPTABLE)
+
         else:
             new_pay.save()
         # return HttpResponse('Transaction failed or canceled by user')
-            return render(request, 'dashboard/success_shopping.html')
+            if request.accepted_renderer.format == 'html':
+                return render(request, 'dashboard/unsuccess_shopping.html')
+            return Response({'error': str(result.Status)},status.HTTP_406_NOT_ACCEPTABLE)
+
