@@ -12,8 +12,9 @@ from rest_framework.decorators import  permission_classes
 from zeep.xsd.elements import element
 from django.core.serializers import serialize
 from rest_framework import status
-from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
-from rest_framework_simplejwt.views import TokenObtainPairView
+from rest_framework.authtoken.views import ObtainAuthToken
+from rest_framework.authtoken.serializers import AuthTokenSerializer
+
 # Create your views here.
 
 
@@ -71,8 +72,8 @@ class SignIn(APIView):
         else:
             return render(request, 'accounts/signin.html', {'error': 'نام کاربری یا رمز عبور اشتباه است'})
  
- 
-class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
+@permission_classes((AllowAny,)) 
+class MyTokenObtainPairSerializer(AuthTokenSerializer):
     def validate(self, attrs):
         try:
             if attrs.get('username').isdigit():
@@ -85,7 +86,7 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
             return super().validate(attrs)
 
 
-class MyTokenObtainPairView(TokenObtainPairView):
+class MyTokenObtainPairView(ObtainAuthToken):
     serializer_class = MyTokenObtainPairSerializer
 
  

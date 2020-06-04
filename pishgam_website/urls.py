@@ -19,14 +19,13 @@ from home.views import home, page_not_found
 from accounts.views import *
 from django.conf import settings
 from django.conf.urls.static import static
-
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', home, name='home'),
     path('404-page-not-found/', page_not_found, name="page-not-found"),
     path('signup/', SignUp.as_view(), name="signup"),
     path('signin/', SignIn.as_view(), name='signin'),
-   path('api/token/', MyTokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('api/token/', MyTokenObtainPairView.as_view(), name='api_token_auth'),
     path('signout/', signout, name='signout'),
     path('dashboard/', include('dashboard.urls')),
     path('payment/', include('zarinpal.urls')),
