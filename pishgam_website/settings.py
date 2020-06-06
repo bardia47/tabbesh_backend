@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 """
 
 import os
+from django.conf.global_settings import LOGIN_REDIRECT_URL
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -49,6 +50,7 @@ LOGGING = {
 # Application definition
 
 INSTALLED_APPS = [
+    'drf_link_header_pagination',
     'rest_framework',
     'rest_framework.authtoken',
     'jalali_date',
@@ -170,6 +172,9 @@ REST_FRAMEWORK = {
     'DEFAULT_FILTER_BACKENDS': ('django_filters.rest_framework.DjangoFilterBackend',
                                 'rest_framework.filters.SearchFilter',
                                 'rest_framework.filters.OrderingFilter'),
+    
+    'DEFAULT_PAGINATION_CLASS': 'drf_link_header_pagination.LinkHeaderPagination',
+    'PAGE_SIZE': 10
 
 }
 
@@ -199,6 +204,8 @@ STATICFILES_DIRS = [
 
 ]
 LOGIN_URL = '/signin/'
+LOGIN_REDIRECT_URL = '/signin/'
+
 AUTH_USER_MODEL = 'accounts.User'
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')

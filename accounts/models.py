@@ -42,16 +42,6 @@ class User(AbstractBaseUser, PermissionsMixin):
     is_superuser = models.BooleanField(default=False)
     is_staff = models.BooleanField(default=True)
 
-    #compress images
-    def compressImage(self,uploadedImage):
-        imageTemproary = Image.open(uploadedImage)
-        outputIoStream = BytesIO()
-        imageTemproaryResized = imageTemproary.resize((20,20), Image.ANTIALIAS) 
-        imageTemproary = imageTemproary.convert('RGB')
-        imageTemproary.save(outputIoStream , format='JPEG', quality=60)
-        outputIoStream.seek(0)
-        uploadedImage = InMemoryUploadedFile(outputIoStream,'ImageField', "%s.jpg" % uploadedImage.name.split('.')[0], 'image/jpeg', sys.getsizeof(outputIoStream), None)
-        return uploadedImage
     class Meta:
         verbose_name_plural = "کاربر"
         verbose_name = "کاربر"
@@ -61,6 +51,17 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     USERNAME_FIELD = 'username'
     REQUIRED_FIELDS = ['email', 'first_name', 'last_name']
+
+      #compress images
+    def compressImage(self,uploadedImage):
+        imageTemproary = Image.open(uploadedImage)
+        outputIoStream = BytesIO()
+        imageTemproaryResized = imageTemproary.resize((20,20), Image.ANTIALIAS) 
+        imageTemproary = imageTemproary.convert('RGB')
+        imageTemproary.save(outputIoStream , format='JPEG', quality=60)
+        outputIoStream.seek(0)
+        uploadedImage = InMemoryUploadedFile(outputIoStream,'ImageField', "%s.jpg" % uploadedImage.name.split('.')[0], 'image/jpeg', sys.getsizeof(outputIoStream), None)
+        return uploadedImage
 
     def get_full_name(self):
         full_name = '%s %s' % (self.first_name, self.last_name)
@@ -180,7 +181,10 @@ class Course(models.Model):
         
     
     def get_first_class(self, exclude=None):
+        if len(self.course_calendar_set.all())==0: 
+            return None
         return  self.course_calendar_set.first().start_date
+        
        
 # Course_Calendar Model
 class Course_Calendar(models.Model):

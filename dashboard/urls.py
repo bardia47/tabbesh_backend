@@ -2,6 +2,9 @@ from django.urls import path
 from .views import  *
 from django.conf import settings
 from django.conf.urls.static import static
+from rest_framework.routers import DefaultRouter
+router = DefaultRouter()
+router.register('test', TestViewSet)
 
 urlpatterns = [
     path('', Dashboard.as_view(), name='dashboard'),
@@ -14,6 +17,9 @@ urlpatterns = [
     path('shopping/', Shopping.as_view(), name="shopping"),
     path('lessons/files/<str:code>', filemanager),
 ]
+
+urlpatterns += router.urls
+
 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL,

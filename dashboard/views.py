@@ -11,6 +11,7 @@ from django.contrib.auth.hashers import make_password
 from rest_framework.views import APIView
 from rest_framework.renderers import TemplateHTMLRenderer, JSONRenderer
 from rest_framework.response import Response
+from rest_framework import viewsets
 from .serializers  import *
 
 
@@ -176,3 +177,29 @@ def filemanager(request, code):
         return shopping(request)
     documents = course.document_set.all()
     return render(request, 'dashboard/filemanager.html', {'course': course, 'documents': documents})
+
+
+
+
+
+
+class TestViewSet(viewsets.ModelViewSet):
+    queryset = Course.objects.all()
+    serializer_class = CourseLessonsSerializer
+    http_method_names = ['get',]
+
+    search_fields = ('title',)
+    ordering_fields =  ('title', )
+    
+    def get_queryset(self):
+         now = datetime.datetime.now()
+         user = get_object_or_404(User, pk=self.request.user.id)
+         courses = user.courses.filter(end_date__gt=now)
+         classes = Course_Calendar.objects.filter(course__in=courses)
+        # update all classes time
+         for klass in classes:
+            while klass.end_date < now:
+                klass.start_date += datetime.timedelta(days=7)
+                klass.end_date += datetime.timedelta(days=7)
+                klass.save()
+         return courses
