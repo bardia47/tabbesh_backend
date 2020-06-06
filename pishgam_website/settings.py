@@ -50,7 +50,6 @@ LOGGING = {
 # Application definition
 
 INSTALLED_APPS = [
-    'drf_link_header_pagination',
     'rest_framework',
     'rest_framework.authtoken',
     'jalali_date',
@@ -173,7 +172,7 @@ REST_FRAMEWORK = {
                                 'rest_framework.filters.SearchFilter',
                                 'rest_framework.filters.OrderingFilter'),
     
-    'DEFAULT_PAGINATION_CLASS': 'drf_link_header_pagination.LinkHeaderPagination',
+    'DEFAULT_PAGINATION_CLASS': 'accounts.pagination.Pagination',
     'PAGE_SIZE': 10
 
 }
