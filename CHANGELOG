@@ -72,4 +72,3 @@ pip install soap
 pip install html-json-forms
 pip install djangorestframework-simplejwt
 pip install django-filter
- pip install djangorestframework-link-header-pagination
