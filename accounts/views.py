@@ -21,6 +21,8 @@ from django.core.exceptions import ObjectDoesNotExist
 
 @permission_classes((AllowAny,))
 class SignUp(APIView):
+    # change default browsable api render to templatehtml render
+    # and also you need add json
     renderer_classes = [TemplateHTMLRenderer, JSONRenderer]
     
     def get(self, request):
@@ -28,8 +30,8 @@ class SignUp(APIView):
         cities = City.objects.all()
         if request.accepted_renderer.format == 'html':
             return Response({'grades' : grades ,'city' : cities}, template_name='accounts/signup.html')        
-        ser = SignUpSerializer(instance={'grades': grades, 'cities': cities})
-        return Response(ser.data)
+        serializer = SignUpSerializer(instance={'grades': grades, 'cities': cities})
+        return Response(serializer.data)
     
     def post(self, request):
         serializer = UserSerializer(data=request.data)
