@@ -26,12 +26,13 @@ urlpatterns = [
     path('signup/', SignUp.as_view(), name="signup"),
     path('signin/', SignIn.as_view(), name='signin'),
     path('api/token/', MyTokenObtainPairView.as_view(), name='api_token_auth'),
-    path('signout/', signout, name='signout'),
+    path('signout/', SignOut.as_view() , name='signout'),
     path('dashboard/', include('dashboard.urls')),
     path('payment/', include('zarinpal.urls')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 handler404 = 'home.views.page_not_found'
+handler403 = 'home.views.sign_up_required'
 admin.site.site_header = "صفحه ادمین"
 admin.site.site_title = "صفحه ادمین"
 admin.site.index_title = "صفحه ادمین"

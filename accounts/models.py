@@ -50,7 +50,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     objects = UserManager()
 
     USERNAME_FIELD = 'username'
-    REQUIRED_FIELDS = ['email', 'first_name', 'last_name']
+    REQUIRED_FIELDS = [ 'first_name', 'last_name']
 
       #compress images
     def compressImage(self,uploadedImage):

@@ -14,6 +14,7 @@ from django.core.serializers import serialize
 from rest_framework import status
 from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.authtoken.serializers import AuthTokenSerializer
+from django.core.exceptions import ObjectDoesNotExist
 
 # Create your views here.
 
@@ -93,6 +94,14 @@ class MyTokenObtainPairView(ObtainAuthToken):
  
        
 
-def signout(request):
-    auth.logout(request)
-    return redirect('home')
+class SignOut(APIView):
+    def get(self, request):
+        if request.accepted_renderer.format == 'json':
+            try:
+                request.user.auth_token.delete()
+            except (AttributeError, ObjectDoesNotExist):
+                pass
+            return Response(status=status.HTTP_200_OK)
+        auth.logout(request)
+        return redirect('home')
+        

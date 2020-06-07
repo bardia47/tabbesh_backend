@@ -9,12 +9,17 @@ from django.db.transaction import commit
 class UserManager(BaseUserManager):
     use_in_migrations = True
     
-    def _create_user(self, username, email, password, **extra_fields):
-        if not email:
-            raise ValueError('The given email must be set')
-        email = self.normalize_email(email)
-        user = self.model(email=email, **extra_fields)
-        user.username = username
+    def _create_user(self, username, password, **extra_fields):
+#         if not email:
+#             raise ValueError('The given email must be set')
+#         email = self.normalize_email(email)
+#         user = self.model(email=email, **extra_fields)
+        try:
+            grades=extra_fields['grades']
+            del extra_fields['grades']
+        except:
+            pass
+        user = self.model(username=username , **extra_fields)
         password = make_password(password)
         user.password = password
         if user.gender is None:
@@ -33,16 +38,19 @@ class UserManager(BaseUserManager):
         #     user.city = city.objects.get(code='1')    
 
         user.save(using=self._db)
+        if grades:
+            user.grades.add(*grades)
+            user.save(using=self._db)
         return user
 
-    def create_user(self, username, email, password=None, **extra_fields):
+    def create_user(self, username, password=None, **extra_fields):
         extra_fields.setdefault('is_superuser', False)
-        return self._create_user(username, email, password, **extra_fields)
+        return self._create_user(username, password, **extra_fields)
 
-    def create_superuser(self, username, email, password, **extra_fields):
+    def create_superuser(self, username, password, **extra_fields):
         extra_fields.setdefault('is_superuser', True)
 
         if extra_fields.get('is_superuser') is not True:
             raise ValueError('Superuser must have is_superuser=True.')
 
-        return self._create_user(username, email, password, **extra_fields)
+        return self._create_user(username, password, **extra_fields)

@@ -14,3 +14,6 @@ def home(request):
 
 def page_not_found(request, exception):
     return render(request, 'home/404-page.html')
+
+def sign_up_required(request, exception):
+    return render(request, 'accounts/signup.html' ,status=403)

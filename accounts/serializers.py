@@ -36,15 +36,12 @@ class UserSerializer(JSONFormSerializer,serializers.ModelSerializer):
             raise serializers.ValidationError({"phone_number":'شماره وارد شده نامعتبر است'}) 
         elif (len(response['Value']) == 1):
             raise serializers.ValidationError('خطایی رخ داده است . لطفا یک بار دیگر تلاش کنید یا با پشتیبان تماس بگیرید')
-        data['password']=make_password(randPass)
+        data['password']=randPass
         return data    
         
       
     def create(self, validated_data):
-        user = super().create(validated_data)
-        user.set_default_avatar()  
-        user.save()
-        return user
+        return User.objects.create_user(**validated_data)
     
     
 class GradeSerializer(JSONFormSerializer,serializers.ModelSerializer):
