@@ -1,152 +1,213 @@
 /* Scroll Bar CSS */
 ::-webkit-scrollbar-track {
-  box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
-  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
-  background-color: #F5F5F5;
+    box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+    background-color: #F5F5F5;
 }
 
 ::-webkit-scrollbar {
-  width: 10px;
-  background-color: #F5F5F5;
+    width: 10px;
+    background-color: #F5F5F5;
 }
 
 ::-webkit-scrollbar-thumb {
-  background-color: #F90;
-  background-image: -webkit-linear-gradient(45deg, rgba(255, 255, 255, .2) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, .2) 50%, rgba(255, 255, 255, .2) 75%, transparent 75%, transparent)
+    background-color: #F90;
+    background-image: -webkit-linear-gradient(45deg, rgba(255, 255, 255, .2) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, .2) 50%, rgba(255, 255, 255, .2) 75%, transparent 75%, transparent)
 }
 
 /* Lesson page CSS */
 
 .course-card {
-  font-size: 1em;
-  overflow: hidden;
-  padding: 0;
-  border: none;
-  border-radius: .28571429rem;
-  box-shadow: 0 1px 3px 0 #d4d4d5, 0 0 0 1px #d4d4d5;
+    font-size: 1em;
+    overflow: hidden;
+    padding: 0;
+    border: none;
+    border-radius: .28571429rem;
+    box-shadow: 0 1px 3px 0 #d4d4d5, 0 0 0 1px #d4d4d5;
 }
 
 .card-body {
-  font-size: 1em;
-  position: relative;
-  margin: 0;
-  padding: 1em;
-  border: none;
-  border-top: 1px solid rgba(34, 36, 38, .1);
-  box-shadow: none;
+    font-size: 1em;
+    position: relative;
+    margin: 0;
+    padding: 1em;
+    border: none;
+    border-top: 1px solid rgba(34, 36, 38, .1);
+    box-shadow: none;
 }
 
 .card-title {
-  font-size: 1.28571429em;
-  font-weight: 700;
-  line-height: 1.2857em;
+    font-size: 1.28571429em;
+    font-weight: 700;
+    line-height: 1.2857em;
 }
 
 .card-text {
-  clear: both;
-  margin-top: .5em;
-  color: rgba(0, 0, 0, .68);
+    clear: both;
+    margin-top: .5em;
+    color: rgba(0, 0, 0, .68);
 }
 
 
 /* Course grade */
 
 .course-grade h6 {
-  font-size: 15px;
-  color: rgba(0, 0, 0, .4);
+    font-size: 15px;
+    color: rgba(0, 0, 0, .4);
 }
 
 /* Course teacher name */
 .course-teacher-name h6 {
-  font-size: 15px;
-  color: rgba(0, 0, 0, .4);
+    font-size: 15px;
+    color: rgba(0, 0, 0, .4);
 }
 
 /* Course calendar */
 
 .course-calender {
-  margin-top: 20px;
-  font-size: 15px;
+    margin-top: 20px;
+    font-size: 15px;
 }
 
 .course-calender img {
-  width: 20px;
-  height: 20px;
-  margin-left: 5px;
+    width: 20px;
+    height: 20px;
+    margin-left: 5px;
 }
 
 .course-calender p {
-  font-family: 'Dana_Bold';
+    font-family: 'Dana_Bold';
 }
 
 .course-calender span {
-  font-family: 'Vazir_Light';
+    font-family: 'Vazir_Light';
 }
 
 /* Course end date */
 
 .course-end-date {
-  margin-top: 20px;
-  font-size: 15px;
+    margin-top: 20px;
+    font-size: 15px;
 }
 
 .course-end-date img {
-  width: 20px;
-  height: 20px;
-  margin-left: 5px;
+    width: 20px;
+    height: 20px;
+    margin-left: 5px;
 }
 
 .course-end-date p {
-  font-family: 'Dana_Bold';
+    font-family: 'Dana_Bold';
 }
 
 .course-end-date span {
-  font-family: 'Vazir_Light';
+    font-family: 'Vazir_Light';
 }
 
 /* Course description */
 
 .course-description {
-  margin-top: 20px;
-  font-size: 15px;
+    margin-top: 20px;
+    font-size: 15px;
 }
 
 .course-description img {
-  width: 20px;
-  height: 20px;
-  margin-left: 5px;
+    width: 20px;
+    height: 20px;
+    margin-left: 5px;
 }
 
 .course-description-title {
-  font-family: 'Dana_Bold';
+    font-family: 'Dana_Bold';
 }
 
 .course-description-p {
-  font-family: 'Vazir_Light';
-  margin-right: 20px;
+    font-family: 'Vazir_Light';
+    margin-right: 20px;
 }
 
 /* Footer of course card */
 
 .card-footer {
-  font-size: 1em;
-  position: static;
-  top: 0;
-  left: 0;
-  max-width: 100%;
-  padding: .75em 1em;
-  color: rgba(0, 0, 0, .4);
-  border-top: 1px solid rgba(0, 0, 0, .05) !important;
-  background: #fff;
+    font-size: 1em;
+    position: static;
+    top: 0;
+    left: 0;
+    max-width: 100%;
+    padding: .75em 1em;
+    color: rgba(0, 0, 0, .4);
+    border-top: 1px solid rgba(0, 0, 0, .05) !important;
+    background: #fff;
 }
 
 .button-to-class {
-  text-align: center;
-  direction: ltr;
+    text-align: center;
+    direction: ltr;
 }
 
 .button-to-class img {
-  width: 20px;
-  height: 20px;
-  margin-right: 5px;
+    width: 20px;
+    height: 20px;
+    margin-right: 5px;
 }
+
+/* CSS for pagination */
+.pagination-wrapper {
+    text-align: center;
+    margin: 40px 0;
+}
+
+.pagination {
+    display: inline-block;
+    height: 70px;
+    margin-top: 70px;
+    padding: 0 25px;
+    border-radius: 35px;
+    background-color: #eee;
+}
+
+.page-numbers {
+    display: block;
+    padding: 0 25px;
+    float: left;
+    transition: 400ms ease;
+    color: #595959;
+    font-size: 20px;
+    letter-spacing: 0.1em;
+    line-height: 70px;
+    text-decoration: none;
+}
+
+.page-numbers:hover, .page-numbers.current {
+    background-color: #86c023;
+    color: #fff;
+}
+
+.page-numbers.prev:hover, .page-numbers.next:hover {
+    background-color: transparent;
+    color: #86c023;
+}
+
+.pagination > .prev, .pagination > .next {
+    letter-spacing: initial;
+}
+
+/* Lessons spinner color*/
+.spinner-color {
+}
+
+@media (max-width: 1199px) {
+    .page-numbers {
+        padding: 0 15px;
+        font-size: 16px;
+        line-height: 50px;
+    }
+
+    .pagination {
+        height: 50px;
+        margin-top: 50px;
+        padding: 0 10px;
+        border-radius: 25px;
+    }
+}
+
