@@ -24,8 +24,6 @@ class CourseInline(admin.StackedInline):
         widget = form.base_fields['course'].widget
         widget.can_add_related = False
         widget.can_change_related = False
-        widget.can_add_related = False
-        widget.can_change_related = False
         widget.label='دوره'
         return formset
 
@@ -79,9 +77,6 @@ class UserCreationForm(forms.ModelForm):
             user.save()
         return user
 
-        if commit:
-            user.save()
-        return user
 
 class UserChangeForm(UserCreationForm):
     
@@ -109,10 +104,6 @@ class UserChangeForm(UserCreationForm):
             password = make_password(self.cleaned_data["password1"])
             user.password = password
         user.set_default_avatar()  
-        if commit:
-            user.save()
-        return user
-
         if commit:
             user.save()
         return user

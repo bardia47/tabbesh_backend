@@ -40,7 +40,7 @@ class CourseBriefSerializer(JSONFormSerializer, serializers.ModelSerializer):
         return obj.teacher.get_full_name()
 
 
-class CourseLessonsSerializer(JSONFormSerializer, serializers.ModelSerializer):
+class CourseLessonsSerializer(CourseBriefSerializer):
     first_class = serializers.SerializerMethodField('get_first_class')
 
     def get_first_class(self, obj):
@@ -48,7 +48,8 @@ class CourseLessonsSerializer(JSONFormSerializer, serializers.ModelSerializer):
 
     class Meta:
         model = Course
-        fields = ('id', 'title', 'start_date', 'end_date', 'code', 'amount', 'description', 'first_class', 'image')
+        fields = ('title', 'start_date', 'end_date', 'code', 'amount',
+                  'description', 'first_class', 'image', 'teacher')
 
 
 class CourseCalendarSerializer(JSONFormSerializer, serializers.ModelSerializer):
