@@ -1,12 +1,15 @@
-// Check page is loading or load 
-if (document.readyState == 'loading') {
-    document.addEventListener('DOMContentLoaded', ready())
-} else {
+$(window).on('load', function () {
+    setTimeout(function () {
+        $(".loading-page").hide()
+        $(".extend-content").show()
+        $('#loading').hide();
+    }, 500);
     ready()
-}
+});
 
 
 function ready() {
+    // loading page js
     $(document).ready(function () {
         $("#sidebarCollapse").click(function () {
             $("#sidebar").toggleClass('active');

@@ -7,7 +7,7 @@
 
 <!-- CSS files -->
 {% block CSSfiles %}
-<link rel="stylesheet" href="{% static 'dashboard/css/shopping.css' %}">
+    <link rel="stylesheet" href="{% static 'dashboard/css/shopping.css' %}">
 {% endblock %}
 
 <!-- Active menu of sidebar -->
@@ -15,207 +15,218 @@
 
 <!-- Content of page -->
 {% block content %}
-<section class="shopping">
-    <!-- Shopping content-->
-    <div class="shopping-content">
-        <!-- Shopping title -->
-        <div class="shopping-title">
-            <h1>
-                دوره های تابش
-            </h1>
-        </div>
-        <!-- Cart Section use cart-list for shopping.js -->
-        <div class="cart-list card-section">
-            <!-- Cart title -->
-            <div class="cart-title">
-                <h4>
-                    <img src="{% static 'home/images/icons/shopping-basket.svg'%}">
-                    سبد خرید
-                </h4>
+    <section class="shopping">
+        <!-- Shopping content-->
+        <div class="shopping-content">
+            <!-- Shopping title -->
+            <div class="shopping-title">
+                <h1>
+                    دوره های تابش
+                </h1>
             </div>
-            <!-- Cart items add with shopping.js -->
-            <!-- End cart items -->
-        </div>
-        <!-- Cart footer section -->
-        <div class="card cart-footer">
-            <!-- Cart purchase button -->
-            <div>
-                <form id="shopping-cart-form" action="{% url 'payment_request' %}" method="post">
-                    {% csrf_token %}
-                    <!-- Total cart items id and price for pass to back-end -->
-                    <input id="total_id" type="hidden" name="total_id" value="">
-                    <input id="total_pr" type="hidden" name="total_pr" value="">
-                    <input type="submit" class="btn btn-success" value="پرداخت">
-                </form>
+            <!-- Cart Section use cart-list for shopping.js -->
+            <div class="cart-list card-section">
+                <!-- Cart title -->
+                <div class="cart-title">
+                    <h4>
+                        <img src="{% static 'home/images/icons/shopping-basket.svg' %}">
+                        سبد خرید
+                    </h4>
+                </div>
+                <!-- Cart items add with shopping.js -->
+                <!-- End cart items -->
             </div>
-            <div class="cart-total-price">
-                مبلغ قابل پرداخت : <b class="total-price">0</b> تومان
-            </div>
-        </div>
-    </div>
-    <hr>
-    <!-- Shopping cards - include Courses & Search section -->
-    <div class="shopping-cards">
-        <!-- Shopping search title -->
-        <div class="shopping-search-title">
-            <h1>
-                <img src="{% static 'home/images/icons/search.svg' %}">
-                جستجوی دروس
-            </h1>
-        </div>
-        <!-- Search form -->
-        <form action="{% url 'shopping' %}">
-            <div class="row form-search">
-                <!-- Select Grade -->
-                <div class="col-md-3 mb-2">
-                    <select class="custom-select" name="grade">
-                        <option selected disabled>پایه</option>
-                        {% for grade in grades %}
-                        <option value="{{ grade.id }}">{{ grade.title }}</option>
-                        {% endfor %}
-                    </select>
+            <!-- Cart footer section -->
+            <div class="card cart-footer">
+                <!-- Cart purchase button -->
+                <div>
+                    <form id="shopping-cart-form" action="{% url 'payment_request' %}" method="post">
+                        {% csrf_token %}
+                        <!-- Total cart items id and price for pass to back-end -->
+                        <input id="total_id" type="hidden" name="total_id" value="">
+                        <input id="total_pr" type="hidden" name="total_pr" value="">
+                        <input type="submit" class="btn btn-success" value="پرداخت">
+                    </form>
                 </div>
-                <!-- Select Lessons -->
-                <div class="col-md-3 mb-2">
-                    <select class="custom-select" name="lesson">
-                        <option selected disabled>دروس</option>
-                        {% for lesson in lessons %}
-                        <option value="{{ lesson.id }}">{{ lesson.title }}</option>
-                        {% endfor %}
-                    </select>
-                </div>
-                <!-- Select teachers -->
-                <div class="col-md-3 mb-2">
-                    <select class="custom-select" name="teacher">
-                        <option selected disabled>استاد</option>
-                        {% for teacher in teachers %}
-                        <option value="{{ teacher.id }}">{{ teacher.get_full_name }}</option>
-                        {% endfor %}
-                    </select>
-                </div>
-                <!-- Search Button -->
-                <div class="col-md-3">
-                    <input type="submit" class="form-control" value="جستجو">
+                <div class="cart-total-price">
+                    مبلغ قابل پرداخت : <b class="total-price">0</b> تومان
                 </div>
             </div>
-        </form>
-
-        <!-- Shopping Cards -->
-        <div class="card-group">
-            <!-- Loop for courses -->
-            {% for course in courses %}
-            <div class="col-md-4 mb-3">
-                <div class="card course-card h-100">
-                    <!-- Course poster -->
-                    <img class="card-img-top" src="{{ course.image.url }}">
-                    <!-- Course content -->
-                    <div class="card-body">
-                        <!-- Course title  -->
-                        <h4 class="title ">{{ course.title }}</h4>
-                        <!-- Course teacher name  -->
-                        <div class="course-teacher-name">
-                            <h6 class="teacher-name">استاد {{ course.teacher.get_full_name }}</h6>
-                        </div>
-                        <!-- Course calender  -->
-                        <div class="course-calender">
-                            <p>
-                                <img src="{% static 'home/images/icons/clock.svg'%}" alt="">
-                                جلسات:
-                            </p>
-                            <!-- Loop for course calender times -->
-                            {% for cc in course.course_calendar_set.all %}
-                            <p class="course-calender-time">
-                                <img src="{% static 'home/images/icons/add-time.svg'%}" class="animated"
-                                    alt="time icon">
-                                {{cc.start_date|date:"l"}} ها ساعت {{cc.start_date|date:"H:i"}}
-                            </p>
+        </div>
+        <hr>
+        <!-- Shopping cards - include Courses & Search section -->
+        <div class="shopping-cards">
+            <!-- Shopping search title -->
+            <div class="shopping-search-title">
+                <h1>
+                    <img src="{% static 'home/images/icons/search.svg' %}">
+                    جستجوی دروس
+                </h1>
+            </div>
+            <!-- Search form -->
+            <form action="{% url 'shopping' %}">
+                <div class="row form-search">
+                    <!-- Select Grade -->
+                    <div class="col-md-3 mb-2">
+                        <select class="custom-select" name="grade">
+                            <option selected disabled>پایه</option>
+                            {% for grade in grades %}
+                                <option value="{{ grade.id }}">{{ grade.title }}</option>
                             {% endfor %}
-                        </div>
-                        <!-- Start of the course  -->
-                        <div class="course-start-date">
-                            <p>
-                                <img src="{% static 'home/images/icons/start-date.svg'%}" alt="">
-                                شروع دوره:
-                                <span>{{ course.start_date|jformat:" %A %-d %B " }}</span>
-                            </p>
-                        </div>
-                        <!-- End of the course  -->
-                        <div class="course-end-date">
-                            <p>
-                                <img src="{% static 'home/images/icons/end-date.svg'%}" alt="">
-                                اتمام دوره:
-                                <span>{{ course.end_date|jformat:" %A %-d %B " }}</span>
-                            </p>
-                        </div>
-                        <!-- Description of the course  -->
-                        <div class="course-description">
-                            <p class="course-description-title">
-                                <img src="{% static 'home/images/icons/paragraph.svg'%}" alt="">
-                                توضیحات:
-                            </p>
-                            <p class="course-description-p">{{course.description}}</p>
-                        </div>
-                        <!-- Course price -->
-                        <div class="course-price">
-                            <p>
-                                <img src="{% static 'home/images/icons/price.svg'%}" alt="">
-                                قیمت:
-                                <span class="price">
+                        </select>
+                    </div>
+                    <!-- Select Lessons -->
+                    <div class="col-md-3 mb-2">
+                        <select class="custom-select" name="lesson">
+                            <option selected disabled>دروس</option>
+                            {% for lesson in lessons %}
+                                <option value="{{ lesson.id }}">{{ lesson.title }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <!-- Select teachers -->
+                    <div class="col-md-3 mb-2">
+                        <select class="custom-select" name="teacher">
+                            <option selected disabled>استاد</option>
+                            {% for teacher in teachers %}
+                                <option value="{{ teacher.id }}">{{ teacher.get_full_name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <!-- Search Button -->
+                    <div class="col-md-3">
+                        <input type="submit" class="form-control" value="جستجو">
+                    </div>
+                </div>
+            </form>
+
+            <!-- Shopping Cards -->
+            <div class="card-group">
+                <!-- Loop for courses -->
+                {% for course in courses %}
+                    <div class="col-md-4 mb-3">
+                        <div class="card course-card h-100">
+                            <!-- Course poster -->
+                            <img class="card-img-top" src="{{ course.image.url }}">
+                            <!-- Course content -->
+                            <div class="card-body">
+                                <!-- Course title  -->
+                                <h4 class="title ">{{ course.title }}</h4>
+                                <!-- Course teacher name  -->
+                                <div class="course-teacher-name">
+                                    <h6 class="teacher-name">استاد {{ course.teacher.get_full_name }}</h6>
+                                </div>
+                                <!-- Course calender  -->
+                                <div class="course-calender">
+                                    <p>
+                                        <img src="{% static 'home/images/icons/clock.svg' %}" alt="">
+                                        جلسات:
+                                    </p>
+                                    <!-- Loop for course calender times -->
+                                    {% for cc in course.course_calendar_set.all %}
+                                        <p class="course-calender-time">
+                                            <img src="{% static 'home/images/icons/add-time.svg' %}" class="animated"
+                                                 alt="time icon">
+                                            {{ cc.start_date|date:"l" }} ها ساعت {{ cc.start_date|date:"H:i" }}
+                                        </p>
+                                    {% endfor %}
+                                </div>
+                                <!-- Start of the course  -->
+                                <div class="course-start-date">
+                                    <p>
+                                        <img src="{% static 'home/images/icons/start-date.svg' %}" alt="">
+                                        شروع دوره:
+                                        <span>{{ course.start_date|jformat:" %A %-d %B " }}</span>
+                                    </p>
+                                </div>
+                                <!-- End of the course  -->
+                                <div class="course-end-date">
+                                    <p>
+                                        <img src="{% static 'home/images/icons/end-date.svg' %}" alt="">
+                                        اتمام دوره:
+                                        <span>{{ course.end_date|jformat:" %A %-d %B " }}</span>
+                                    </p>
+                                </div>
+                                <!-- Description of the course  -->
+                                <div class="course-description">
+                                    <p class="course-description-title">
+                                        <img src="{% static 'home/images/icons/paragraph.svg' %}" alt="">
+                                        توضیحات:
+                                    </p>
+                                    <p class="course-description-p">{{ course.description }}</p>
+                                </div>
+                                <!-- Course price -->
+                                <div class="course-price">
+                                    <p>
+                                        <img src="{% static 'home/images/icons/price.svg' %}" alt="">
+                                        قیمت:
+                                        <span class="price">
                                     {% if course.amount ==  0 %}
-                                    رایگان!
+                                        رایگان!
                                     {% else %}
-                                    {{course.amount|floatformat:"-3"}}
-                                    <span class="currency">تومان</span>
+                                        {{ course.amount|floatformat:"-3" }}
+                                        <span class="currency">تومان</span>
                                     {% endif %}
                                 </span>
-                            </p>
+                                    </p>
+                                </div>
+                            </div>
+                            <!-- Button add course to cart -->
+                            <div class="card-footer add-to-cart">
+                                <button class="btn btn-success add-to-cart-button">
+                                    <img src="{% static 'home/images/icons/add-to-cart.svg' %}"
+                                         alt="button link to class">
+                                    اضافه به سبد خرید
+                                </button>
+                            </div>
+                            <!-- hidden lesson id for handel total buy id in shopping.js -->
+                            <input type="hidden" class="course-id" value="{{ course.id }}">
                         </div>
                     </div>
-                    <!-- Button add course to cart -->
-                    <div class="card-footer add-to-cart">
-                        <button class="btn btn-success add-to-cart-button">
-                            <img src="{% static 'home/images/icons/add-to-cart.svg'%}" alt="button link to class">
-                            اضافه به سبد خرید
+                {% endfor %}
+            </div>
+            <div class="pagination-wrapper">
+                <div class="pagination">
+                    <a class="prev page-numbers" href="javascript:;">قبلی</a>
+                    <a class="page-numbers" href="javascript:;">1</a>
+                    <a class="page-numbers" href="javascript:;">2</a>
+                    <span aria-current="page" class="page-numbers current">3</span>
+                    <a class="page-numbers" href="javascript:;">4</a>
+                    <a class="page-numbers" href="javascript:;">5</a>
+                    <a class="next page-numbers" href="javascript:;">بعدی</a>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- Modal Eror for duplicate course in cart -->
+        <div class="modal fade" id="errorModalForCart" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+             aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title text-danger" id="exampleModalLabel" style="font-family: 'Vazir_Bold';">
+                            مشکل
+                            در خرید دوره</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
-                    <!-- hidden lesson id for handel total buy id in shopping.js -->
-                    <input type="hidden" class="course-id" value="{{ course.id }}">
-                </div>
-            </div>
-            {% endfor %}
-        </div>
-    </div>
-
-
-
-    <!-- Modal Eror for duplicate course in cart -->
-    <div class="modal fade" id="errorModalForCart" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title text-danger" id="exampleModalLabel" style="font-family: 'Vazir_Bold';">مشکل
-                        در خرید دوره</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <strong>
-                        <p id="modal-body"></p>
-                    </strong>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-danger w-100" data-dismiss="modal">فهمیدم!</button>
+                    <div class="modal-body">
+                        <strong>
+                            <p id="modal-body"></p>
+                        </strong>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger w-100" data-dismiss="modal">فهمیدم!</button>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-
-</section>
+    </section>
 {% endblock %}
 
 <!-- JS files -->
 {% block JSfile %}
-<script src="{% static 'dashboard/js/shopping.js' %}"></script>
+    <script src="{% static 'dashboard/js/shopping.js' %}"></script>
 {% endblock %}

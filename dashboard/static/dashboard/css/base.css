@@ -210,6 +210,20 @@ a:focus {
     font-size: 18px;
 }
 
+/* loading page */
+.loading-page {
+    position: absolute;
+    top: 45%;
+    left: 38%;
+    width: 80px;
+    height: 80px;
+}
+/* Default spinner color */
+.spinner-color {
+    color: #FFCE00;
+}
+
+
 /* ---------------------------------------------------
     MEDIAQUERIES for when screen width is lower than 768 pixels
 ----------------------------------------------------- */
