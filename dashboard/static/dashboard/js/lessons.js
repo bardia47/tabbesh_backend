@@ -29,9 +29,29 @@ $(function () {
     });
 });
 
+// hostname of project -- example : https://127.0.0.1:8000
+let hostName = window.location.href.split("/")[0]
+
 function renderLessenCards(courseCards) {
     $.each(courseCards, function (index, courseCard) {
-        endDateCourse = new persianDate(courseCard.strat_date)
+        let endDateCourse = new persianDate(Date.parse(courseCard.end_date))
+        let nextClassDate = new persianDate(Date.parse(courseCard.first_class))
+        // check class is active or not
+        if (courseCard.is_active) {
+            buttonToClassTemplate = `
+            <button class="btn btn-success mb-1">
+                <img src="${hostName}/static/home/images/icons/click.svg" alt="button link to class">
+                ورود به کلاس
+            </button>
+            `
+        } else {
+            buttonToClassTemplate = `
+            <button class="btn btn-danger mb-1" disabled>
+                <img src="${hostName}/static/home/images/icons/click.svg" alt="button link to class">
+                کلاس شروع نشده
+            </button>
+            `
+        }
         let lessonCardTemplate = `
         <!-- Course Cards -->
         <div class="col-md-4 mb-3">
@@ -48,23 +68,35 @@ function renderLessenCards(courseCards) {
                         <h6>استاد {{ course.teacher.get_full_name }}</h6>
                     </div>
                     <!-- Course calender for next class  -->
-                    <div class="course-calender"></div>
-                    <!-- End of the course  -->
-                    <div class="course-end-date">
+                    <div class="course-calender">
                         <p>
-                            <img src="{% static 'home/images/icons/calendar.svg' %}" alt="" />
-                            اتمام دوره:
+                            <img src="{% static 'home/images/icons/clock.svg' %}" alt="">
+                            جلسه ی بعدی:
                             <span>
                                 ${endDateCourse.format("dddd")}
                                 ${endDateCourse.format("D")}
-                                ${endDateCourse.format("MMMM")}
+                                ام
+                                ساعت
+                                ${endDateCourse.format("H:m")}
+                             </span>
+                        </p>
+                    </div>
+                    <!-- End of the course  -->
+                    <div class="course-end-date">
+                        <p>
+                            <img src="${hostName}/static/home/images/icons/calendar.svg" alt="calender-icon" />
+                            اتمام دوره:
+                            <span>
+                                ${nextClassDate.format("dddd")}
+                                ${nextClassDate.format("D")}
+                                ${nextClassDate.format("MMMM")}
                             </span>
                         </p>
                     </div>
                     <!-- Description of the course  -->
                     <div class="course-description">
                         <p class="course-description-title">
-                            <img src="{% static 'home/images/icons/paragraph.svg' %}" alt="" />
+                            <img src="${hostName}/static/home/images/icons/paragraph.svg" alt="" />
                             توضیحات:
                         </p>
                         <p class="course-description-p">${courseCard.description}</p>
@@ -72,8 +104,9 @@ function renderLessenCards(courseCards) {
                 </div>
                 <!-- Button link to class -->
                 <div class="card-footer button-to-class p-0 py-3">
+                    ${buttonToClassTemplate}
                     <button onclick="location.href='files/${courseCard.code}'" class="btn btn-dark mr-2" type="button">
-                        <img src="{% static 'home/images/icons/document.svg' %}" alt="button link to class" />
+                        <img src="${hostName}/static/home/images/icons/document.svg" alt="button link to class" />
                         جزوه ها
                     </button>
                 </div>
@@ -86,10 +119,9 @@ function renderLessenCards(courseCards) {
 
 
 function renderPagination(pageNumber) {
-    $('.pagination').append(`<a class="next page-numbers" href="javascript:;">قبلی</a>`)
+    $('.pagination').append(`<a class="next page-numbers" href="${hostName}/"></a>"`)
     for (let i = 1; i <= pageNumber; i++) {
         $('.pagination').append(`<a class="page-numbers" href="javascript:;">${i}</a>`)
-        console.log("Hi")
     }
     $('.pagination').append(`<a class="next page-numbers" href="javascript:;">بعدی</a>`)
 }
