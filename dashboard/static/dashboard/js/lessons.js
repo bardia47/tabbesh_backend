@@ -28,9 +28,9 @@ function pagination(url) {
         urlAjax = url
     } else {
         if (getUrlParameter(window.location.href, "page")) {
-            urlAjax = hostName + "/dashboard/test/?page=" + getUrlParameter(window.location.href, "page")
+            urlAjax = hostName + "/dashboard/get_lessons/?page=" + getUrlParameter(window.location.href, "page")
         } else {
-            urlAjax = hostName + "/dashboard/test/?page=1"
+            urlAjax = hostName + "/dashboard/get_lessons/?page=1"
             history.replaceState({url: urlAjax}, null, window.location.href + "?page=1")
         }
     }
@@ -142,12 +142,12 @@ function renderLessenCards(courseCards) {
 
 // make pagination numbers
 function renderPagination(pageNumber) {
-    // $('.pagination').append(`<a class="next page-numbers" href="${hostName}/dashboard/test/"> Prev </a>`)
+    // $('.pagination').append(`<a class="next page-numbers" href="${hostName}/dashboard/get_lessons/"> Prev </a>`)
     for (let number = 1; number <= pageNumber; number++) {
         if (getUrlParameter(window.location.href, "page") == number) {
             $('.pagination').append(`<span aria-current="page" class="page-numbers current">${number}</span>`)
         } else {
-            $('.pagination').append(`<a class="page-numbers" href="${hostName}/dashboard/test/?page=${number}">${number}</a>`)
+            $('.pagination').append(`<a class="page-numbers" href="${hostName}/dashboard/get_lessons/?page=${number}">${number}</a>`)
         }
     }
     $(".page-numbers").click(function (event) {

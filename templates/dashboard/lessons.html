@@ -11,11 +11,10 @@
 
 <!-- Active menu of sidebar -->
 {% block lesson_active %}active-menu{% endblock %}
-
 <!-- Content of page -->
 {% block content %}
     <!-- Course Rows -->
-    {% if not courses %}
+    {% if not have_class %}
         <div class="container w-100 p-1 text-center" style="font-family: 'Vazir_Bold';">
             <div class="col-md-12 mt-3 mb-3">
                 <img class="m-auto" src="{% static 'home/images/icons/sad-emoji.svg' %}" width="130" height="130">

@@ -104,21 +104,8 @@ class Lessons(APIView):
 
     def get(self, request):
         now = datetime.datetime.now()
-        user = get_object_or_404(User, pk=request.user.id)
-        courses = user.courses.filter(end_date__gt=now)
-        classes = Course_Calendar.objects.filter(course__in=courses)
-        # update all classes time
-        for klass in classes:
-            while klass.end_date < now:
-                klass.start_date += datetime.timedelta(days=7)
-                klass.end_date += datetime.timedelta(days=7)
-                klass.save()
         if request.accepted_renderer.format == 'html':
-            return Response({'courses': courses} , template_name='dashboard/lessons.html')
-        ser = CourseLessonsSerializer(instance=courses, many=True)
-        return Response(ser.data)    
-
-
+            return Response({"have_class" : request.user.courses.filter(end_date__gt=now).count()!=0} ,template_name='dashboard/lessons.html')
 # Shopping Page
 class Shopping(APIView):
     renderer_classes = [TemplateHTMLRenderer, JSONRenderer]
@@ -183,7 +170,7 @@ def filemanager(request, code):
 
 
 
-class TestViewSet(viewsets.ModelViewSet):
+class GetLessonsViewSet(viewsets.ModelViewSet):
     queryset = Course.objects.all()
     serializer_class = CourseLessonsSerializer
     http_method_names = ['get',]
