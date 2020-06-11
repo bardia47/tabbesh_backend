@@ -12,7 +12,9 @@ let hostName = arrayHref[0] + "//" + arrayHref[2]
 
 // first pagination when user request https://127.0.0.1:8000/dashboard/lessons/
 $(function () {
-    pagination()
+	url= hostName + "/dashboard/get_lessons/?page=" +( getUrlParameter(window.location.href, "page") ? + getUrlParameter(window.location.href, "page") : "1")
+	
+    pagination(url)
 })
 
 // pagination when user return to previous page --> hint: read about history javascript stack
@@ -23,26 +25,17 @@ window.onpopstate = function (event) {
 //get lessons with ajax
 function pagination(url) {
     // check with page go
-    if (url) {
-        urlAjax = url
-    } else {
-        if (getUrlParameter(window.location.href, "page")) {
-            urlAjax = hostName + "/dashboard/get_lessons/?page=" + getUrlParameter(window.location.href, "page")
-        } else {
-            urlAjax = hostName + "/dashboard/get_lessons/?page=1"
-            history.replaceState({url: urlAjax}, null, window.location.href + "?page=1")
-        }
-    }
+   
 
     // get JSON and Response Header
     $.ajax({
-        url: urlAjax,
+        url: url,
         type: "GET",
         success: function (courseCards, textStatus, request) {
             $(".card-group").empty()
             $(".pagination").empty()
             renderLessenCards(courseCards)
-            renderPagination(request.getResponseHeader('Last-Page'),urlAjax)
+            renderPagination(request.getResponseHeader('Last-Page'),url)
         },
         error: function () {
             alert("خطا در بارگزاری دروس ... لطفا دوباره امتحان کنید!")
@@ -140,10 +133,11 @@ function renderLessenCards(courseCards) {
 
 // make pagination numbers
 function renderPagination(pageNumber,urlAjax) {
-	var url=urlAjax.substring(0, urlAjax.indexOf('?'))
+	url=urlAjax.substring(0, urlAjax.indexOf('?'))
+	page = (getUrlParameter(window.location.href, "page") ? getUrlParameter(window.location.href, "page") : "1")
     // $('.pagination').append(`<a class="next page-numbers" href="${hostName}/dashboard/get_lessons/"> Prev </a>`)
     for (let number = 1; number <= pageNumber; number++) {
-        if (getUrlParameter(window.location.href, "page") == number) {
+        if ( page == number) {
             $('.pagination').append(`<span aria-current="page" class="page-numbers current">${number}</span>`)
         } else {
             $('.pagination').append(`<a class="page-numbers" href="`+url+`?page=${number}">${number}</a>`)
