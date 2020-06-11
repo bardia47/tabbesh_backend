@@ -18,7 +18,6 @@ $(function () {
 // pagination when user return to previous page --> hint: read about history javascript stack
 window.onpopstate = function (event) {
     pagination(event.state.url)
-    console.log(history);
 };
 
 //get lessons with ajax
@@ -43,8 +42,7 @@ function pagination(url) {
             $(".card-group").empty()
             $(".pagination").empty()
             renderLessenCards(courseCards)
-            renderPagination(request.getResponseHeader('Last-Page'))
-            console.log(urlAjax)
+            renderPagination(request.getResponseHeader('Last-Page'),urlAjax)
         },
         error: function () {
             alert("خطا در بارگزاری دروس ... لطفا دوباره امتحان کنید!")
@@ -141,13 +139,14 @@ function renderLessenCards(courseCards) {
 }
 
 // make pagination numbers
-function renderPagination(pageNumber) {
+function renderPagination(pageNumber,urlAjax) {
+	var url=urlAjax.substring(0, urlAjax.indexOf('?'))
     // $('.pagination').append(`<a class="next page-numbers" href="${hostName}/dashboard/get_lessons/"> Prev </a>`)
     for (let number = 1; number <= pageNumber; number++) {
         if (getUrlParameter(window.location.href, "page") == number) {
             $('.pagination').append(`<span aria-current="page" class="page-numbers current">${number}</span>`)
         } else {
-            $('.pagination').append(`<a class="page-numbers" href="${hostName}/dashboard/get_lessons/?page=${number}">${number}</a>`)
+            $('.pagination').append(`<a class="page-numbers" href="`+url+`?page=${number}">${number}</a>`)
         }
     }
     $(".page-numbers").click(function (event) {
