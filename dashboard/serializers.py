@@ -70,10 +70,19 @@ class ShoppingSerializer(serializers.Serializer):
     
     
 class UserProfileSerializer(JSONFormSerializer,serializers.ModelSerializer):
+    grade = serializers.SerializerMethodField('get_student_grade')
+
     class Meta:
         model = User
         fields = ( 'first_name',
-                  'last_name','username','email' ,'grades', 'gender', 'phone_number','city','avatar')    
+                  'last_name','username','email' ,'grade', 'gender', 'phone_number','city','avatar')    
+    
+        
+    def get_student_grade(self, obj):
+        try:
+            return obj.grades.all().first().title
+        except:
+            return ""
         
        
     
