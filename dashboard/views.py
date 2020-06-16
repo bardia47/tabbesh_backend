@@ -6,13 +6,15 @@ from django.db.models import Q
 from operator import or_
 from functools import reduce
 from django.contrib.auth.decorators import login_required
-from .forms import ProfileForm
 from django.contrib.auth.hashers import make_password
 from rest_framework.views import APIView
-from rest_framework.renderers import TemplateHTMLRenderer, JSONRenderer
+from rest_framework.renderers import TemplateHTMLRenderer, JSONRenderer,\
+    BrowsableAPIRenderer
 from rest_framework.response import Response
 from rest_framework import viewsets
 from .serializers  import *
+from rest_framework import status
+from django.http import response
 
 
 class Dashboard(APIView):
@@ -23,13 +25,6 @@ class Dashboard(APIView):
         user = get_object_or_404(User, pk=request.user.id)
         courses = user.courses.filter(end_date__gt=now)
         classes = Course_Calendar.objects.filter(course__in=courses)
-
-        # update all classes time
-        for klass in classes:
-            while klass.end_date < now:
-                klass.start_date += datetime.timedelta(days=7)
-                klass.end_date += datetime.timedelta(days=7)
-                klass.save()
         classes = Course_Calendar.objects.filter(
         Q(start_date__day=now.day) | Q(start_date__day=now.day + 1), course__in=courses)
         if classes.count() > 0:
@@ -42,60 +37,113 @@ class Dashboard(APIView):
         return Response(ser.data)
         
 
-# Edit Profile Page
-class EditProfile(APIView):
-    renderer_classes = [TemplateHTMLRenderer, JSONRenderer]
+class AppProfile(APIView):
+    renderer_classes = [JSONRenderer]
     
     def get(self, request):
-        form = ProfileForm()
-        if request.accepted_renderer.format == 'html':
-            return render(request, 'dashboard/profile_page.html', {'form': form})
         ser = UserProfileSerializer(request.user)
         return Response(ser.data)
 
 
-# Edit profile page --> change avatar form
-@login_required
-def change_avatar(request):
-    if request.method == 'POST':
-        form = ProfileForm()
-        avatar = request.user.compressImage(request.FILES.get("file"))
-        if avatar:
-            if not request.user.avatar.url.startswith("/media/defaults"):
-                request.user.avatar.delete()
-            request.user.avatar = avatar
-            request.user.save()
-        return redirect('dashboard')
-    else:
-        error = 'تغییر پروفایل با مشکل رو به رو شد'
-        return render(request, 'dashboard/profile_page.html', {'form': form, 'error': error})
 
 
-# Edit profile page --> change field except avatar field
-@login_required
-def change_profile(request):
-    if request.method == 'POST':
-        form = ProfileForm(data=request.POST, instance=request.user)
-        if form.is_valid():
-            form.save()
-            return redirect('dashboard')
-        else:
-            return render(request, 'dashboard/profile_page.html', {'form': form})
+# Edit Profile Page
+class EditProfile(APIView):
+    renderer_classes = [TemplateHTMLRenderer, JSONRenderer]
+    template_name='dashboard/profile_page.html'
+    
+    def get(self, request):
+        grades = Grade.objects.all()
+        cities = City.objects.all()
+        ser = UserProfileShowSerializer(instance={'grades' : grades ,'cities' : cities, "user":request.user})
+        return Response(ser.data)
+    
+    
+    def post(self, request):
+        grades = Grade.objects.all()
+        cities = City.objects.all()
+        method=request.GET.get('method')
+        if method is None:
+            instance = request.user
+            serializer = UserSaveProfileSerializer(instance, data=request.data, partial=False)
+            haveError= True
+            if serializer.is_valid() :
+                serializer.save()
+                haveError = False
+        
+            showSer = UserProfileShowSerializer(instance={'grades' : grades ,'cities' : cities, "user":request.user})
+            if haveError :
+                newdict={'errors':serializer.errors}
+                newdict.update(showSer.data)
+                return Response(newdict, status=status.HTTP_406_NOT_ACCEPTABLE)
+            return Response(showSer.data)
+        
+        if method == 'changePassword':
+            showSer = UserProfileShowSerializer(instance={'grades' : grades ,'cities' : cities, "user":request.user})   
+            if not request.user.check_password(request.data['old_password']):
+                    newdict={'errors':['رمز وارد شده اشتباه است']}
+                    newdict.update(showSer.data)
+                    return Response(newdict, status=status.HTTP_406_NOT_ACCEPTABLE)
+            else:
+                request.user.password = make_password(request.data['password'])
+                request.user.save()
+                if request.accepted_renderer.format == 'html':
+                      return redirect('signin')
+                return Response()
+            
+        if method == 'changeAvatar':
+             avatar = request.user.compressImage(request.FILES.get("file"))
+             if avatar:
+                 if not request.user.avatar.url.startswith("/media/defaults"):
+                     request.user.avatar.delete()
+                 request.user.avatar = avatar
+                 request.user.save()
+                 showSer = UserProfileShowSerializer(instance={'grades' : grades ,'cities' : cities, "user":request.user})   
+                 return Response(showSer.data)
+            
+
+# # Edit profile page --> change avatar form
+# @login_required
+# def change_avatar(request):
+#     if request.method == 'POST':
+#         form = ProfileForm()
+#         avatar = request.user.compressImage(request.FILES.get("file"))
+#         if avatar:
+#             if not request.user.avatar.url.startswith("/media/defaults"):
+#                 request.user.avatar.delete()
+#             request.user.avatar = avatar
+#             request.user.save()
+#         return redirect('dashboard')
+#     else:
+#         error = 'تغییر پروفایل با مشکل رو به رو شد'
+#         return render(request, 'dashboard/profile_page.html', {'form': form, 'error': error})
+# 
+# 
+# # Edit profile page --> change field except avatar field
+# @login_required
+# def change_profile(request):
+#     if request.method == 'POST':
+#         form = ProfileForm(data=request.POST, instance=request.user)
+#         if form.is_valid():
+#             form.save()
+#             return redirect('dashboard')
+#         else:
+#             return render(request, 'dashboard/profile_page.html', {'form': form})
 
 
-# Edit profile page --> change password
-@login_required
-def change_password(request):
-    if request.method == 'POST':
-        form = ProfileForm()
-        if not request.user.check_password(request.POST['old_password']):
-            error = 'رمز وارد شده اشتباه است'
-            return render(request, 'dashboard/profile_page.html', {'form': form, 'error': error})
-        else:
-            error = 'تغییر رمز با موفقیت انجام شد'
-            request.user.password = make_password(request.POST['password'])
-            request.user.save()
-            return render(request, 'dashboard/profile_page.html', {'form': form, 'error': error})
+# # Edit profile page --> change password
+# @login_required
+# def change_password(request):
+#     if request.method == 'POST':
+#         form = ProfileForm()
+#         if not request.user.check_password(request.POST['old_password']):
+#             error = 'رمز وارد شده اشتباه است'
+#             return render(request, 'dashboard/profile_page.html', {'form': form, 'error': error})
+#         else:
+#             error = 'تغییر رمز با موفقیت انجام شد'
+#             request.user.password = make_password(request.POST['password'])
+#             request.user.save()
+#             return render(request, 'dashboard/profile_page.html', {'form': form, 'error': error})
 
 
 # Lessons Page
@@ -106,13 +154,7 @@ class Lessons(APIView):
         now = datetime.datetime.now()
         user = get_object_or_404(User, pk=request.user.id)
         courses = user.courses.filter(end_date__gt=now)
-        classes = Course_Calendar.objects.filter(course__in=courses)
         # update all classes time
-        for klass in classes:
-            while klass.end_date < now:
-                klass.start_date += datetime.timedelta(days=7)
-                klass.end_date += datetime.timedelta(days=7)
-                klass.save()
         if request.accepted_renderer.format == 'html':
             return Response({'courses': courses} , template_name='dashboard/lessons.html')
         ser = CourseLessonsSerializer(instance=courses, many=True)
@@ -195,11 +237,5 @@ class TestViewSet(viewsets.ModelViewSet):
          now = datetime.datetime.now()
          user = get_object_or_404(User, pk=self.request.user.id)
          courses = user.courses.filter(end_date__gt=now)
-         classes = Course_Calendar.objects.filter(course__in=courses)
-        # update all classes time
-         for klass in classes:
-            while klass.end_date < now:
-                klass.start_date += datetime.timedelta(days=7)
-                klass.end_date += datetime.timedelta(days=7)
-                klass.save()
+
          return courses

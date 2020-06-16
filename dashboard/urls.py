@@ -9,11 +9,12 @@ router.register('test', TestViewSet)
 urlpatterns = [
     path('', Dashboard.as_view(), name='dashboard'),
     path('lessons/', Lessons.as_view(), name="lessons"),
+    path('app_profile/', AppProfile.as_view(), name="app_profile"),
     path('edit_profile/', EditProfile.as_view(), name="edit_profile"),
-    path('edit_profile/change-avatar', change_avatar, name="change_avatar"),
-    path('edit_profile/change-profile', change_profile, name="change_profile"),
-    path('edit_profile/change_password',
-         change_password, name="change_password"),
+#     path('edit_profile/change-avatar', change_avatar, name="change_avatar"),
+#     path('edit_profile/change-profile', change_profile, name="change_profile"),
+#     path('edit_profile/change_password',
+#          change_password, name="change_password"),
     path('shopping/', Shopping.as_view(), name="shopping"),
     path('lessons/files/<str:code>', filemanager),
 ]

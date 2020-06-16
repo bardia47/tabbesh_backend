@@ -1,5 +1,7 @@
 {% extends 'dashboard/base.html' %}
 {% load static %}
+{% load rest_framework %}
+
 <!-- Title block of base.html -->
 {% block title %}پروفایل{% endblock %}
 
@@ -14,13 +16,13 @@
     <h1>پروفایل</h1>
     <hr>
     <!-- Change avatar form & enctype requried for file input -->
-    <form class="form-horizontal" id="avatar_form" action="{% url 'change_avatar' %}" method="POST"
+    <form class="form-horizontal" id="avatar_form" action="{% url 'edit_profile' %}?method=changeAvatar" method="POST"
         enctype="multipart/form-data">
         <div class="row">
             <!-- right column -->
             <div class="col-md-3 text-center">
                 {% csrf_token %}
-                <img src="{{ user.avatar.url }}" id="avatar" class="avatar img-circle img-thumbnail" alt="avatar">
+                <img src="{{ user.avatar }}" id="avatar" class="avatar img-circle img-thumbnail" alt="avatar">
                 <div class="custom-file w-100 mt-2" lang="fa">
                     <input type="file" id="file" name="file" class="custom-file-input" accept="image/*">
                     <label class="custom-file-label text-left" for="file">روی آپلود کلیک کنید...</label>
@@ -30,28 +32,27 @@
             </div>
     </form>
 
-
     <!-- edit form column -->
     <div class="col-md-9 personal-info">
         <div class="alert alert-info alert-dismissable">
             <a class="panel-close close" data-dismiss="alert">×</a>
             <i class="fa fa-coffee"></i>
- {% if form.errors %}
-            {% for field in form %}
-                {% for error in field.errors %}
-           <strong>  {{ error|escape }} </strong>
-                {% endfor %}
-            {% endfor %}
-            {% for error in form.non_field_errors %}
-              <strong>   {{ error|escape }}</strong>
-            {% endfor %}
-            {% else %}
+ {% if errors %}
+{% for field in errors %} 
+			{% if field.errors %}
+      		{% for error in field.errors %}
+           <strong>  {{ value }} </strong>
+             {% endfor %}
+    		{% endif %}
+    		{% endfor %}
+    		{% else %}
             <strong>تمامی فیلد ها ضروری است و در صورت تغییر دادن چند مورد فقط آن موارد را تغییر دهید.</strong>
-            {% endif %}
+			 {% endif %}
+            
         </div>
         <h3>اطلاعات شخصی</h3>
         <!-- Change Profile form -->
-        <form action="{% url 'change_profile' %}" method="POST">
+        <form action="{% url 'edit_profile' %}" method="POST">
             {% csrf_token %}
             <div class="pl-2">
                 <div class="form-row">
@@ -90,8 +91,8 @@
                     </small>
                 </div>
                 <div class="form-group">
-                    <label class="control-label" for="national-code">کد ملی</label>
-                    <input class="form-control" type="text" id="national-code" name="national_code"
+                    <label class="control-label" for="national_code">کد ملی</label>
+                    <input class="form-control" type="text" id="national_code" name="national_code"
                         value="{{ user.national_code |default_if_none:'' }}" maxlength="10" required>
                     <small id="national-code-check-alert" class="form-text text-danger mt-1" style="display: none;">
                         <i class="fas fa-exclamation-triangle"></i>
@@ -117,8 +118,8 @@
                         <div class="ui-select">
                             <select id="city" name="city" class="custom-select w-50 ml-n3 text-center" size="3"
                                 required>
-                                {% for element in form.fields.city.queryset %}
-                                <option value="{{ element.id }}" {% ifequal user.city.id element.id %}
+                                {% for element in cities %}
+                                <option value="{{ element.id }}" {% ifequal user.cityTitle element.title %}
                                     selected="selected" {% endifequal %}>{{ element.title }}</option>
                                 {% endfor %}
                             </select>
@@ -128,10 +129,10 @@
                 <div class="form-group">
                     <label for="grades" class="control-label">پایه تحصیلی</label>
                     <div class="col-md-8">
-                        <select id="grades" name="grades" class="custom-select ml-n3 text-center w-50" required
+                        <select id="grades[0]" name="grades[0]" class="custom-select ml-n3 text-center w-50" required
                             size="3">
-                            {% for element in form.fields.grades.queryset %}
-                            <option value="{{ element.id }}" {% ifequal user.grades.first.id element.id %} selected
+                            {% for element in grades %}
+                            <option value="{{ element.id }}" {% ifequal user.grade element.title %} selected
                                 {% endifequal %}>{{ element.title }}</option>
                             {% endfor %}
                         </select>
@@ -150,7 +151,7 @@
         </form>
         <hr>
         <!-- Change password form -->
-        <form action="{% url 'change_password' %}" method="POST">
+        <form action="{% url 'edit_profile' %}?method=changePassword" method="POST">
             {% csrf_token %}
             <div class="form-group">
                 <label class="col-md-3 control-label" for="old_password" required>تغییر رمز عبور</label>
