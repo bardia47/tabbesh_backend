@@ -39,11 +39,9 @@
             <i class="fa fa-coffee"></i>
  {% if errors %}
 {% for field in errors %} 
-			{% if field.errors %}
-      		{% for error in field.errors %}
-           <strong>  {{ value }} </strong>
+      		{% for error in field.username %}
+           <strong> {{value}} </strong>
              {% endfor %}
-    		{% endif %}
     		{% endfor %}
     		{% else %}
             <strong>تمامی فیلد ها ضروری است و در صورت تغییر دادن چند مورد فقط آن موارد را تغییر دهید.</strong>
