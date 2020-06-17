@@ -1,6 +1,6 @@
 $(document).ready(function () {
 
-    // Profile image valid check 
+    // Profile image valid check
     $("#file").on('change', function () {
         readURL(this);
     });
@@ -153,3 +153,4 @@ document.addEventListener("DOMContentLoaded", function () {
         };
     }
 });
+

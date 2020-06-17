@@ -88,7 +88,6 @@ class UserProfileSerializer(JSONFormSerializer,serializers.ModelSerializer):
     
 #for post method and android
 class UserSaveProfileSerializer(UserProfileSerializer):
-
     class Meta:
         model = User
         fields = ( 'first_name',
