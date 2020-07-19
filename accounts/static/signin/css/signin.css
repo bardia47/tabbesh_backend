@@ -1,65 +1,65 @@
 body {
-  display: -ms-flexbox;
-  display: flex;
-  -ms-flex-align: center;
-  align-items: center;
-  padding-top: 100px;
-  padding-bottom: 40px;
-  background: url('../images/sign_in_poster.jpg') no-repeat center center fixed;
-  background-size: cover;
-  height: 100%;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-align: center;
+    align-items: center;
+    padding-top: 100px;
+    padding-bottom: 40px;
+    background: url('../images/sign_in_poster.jpg') no-repeat center center fixed;
+    background-size: cover;
+    height: 100%;
 }
 
 p {
-  margin-bottom: 6px;
-  color: #E4E4E4;
-  font-family: "Iransense";
-  font-size: 18px;
+    margin-bottom: 6px;
+    color: #E4E4E4;
+    font-family: "Iransense";
+    font-size: 18px;
 }
 
 a {
-  color: #FFDE03;
-  font-size: 18px;
-  text-decoration: none;
+    color: #FFDE03;
+    font-size: 18px;
+    text-decoration: none;
 }
 
 .form-signin {
-  width: 100%;
-  max-width: 330px;
-  margin: auto;
-  background-color: rgba(255, 255, 255, 0.3);
-  border-radius: 20px;
-  -webkit-backdrop-filter: blur(4px);
-  backdrop-filter: blur(4px);
+    width: 100%;
+    max-width: 330px;
+    margin: auto;
+    background-color: rgba(255, 255, 255, 0.3);
+    border-radius: 20px;
+    -webkit-backdrop-filter: blur(4px);
+    backdrop-filter: blur(4px);
 }
 
 .form-signin input[type="username"] {
-  background-color: #BEBEBD;
-  border-radius: 14px;
-  border-color: #BEBEBD;
+    background-color: #BEBEBD;
+    border-radius: 14px;
+    border-color: #BEBEBD;
 }
 
 .form-signin input[type="password"] {
-  margin-bottom: 10px;
-  background-color: #BEBEBD;
-  border-radius: 14px;
-  border-color: #BEBEBD;
+    margin-bottom: 10px;
+    background-color: #BEBEBD;
+    border-radius: 14px;
+    border-color: #BEBEBD;
 }
 
 .title {
-  font-family: 'Vazir_Bold';
-  font-size: 50px;
-  color: #fff;
+    font-family: 'Vazir_Bold';
+    font-size: 50px;
+    color: #fff;
 }
 
 .sign-in-button {
-  width: 100%;
-  max-height: 50px;
-  border-radius: 0;
-  background-color: #FFDE03;
-  border: #FFDE03;
-  font-family: 'Vazir_Bold';
-  color: rgb(46, 46, 46, 0.79);
+    width: 100%;
+    max-height: 50px;
+    border-radius: 0;
+    background-color: #FFDE03;
+    border: #FFDE03;
+    font-family: 'Vazir_Bold';
+    color: rgb(46, 46, 46, 0.79);
 }
 
 /* Chage Hover of btn class of bootstrap */
@@ -68,48 +68,73 @@ a {
 .btn-primary:focus,
 .btn-primary:active,
 .btn-primary.active,
-.open>.dropdown-toggle.btn-primary {
-  color: #000000;
-  background-color: #E4E4E4;
+.open > .dropdown-toggle.btn-primary {
+    color: #000000;
+    background-color: #E4E4E4;
 }
 
 /* Font of place holder of inputs */
 
 ::-webkit-input-placeholder {
-  font-family: 'Iransense';
-  font-size: 15px;
+    font-family: 'Iransense';
+    font-size: 15px;
 }
 
 ::-moz-placeholder {
-  /* Firefox 19+ */
-  font-family: 'Iransense';
-  font-size: 15px;
+    /* Firefox 19+ */
+    font-family: 'Iransense';
+    font-size: 15px;
 }
 
 :-ms-input-placeholder {
-  /* IE 10+ */
-  font-family: 'Iransense';
-  font-size: 15px;
+    /* IE 10+ */
+    font-family: 'Iransense';
+    font-size: 15px;
 }
 
 :-moz-placeholder {
-  /* Firefox 18- */
-  font-family: 'Iransense';
-  font-size: 15px;
+    /* Firefox 18- */
+    font-family: 'Iransense';
+    font-size: 15px;
 }
 
 .footer-p {
-  font-family: 'Vazir_Medium';
-  font-size: 12px;
+    font-family: 'Vazir_Medium';
+    font-size: 12px;
 }
 
 .footer-p-forget {
-  font-family: 'Vazir_Medium';
-  margin-top: -5px;
+    font-family: 'Vazir_Medium';
+    cursor: pointer;
+    font-size: 12px;
+    margin-top: -5px;
 }
 
 .footer-p-forget a {
-  font-family: 'Vazir_Light';
-  font-size: 12px;
-  color: #263f44;
+    font-family: 'Vazir_Light';
+    font-size: 13px;
+    color: #263f44;
+}
+
+/* centering modal with ghost element trick
+   --> read this article : https://css-tricks.com/centering-in-the-unknown/ */
+
+.modal {
+    text-align: center;
+    font-family: 'Vazir_Light' !important;
+}
+
+@media screen and (min-width: 768px) {
+    .modal:before {
+        display: inline-block;
+        vertical-align: middle;
+        content: " ";
+        height: 100%;
+    }
+}
+
+.modal-dialog {
+    display: inline-block;
+    text-align: left;
+    vertical-align: middle;
 }
