@@ -44,9 +44,33 @@ class SignUp(APIView):
         serializer.save()
         if request.accepted_renderer.format == 'html':
               return render(request, 'accounts/signin.html', {'signup_success': 'ثبت نام با موفقیت انجام شد.'}) 
-        return Response({'signup_success': 'ثبت نام با موفقیت انجام شد.'})
- 
-        
+        return Response({'success': 'ثبت نام با موفقیت انجام شد.'})
+
+
+@permission_classes((AllowAny,))
+class ForgetPassword(APIView):
+    renderer_classes = [TemplateHTMLRenderer, JSONRenderer]
+
+    def post(self, request):
+        error = None
+        try:
+             user1 = User.objects.get(phone_number=request.data['phone_number'])
+             to = "0" + request.data['phone_number']
+             randPass = random.randint(10000000, 99999999)
+             text = Sms.signupText.value.replace('{}', str(randPass))
+             sendSms = SmsWebServices.send_sms(to, text)
+             if sendSms is not None:
+                error = sendSms
+        except User.DoesNotExist:
+            error = 'شماره تلفن وارد شده در سامانه موجود نمیباشد'
+
+        if error is not None  :
+            return Response({'error': error} , template_name='accounts/signin.html' )
+        else:
+            user1.password = make_password(randPass)
+            user1.save()
+            return Response({'success': 'ارسال با موفقیت انجام شد'} , template_name='accounts/signin.html')
+
 
 
 @permission_classes((AllowAny,))

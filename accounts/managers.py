@@ -38,9 +38,14 @@ class UserManager(BaseUserManager):
         #     user.city = city.objects.get(code='1')    
 
         user.save(using=self._db)
-        if grades:
-            user.grades.add(*grades)
-            user.save(using=self._db)
+
+
+        try:
+            if grades:
+                user.grades.add(*grades)
+                user.save(using=self._db)
+        except:
+            pass
         return user
 
     def create_user(self, username, password=None, **extra_fields):

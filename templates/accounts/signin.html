@@ -42,31 +42,34 @@
             <i class="fas fa-exclamation-triangle"></i>
             {{ error }}
         </small>
-        <p id="forgetPasswordTag" class="footer-p-forget mt-1">در صورت فراموشی رمز کلیک کنید</p>
     {% endif %}
-    {% if signup_success %}
+    {% if success %}
         <small class="form-text mb-1 mt-n2" style="font-family: 'Vazir_Bold'; color: white;">
             <i class="fas fa-info-circle"></i>
-            {{ signup_success }}
+            {{ success }}
             <br>
             <i class="fas fa-envelope"></i>
             رمز عبور به شماره تلفن پیامک داده شد
         </small>
+    {% else %}
+        <p id="forgetPasswordTag" class="footer-p-forget mt-1">در صورت فراموشی رمز کلیک کنید</p>
     {% endif %}
 </form>
+
 
 <!-- modal form for forget password !-->
 <div class="modal fade" id="forgetPasswordModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
      aria-hidden="true">
     <div class="modal-dialog" role="document">
         <!-- form for submit forget password !-->
-        <form method="post" action="#">
+        <form method="POST" action="{% url 'forget_password' %}" >
+             {% csrf_token %}
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title text-danger" id="exampleModalLabel" style="font-family: 'Vazir_Bold';">
                         فراموشی رمز
                         عبور</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <button type="submit" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>

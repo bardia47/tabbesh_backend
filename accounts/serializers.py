@@ -2,9 +2,11 @@ from django.contrib.auth.models import User
 from .models import *
 from rest_framework import serializers
 from html_json_forms.serializers import JSONFormSerializer
-from pip._vendor.pkg_resources import require
 from .enums import Sms
-from melipayamak import Api
+from .webServices import SmsWebServices
+
+from pip._vendor.pkg_resources import require
+
 from django.contrib.auth.hashers import make_password
 import random
 
@@ -25,17 +27,13 @@ class UserSerializer(JSONFormSerializer,serializers.ModelSerializer):
             data['role']
         except:
             data['role']=Role.objects.get(code=RoleCodes.STUDENT.value)
-        api = Api(Sms.username.value, Sms.password.value)
-        sms = api.sms()
         to = "0"+data['phone_number']
-        _from = Sms._from.value
         randPass = random.randint(10000000, 99999999)
         text = Sms.signupText.value.replace('{}', str(randPass))
-        response = sms.send(to, _from, text)
-        if response['Value'] == Sms.wrongNumber.value:
-            raise serializers.ValidationError({"phone_number":'شماره وارد شده نامعتبر است'}) 
-        elif (len(response['Value']) == 1):
-            raise serializers.ValidationError('خطایی رخ داده است . لطفا یک بار دیگر تلاش کنید یا با پشتیبان تماس بگیرید')
+
+        sendSms=SmsWebServices.send_sms(to,text)
+        if sendSms is not None:
+                raise serializers.ValidationError({"phone_number":sendSms})
         data['password']=randPass
         return data    
         
