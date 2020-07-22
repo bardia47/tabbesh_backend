@@ -1,132 +1,175 @@
-// Check page is loading or load 
-if (document.readyState == 'loading') {
-    document.addEventListener('DOMContentLoaded', ready())
-} else {
-    ready()
+// function for get Request.GET variable
+function getUrlParameter(url, param) {
+    urlArray = url.split("/")
+    paramets = urlArray[urlArray.length - 1]
+    const urlParams = new URLSearchParams(paramets);
+    return urlParams.get(param)
 }
 
-function ready() {
-    // Remove cart item with button
-    let removeCartItemButtons = document.getElementsByClassName('btn-remove')
-    for (let i = 0; i < removeCartItemButtons.length; i++) {
-        let button = removeCartItemButtons[i]
-        button.addEventListener('click', removeCartItem)
-    }
+// hostname of project -- example : https://127.0.0.1:8000
+let arrayHref = window.location.href.split("/")
+let hostName = arrayHref[0] + "//" + arrayHref[2]
 
-    // Add to cart with "Add to list Button"
-    let addToCartButtons = document.getElementsByClassName('add-to-cart-button')
-    for (let i = 0; i < addToCartButtons.length; i++) {
-        let button = addToCartButtons[i]
-        button.addEventListener('click', addToCartClicked)
-    }
+// first pagination when user request https://127.0.0.1:8000/dashboard/shopping/
+$(function () {
+    url = hostName + "/dashboard/shopping/?page=" + (getUrlParameter(window.location.href, "page") ? +getUrlParameter(window.location.href, "page") : "1")
 
-    $("#shopping-cart-form").submit(function (event) {
-        let cartRows = document.getElementsByClassName('cart-item')
-        if (cartRows.length === 0) {
-            $("#errorModalForCart").modal();
-            $("#modal-body").text("سبد خرید شما خالی می باشد، یک درس را انتخاب کنید.")
-            event.preventDefault();
-        } else {
-            $("#shopping-cart-form").submit()
-        }
+    pagination("http://127.0.0.1:8000/dashboard/shopping/")
+})
+
+// pagination when user return to previous page --> hint: read about history javascript stack
+window.onpopstate = function (event) {
+    pagination(event.state.url)
+};
+
+//get lessons with ajax
+function pagination(url) {
+    // check with page go
+
+
+    // get JSON and Response Header
+    $.ajax({
+        url: url,
+        type: "GET",
+        dataType: "json",
+        success: function (data, textStatus, request) {
+            $(".card-group").empty()
+            // $(".pagination").empty()
+            shoppingCards = data.courses
+            renderShoppingCards(shoppingCards)
+            // check if page number is not 0 show pagination
+            // if (shoppingCards != 0) {
+            //     renderPagination(request.getResponseHeader('Last-Page'), url)
+            // }
+        },
+        error: function () {
+            alert("خطا در بارگزاری دروس ... لطفا دوباره امتحان کنید!")
+        },
     });
-
 }
 
-// Remove Cart Item 
-function removeCartItem(event) {
-    let buttonClicked = event.target
-    buttoncl = buttonClicked.parentElement.parentElement.parentElement.parentElement.parentElement
-    buttoncl.remove()
-    updateCartTotal()
-}
-
-// Add Cart Item With add-to-cart button
-function addToCartClicked(event) {
-    let button = event.target
-    let shopItem = button.parentElement.parentElement
-    let title = shopItem.getElementsByClassName('title')[0].textContent;
-    let price = shopItem.getElementsByClassName('price')[0].textContent;
-    let teacher = shopItem.getElementsByClassName('teacher-name')[0].textContent;
-    let imageSrc = shopItem.getElementsByClassName('card-img-top')[0].src;
-    let id = shopItem.getElementsByClassName('course-id')[0].value;
-    addItemToCart(title, price, teacher, imageSrc, id)
-    updateCartTotal()
-}
-
-// Create cart item
-function addItemToCart(title, price, teacher, imageSrc, id) {
-    let cartRow = document.createElement('div')
-    cartRow.classList.add('row')
-    cartRow.classList.add('card-row')
-    let cartItems = document.getElementsByClassName('cart-list')[0]
-    let cartItemNames = cartItems.getElementsByClassName('cart-course-title')
-    for (let i = 0; i < cartItemNames.length; i++) {
-        if (cartItemNames[i].textContent == title) {
-            $("#errorModalForCart").modal();
-            $("#modal-body").text("درس مورد نظر قبلا به سبد خرید اضافه شده است.")
-            return
-        }
-    }
-    let cartRowContents = `
-    <div class="col-md-12 cart-item ">
-    <div class="card">
-    <div class="card-body">
-      <div class="row">
-        <!-- Course image -->
-        <div class="col-md-1 cart-course-image">
-          <img src="${imageSrc}" alt="course image">
-        </div>
-        <!-- Course title -->
-        <div class="col-md-2 cart-course-title">
-          <p class="cart-course-title">${title}</p>
-        </div>
-        <!--Course teacher name -->
-        <div class="col-md-2 cart-course-teacher-name">
-          <p>${teacher}</p>
-        </div>
-        <!-- Course price -->
-        <div class="col-md-3 cart-price">
-          <p style="font-family:'Vazir_Bold'">
-          <span style="font-family:'Vazir_Light'">قیمت : </span>
-          <span class="cart-price-text">${price}</span>
-          </p>
-      </div>
-      <!-- Button-to-delete -->
-        <div class="col-md-4 cart-button-to-delete">
-          <button class="btn btn-danger btn-remove"><img src="/static/home/images/icons/delete.svg" alt="button link to class">حذف</button>
-        </div>
-      </div>
-    </div>
-  </div>
-  <input type="hidden" class="cart-course-id" value="${id}">
-  </div>`
-    cartRow.innerHTML = cartRowContents
-    cartItems.append(cartRow)
-    cartRow.getElementsByClassName('btn-remove')[0].addEventListener('click', removeCartItem)
-    cartItems.parentElement.scrollIntoView();
-}
-
-// Update cart total price
-function updateCartTotal() {
-    let cartRows = document.getElementsByClassName('cart-item')
-    let total = 0
-    let total_id = ""
-    for (let i = 0; i < cartRows.length; i++) {
-        let cartRow = cartRows[i]
-        let priceElement = cartRow.getElementsByClassName('cart-price-text')[0]
-        if (priceElement.innerText == "رایگان!") {
-            price = 0;
+// Add course card to div card group
+function renderShoppingCards(courseCards) {
+    $.each(courseCards, function (index, courseCard) {
+        // parse Date to ISO date format and use persianDate jQuery
+        let startDateCourse = new persianDate(Date.parse(courseCard.start_date))
+        let endDateCourse = new persianDate(Date.parse(courseCard.end_date))
+        // price check -- for free courses
+        if (courseCard.amount <= 0) {
+            coursePriceTemplate = `رايگان!`
         } else {
-            price = parseFloat(priceElement.innerText)
+            coursePriceTemplate = `
+            ${courseCard.amount}
+            <span class="currency">تومان</span>
+            `
         }
-        let id = cartRow.getElementsByClassName('cart-course-id')[0].value
-        total = total + price
-        total_id = total_id + id + " "
+        let shoppingCardTemplate = `
+        <div class="col-md-4 mb-3">
+            <div class="card course-card h-100">
+                <!-- Course poster -->
+                <img class="card-img-top" src="${courseCard.image}">
+                <!-- Course content -->
+                <div class="card-body">
+                    <!-- Course title  -->
+                    <h4 class="title ">${courseCard.title}</h4>
+                    <!-- Course teacher name  -->
+                    <div class="course-teacher-name">
+                        <h6 class="teacher-name">استاد ${courseCard.teacher}</h6>
+                    </div>
+                    <!-- Course calender  -->
+                    <div class="course-calender">
+                        <p>
+                            <img src="${hostName}/static/home/images/icons/clock.svg" alt="course clock time">
+                            جلسات:
+                        </p>
+                        <!-- Loop for course calender times -->
+                        {% for cc in course.course_calendar_set.all %}
+
+                        {% endfor %}
+                    </div>
+                    <!-- Start of the course  -->
+                    <div class="course-start-date">
+                        <p>
+                            <img src="${hostName}/static/home/images/icons/start-date.svg" alt="start course clock">
+                            شروع دوره:
+                            <span>
+                                ${startDateCourse.format("dddd")}
+                                ${startDateCourse.format("D")}
+                                ${startDateCourse.format("MMMM")}
+                            </span>
+                        </p>
+                    </div>
+                    <!-- End of the course  -->
+                    <div class="course-end-date">
+                        <p>
+                            <img src="${hostName}/static/home/images/icons/end-date.svg" alt="end course clock">
+                            اتمام دوره:
+                            <span>
+                                ${endDateCourse.format("dddd")}
+                                ${endDateCourse.format("D")}
+                                ${endDateCourse.format("MMMM")}
+                            </span>
+                        </p>
+                    </div>
+                    <!-- Description of the course  -->
+                    <div class="course-description">
+                        <p class="course-description-title">
+                            <img src="${hostName}/static/home/images/icons/paragraph.svg" alt="description">
+                            توضیحات:
+                        </p>
+                        <p class="course-description-p">${courseCard.description}</p>
+                    </div>
+                    <!-- Course price -->
+                    <div class="course-price">
+                        <p>
+                            <img src="${hostName}/static/home/images/icons/price.svg" alt="price">
+                            قیمت:
+                            <span class="price">
+                            ${coursePriceTemplate}
+                    </span>
+                        </p>
+                    </div>
+                </div>
+                <!-- Button add course to cart -->
+                <div class="card-footer add-to-cart">
+                    <button class="btn btn-success add-to-cart-button">
+                        <img src="${hostName}/static/home/images/icons/add-to-cart.svg"
+                             alt="button link to class">
+                        اضافه به سبد خرید
+                    </button>
+                </div>
+                <!-- hidden lesson id for handel total buy id in shopping.js -->
+                <input type="hidden" class="course-id" value="{{ course.id }}">
+            </div>
+        </div>
+        `
+        $(".card-group").append(shoppingCardTemplate)
+        // course calender section
+
+
+    });
+    $(".card-group").show()
+}
+
+// make pagination numbers
+function renderPagination(pageNumber, urlAjax) {
+    let url = urlAjax.substring(0, urlAjax.indexOf('?'))
+    let page = (getUrlParameter(window.location.href, "page") ? getUrlParameter(window.location.href, "page") : "1")
+    // $('.pagination').append(`<a class="next page-numbers" href="${hostName}/dashboard/get_lessons/"> Prev </a>`)
+    console.log(pageNumber)
+    for (let number = 1; number <= pageNumber; number++) {
+        if (page == number) {
+            $('.pagination').append(`<span aria-current="page" class="page-numbers current">${number}</span>`)
+        } else {
+            $('.pagination').append(`<a class="page-numbers" href="` + url + `?page=${number}">${number}</a>`)
+        }
     }
-    total = Math.round(total * 100) / 100
-    document.getElementsByClassName('total-price')[0].innerText = total.toLocaleString()
-    // send total id to input
-    document.getElementById('total_id').value = total_id
-    document.getElementById('total_pr').value = total
+    $(".page-numbers").click(function (event) {
+        event.preventDefault();
+        history.pushState({url: $(this).attr("href")}, null, "?page=" + getUrlParameter($(this).attr("href"), "page"));
+        pagination($(this).attr("href"))
+    });
+    // $('.pagination').append(`<a class="next page-numbers" href="${hostName}"> Next </a>`)
+    $(".pagination-wrapper").show()
+    $("html, body").animate({scrollTop: 0}, "slow");
 }

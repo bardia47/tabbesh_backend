@@ -12,8 +12,8 @@ let hostName = arrayHref[0] + "//" + arrayHref[2]
 
 // first pagination when user request https://127.0.0.1:8000/dashboard/lessons/
 $(function () {
-	url= hostName + "/dashboard/get_lessons/?page=" +( getUrlParameter(window.location.href, "page") ? + getUrlParameter(window.location.href, "page") : "1")
-	
+    url = hostName + "/dashboard/get_lessons/?page=" + (getUrlParameter(window.location.href, "page") ? +getUrlParameter(window.location.href, "page") : "1")
+
     pagination(url)
 })
 
@@ -25,7 +25,7 @@ window.onpopstate = function (event) {
 //get lessons with ajax
 function pagination(url) {
     // check with page go
-   
+
 
     // get JSON and Response Header
     $.ajax({
@@ -35,7 +35,9 @@ function pagination(url) {
             $(".card-group").empty()
             $(".pagination").empty()
             renderLessenCards(courseCards)
-            renderPagination(request.getResponseHeader('Last-Page'),url)
+            if (courseCards != 0) {
+                renderPagination(request.getResponseHeader('Last-Page'), url)
+            }
         },
         error: function () {
             alert("خطا در بارگزاری دروس ... لطفا دوباره امتحان کنید!")
@@ -132,15 +134,15 @@ function renderLessenCards(courseCards) {
 }
 
 // make pagination numbers
-function renderPagination(pageNumber,urlAjax) {
-	url=urlAjax.substring(0, urlAjax.indexOf('?'))
-	page = (getUrlParameter(window.location.href, "page") ? getUrlParameter(window.location.href, "page") : "1")
+function renderPagination(pageNumber, urlAjax) {
+    url = urlAjax.substring(0, urlAjax.indexOf('?'))
+    page = (getUrlParameter(window.location.href, "page") ? getUrlParameter(window.location.href, "page") : "1")
     // $('.pagination').append(`<a class="next page-numbers" href="${hostName}/dashboard/get_lessons/"> Prev </a>`)
     for (let number = 1; number <= pageNumber; number++) {
-        if ( page == number) {
+        if (page == number) {
             $('.pagination').append(`<span aria-current="page" class="page-numbers current">${number}</span>`)
         } else {
-            $('.pagination').append(`<a class="page-numbers" href="`+url+`?page=${number}">${number}</a>`)
+            $('.pagination').append(`<a class="page-numbers" href="` + url + `?page=${number}">${number}</a>`)
         }
     }
     $(".page-numbers").click(function (event) {
