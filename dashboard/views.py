@@ -27,7 +27,6 @@ class Dashboard(APIView):
         now = datetime.datetime.now()
         user = get_object_or_404(User, pk=request.user.id)
         courses = user.courses.filter(end_date__gt=now)
-        classes = Course_Calendar.objects.filter(course__in=courses)
         classes = Course_Calendar.objects.filter(
             Q(start_date__day=now.day) | Q(start_date__day=now.day + 1), course__in=courses)
         if classes.count() > 0:
