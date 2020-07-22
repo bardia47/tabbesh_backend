@@ -41,27 +41,29 @@ class CourseBriefSerializer(JSONFormSerializer, serializers.ModelSerializer):
 
 
 class CourseLessonsSerializer(CourseBriefSerializer):
-    #first_class = serializers.SerializerMethodField('get_first_class')
-    is_active = serializers.SerializerMethodField('is_class_active')
-
-    def is_class_active(self, obj):
-        return obj.get_first_class().is_class_active()
-
-   # def get_first_class(self, obj):
-     #   return obj.get_first_class().start_date
 
     class Meta:
         model = Course
-        fields = ('title', 'start_date', 'end_date' ,'image', 'teacher','url' ,
-                  'is_active',)
+        fields = ('title', 'end_date' ,'image', 'teacher','url' )
 
 
 class CourseCalendarSerializer(JSONFormSerializer, serializers.ModelSerializer):
-    course = CourseLessonsSerializer(read_only=True)
+    is_active = serializers.SerializerMethodField('get_is_active')
 
     class Meta:
         model = Course_Calendar
-        fields = ('start_date', 'course')
+        fields = ('start_date','is_active')
+
+    def get_is_active(self, obj):
+        return obj.is_class_active()
+
+    def to_representation(self, course_calendar):
+        data =  super(CourseCalendarSerializer, self).to_representation(course_calendar)
+        course=CourseLessonsSerializer(instance=course_calendar.course)
+        data.update(course.data)
+        return data
+
+
 
 
 class DashboardSerializer(serializers.Serializer):
