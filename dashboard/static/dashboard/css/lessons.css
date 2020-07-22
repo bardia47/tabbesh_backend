@@ -152,34 +152,23 @@
 }
 
 /* CSS for pagination */
-.pagination-wrapper {
-    text-align: center;
-    margin: 40px 0;
-}
-
 .pagination {
     display: inline-block;
-    height: 70px;
-    margin-top: 70px;
-    padding: 0 25px;
-    border-radius: 35px;
-    background-color: #eee;
 }
 
 .page-numbers {
     display: block;
-    padding: 0 25px;
-    float: left;
+    padding: 12px 22px 12px; /* padding top (right/left) bottom */
+    float: right;
     transition: 400ms ease;
     color: #595959;
     font-size: 20px;
-    letter-spacing: 0.1em;
-    line-height: 70px;
     text-decoration: none;
+    background-color: #eee;
 }
 
 .page-numbers:hover, .page-numbers.current {
-    background-color: #86c023;
+    background-color: #FF9900;
     color: #fff;
 }
 
@@ -188,26 +177,14 @@
     color: #86c023;
 }
 
-.pagination > .prev, .pagination > .next {
-    letter-spacing: initial;
-}
-
 /* Lessons spinner color*/
 .spinner-color {
 }
 
 @media (max-width: 1199px) {
     .page-numbers {
-        padding: 0 15px;
+        padding: 7px 15px 7px;
         font-size: 16px;
-        line-height: 50px;
-    }
-
-    .pagination {
-        height: 50px;
-        margin-top: 50px;
-        padding: 0 10px;
-        border-radius: 25px;
     }
 }
 

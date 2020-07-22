@@ -12,7 +12,7 @@ let hostName = arrayHref[0] + "//" + arrayHref[2]
 
 // first pagination when user request https://127.0.0.1:8000/dashboard/lessons/
 $(function () {
-    url = hostName + "/dashboard/get_lessons/?page=" + (getUrlParameter(window.location.href, "page") ? +getUrlParameter(window.location.href, "page") : "1")
+    url = hostName + "/dashboard/get-lessons/?page=" + (getUrlParameter(window.location.href, "page") ? +getUrlParameter(window.location.href, "page") : "1")
 
     pagination(url)
 })
@@ -140,9 +140,9 @@ function renderPagination(pageNumber, urlAjax) {
     // $('.pagination').append(`<a class="next page-numbers" href="${hostName}/dashboard/get_lessons/"> Prev </a>`)
     for (let number = 1; number <= pageNumber; number++) {
         if (page == number) {
-            $('.pagination').append(`<span aria-current="page" class="page-numbers current">${number}</span>`)
+            $('.pagination').append(`<span aria-current="page" class="page-numbers current ml-3">${number}</span>`)
         } else {
-            $('.pagination').append(`<a class="page-numbers" href="` + url + `?page=${number}">${number}</a>`)
+            $('.pagination').append(`<a class="page-numbers ml-3" href="` + url + `?page=${number}">${number}</a>`)
         }
     }
     $(".page-numbers").click(function (event) {

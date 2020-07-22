@@ -14,7 +14,7 @@ let hostName = arrayHref[0] + "//" + arrayHref[2]
 $(function () {
     url = hostName + "/dashboard/shopping/?page=" + (getUrlParameter(window.location.href, "page") ? +getUrlParameter(window.location.href, "page") : "1")
 
-    pagination("http://127.0.0.1:8000/dashboard/shopping/")
+    pagination("http://127.0.0.1:8000/dashboard/get-shopping/")
 })
 
 // pagination when user return to previous page --> hint: read about history javascript stack
@@ -32,10 +32,9 @@ function pagination(url) {
         url: url,
         type: "GET",
         dataType: "json",
-        success: function (data, textStatus, request) {
+        success: function (shoppingCards, textStatus, request) {
             $(".card-group").empty()
             // $(".pagination").empty()
-            shoppingCards = data.courses
             renderShoppingCards(shoppingCards)
             // check if page number is not 0 show pagination
             // if (shoppingCards != 0) {
