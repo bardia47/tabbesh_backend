@@ -71,7 +71,6 @@ class DashboardSerializer(serializers.Serializer):
 
 
 class ShoppingSerializer(serializers.Serializer):
-    courses = CourseLessonsSerializer(many=True)
     teachers = TeacherSerializer(many=True)
     lessons = LessonSerializer(many=True)
     grades = GradeSerializer(many=True)

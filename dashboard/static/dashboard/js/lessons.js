@@ -12,7 +12,7 @@ let hostName = arrayHref[0] + "//" + arrayHref[2]
 
 // first pagination when user request https://127.0.0.1:8000/dashboard/lessons/
 $(function () {
-	url= hostName + "/dashboard/get_lessons/?page=" +( getUrlParameter(window.location.href, "page") ? + getUrlParameter(window.location.href, "page") : "1")
+	url= hostName + "/dashboard/get-lessons/?page=" +( getUrlParameter(window.location.href, "page") ? + getUrlParameter(window.location.href, "page") : "1")
 	
     pagination(url)
 })

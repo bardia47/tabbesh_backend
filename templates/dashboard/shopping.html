@@ -89,7 +89,7 @@
                         <select class="custom-select" name="teacher">
                             <option selected disabled>استاد</option>
                             {% for teacher in teachers %}
-                                <option value="{{ teacher.id }}">{{ teacher.get_full_name }}</option>
+                                <option value="{{ teacher.id }}">{{ teacher.full_name }}</option>
                             {% endfor %}
                         </select>
                     </div>
@@ -100,7 +100,7 @@
                 </div>
             </form>
 
-            <!-- Shopping Cards -->
+            {% comment %}<!-- Shopping Cards -->
             <div class="card-group">
                 <!-- Loop for courses -->
                 {% for course in courses %}
@@ -184,7 +184,7 @@
                         </div>
                     </div>
                 {% endfor %}
-            </div>
+            </div>{% endcomment %}
             <div class="pagination-wrapper">
                 <div class="pagination">
                     <a class="prev page-numbers" href="javascript:;">قبلی</a>

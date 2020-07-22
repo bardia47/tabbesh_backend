@@ -23,13 +23,6 @@ class Dashboard(APIView):
         user = get_object_or_404(User, pk=request.user.id)
         courses = user.courses.filter(end_date__gt=now)
         classes = Course_Calendar.objects.filter(course__in=courses)
-
-        # update all classes time
-        for klass in classes:
-            while klass.end_date < now:
-                klass.start_date += datetime.timedelta(days=7)
-                klass.end_date += datetime.timedelta(days=7)
-                klass.save()
         classes = Course_Calendar.objects.filter(
         Q(start_date__day=now.day) | Q(start_date__day=now.day + 1), course__in=courses)
         if classes.count() > 0:
@@ -110,31 +103,11 @@ class Lessons(APIView):
 class Shopping(APIView):
     renderer_classes = [TemplateHTMLRenderer, JSONRenderer]
     def get(self, request):
-        now = datetime.datetime.now()
         grades = Grade.objects.all()
         lessons = Lesson.objects.all()
         teachers = User.objects.filter(role__code=RoleCodes.TEACHER.value)
-        query = Q(end_date__gt=now)
-        if request.GET.get("teacher") or request.GET.get("lesson") or request.GET.get("grade"):
-            if request.GET.get("lesson"):
-                query &= getAllLessons(request.GET.get("lesson"), now)
-            if request.GET.get("grade"):
-                query &= Q(grade__id=request.GET.get("grade"))
-            if request.GET.get("teacher"):
-                query &= Q(teacher__id=request.GET.get("teacher"))
-        else:
-            if (request.user.grades.count() > 0):
-                query &= Q(grade__id=request.user.grades.first().id)
-        
-        if request.user.courses.all():
-                queryNot = reduce(or_, (Q(id=course.id)
-                        for course in request.user.courses.all()))
-                query = query & ~queryNot
-        courses = Course.objects.filter(query)
-        if request.accepted_renderer.format == 'html':
-            return Response({'grades': grades, 'lessons': lessons, 'teachers': teachers, 'courses': courses}, template_name='dashboard/shopping.html')  
-        ser = ShoppingSerializer(instance={'grades': grades, 'lessons': lessons, 'teachers': teachers, 'courses': courses})
-        return Response(ser.data)  
+        ser = ShoppingSerializer(instance={'grades': grades, 'lessons': lessons, 'teachers': teachers})
+        return Response(ser.data, template_name='dashboard/shopping.html')
 
 
 def getAllLessons(lesson_id, now):
@@ -166,10 +139,6 @@ def filemanager(request, code):
     return render(request, 'dashboard/filemanager.html', {'course': course, 'documents': documents})
 
 
-
-
-
-
 class GetLessonsViewSet(viewsets.ModelViewSet):
     queryset = Course.objects.all()
     serializer_class = CourseLessonsSerializer
@@ -182,11 +151,31 @@ class GetLessonsViewSet(viewsets.ModelViewSet):
          now = datetime.datetime.now()
          user = get_object_or_404(User, pk=self.request.user.id)
          courses = user.courses.filter(end_date__gt=now)
-         classes = Course_Calendar.objects.filter(course__in=courses)
-        # update all classes time
-         for klass in classes:
-            while klass.end_date < now:
-                klass.start_date += datetime.timedelta(days=7)
-                klass.end_date += datetime.timedelta(days=7)
-                klass.save()
          return courses
+
+
+class GetShoppingViewSet(viewsets.ModelViewSet):
+    queryset = Course.objects.all()
+    serializer_class = CourseLessonsSerializer
+    http_method_names = ['get', ]
+
+    def get_queryset(self):
+        now = datetime.datetime.now()
+        query = Q(end_date__gt=now)
+        if self.request.GET.get("teacher") or self.request.GET.get("lesson") or self.request.GET.get("grade"):
+            if self.request.GET.get("lesson"):
+                query &= getAllLessons(self.request.GET.get("lesson"), now)
+            if self.request.GET.get("grade"):
+                query &= Q(grade__id=self.request.GET.get("grade"))
+            if self.request.GET.get("teacher"):
+                query &= Q(teacher__id=self.request.GET.get("teacher"))
+        else:
+            if (self.request.user.grades.count() > 0):
+                query &= Q(grade__id=self.request.user.grades.first().id)
+
+        if self.request.user.courses.all():
+            queryNot = reduce(or_, (Q(id=course.id)
+                                    for course in self.request.user.courses.all()))
+            query = query & ~queryNot
+        courses = Course.objects.filter(query)
+        return courses
