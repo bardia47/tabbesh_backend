@@ -156,7 +156,7 @@ class GetLessonsViewSet(viewsets.ModelViewSet):
 
 class GetShoppingViewSet(viewsets.ModelViewSet):
     queryset = Course.objects.all()
-    serializer_class = CourseLessonsSerializer
+    serializer_class = ShoppingCourseSerializer
     http_method_names = ['get', ]
 
     def get_queryset(self):
