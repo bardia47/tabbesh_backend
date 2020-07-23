@@ -161,16 +161,16 @@ class GetShoppingViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         now = datetime.datetime.now()
         query = Q(end_date__gt=now)
-        if self.request.GET.get("teacher") or self.request.GET.get("lesson") or self.request.GET.get("grade"):
-            if self.request.GET.get("lesson"):
-                query &= getAllLessons(self.request.GET.get("lesson"), now)
-            if self.request.GET.get("grade"):
-                query &= Q(grade__id=self.request.GET.get("grade"))
-            if self.request.GET.get("teacher"):
-                query &= Q(teacher__id=self.request.GET.get("teacher"))
+        if self.request.GET.get("teacher") or self.request.GET.get("lesson") or  self.request.GET.get("grade"):
+            if  self.request.GET.get("lesson"):
+                query &= getAllLessons( self.request.GET.get("lesson"), now)
+            if  self.request.GET.get("grade"):
+                query &= (Q(grade__id= self.request.GET.get("grade")) | Q(grade__id=None))
+            if  self.request.GET.get("teacher"):
+                query &= Q(teacher__id= self.request.GET.get("teacher"))
         else:
-            if (self.request.user.grades.count() > 0):
-                query &= Q(grade__id=self.request.user.grades.first().id)
+            if ( self.request.user.grades.count() > 0):
+                query &= (Q(grade__id= self.request.user.grades.first().id) | Q(grade__id=None))
 
         if self.request.user.courses.all():
             queryNot = reduce(or_, (Q(id=course.id)
