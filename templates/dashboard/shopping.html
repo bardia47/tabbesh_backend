@@ -69,27 +69,27 @@
                     <!-- Select Grade -->
                     <div class="col-md-4 mb-2">
                         <select class="custom-select" id="searchGrade">
-                            <option value="none" selected>پایه</option>
+                            <option value="none" >پایه</option>
                             {% for grade in grades %}
-                                <option value="{{ grade.id }}">{{ grade.title }}</option>
+                                <option value="{{ grade.id }}"  {%  if request.GET.grade|add:"0" == grade.id  %} selected {% endif %} >{{ grade.title }}</option>
                             {% endfor %}
                         </select>
                     </div>
                     <!-- Select Lessons -->
                     <div class="col-md-4 mb-2">
                         <select class="custom-select" id="searchLesson">
-                            <option value="none" selected>دروس</option>
+                            <option value="none" >دروس</option>
                             {% for lesson in lessons %}
-                                <option value="{{ lesson.id }}">{{ lesson.title }}</option>
+                                <option value="{{ lesson.id }}"  {%  if request.GET.lesson|add:"0" == lesson.id  %} selected {% endif %} >{{ lesson.title }}</option>
                             {% endfor %}
                         </select>
                     </div>
                     <!-- Select teachers -->
                     <div class="col-md-4 mb-2">
                         <select class="custom-select" id="searchTeacher">
-                            <option value="none" selected>استاد</option>
+                            <option value="none">استاد</option>
                             {% for teacher in teachers %}
-                                <option value="{{ teacher.id }}">{{ teacher.full_name }}</option>
+                                <option value="{{ teacher.id }}" {%  if request.GET.teacher|add:"0" == teacher.id  %} selected {% endif %} >{{ teacher.full_name }}</option>
                             {% endfor %}
                         </select>
                     </div>

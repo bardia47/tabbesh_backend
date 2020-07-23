@@ -110,7 +110,7 @@
                     <select data-placeholder="پایه تحصیلی" name="grades[0]" class="grade-choicen" tabindex="5" required>
                         <option value="">پایه تحصیلی</option>
                         {% for element in grades %}
-                        <option value="{{ element.id }}">{{ element.title }}</option>
+                        <option value="{{ element.id }}" {% if element.id == grades0|add:"0" %} selected {% endif %}>{{ element.title }}</option>
                         {% endfor %}
                     </select>
                 </div>
@@ -125,7 +125,7 @@
                         <option value="">شهر</option>
                         {% for element in city %}
                         {# if dont work if you can fix it :) #}
-                        <option value="{{ element.id }}" {% if element.id == serializer.data.city %} selected {% endif %}>{{ element.title }}</option>
+                        <option value="{{ element.id }}" {% if element.id == serializer.data.city|add:"0" %} selected {% endif %}>{{ element.title }}</option>
                         {% endfor %}
                     </select>
                 </div>

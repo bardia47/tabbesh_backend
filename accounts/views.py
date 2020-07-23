@@ -39,7 +39,7 @@ class SignUp(APIView):
              if request.accepted_renderer.format == 'html':
                 grades = Grade.objects.all()
                 cities = City.objects.all()
-                return Response({'serializer': serializer, 'grades' : grades ,'city' : cities}, template_name='accounts/signup.html')
+                return Response({'serializer': serializer, 'grades' : grades ,'city' : cities ,'grades0' : request.data['grades[0]']}, template_name='accounts/signup.html')
              return Response(serializer.errors , status=status.HTTP_406_NOT_ACCEPTABLE)
         serializer.save()
         if request.accepted_renderer.format == 'html':
