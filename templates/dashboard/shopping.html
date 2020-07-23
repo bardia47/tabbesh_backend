@@ -68,34 +68,39 @@
                 <div class="row form-search">
                     <!-- Select Grade -->
                     <div class="col-md-4 mb-2">
-                        <select class="custom-select" id="searchGrade">
-                            <option value="none" >پایه</option>
+                        <select class="custom-select" id="searchGrade" data-search="grade">
+                            <option value="none">پایه</option>
                             {% for grade in grades %}
-                                <option value="{{ grade.id }}"  {%  if request.GET.grade|add:"0" == grade.id  %} selected {% endif %} >{{ grade.title }}</option>
+                                <option value="{{ grade.id }}"  {% if request.GET.grade|add:"0" == grade.id %}
+                                        selected {% endif %} >{{ grade.title }}</option>
                             {% endfor %}
                         </select>
                     </div>
                     <!-- Select Lessons -->
                     <div class="col-md-4 mb-2">
-                        <select class="custom-select" id="searchLesson">
-                            <option value="none" >دروس</option>
+                        <select class="custom-select" id="searchLesson" data-search="lesson">
+                            <option value="none">دروس</option>
                             {% for lesson in lessons %}
-                                <option value="{{ lesson.id }}"  {%  if request.GET.lesson|add:"0" == lesson.id  %} selected {% endif %} >{{ lesson.title }}</option>
+                                <option value="{{ lesson.id }}"  {% if request.GET.lesson|add:"0" == lesson.id %}
+                                        selected {% endif %} >{{ lesson.title }}</option>
                             {% endfor %}
                         </select>
                     </div>
                     <!-- Select teachers -->
                     <div class="col-md-4 mb-2">
-                        <select class="custom-select" id="searchTeacher">
+                        <select class="custom-select" id="searchTeacher" data-search="teacher">
                             <option value="none">استاد</option>
                             {% for teacher in teachers %}
-                                <option value="{{ teacher.id }}" {%  if request.GET.teacher|add:"0" == teacher.id  %} selected {% endif %} >{{ teacher.full_name }}</option>
+                                <option value="{{ teacher.id }}" {% if request.GET.teacher|add:"0" == teacher.id %}
+                                        selected {% endif %} >{{ teacher.full_name }}</option>
                             {% endfor %}
                         </select>
                     </div>
                 </div>
             </form>
-
+            <div class="loading-search spinner-border spinner-color" role="status">
+                <span class="sr-only">Loading...</span>
+            </div>
             <!-- Shopping Cards -->
             <div class="card-group">
             </div>

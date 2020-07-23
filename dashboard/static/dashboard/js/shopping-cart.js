@@ -1,4 +1,4 @@
-// Check page is loading or load 
+// Check page is loading or load
 if (document.readyState == 'loading') {
     document.addEventListener('DOMContentLoaded', ready())
 } else {
@@ -15,7 +15,6 @@ function ready() {
 
     // Add to cart with "Add to list Button"
     let addToCartButtons = document.getElementsByClassName('add-to-cart-button')
-    console.log(addToCartButtons)
     for (let i = 0; i < addToCartButtons.length; i++) {
         let button = addToCartButtons[i]
         button.addEventListener('click', addToCartClicked)
@@ -34,7 +33,7 @@ function ready() {
 
 }
 
-// Remove Cart Item 
+// Remove Cart Item
 function removeCartItem(event) {
     let buttonClicked = event.target
     buttoncl = buttonClicked.parentElement.parentElement.parentElement.parentElement.parentElement
@@ -45,7 +44,6 @@ function removeCartItem(event) {
 // Add Cart Item With add-to-cart button
 function addToCartClicked(event) {
     let button = event.target
-    console.log(button)
     let shopItem = button.parentElement.parentElement
     let title = shopItem.getElementsByClassName('title')[0].textContent;
     let price = shopItem.getElementsByClassName('price')[0].textContent;
@@ -58,7 +56,6 @@ function addToCartClicked(event) {
 
 // Create cart item
 function addItemToCart(title, price, teacher, imageSrc, id) {
-    console.log("HI")
     let cartRow = document.createElement('div')
     cartRow.classList.add('row')
     cartRow.classList.add('card-row')
@@ -118,7 +115,6 @@ function updateCartTotal() {
     for (let i = 0; i < cartRows.length; i++) {
         let cartRow = cartRows[i]
         let priceElement = cartRow.getElementsByClassName('cart-price-text')[0]
-        console.log(priceElement)
         if (priceElement.innerText == "رايگان!") {
             price = 0;
         } else {

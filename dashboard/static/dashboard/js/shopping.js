@@ -6,8 +6,22 @@ function getUrlParameter(url, param) {
     return urlParams.get(param)
 }
 
-function urlMaker(){
+function urlMaker() {
     return getShoppingURL + searchParameter
+}
+
+function loading() {
+    $(".card-group").hide()
+    $(".pagination-wrapper").hide()
+    $(".loading-search").show()
+
+    setTimeout(function () {
+        $(".card-group").show()
+        $(".pagination-wrapper").show()
+        $(".loading-search").hide()
+        $(".card-group").show()
+        $(".pagination-wrapper").show()
+    }, 1000);
 }
 
 // hostname of project -- example : https://127.0.0.1:8000
@@ -159,8 +173,7 @@ function renderShoppingCards(courseCards) {
         })
 
     });
-    $(".card-group").show()
-
+    loading()
     // add shopping-cart js to DOM
     let imported = document.createElement('script')
     imported.src = `${hostName}/static/dashboard/js/shopping-cart.js`
@@ -176,52 +189,32 @@ function renderPagination(pageNumber, urlAjax) {
         } else {
             searchParameter.set("page", number.toString())
             $('.pagination').append(`<a class="page-numbers ml-3" href="?${searchParameter}">${number}</a>`)
-            if (page != "1") searchParameter.set("page", page)
+            if (page != "1") {
+                searchParameter.set("page", page)
+            } else {
+                searchParameter.delete("page")
+            }
         }
     }
     $(".page-numbers").click(function (event) {
         event.preventDefault();
         searchParameter.set("page", getUrlParameter($(this).attr("href"), "page"))
         history.pushState({url: urlMaker()}, null, "?" + searchParameter);
+        // animate to shopping card section
         pagination(urlMaker())
     });
-    $(".pagination-wrapper").show()
-    // animate to shopping card section
-    $('html, body').animate({
-        scrollTop: $(".shopping-search-title").offset().top
-    }, 1000);
 }
 
-
-$("#searchGrade").change(function (event) {
-    if ($("#searchGrade").val() != "none") {
-        searchParameter.set("grade", $("#searchGrade").val());
+// regex selector
+// --> read : https://stackoverflow.com/questions/190253/jquery-selector-regular-expressions
+$("select[id^='search']").change(function (event) {
+    if ($(this).val() != "none") {
+        searchParameter.set($(this).data("search"), $(this).val());
         searchParameter.delete("page");
     } else {
-        searchParameter.delete("grade");
+        console.log($(this).data("search"))
+        searchParameter.delete($(this).data("search"));
     }
     history.pushState({url: urlMaker()}, null, "?" + searchParameter);
     pagination(urlMaker())
-});
-
-$("#searchLesson").change(function (event) {
-    if ($("#searchLesson").val() != "none") {
-        searchParameter.set("lesson", $("#searchLesson").val());
-        searchParameter.delete("page");
-    } else {
-        searchParameter.delete("lesson");
-    }
-    history.pushState({url: urlMaker()}, null, "?" + searchParameter);
-    pagination(urlMaker())
-});
-
-$("#searchTeacher").change(function (event) {
-    if ($("#searchTeacher").val() != "none") {
-        searchParameter.set("teacher", $("#searchTeacher").val());
-        searchParameter.delete("page");
-    } else {
-        searchParameter.delete("teacher");
-    }
-    history.pushState({url: urlMaker()}, null, "?" + searchParameter);
-    pagination(urlMaker())
-});
+})
