@@ -120,12 +120,12 @@ def shopping(request):
         if request.GET.get("lesson"):
             query &= getAllLessons(request.GET.get("lesson"), now)
         if request.GET.get("grade"):
-            query &= Q(grade__id=request.GET.get("grade"))
+            query &= (Q(grade__id=request.GET.get("grade")) | Q(grade__id=None) )
         if request.GET.get("teacher"):
             query &= Q(teacher__id=request.GET.get("teacher"))
     else:
         if (request.user.grades.count() > 0):
-            query &= Q(grade__id=request.user.grades.first().id)
+            query &= (Q(grade__id=request.user.grades.first().id)  | Q(grade__id=None) )
     if request.user.courses.all():
         queryNot = reduce(or_, (Q(id=course.id)
                                 for course in request.user.courses.all()))
