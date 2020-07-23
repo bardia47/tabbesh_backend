@@ -45,7 +45,7 @@
                         <!-- Total cart items id and price for pass to back-end -->
                         <input id="total_id" type="hidden" name="total_id" value="">
                         <input id="total_pr" type="hidden" name="total_pr" value="">
-                        <input type="submit" class="btn btn-success" value="پرداخت">
+                        <input type="submit" class="btn button-purchase" value="پرداخت">
                     </form>
                 </div>
                 <div class="cart-total-price">
@@ -64,38 +64,34 @@
                 </h1>
             </div>
             <!-- Search form -->
-            <form action="{% url 'shopping' %}">
+            <form action="" id="searchForm">
                 <div class="row form-search">
                     <!-- Select Grade -->
-                    <div class="col-md-3 mb-2">
-                        <select class="custom-select" name="grade">
-                            <option selected disabled>پایه</option>
+                    <div class="col-md-4 mb-2">
+                        <select class="custom-select" id="searchGrade">
+                            <option value="none" selected>پایه</option>
                             {% for grade in grades %}
                                 <option value="{{ grade.id }}">{{ grade.title }}</option>
                             {% endfor %}
                         </select>
                     </div>
                     <!-- Select Lessons -->
-                    <div class="col-md-3 mb-2">
-                        <select class="custom-select" name="lesson">
-                            <option selected disabled>دروس</option>
+                    <div class="col-md-4 mb-2">
+                        <select class="custom-select" id="searchLesson">
+                            <option value="none" selected>دروس</option>
                             {% for lesson in lessons %}
                                 <option value="{{ lesson.id }}">{{ lesson.title }}</option>
                             {% endfor %}
                         </select>
                     </div>
                     <!-- Select teachers -->
-                    <div class="col-md-3 mb-2">
-                        <select class="custom-select" name="teacher">
-                            <option selected disabled>استاد</option>
+                    <div class="col-md-4 mb-2">
+                        <select class="custom-select" id="searchTeacher">
+                            <option value="none" selected>استاد</option>
                             {% for teacher in teachers %}
-                                <option value="{{ teacher.id }}">{{ teacher.get_full_name }}</option>
+                                <option value="{{ teacher.id }}">{{ teacher.full_name }}</option>
                             {% endfor %}
                         </select>
-                    </div>
-                    <!-- Search Button -->
-                    <div class="col-md-3">
-                        <input type="submit" class="form-control" value="جستجو">
                     </div>
                 </div>
             </form>
@@ -104,18 +100,10 @@
             <div class="card-group">
             </div>
 
-            <!-- pagination !-->
-            {#            <div class="pagination-wrapper">#}
-            {#                <div class="pagination">#}
-            {#                    <a class="prev page-numbers" href="javascript:;">قبلی</a>#}
-            {#                    <a class="page-numbers" href="javascript:;">1</a>#}
-            {#                    <a class="page-numbers" href="javascript:;">2</a>#}
-            {#                    <span aria-current="page" class="page-numbers current">3</span>#}
-            {#                    <a class="page-numbers" href="javascript:;">4</a>#}
-            {#                    <a class="page-numbers" href="javascript:;">5</a>#}
-            {#                    <a class="next page-numbers" href="javascript:;">بعدی</a>#}
-            {#                </div>#}
-            {#            </div>#}
+            <div class="pagination-wrapper mt-2 text-center" style="display: none">
+                <div class="pagination">
+                </div>
+            </div>
         </div>
 
 
@@ -149,7 +137,6 @@
 <!-- JS files -->
 {% block JSfile %}
     <script src="{% static 'dashboard/js/shopping.js' %}"></script>
-    <script src="{% static 'dashboard/js/shopping-cart.js' %}"></script>
     <!-- persian date formatter -- hint: read doc: https://github.com/babakhani/PersianDate -->
     <script src="{% static "home/js/persian-date.min.js" %}"></script>
 {% endblock %}

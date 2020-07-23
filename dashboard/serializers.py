@@ -69,19 +69,22 @@ class DashboardSerializer(serializers.Serializer):
     now = serializers.DateTimeField()
     calendar_time = serializers.DurationField(required=False, allow_null=True)
 
-#for shopping page
+
+# for shopping page
 class ShoppingSerializer(serializers.Serializer):
     teachers = TeacherSerializer(many=True)
     lessons = LessonSerializer(many=True)
     grades = GradeSerializer(many=True)
 
-#for shopping page
+
+# for shopping page
 class ShoppingCourseSerializer(CourseLessonsSerializer):
     course_calendars = serializers.SerializerMethodField('get_start_dates')
 
     class Meta:
         model = Course
-        fields = ('title', 'start_date', 'end_date', 'code', 'amount', 'description', 'image', 'teacher', 'course_calendars')
+        fields = ('id', 'title', 'start_date', 'end_date', 'code', 'amount', 'description', 'image', 'teacher',
+                  'course_calendars')
 
     def get_start_dates(self, obj):
         dates = []
@@ -89,6 +92,7 @@ class ShoppingCourseSerializer(CourseLessonsSerializer):
         for i in calendars:
             dates.append(i.start_date)
         return dates
+
 
 class UserProfileSerializer(JSONFormSerializer, serializers.ModelSerializer):
     class Meta:

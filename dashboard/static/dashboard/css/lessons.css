@@ -172,10 +172,6 @@
     color: #fff;
 }
 
-.page-numbers.prev:hover, .page-numbers.next:hover {
-    background-color: transparent;
-    color: #86c023;
-}
 
 /* Lessons spinner color*/
 .spinner-color {

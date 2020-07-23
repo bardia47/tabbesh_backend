@@ -6,27 +6,35 @@ function getUrlParameter(url, param) {
     return urlParams.get(param)
 }
 
+function urlMaker(){
+    return getShoppingURL + searchParameter
+}
+
 // hostname of project -- example : https://127.0.0.1:8000
 let arrayHref = window.location.href.split("/")
 let hostName = arrayHref[0] + "//" + arrayHref[2]
-
+let firstParameter = new URL(window.location.href).search.slice(1)
+let searchParameter
+// add to GET variable page to url parameter --> read : https://developer.mozilla.org/en-US/docs/Web/API/URLSearchParams/append
+if (firstParameter) {
+    searchParameter = new URLSearchParams(firstParameter)
+} else {
+    searchParameter = new URLSearchParams("?page=1")
+}
+let getShoppingURL = hostName + "/dashboard/get-shopping/?"
 // first pagination when user request https://127.0.0.1:8000/dashboard/shopping/
 $(function () {
-    url = hostName + "/dashboard/shopping/?page=" + (getUrlParameter(window.location.href, "page") ? +getUrlParameter(window.location.href, "page") : "1")
-
-    pagination("http://127.0.0.1:8000/dashboard/get-shopping/")
+    pagination(urlMaker())
 })
 
 // pagination when user return to previous page --> hint: read about history javascript stack
 window.onpopstate = function (event) {
+    console.log(event.state.url);
     pagination(event.state.url)
 };
 
 //get lessons with ajax
 function pagination(url) {
-    // check with page go
-
-
     // get JSON and Response Header
     $.ajax({
         url: url,
@@ -34,12 +42,12 @@ function pagination(url) {
         dataType: "json",
         success: function (shoppingCards, textStatus, request) {
             $(".card-group").empty()
-            // $(".pagination").empty()
+            $(".pagination").empty()
             renderShoppingCards(shoppingCards)
             // check if page number is not 0 show pagination
-            // if (shoppingCards != 0) {
-            //     renderPagination(request.getResponseHeader('Last-Page'), url)
-            // }
+            if (shoppingCards != 0) {
+                renderPagination(request.getResponseHeader('Last-Page'), url)
+            }
         },
         error: function () {
             alert("خطا در بارگزاری دروس ... لطفا دوباره امتحان کنید!")
@@ -63,112 +71,157 @@ function renderShoppingCards(courseCards) {
             `
         }
         let shoppingCardTemplate = `
-        <div class="col-md-4 mb-3">
-            <div class="card course-card h-100">
-                <!-- Course poster -->
-                <img class="card-img-top" src="${courseCard.image}">
-                <!-- Course content -->
-                <div class="card-body">
-                    <!-- Course title  -->
-                    <h4 class="title ">${courseCard.title}</h4>
-                    <!-- Course teacher name  -->
-                    <div class="course-teacher-name">
+            <div class="col-md-4 mb-3">
+               <div class="card course-card h-100">
+                  <!-- Course poster -->
+                  <img class="card-img-top" src="${courseCard.image}">
+                  <!-- Course content -->
+                  <div class="card-body">
+                     <!-- Course title  -->
+                     <h4 class="title ">${courseCard.title}</h4>
+                     <!-- Course teacher name  -->
+                     <div class="course-teacher-name">
                         <h6 class="teacher-name">استاد ${courseCard.teacher}</h6>
-                    </div>
-                    <!-- Course calender  -->
-                    <div class="course-calender">
+                     </div>
+                     <!-- Course calender  -->
+                     <div class="course-calender">
                         <p>
-                            <img src="${hostName}/static/home/images/icons/clock.svg" alt="course clock time">
-                            جلسات:
+                           <img src="${hostName}/static/home/images/icons/clock.svg" alt="course clock time">
+                           جلسات:
                         </p>
-                        <!-- Loop for course calender times -->
-                        {% for cc in course.course_calendar_set.all %}
-
-                        {% endfor %}
-                    </div>
-                    <!-- Start of the course  -->
-                    <div class="course-start-date">
+                     </div>
+                     <!-- Start of the course  -->
+                     <div class="course-start-date">
                         <p>
-                            <img src="${hostName}/static/home/images/icons/start-date.svg" alt="start course clock">
-                            شروع دوره:
-                            <span>
-                                ${startDateCourse.format("dddd")}
-                                ${startDateCourse.format("D")}
-                                ${startDateCourse.format("MMMM")}
-                            </span>
+                           <img src="${hostName}/static/home/images/icons/start-date.svg" alt="start course clock">
+                           شروع دوره:
+                           <span>
+                           ${startDateCourse.format("dddd")}
+                           ${startDateCourse.format("D")}
+                           ${startDateCourse.format("MMMM")}
+                           </span>
                         </p>
-                    </div>
-                    <!-- End of the course  -->
-                    <div class="course-end-date">
+                     </div>
+                     <!-- End of the course  -->
+                     <div class="course-end-date">
                         <p>
-                            <img src="${hostName}/static/home/images/icons/end-date.svg" alt="end course clock">
-                            اتمام دوره:
-                            <span>
-                                ${endDateCourse.format("dddd")}
-                                ${endDateCourse.format("D")}
-                                ${endDateCourse.format("MMMM")}
-                            </span>
+                           <img src="${hostName}/static/home/images/icons/end-date.svg" alt="end course clock">
+                           اتمام دوره:
+                           <span>
+                           ${endDateCourse.format("dddd")}
+                           ${endDateCourse.format("D")}
+                           ${endDateCourse.format("MMMM")}
+                           </span>
                         </p>
-                    </div>
-                    <!-- Description of the course  -->
-                    <div class="course-description">
+                     </div>
+                     <!-- Description of the course  -->
+                     <div class="course-description">
                         <p class="course-description-title">
-                            <img src="${hostName}/static/home/images/icons/paragraph.svg" alt="description">
-                            توضیحات:
+                           <img src="${hostName}/static/home/images/icons/paragraph.svg" alt="description">
+                           توضیحات:
                         </p>
                         <p class="course-description-p">${courseCard.description}</p>
-                    </div>
-                    <!-- Course price -->
-                    <div class="course-price">
+                     </div>
+                     <!-- Course price -->
+                     <div class="course-price">
                         <p>
-                            <img src="${hostName}/static/home/images/icons/price.svg" alt="price">
-                            قیمت:
-                            <span class="price">
-                            ${coursePriceTemplate}
-                    </span>
+                           <img src="${hostName}/static/home/images/icons/price.svg" alt="price">
+                           قیمت:
+                           <span class="price">${coursePriceTemplate}</span>
                         </p>
-                    </div>
-                </div>
-                <!-- Button add course to cart -->
-                <div class="card-footer add-to-cart">
-                    <button class="btn btn-success add-to-cart-button">
-                        <img src="${hostName}/static/home/images/icons/add-to-cart.svg"
-                             alt="button link to class">
-                        اضافه به سبد خرید
-                    </button>
-                </div>
-                <!-- hidden lesson id for handel total buy id in shopping.js -->
-                <input type="hidden" class="course-id" value="{{ course.id }}">
+                     </div>
+                  </div>
+                  <!-- Button add course to cart -->
+                  <div class="card-footer add-to-cart">
+                     <button class="btn add-to-cart-button">
+                     <img src="${hostName}/static/home/images/icons/add-to-cart.svg"
+                        alt="button link to class">
+                     اضافه به سبد خرید
+                     </button>
+                  </div>
+                  <!-- hidden lesson id for handel total buy id in shopping.js -->
+                  <input type="hidden" class="course-id" value="${courseCard.id}">
+               </div>
             </div>
-        </div>
         `
         $(".card-group").append(shoppingCardTemplate)
-        // course calender section
-
+        // loop for course calender times
+        $.each(courseCard.course_calendars, function (index, courseCalender) {
+            let courseStandardTime = new persianDate(Date.parse(courseCalender))
+            let courseCalenderTemplate = `
+                <p class="course-calender-time">
+                    <img src="${hostName}/static/home/images/icons/add-time.svg" class="animated"
+                    alt="time icon">
+                    ${courseStandardTime.format("dddd")} ها ساعت ${courseStandardTime.format("H:m")}
+                </p>
+            `
+            $(".course-calender").last().append(courseCalenderTemplate)
+        })
 
     });
     $(".card-group").show()
+
+    // add shopping-cart js to DOM
+    let imported = document.createElement('script')
+    imported.src = `${hostName}/static/dashboard/js/shopping-cart.js`
+    document.body.appendChild(imported);
 }
 
 // make pagination numbers
 function renderPagination(pageNumber, urlAjax) {
-    let url = urlAjax.substring(0, urlAjax.indexOf('?'))
-    let page = (getUrlParameter(window.location.href, "page") ? getUrlParameter(window.location.href, "page") : "1")
-    // $('.pagination').append(`<a class="next page-numbers" href="${hostName}/dashboard/get_lessons/"> Prev </a>`)
-    console.log(pageNumber)
+    page = searchParameter.get("page") ? searchParameter.get("page") : "1"
     for (let number = 1; number <= pageNumber; number++) {
         if (page == number) {
-            $('.pagination').append(`<span aria-current="page" class="page-numbers current">${number}</span>`)
+            $('.pagination').append(`<span aria-current="page" class="page-numbers current ml-3">${number}</span>`)
         } else {
-            $('.pagination').append(`<a class="page-numbers" href="` + url + `?page=${number}">${number}</a>`)
+            searchParameter.set("page", number.toString())
+            $('.pagination').append(`<a class="page-numbers ml-3" href="?${searchParameter}">${number}</a>`)
+            if (page != "1") searchParameter.set("page", page)
         }
     }
     $(".page-numbers").click(function (event) {
         event.preventDefault();
-        history.pushState({url: $(this).attr("href")}, null, "?page=" + getUrlParameter($(this).attr("href"), "page"));
-        pagination($(this).attr("href"))
+        searchParameter.set("page", getUrlParameter($(this).attr("href"), "page"))
+        history.pushState({url: urlMaker()}, null, "?" + searchParameter);
+        pagination(urlMaker())
     });
-    // $('.pagination').append(`<a class="next page-numbers" href="${hostName}"> Next </a>`)
     $(".pagination-wrapper").show()
-    $("html, body").animate({scrollTop: 0}, "slow");
+    // animate to shopping card section
+    $('html, body').animate({
+        scrollTop: $(".shopping-search-title").offset().top
+    }, 1000);
 }
+
+
+$("#searchGrade").change(function (event) {
+    if ($("#searchGrade").val() != "none") {
+        searchParameter.set("grade", $("#searchGrade").val());
+        searchParameter.delete("page");
+    } else {
+        searchParameter.delete("grade");
+    }
+    history.pushState({url: urlMaker()}, null, "?" + searchParameter);
+    pagination(urlMaker())
+});
+
+$("#searchLesson").change(function (event) {
+    if ($("#searchLesson").val() != "none") {
+        searchParameter.set("lesson", $("#searchLesson").val());
+        searchParameter.delete("page");
+    } else {
+        searchParameter.delete("lesson");
+    }
+    history.pushState({url: urlMaker()}, null, "?" + searchParameter);
+    pagination(urlMaker())
+});
+
+$("#searchTeacher").change(function (event) {
+    if ($("#searchTeacher").val() != "none") {
+        searchParameter.set("teacher", $("#searchTeacher").val());
+        searchParameter.delete("page");
+    } else {
+        searchParameter.delete("teacher");
+    }
+    history.pushState({url: urlMaker()}, null, "?" + searchParameter);
+    pagination(urlMaker())
+});

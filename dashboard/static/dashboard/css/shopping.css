@@ -11,7 +11,7 @@
 }
 
 ::-webkit-scrollbar-thumb {
-    background-color: #527318;
+    background-color: #06623b;
     background-image: -webkit-linear-gradient(45deg, rgba(255, 255, 255, .2) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, .2) 50%, rgba(255, 255, 255, .2) 75%, transparent 75%, transparent)
 }
 
@@ -42,7 +42,7 @@
 
 .cart-title {
     text-align: center;
-    background-color: #527318;
+    background-color: #06623b;
     color: white;
     padding: 20px;
     border-radius: 4px;
@@ -70,7 +70,7 @@
 }
 
 .cart-footer button {
-    background-color: #899857;
+    background-color: #649d66;
     border: none;
     color: white;
     font-size: 16px;
@@ -81,7 +81,7 @@
 
 .cart-footer button:focus,
 .cart-footer button:hover {
-    background-color: #527318;
+    background-color: #06623b;
     border: none;
     color: white;
     font-size: 16px;
@@ -94,6 +94,16 @@
 .cart-total-price {
     font-family: 'Vazir_light';
     margin-top: 5px;
+}
+
+.button-purchase {
+    background-color: #649d66;
+    color: #FFFFFF;
+}
+
+.button-purchase:hover {
+    background-color: #06623b;
+    color: #FFFFFF;
 }
 
 /* Shopping card with filter CSS */
@@ -122,7 +132,7 @@
 }
 
 .form-search input[type="submit"] {
-    background-color: #527318;
+    background-color: #06623b;
     border: none;
     color: #fff;
 }
@@ -306,6 +316,16 @@
     margin-right: 5px;
 }
 
+.add-to-cart-button{
+    background-color: #649d66;
+    color: #FFFFFF;
+}
+
+.add-to-cart-button:hover{
+    background-color: #06623b;
+    color: #FFFFFF;
+}
+
 
 /* Cart section CSS */
 
@@ -393,49 +413,35 @@
 }
 
 /* CSS for pagination */
-.pagination-wrapper {
-    text-align: center;
-    margin: 40px 0;
-}
-
 .pagination {
     display: inline-block;
-    height: 70px;
-    margin-top: 70px;
-    padding: 0 25px;
-    border-radius: 35px;
-    background-color: #eee;
 }
 
 .page-numbers {
     display: block;
-    padding: 0 25px;
-    float: left;
+    padding: 12px 22px 12px; /* padding top (right/left) bottom */
+    float: right;
     transition: 400ms ease;
     color: #595959;
     font-size: 20px;
-    letter-spacing: 0.1em;
-    line-height: 70px;
     text-decoration: none;
+    background-color: #eee;
 }
 
-.page-numbers:hover, .page-numbers.current {
-    background-color: #86c023;
+.page-numbers:hover {
+    background-color: #649d66;
     color: #fff;
 }
 
-.page-numbers.prev:hover, .page-numbers.next:hover {
-    background-color: transparent;
-    color: #86c023;
+.page-numbers.current {
+    background-color: #06623b;
+    color: #fff;
 }
 
-.pagination > .prev, .pagination > .next {
-    letter-spacing: initial;
-}
 
 /* Lessons spinner color*/
 .spinner-color {
-    color: #527318;
+    color: #06623b;
 }
 
 @media (max-width: 1199px) {
