@@ -39,17 +39,14 @@
         <div class="row account-title">
             <!-- Profile picture -->
             <div class="col-md-4">
-                {% if user.avatar.url %}
-                    <img src="{{ user.avatar.url }}" id="userDashboardProfile" alt="تصویر پروفایل">
-                {% else %}
-                    <img src="{{ user.avatar }}" id="userDashboardProfile" alt="تصویر پروفایل">
-                {% endif %}
+                <img src="{{ user.avatar.url }}" alt="تصویر پروفایل">
             </div>
             <!-- Name & Grade -->
             <div class="col-md-8">
                 <div class="row">
                     <div class="col-md-12">
-                        <p class="account-title-name">{{ user.first_name }} {{ user.last_name }}<p>
+                        <p class="account-title-name">{{ user.get_full_name }}
+                        <p>
                     </div>
                     <div class="col-md-12">
                         <!-- Give grade title from m2m field grade -->
@@ -132,10 +129,14 @@
                 </p>
             </div>
         </div>
-
-        {% block content %}
-
-        {% endblock %}
+        <div class="extend-content" style="display: none">
+            {% block content %}
+            {% endblock %}
+        </div>
+    </div>
+    <!-- Loading Page -->
+    <div class="loading-page spinner-border spinner-color" role="status">
+        <span class="sr-only">Loading...</span>
     </div>
 </div>
 

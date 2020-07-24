@@ -54,7 +54,7 @@ function check() {
 	return false;
 }
 
-
+// change error message of empty input ( required input )
 document.addEventListener("DOMContentLoaded", function () {
 	let elements = document.getElementsByTagName("INPUT");
 	for (let i = 0; i < elements.length; i++) {
@@ -70,7 +70,7 @@ document.addEventListener("DOMContentLoaded", function () {
 	}
 });
 
-
+// change error message of empty select ( required input )
 document.addEventListener("DOMContentLoaded", function () {
 	let elements = document.getElementsByTagName("SELECT");
 	for (let i = 0; i < elements.length; i++) {

@@ -1,392 +1,472 @@
 /* Scroll Bar CSS */
 ::-webkit-scrollbar-track {
-  box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
-  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
-  background-color: #F5F5F5;
+    box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+    background-color: #F5F5F5;
 }
 
 ::-webkit-scrollbar {
-  width: 10px;
-  background-color: #F5F5F5;
+    width: 10px;
+    background-color: #F5F5F5;
 }
 
 ::-webkit-scrollbar-thumb {
-  background-color: #527318;
-  background-image: -webkit-linear-gradient(45deg, rgba(255, 255, 255, .2) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, .2) 50%, rgba(255, 255, 255, .2) 75%, transparent 75%, transparent)
+    background-color: #06623b;
+    background-image: -webkit-linear-gradient(45deg, rgba(255, 255, 255, .2) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, .2) 50%, rgba(255, 255, 255, .2) 75%, transparent 75%, transparent)
 }
 
 /* Shopping CSS */
 .shopping {
-  height: 76%;
-  width: 100%;
-  margin: 20px auto;
+    position: relative;
+    height: 76%;
+    width: 100%;
+    margin: 20px auto;
 }
 
 .shopping-content {
-  margin-top: 1px;
-  color: black;
+    margin-top: 1px;
+    color: black;
 }
 
 .shopping-title {
-  margin-bottom: 40px;
-  text-align: center;
+    margin-bottom: 40px;
+    text-align: center;
 }
 
 /* Shopping cart section */
 
 .card-section {
-  text-align: center;
-  margin-bottom: 5px;
+    text-align: center;
+    margin-bottom: 5px;
 }
 
 .cart-title {
-  text-align: center;
-  background-color: #527318;
-  color: white;
-  padding: 20px;
-  border-radius: 4px;
-  margin-bottom: 5px;
+    text-align: center;
+    background-color: #06623b;
+    color: white;
+    padding: 20px;
+    border-radius: 4px;
+    margin-bottom: 5px;
 }
 
 .cart-title img {
-  width: 35px;
-  height: 35px;
-  margin-left: 5px;
+    width: 35px;
+    height: 35px;
+    margin-left: 5px;
 }
 
 .cart-footer {
-  font-size: 1em;
-  position: static;
-  top: 0;
-  left: 0;
-  max-width: 100%;
-  padding: .75em 1em;
-  color: rgba(0, 0, 0, .4);
-  background-color: transparent;
-  border: none;
-  margin-bottom: 20px;
-  text-align: center
+    font-size: 1em;
+    position: static;
+    top: 0;
+    left: 0;
+    max-width: 100%;
+    padding: .75em 1em;
+    color: rgba(0, 0, 0, .4);
+    background-color: transparent;
+    border: none;
+    margin-bottom: 20px;
+    text-align: center
 }
 
 .cart-footer button {
-  background-color: #899857;
-  border: none;
-  color: white;
-  font-size: 16px;
-  cursor: pointer;
-  height: 50px;
-  text-align: center;
+    background-color: #649d66;
+    border: none;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    height: 50px;
+    text-align: center;
 }
 
 .cart-footer button:focus,
 .cart-footer button:hover {
-  background-color: #527318;
-  border: none;
-  color: white;
-  font-size: 16px;
-  cursor: pointer;
-  height: 50px;
-  text-align: center;
-  box-shadow: none;
+    background-color: #06623b;
+    border: none;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    height: 50px;
+    text-align: center;
+    box-shadow: none;
 }
 
 .cart-total-price {
-  font-family: 'Vazir_light';
-  margin-top: 5px;
+    font-family: 'Vazir_light';
+    margin-top: 5px;
+}
+
+.button-purchase {
+    background-color: #649d66;
+    color: #FFFFFF;
+}
+
+.button-purchase:hover {
+    background-color: #06623b;
+    color: #FFFFFF;
 }
 
 /* Shopping card with filter CSS */
-
+.shopping-cards{
+    text-align: center;
+    min-height: 200px;
+}
 .shopping-search-title h1 {
-  text-align: center;
-  padding: 5px;
-  margin: 30px;
+    text-align: center;
+    padding: 5px;
+    margin: 30px;
 }
 
 .shopping-search-title img {
-  height: 50px;
-  width: 50px;
-  margin-left: 5px;
+    height: 50px;
+    width: 50px;
+    margin-left: 5px;
 }
 
 /* Search filters */
 
 .form-search {
-  margin-bottom: 20px;
+    margin-bottom: 20px;
 }
 
 .form-search select {
-  text-align: center;
-  text-align-last: center;
+    text-align: center;
+    text-align-last: center;
 }
 
 .form-search input[type="submit"] {
-  background-color: #527318;
-  border: none;
-  color: #fff;
+    background-color: #06623b;
+    border: none;
+    color: #fff;
 }
 
 /* Shopping Cards CSS */
 
 .course-card {
-  font-size: 1em;
-  overflow: hidden;
-  padding: 0;
-  border: none;
-  border-radius: .28571429rem;
-  box-shadow: 0 1px 3px 0 #d4d4d5, 0 0 0 1px #d4d4d5;
+    font-size: 1em;
+    overflow: hidden;
+    padding: 0;
+    border: none;
+    border-radius: .28571429rem;
+    box-shadow: 0 1px 3px 0 #d4d4d5, 0 0 0 1px #d4d4d5;
 }
 
 .card-body {
-  font-size: 1em;
-  position: relative;
-  margin: 0;
-  padding: 1em;
-  border: none;
-  border-top: 1px solid rgba(34, 36, 38, .1);
-  box-shadow: none;
+    font-size: 1em;
+    position: relative;
+    margin: 0;
+    padding: 1em;
+    border: none;
+    border-top: 1px solid rgba(34, 36, 38, .1);
+    box-shadow: none;
 }
 
 .card-img-top {
-  display: block;
-  width: 100%;
-  height: auto;
+    display: block;
+    width: 100%;
+    height: auto;
 }
 
 /* Course title */
 
 .course-title {
-  font-size: 1.28571429em;
-  font-weight: 700;
-  line-height: 1.2857em;
+    font-size: 1.28571429em;
+    font-weight: 700;
+    line-height: 1.2857em;
 }
 
 /* Course teacher name  */
 
 .course-teacher-name h6 {
-  font-size: 15px;
-  color: rgba(0, 0, 0, .4);
+    font-size: 15px;
+    color: rgba(0, 0, 0, .4);
 }
 
 /* Course calendar */
 
 .course-calender {
-  margin-top: 20px;
-  font-size: 15px;
+    margin-top: 20px;
+    font-size: 15px;
 }
 
 .course-calender img {
-  width: 20px;
-  height: 20px;
-  margin-left: 5px;
+    width: 20px;
+    height: 20px;
+    margin-left: 5px;
 }
 
 .course-calender p {
-  font-family: 'Dana_Bold';
+    font-family: 'Dana_Bold';
 }
 
 .course-calender-time {
-  margin-right: 20px;
-  font-family: 'Vazir_light' !important;
+    margin-right: 20px;
+    font-family: 'Vazir_light' !important;
 }
 
 .course-calender-time img:hover {
-  animation-name: swing;
-  animation-duration: 1s;
+    animation-name: swing;
+    animation-duration: 1s;
 }
 
 /* Course start date */
 
 .course-start-date {
-  margin-top: 20px;
-  font-size: 15px;
+    margin-top: 20px;
+    font-size: 15px;
 }
 
 .course-start-date img {
-  width: 20px;
-  height: 20px;
-  margin-left: 5px;
+    width: 20px;
+    height: 20px;
+    margin-left: 5px;
 }
 
 .course-start-date p {
-  font-family: 'Dana_Bold';
+    font-family: 'Dana_Bold';
 }
 
 .course-start-date span {
-  font-family: 'Vazir_Light';
+    font-family: 'Vazir_Light';
 }
 
 /* Course end date */
 
 .course-end-date {
-  margin-top: 20px;
-  font-size: 15px;
+    margin-top: 20px;
+    font-size: 15px;
 }
 
 .course-end-date img {
-  width: 20px;
-  height: 20px;
-  margin-left: 5px;
+    width: 20px;
+    height: 20px;
+    margin-left: 5px;
 }
 
 .course-end-date p {
-  font-family: 'Dana_Bold';
+    font-family: 'Dana_Bold';
 }
 
 .course-end-date span {
-  font-family: 'Vazir_Light';
+    font-family: 'Vazir_Light';
 }
 
 /* Course description */
 
 .course-description {
-  margin-top: 20px;
-  font-size: 15px;
+    margin-top: 20px;
+    font-size: 15px;
 }
 
 .course-description img {
-  width: 20px;
-  height: 20px;
-  margin-left: 5px;
+    width: 20px;
+    height: 20px;
+    margin-left: 5px;
 }
 
 .course-description-title {
-  font-family: 'Dana_Bold';
+    font-family: 'Dana_Bold';
 }
 
 .course-description-p {
-  font-family: 'Vazir_Light';
-  margin-right: 20px;
+    font-family: 'Vazir_Light';
+    margin-right: 20px;
 }
 
 /* Course price */
 
 .course-price {
-  margin-top: 20px;
-  font-size: 15px;
+    margin-top: 20px;
+    font-size: 15px;
 }
 
 .course-price img {
-  width: 20px;
-  height: 20px;
-  margin-left: 5px;
+    width: 20px;
+    height: 20px;
+    margin-left: 5px;
 }
 
 .course-price p {
-  font-family: 'Dana_Bold';
+    font-family: 'Dana_Bold';
 }
 
 .price {
-  font-family: 'Vazir_Bold';
+    font-family: 'Vazir_Bold';
 }
 
 /* Button add to cart */
 
 .card-footer {
-  font-size: 1em;
-  position: static;
-  top: 0;
-  left: 0;
-  max-width: 100%;
-  padding: .75em 1em;
-  color: rgba(0, 0, 0, .4);
-  border-top: 1px solid rgba(0, 0, 0, .05) !important;
-  background: #fff;
+    font-size: 1em;
+    position: static;
+    top: 0;
+    left: 0;
+    max-width: 100%;
+    padding: .75em 1em;
+    color: rgba(0, 0, 0, .4);
+    border-top: 1px solid rgba(0, 0, 0, .05) !important;
+    background: #fff;
 }
 
 .add-to-cart {
-  text-align: center;
-  direction: ltr;
+    text-align: center;
+    direction: ltr;
 }
 
 .add-to-cart img {
-  width: 20px;
-  height: 20px;
-  margin-right: 5px;
+    width: 20px;
+    height: 20px;
+    margin-right: 5px;
+}
+
+.add-to-cart-button{
+    background-color: #649d66;
+    color: #FFFFFF;
+}
+
+.add-to-cart-button:hover{
+    background-color: #06623b;
+    color: #FFFFFF;
 }
 
 
 /* Cart section CSS */
 
 .cart-course-image img {
-  width: 60px;
-  height: 60px;
-  border-radius: 4px;
-  margin-top: -5px;
+    width: 60px;
+    height: 60px;
+    border-radius: 4px;
+    margin-top: -5px;
 }
 
 .cart-course-title p {
-  font-family: 'Vazir_Medium', sans-serif;
-  font-size: 20px;
-  padding: 6px;
+    font-family: 'Vazir_Medium', sans-serif;
+    font-size: 20px;
+    padding: 6px;
 }
 
 .cart-course-teacher-name p {
-  font-family: 'Vazir_light', sans-serif;
-  font-size: 15px;
-  padding: 10px 6px 6px 6px;
+    font-family: 'Vazir_light', sans-serif;
+    font-size: 15px;
+    padding: 10px 6px 6px 6px;
 }
 
 .cart-price img {
-  width: 20px;
-  height: 20px;
-  margin-left: 5px;
+    width: 20px;
+    height: 20px;
+    margin-left: 5px;
 }
 
 .cart-price p {
-  font-family: 'Vazir_light', sans-serif;
-  font-size: 15px;
-  padding: 10px 6px 6px 6px;
+    font-family: 'Vazir_light', sans-serif;
+    font-size: 15px;
+    padding: 10px 6px 6px 6px;
 }
 
 .cart-button-to-delete {
-  direction: ltr;
-  height: 50px;
-  margin-top: -5px;
+    direction: ltr;
+    height: 50px;
+    margin-top: -5px;
 }
 
 .cart-button-to-delete img {
-  width: 20px;
-  height: 20px;
-  margin-right: 5px;
+    width: 20px;
+    height: 20px;
+    margin-right: 5px;
 }
 
 .cart-button-to-delete button {
-  border: none;
-  color: white;
-  font-size: 16px;
-  cursor: pointer;
-  height: 50px;
-  text-align: center;
+    border: none;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    height: 50px;
+    text-align: center;
 }
 
 .cart-button-to-delete button:hover {
-  border: none;
-  color: white;
-  font-size: 16px;
-  cursor: pointer;
-  height: 50px;
-  text-align: center;
+    border: none;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    height: 50px;
+    text-align: center;
 }
 
 .btn-remove {
-  background-color: #da2d2d;
-  border: none;
-  color: white;
-  font-size: 16px;
-  cursor: pointer;
-  height: 50px;
-  text-align: center;
+    background-color: #da2d2d;
+    border: none;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    height: 50px;
+    text-align: center;
 }
 
 .btn-remove:focus,
 .btn-remove:hover {
-  background-color: #da2d2d;
-  border: none;
-  color: white;
-  font-size: 16px;
-  cursor: pointer;
-  height: 50px;
-  text-align: center;
-  box-shadow: none;
+    background-color: #da2d2d;
+    border: none;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    height: 50px;
+    text-align: center;
+    box-shadow: none;
 }
+
+/* CSS for pagination */
+.pagination {
+    display: inline-block;
+}
+
+.page-numbers {
+    display: block;
+    padding: 12px 22px 12px; /* padding top (right/left) bottom */
+    float: right;
+    transition: 400ms ease;
+    color: #595959;
+    font-size: 20px;
+    text-decoration: none;
+    background-color: #eee;
+}
+
+.page-numbers:hover {
+    background-color: #649d66;
+    color: #fff;
+}
+
+.page-numbers.current {
+    background-color: #06623b;
+    color: #fff;
+}
+
+
+/* Lessons spinner color*/
+.spinner-color {
+    color: #06623b;
+}
+
+@media (max-width: 1199px) {
+    .page-numbers {
+        padding: 0 15px;
+        font-size: 16px;
+        line-height: 50px;
+    }
+
+    .pagination {
+        height: 50px;
+        margin-top: 50px;
+        padding: 0 10px;
+        border-radius: 25px;
+    }
+}
+
+.loading-search {
+    display: inline-block;
+    text-align: left;
+    vertical-align: middle;
+    width: 50px;
+    height: 50px;
+}
+

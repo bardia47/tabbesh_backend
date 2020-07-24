@@ -299,7 +299,10 @@ time.icon span {
   text-align: center;
 }
 
-
+/* Dashboard spinner color*/
+.spinner-color {
+    color: #10375c;
+}
 /* ---------------------------------------------------
     MEDIAQUERIES for when dashoard screen width is lower than 768 pixels
 ----------------------------------------------------- */

@@ -183,7 +183,7 @@ class Course(models.Model):
     def get_first_class(self, exclude=None):
         if len(self.course_calendar_set.all())==0: 
             return None
-        return  self.course_calendar_set.first().start_date
+        return  self.course_calendar_set.first()
         
        
 # Course_Calendar Model

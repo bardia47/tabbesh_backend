@@ -4,7 +4,8 @@ from django.conf import settings
 from django.conf.urls.static import static
 from rest_framework.routers import DefaultRouter
 router = DefaultRouter()
-router.register('test', TestViewSet)
+router.register('get-lessons', GetLessonsViewSet)
+router.register('get-shopping', GetShoppingViewSet)
 
 urlpatterns = [
     path('', Dashboard.as_view(), name='dashboard'),
