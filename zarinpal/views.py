@@ -51,20 +51,25 @@ class SendRequest(APIView):
                
         # request to zarinpal
             else:
-                if request.accepted_renderer.format == 'html':
                     url = request.scheme+"://"+request.get_host() + CallbackURL
                     result = client.service.PaymentRequest(
                         MERCHANT, amount, description, email, mobile, url)
                     if result.Status == 100:
                         new_pay = Pay_History.objects.create(purchaser=request.user, amount=amount, courses=request.POST.get("total_id"))
-                        return redirect('https://www.zarinpal.com/pg/StartPay/' + str(result.Authority))
+                        if request.accepted_renderer.format == 'html':
+                            return redirect('https://www.zarinpal.com/pg/StartPay/' + str(result.Authority))
+                        else:
+                            return Response({'url':'https://www.zarinpal.com/pg/StartPay/' + str(result.Authority)})
                     else:
-                        return render(request, 'dashboard/unsuccess_shopping.html', {'error': str(result.Status)})
-                else:
-                    new_pay = Pay_History.objects.create(purchaser=request.user, amount=amount, courses=request.POST.get("total_id"))
-                    return Response({'massage':'payment'})
+                        if request.accepted_renderer.format == 'html':
+                            return render(request, 'dashboard/unsuccess_shopping.html', {'error': str(result.Status)})
+                        else:
+                            return Response(status=status.HTTP_406_NOT_ACCEPTABLE)
         else:
-            return redirect('shopping')  # what's up noob :)
+            if request.accepted_renderer.format == 'html':
+                return redirect('/dashboard/shopping/')  # what's up noob :)
+            return Response(status=status.HTTP_406_NOT_ACCEPTABLE)
+
 
 
 

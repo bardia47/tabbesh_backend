@@ -193,7 +193,7 @@ def filemanager(request, code):
     try:
         request.user.courses.get(id=course.id)
     except:
-        return Shopping(request)
+        return redirect('/dashboard/shopping/')
     documents = course.document_set.all()
     return render(request, 'dashboard/filemanager.html', {'course': course, 'documents': documents})
 
