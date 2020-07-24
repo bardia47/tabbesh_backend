@@ -184,6 +184,12 @@ class Course(models.Model):
         if len(self.course_calendar_set.all())==0: 
             return None
         return  self.course_calendar_set.first()
+
+    def get_next_class(self, exclude=None):
+        if len(self.course_calendar_set.all())==0:
+            return None
+        now = datetime.datetime.now()
+        return  self.course_calendar_set.filter(end_date__gte=now).first()
         
        
 # Course_Calendar Model

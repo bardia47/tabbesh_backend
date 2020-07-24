@@ -52,14 +52,14 @@ function renderLessenCards(courseCards) {
         let nextClassDate = new persianDate(Date.parse(courseCard.first_class))
         // check class is active or not
         if (courseCard.is_active) {
-            let buttonToClassTemplate = `
+             buttonToClassTemplate = `
                 <button class="btn btn-success mb-1">
                     <img src="${hostName}/static/home/images/icons/click.svg" alt="button link to class">
                     ورود به کلاس
                 </button>
             `
         } else {
-            let buttonToClassTemplate = `
+             buttonToClassTemplate = `
                 <button class="btn btn-danger mb-1" disabled>
                     <img src="${hostName}/static/home/images/icons/click.svg" alt="button link to class">
                     کلاس شروع نشده
@@ -87,11 +87,12 @@ function renderLessenCards(courseCards) {
                                 <img src="${hostName}/static/home/images/icons/clock.svg" alt="">
                                 جلسه ی بعدی:
                                 <span>
-                                    ${endDateCourse.format("dddd")}
-                                    ${endDateCourse.format("D")}
+                                
+                                    ${nextClassDate.format("dddd")}
+                                    ${nextClassDate.format("D")}
                                     ام
                                     ساعت
-                                    ${endDateCourse.format("H:m")}
+                                    ${nextClassDate.format("H:m")}
                                  </span>
                             </p>
                         </div>
@@ -101,9 +102,9 @@ function renderLessenCards(courseCards) {
                                 <img src="${hostName}/static/home/images/icons/calendar.svg" alt="calender-icon" />
                                 اتمام دوره:
                                 <span>
-                                    ${nextClassDate.format("dddd")}
-                                    ${nextClassDate.format("D")}
-                                    ${nextClassDate.format("MMMM")}
+                                    ${endDateCourse.format("dddd")}
+                                    ${endDateCourse.format("D")}
+                                    ${endDateCourse.format("MMMM")}
                                 </span>
                             </p>
                         </div>
