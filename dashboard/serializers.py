@@ -1,5 +1,7 @@
 from django.contrib.auth.models import User
 from accounts.models import *
+from accounts.serializers import *
+
 from rest_framework import serializers
 from html_json_forms.serializers import JSONFormSerializer
 from pip._vendor.pkg_resources import require
@@ -92,8 +94,40 @@ class ShoppingCourseSerializer(CourseLessonsSerializer):
             dates.append(i.start_date)
         return dates
 
+
 class UserProfileSerializer(JSONFormSerializer, serializers.ModelSerializer):
+    grade = serializers.SerializerMethodField('get_student_grade')
+    cityTitle = serializers.SerializerMethodField('get_city_title')
+
     class Meta:
         model = User
         fields = ('first_name',
-                  'last_name', 'username', 'email', 'grades', 'gender', 'phone_number', 'city', 'avatar')
+                  'last_name', 'username', 'grade', 'cityTitle', 'gender', 'national_code', 'phone_number', 'avatar')
+
+    def get_student_grade(self, obj):
+            try:
+                return obj.grades.all().first().title
+            except:
+                return ""
+
+    def get_city_title(self, obj):
+            try:
+                return obj.city.title
+            except:
+                return ""
+
+                # for post method and android
+class UserSaveProfileSerializer(UserProfileSerializer):
+    class Meta:
+        model = User
+        fields = ('first_name',
+                  'last_name', 'username', 'email', 'gender', 'national_code',
+                  'grades', 'city', 'avatar')
+
+    # for get method
+
+
+class UserProfileShowSerializer(serializers.Serializer):
+    user = UserProfileSerializer()
+    grades = GradeSerializer(many=True)
+    cities = CitySerializer(many=True)

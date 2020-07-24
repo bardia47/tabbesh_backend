@@ -223,7 +223,7 @@ def filemanager(request, code):
     try:
         request.user.courses.get(id=course.id)
     except:
-        return shopping(request)
+        return Shopping(request)
     documents = course.document_set.all()
     return render(request, 'dashboard/filemanager.html', {'course': course, 'documents': documents})
 
