@@ -1,5 +1,7 @@
 from django.contrib.auth.models import User
 from accounts.models import *
+from accounts.serializers import *
+
 from rest_framework import serializers
 from html_json_forms.serializers import JSONFormSerializer
 from pip._vendor.pkg_resources import require
@@ -41,6 +43,7 @@ class CourseBriefSerializer(JSONFormSerializer, serializers.ModelSerializer):
 
 
 class CourseLessonsSerializer(CourseBriefSerializer):
+<<<<<<< dashboard/serializers.py
     #first_class = serializers.SerializerMethodField('get_first_class')
     is_active = serializers.SerializerMethodField('is_class_active')
 
@@ -62,6 +65,31 @@ class CourseCalendarSerializer(JSONFormSerializer, serializers.ModelSerializer):
     class Meta:
         model = Course_Calendar
         fields = ('start_date', 'course')
+=======
+
+    class Meta:
+        model = Course
+        fields = ('title', 'end_date' ,'image', 'teacher','url' )
+
+
+class CourseCalendarSerializer(JSONFormSerializer, serializers.ModelSerializer):
+    is_active = serializers.SerializerMethodField('get_is_active')
+
+    class Meta:
+        model = Course_Calendar
+        fields = ('start_date','is_active')
+
+    def get_is_active(self, obj):
+        return obj.is_class_active()
+
+    def to_representation(self, course_calendar):
+        data =  super(CourseCalendarSerializer, self).to_representation(course_calendar)
+        course=CourseLessonsSerializer(instance=course_calendar.course)
+        data.update(course.data)
+        return data
+
+
+>>>>>>> dashboard/serializers.py
 
 
 class DashboardSerializer(serializers.Serializer):
@@ -69,22 +97,34 @@ class DashboardSerializer(serializers.Serializer):
     now = serializers.DateTimeField()
     calendar_time = serializers.DurationField(required=False, allow_null=True)
 
+<<<<<<< dashboard/serializers.py
 
 # for shopping page
+=======
+#for shopping page
+>>>>>>> dashboard/serializers.py
 class ShoppingSerializer(serializers.Serializer):
     teachers = TeacherSerializer(many=True)
     lessons = LessonSerializer(many=True)
     grades = GradeSerializer(many=True)
 
+<<<<<<< dashboard/serializers.py
 
 # for shopping page
+=======
+#for shopping page
+>>>>>>> dashboard/serializers.py
 class ShoppingCourseSerializer(CourseLessonsSerializer):
     course_calendars = serializers.SerializerMethodField('get_start_dates')
 
     class Meta:
         model = Course
+<<<<<<< dashboard/serializers.py
         fields = ('id', 'title', 'start_date', 'end_date', 'code', 'amount', 'description', 'image', 'teacher',
                   'course_calendars')
+=======
+        fields = ('title', 'start_date', 'end_date', 'code', 'amount', 'description', 'image', 'teacher', 'course_calendars')
+>>>>>>> dashboard/serializers.py
 
     def get_start_dates(self, obj):
         dates = []
@@ -95,7 +135,45 @@ class ShoppingCourseSerializer(CourseLessonsSerializer):
 
 
 class UserProfileSerializer(JSONFormSerializer, serializers.ModelSerializer):
+<<<<<<< dashboard/serializers.py
     class Meta:
         model = User
         fields = ('first_name',
                   'last_name', 'username', 'email', 'grades', 'gender', 'phone_number', 'city', 'avatar')
+=======
+    grade = serializers.SerializerMethodField('get_student_grade')
+    cityTitle = serializers.SerializerMethodField('get_city_title')
+
+    class Meta:
+        model = User
+        fields = ('first_name',
+                  'last_name', 'username', 'grade', 'cityTitle', 'gender', 'national_code', 'phone_number', 'avatar')
+
+    def get_student_grade(self, obj):
+            try:
+                return obj.grades.all().first().title
+            except:
+                return ""
+
+    def get_city_title(self, obj):
+            try:
+                return obj.city.title
+            except:
+                return ""
+
+                # for post method and android
+class UserSaveProfileSerializer(UserProfileSerializer):
+    class Meta:
+        model = User
+        fields = ('first_name',
+                  'last_name', 'username', 'email', 'gender', 'national_code',
+                  'grades', 'city', 'avatar')
+
+    # for get method
+
+
+class UserProfileShowSerializer(serializers.Serializer):
+    user = UserProfileSerializer()
+    grades = GradeSerializer(many=True)
+    cities = CitySerializer(many=True)
+>>>>>>> dashboard/serializers.py

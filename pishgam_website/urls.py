@@ -25,6 +25,7 @@ urlpatterns = [
     path('404-page-not-found/', page_not_found, name="page-not-found"),
     path('signup/', SignUp.as_view(), name="signup"),
     path('signin/', SignIn.as_view(), name='signin'),
+    path('signin/forget-password/', ForgetPassword.as_view(), name='forget_password'),
     path('api/token/', MyTokenObtainPairView.as_view(), name='api_token_auth'),
     path('signout/', SignOut.as_view() , name='signout'),
     path('dashboard/', include('dashboard.urls')),
