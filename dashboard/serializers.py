@@ -43,7 +43,6 @@ class CourseBriefSerializer(JSONFormSerializer, serializers.ModelSerializer):
 
 
 class CourseLessonsSerializer(CourseBriefSerializer):
-<<<<<<< dashboard/serializers.py
     #first_class = serializers.SerializerMethodField('get_first_class')
     is_active = serializers.SerializerMethodField('is_class_active')
 
@@ -65,7 +64,6 @@ class CourseCalendarSerializer(JSONFormSerializer, serializers.ModelSerializer):
     class Meta:
         model = Course_Calendar
         fields = ('start_date', 'course')
-=======
 
     class Meta:
         model = Course
@@ -89,7 +87,6 @@ class CourseCalendarSerializer(JSONFormSerializer, serializers.ModelSerializer):
         return data
 
 
->>>>>>> dashboard/serializers.py
 
 
 class DashboardSerializer(serializers.Serializer):
@@ -97,34 +94,23 @@ class DashboardSerializer(serializers.Serializer):
     now = serializers.DateTimeField()
     calendar_time = serializers.DurationField(required=False, allow_null=True)
 
-<<<<<<< dashboard/serializers.py
 
-# for shopping page
-=======
 #for shopping page
->>>>>>> dashboard/serializers.py
 class ShoppingSerializer(serializers.Serializer):
     teachers = TeacherSerializer(many=True)
     lessons = LessonSerializer(many=True)
     grades = GradeSerializer(many=True)
 
-<<<<<<< dashboard/serializers.py
 
-# for shopping page
-=======
 #for shopping page
->>>>>>> dashboard/serializers.py
 class ShoppingCourseSerializer(CourseLessonsSerializer):
     course_calendars = serializers.SerializerMethodField('get_start_dates')
 
     class Meta:
         model = Course
-<<<<<<< dashboard/serializers.py
         fields = ('id', 'title', 'start_date', 'end_date', 'code', 'amount', 'description', 'image', 'teacher',
                   'course_calendars')
-=======
         fields = ('title', 'start_date', 'end_date', 'code', 'amount', 'description', 'image', 'teacher', 'course_calendars')
->>>>>>> dashboard/serializers.py
 
     def get_start_dates(self, obj):
         dates = []
@@ -135,12 +121,10 @@ class ShoppingCourseSerializer(CourseLessonsSerializer):
 
 
 class UserProfileSerializer(JSONFormSerializer, serializers.ModelSerializer):
-<<<<<<< dashboard/serializers.py
     class Meta:
         model = User
         fields = ('first_name',
                   'last_name', 'username', 'email', 'grades', 'gender', 'phone_number', 'city', 'avatar')
-=======
     grade = serializers.SerializerMethodField('get_student_grade')
     cityTitle = serializers.SerializerMethodField('get_city_title')
 
@@ -176,4 +160,3 @@ class UserProfileShowSerializer(serializers.Serializer):
     user = UserProfileSerializer()
     grades = GradeSerializer(many=True)
     cities = CitySerializer(many=True)
->>>>>>> dashboard/serializers.py
