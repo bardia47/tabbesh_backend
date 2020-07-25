@@ -29,9 +29,11 @@ class UserSerializer(JSONFormSerializer,serializers.ModelSerializer):
             data['role']=Role.objects.get(code=RoleCodes.STUDENT.value)
         to = "0"+data['phone_number']
         randPass = random.randint(10000000, 99999999)
-        text = Sms.signupText.value.replace('{}', str(randPass))
+      #  text = Sms.signupText.value.replace('{}', str(randPass))
+        text=str(randPass)
+        #sendSms=SmsWebServices.send_sms(to,text)
+        sendSms=SmsWebServices.send_sms(to, text, Sms.signupBodyId.value)
 
-        sendSms=SmsWebServices.send_sms(to,text)
         if sendSms is not None:
                 raise serializers.ValidationError({"phone_number":sendSms})
         data['password']=randPass

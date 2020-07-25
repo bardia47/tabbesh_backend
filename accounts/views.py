@@ -43,7 +43,7 @@ class SignUp(APIView):
              return Response(serializer.errors , status=status.HTTP_406_NOT_ACCEPTABLE)
         serializer.save()
         if request.accepted_renderer.format == 'html':
-              return render(request, 'accounts/signin.html', {'signup_success': 'ثبت نام با موفقیت انجام شد.'}) 
+              return render(request, 'accounts/signin.html', {'success': 'ثبت نام با موفقیت انجام شد.'})
         return Response({'success': 'ثبت نام با موفقیت انجام شد.'})
 
 
