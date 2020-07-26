@@ -23,10 +23,11 @@ def signup(request):
             api = Api(Sms.username.value, Sms.password.value)
             sms = api.sms()
             to = "0"+form.data['phone_number']
-            _from = Sms._from.value
             randPass = random.randint(10000000, 99999999)
-            text = Sms.signupText.value.replace('{}', str(randPass))
-            response = sms.send(to, _from, text)
+            #  text = Sms.signupText.value.replace('{}', str(randPass))
+            text = str(randPass)
+            # sendSms=SmsWebServices.send_sms(to,text)
+            response = response=sms.send_by_base_number(text,to, Sms.signupBodyId.value)
             if response['Value'] == Sms.wrongNumber.value:
                 form.error = 'شماره وارد شده نامعتبر است'
             elif (len(response['Value']) == 1):
