@@ -27,7 +27,7 @@ def signup(request):
             #  text = Sms.signupText.value.replace('{}', str(randPass))
             text = str(randPass)
             # sendSms=SmsWebServices.send_sms(to,text)
-            response = response=sms.send_by_base_number(text,to, Sms.signupBodyId.value)
+            response=sms.send_by_base_number(text,to, Sms.signupBodyId.value)
             if response['Value'] == Sms.wrongNumber.value:
                 form.error = 'شماره وارد شده نامعتبر است'
             elif (len(response['Value']) == 1):
