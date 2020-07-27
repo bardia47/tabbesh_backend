@@ -56,7 +56,7 @@ function check() {
 }
 
 // change +98 & 09 to 9
-$("#formSignUp").submit(function () {
+$("#form-sign-up").submit(function () {
     let phoneNumber = $("#phone-number");
     if (phoneNumber.val().startsWith("0")) {
         phoneNumber.val(phoneNumber.val().slice(1))

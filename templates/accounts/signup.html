@@ -21,7 +21,7 @@
 
 <body class="text-center">
 <!-- Form of sing up page -->
-<form id="formSignUp" class="form-signup" method="POST" action="{% url 'signup' %}">
+<form id="form-sign-up" class="form-signup" method="POST" action="{% url 'signup' %}">
     {% csrf_token %}
     <!-- Content of sign up page -->
     <div class="container mt-3">
@@ -77,11 +77,11 @@
         <!-- Last name field -->
         <div class="row mb-2">
             <div class="col-md-2 field-label">
-                <label id="last-name-check-alert" for="last-name">نام خانوادگی</label>
+                <label for="last-name">نام خانوادگی</label>
             </div>
             <div class="col-md-4">
                 <input type="text" id="last-name" name="last_name" required>
-                <small class="form-text text-nowrap mt-2 text-md-left ml-3"
+                <small id="last-name-check-alert" class="form-text text-nowrap mt-2 text-md-left ml-3"
                        style="display: none;">
                     <i class="fas fa-exclamation-triangle"></i>
                     تنها حروف فارسی مجاز است.
