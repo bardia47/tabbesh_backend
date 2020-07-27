@@ -1,5 +1,4 @@
 $(document).ready(function () {
-
     // Profile image valid check 
     $("#file").on('change', function () {
         readURL(this);
@@ -33,97 +32,94 @@ $(document).ready(function () {
 
         }
     }
-
-    //Check new password & conform password equal
-    $('#password2').on('keyup', function () {
-        $('#old_password').val(persianToEnglishNumbers($('#old_password').val()));
-        $('#password').val(persianToEnglishNumbers($('#password').val()));
-        $('#password2').val(persianToEnglishNumbers($('#password2').val()));
-        if ($('#password').val() == $('#password2').val() && $("#password2").is(":focus")) {
-            $("#change-password-alert").hide()
-        } else {
-            $("#change-password-alert").show()
-        }
-    });
-
-    // Check if click ثبت button the other inputs form not required
-    $('#edit_profile').click(function () {
-        $('[name="old_password"]').prop('required', false);
-        $('#password').prop('required', false);
-        $('#password2').prop('required', false);
-    });
-
-    // Check if click تغییر رمز عبور button the other inputs form not required
-    $('#changePassword').click(function () {
-        $('input').prop('required', false);
-        $('select').prop('required', false);
-    });
-
-
-    // Check if click آپلود button the other inputs form not required
-    $('[name="upload"]').click(function () {
-        $('input').prop('required', false);
-        $('select').prop('required', false);
-        $('#file').prop('required', true);
-    });
-
-
-    // Check firstname contain persian character
-    $('#first_name').on('keyup', function () {
-        let p = /^[\u0600-\u06FF\s]+$/;
-        if ((p.test($('#first_name').val()) || !$('#first_name').val())) {
-            $('#name-check-alert').hide()
-        } else {
-            $('#name-check-alert').show()
-        }
-    });
-
-    // Check last name contain persian character
-    $('#last_name').on('keyup', function () {
-        let p = /^[\u0600-\u06FF\s]+$/;
-        if ((p.test($('#last_name').val()) || !$('#last_name').val())) {
-            $('#lastname-check-alert').hide()
-        } else {
-            $('#lastname-check-alert').show()
-        }
-    });
-
-    // Username valid check
-    $('#username').on('keyup', function () {
-        let p = /^[a-zA-Z0-9]+$/;
-        $('#username').val(persianToEnglishNumbers($('#username').val()));
-        if (p.test($('#username').val())) {
-            $('#username-check-alert').hide();
-        } else {
-            $('#username-check-alert').show();
-        }
-    });
-
-    $('#national-code').on('keyup', function () {
-        $('#national-code').val(persianToEnglishNumbers($('#national-code').val()));
-        if (isValidIranianNationalCode($('#national-code').val())) {
-            $('#national-code-check-alert').hide();
-        } else {
-            $('#national-code-check-alert').show();
-        }
-    });
-
-
-    // Check valid iranian national code 
-    function isValidIranianNationalCode(input) {
-        if (!/^\d{10}$/.test(input))
-            return false;
-
-        var check = parseInt(input[9]);
-        var sum = 0;
-        var i;
-        for (i = 0; i < 9; ++i) {
-            sum += parseInt(input[i]) * (10 - i);
-        }
-        sum %= 11;
-
-        return (sum < 2 && check == sum) || (sum >= 2 && check + sum == 11);
-    }
-
 });
+
+//Check new password & conform password equal
+$('#conformPassword').on('keyup', function () {
+    let oldPassword = $('#oldPassword'),
+        newPassword = $('#newPassword'),
+        conformPassword = $('#conformPassword');
+    oldPassword.val(persianToEnglishNumbers(oldPassword.val()));
+    newPassword.val(persianToEnglishNumbers(newPassword.val()));
+    conformPassword.val(persianToEnglishNumbers(conformPassword.val()));
+    if (newPassword.val() === conformPassword.val() && $("#conformPassword").is(":focus")) {
+        $("#change-password-alert").hide()
+    } else {
+        $("#change-password-alert").show()
+    }
+});
+
+// Check if click ثبت button the other inputs form not required
+$('#edit_profile').click(function () {
+    $('#oldPassword').prop('required', false);
+    $('#newPassword').prop('required', false);
+    $('#conformPassword').prop('required', false);
+});
+
+// Check if click تغییر رمز عبور button the other inputs form not required
+$('#changePassword').click(function () {
+    $('input').prop('required', false);
+    $('select').prop('required', false);
+});
+
+
+// Check if click آپلود button the other inputs form not required
+$('[name="upload"]').click(function () {
+    $('input').prop('required', false);
+    $('select').prop('required', false);
+    $('#file').prop('required', true);
+});
+
+
+// check first name & last name contains persian character
+$("#firstName , #lastName").on("keyup", function () {
+    let p = /^[\u0600-\u06FF\s]+$/;
+    if (p.test($(this).val()) || !$(this).val()) {
+        $($(this).siblings("small")).hide();
+        if (check()) {
+            $("#submit").prop("disabled", false);
+        }
+    } else {
+        $($(this).siblings("small")).show();
+        $("#submit").prop("disabled", true);
+
+    }
+});
+
+// Username valid check
+$('#username').on('keyup', function () {
+    let p = /^[a-zA-Z0-9]+$/;
+    $('#username').val(persianToEnglishNumbers($('#username').val()));
+    if (p.test($('#username').val())) {
+        $('#username-check-alert').hide();
+    } else {
+        $('#username-check-alert').show();
+    }
+});
+
+$('#national-code').on('keyup', function () {
+    $('#national-code').val(persianToEnglishNumbers($('#national-code').val()));
+    if (isValidIranianNationalCode($('#national-code').val())) {
+        $('#national-code-check-alert').hide();
+    } else {
+        $('#national-code-check-alert').show();
+    }
+});
+
+
+// Check valid iranian national code
+function isValidIranianNationalCode(input) {
+    if (!/^\d{10}$/.test(input))
+        return false;
+
+    var check = parseInt(input[9]);
+    var sum = 0;
+    var i;
+    for (i = 0; i < 9; ++i) {
+        sum += parseInt(input[i]) * (10 - i);
+    }
+    sum %= 11;
+
+    return (sum < 2 && check == sum) || (sum >= 2 && check + sum == 11);
+}
 

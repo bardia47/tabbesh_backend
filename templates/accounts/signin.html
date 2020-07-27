@@ -5,8 +5,8 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="Sign in page">
-    <meta name="author" content="Taabesh website">
+    <meta name="description" content="sign in page">
+    <meta name="author" content="taabesh website">
     <title>ورود</title>
     <!-- favicon !-->
     <link rel="shortcut icon" type="image/png" href="{% static 'home/images/favicon.ico' %}"/>
@@ -19,20 +19,20 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css">
 </head>
 
-<body class="text-center">
-<form id="signInForm" class="form-signin" method="POST" action="{% url 'signin' %}">
+<body>
+<form id="sign-in-form" class="sign-in-form" method="POST" action="{% url 'signin' %}">
     {% csrf_token %}
     <h1 class="title">ورود</h1>
     <div class="container">
-        <!-- Email OR Username Input -->
+        <!-- phone number or username input -->
         <div class="row" style="margin:10px">
-            <p> نام کاربری یا شماره تلفن</p>
-            <input type="username" id="username" name="username" class="form-control"
+            <label class="p" for="username"> نام کاربری یا شماره تلفن</label>
+            <input type="text" id="username" name="username" class="form-control"
                    placeholder="شماره تلفن یا نام کاربری خود را وارد کنید ..." required autofocus>
         </div>
-        <!-- Password Input -->
+        <!-- password input -->
         <div class="row" style="margin:10px; margin-bottom:20px">
-            <p> رمز عبور </p>
+            <label class="p" for="password">رمز عبور</label>
             <input type="password" id="password" name="password" class="form-control"
                    placeholder="رمز عبور خود را با دقت وارد کنید ..." required style="background-color:#BEBEBD">
         </div>

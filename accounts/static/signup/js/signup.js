@@ -1,5 +1,5 @@
 // check first name & last name contains persian character
-$("#firstName , #lastName").on("keyup", function () {
+$("#first-name , #last-name").on("keyup", function () {
     let p = /^[\u0600-\u06FF\s]+$/;
     if (p.test($(this).val()) || !$(this).val()) {
         $($(this).siblings("small")).hide();
@@ -19,45 +19,45 @@ $("#username").on("keyup", function () {
     let username = $("#username");
     username.val(persianToEnglishNumbers(username.val()));
     if (p.test(username.val()) || !username.val()) {
-        $("#usernameCheckAlert").hide();
+        $("#username-check-alert").hide();
         if (check()) {
             $("#submit").prop("disabled", false);
         }
     } else {
-        $("#usernameCheckAlert").show();
+        $("#username-check-alert").show();
         $("#submit").prop("disabled", true);
 
     }
 });
 
 // phone number validation check
-$("#phoneNumber").on("keyup", function () {
+$("#phone-number").on("keyup", function () {
     let phoneNumberRegEx = /^(\+98|0)?9\d{9}$/;
-    let phoneNumber = $("#phoneNumber");
+    let phoneNumber = $("#phone-number");
     phoneNumber.val(persianToEnglishNumbers(phoneNumber.val()));
     if (phoneNumberRegEx.test(phoneNumber.val()) || !phoneNumber.val()) {
-        $("#phoneNumberCheckAlert").hide();
+        $("#phone-number-check-alert").hide();
         if (check()) {
             $("#submit").prop("disabled", false);
         }
     } else {
-        $("#phoneNumberCheckAlert").show();
+        $("#phone-number-check-alert").show();
         $("#submit").prop("disabled", true);
 
     }
 });
 
 function check() {
-    return !$("#usernameCheckAlert").is(":visible") &&
-        !$("#firstNameCheckAlert").is(":visible") &&
-        !$("#lastNameCheckAlert").is(":visible") &&
-        !$("#phoneNumberCheckAlert").is(":visible");
+    return !$("#username-check-alert").is(":visible") &&
+        !$("#first-name-check-alert").is(":visible") &&
+        !$("#last-name-check-alert").is(":visible") &&
+        !$("#phone-number-check-alert").is(":visible");
 
 }
 
 // change +98 & 09 to 9
 $("#formSignUp").submit(function () {
-    let phoneNumber = $("#phoneNumber");
+    let phoneNumber = $("#phone-number");
     if (phoneNumber.val().startsWith("0")) {
         phoneNumber.val(phoneNumber.val().slice(1))
     } else if (phoneNumber.startsWith("+98")) {

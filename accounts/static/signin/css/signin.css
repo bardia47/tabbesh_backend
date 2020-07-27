@@ -10,10 +10,10 @@ body {
   height: 100%;
 }
 
-p {
+.p , p{
   margin-bottom: 6px;
   color: #E4E4E4;
-  font-family: "Iransense";
+  font-family: "Iransense", sans-serif;
   font-size: 18px;
 }
 
@@ -23,7 +23,8 @@ a {
   text-decoration: none;
 }
 
-.form-signin {
+.sign-in-form {
+  text-align: center;
   width: 100%;
   max-width: 330px;
   margin: auto;
@@ -33,13 +34,13 @@ a {
   backdrop-filter: blur(4px);
 }
 
-.form-signin input[type="username"] {
+.sign-in-form input[type="text"] {
   background-color: #BEBEBD;
   border-radius: 14px;
   border-color: #BEBEBD;
 }
 
-.form-signin input[type="password"] {
+.sign-in-form input[type="password"] {
   margin-bottom: 10px;
   background-color: #BEBEBD;
   border-radius: 14px;
@@ -47,7 +48,7 @@ a {
 }
 
 .title {
-  font-family: 'Vazir_Bold';
+  font-family: 'Vazir_Bold', sans-serif;
   font-size: 50px;
   color: #fff;
 }
@@ -58,11 +59,11 @@ a {
   border-radius: 0;
   background-color: #FFDE03;
   border: #FFDE03;
-  font-family: 'Vazir_Bold';
-  color: rgb(46, 46, 46, 0.79);
+  font-family: 'Vazir_Bold', sans-serif;
+  color: rgb(46, 46, 46);
 }
 
-/* Chage Hover of btn class of bootstrap */
+/* change hover of btn class of bootstrap */
 
 .btn-primary:hover,
 .btn-primary:focus,
@@ -76,40 +77,40 @@ a {
 /* Font of place holder of inputs */
 
 ::-webkit-input-placeholder {
-  font-family: 'Iransense';
+  font-family: 'Iransense', sans-serif;
   font-size: 15px;
 }
 
 ::-moz-placeholder {
   /* Firefox 19+ */
-  font-family: 'Iransense';
+  font-family: 'Iransense', sans-serif;
   font-size: 15px;
 }
 
 :-ms-input-placeholder {
   /* IE 10+ */
-  font-family: 'Iransense';
+  font-family: 'Iransense', sans-serif;
   font-size: 15px;
 }
 
 :-moz-placeholder {
   /* Firefox 18- */
-  font-family: 'Iransense';
+  font-family: 'Iransense', sans-serif;
   font-size: 15px;
 }
 
 .footer-p {
-  font-family: 'Vazir_Medium';
+  font-family: 'Vazir_Medium', sans-serif;
   font-size: 12px;
 }
 
 .footer-p-forget {
-  font-family: 'Vazir_Medium';
+  font-family: 'Vazir_Medium', sans-serif;
   margin-top: -5px;
 }
 
 .footer-p-forget a {
-  font-family: 'Vazir_Light';
+  font-family: 'Vazir_Light', sans-serif;
   font-size: 12px;
   color: #263f44;
 }

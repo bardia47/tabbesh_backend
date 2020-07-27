@@ -1,5 +1,5 @@
-$("#signInForm").submit(function () {
-    let username = $('#username');
+$("#sign-in-form").submit(function () {
+    let username = $("#username");
     let password = $("#password");
     username.val(persianToEnglishNumbers(username.val()));
     password.val(persianToEnglishNumbers(password.val()));
