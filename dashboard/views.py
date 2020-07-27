@@ -163,7 +163,7 @@ class Shopping(APIView):
 
     def get(self, request):
         grades = Grade.objects.all()
-        lessons = Lesson.objects.all()
+        lessons = Lesson.objects.filter(parent__id=None)
         teachers = User.objects.filter(role__code=RoleCodes.TEACHER.value)
         ser = ShoppingSerializer(instance={'grades': grades, 'lessons': lessons, 'teachers': teachers})
         return Response(ser.data, template_name='dashboard/shopping.html')
