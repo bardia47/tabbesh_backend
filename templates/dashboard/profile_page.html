@@ -86,7 +86,7 @@
                     <div class="form-group">
                         <label class="control-label" for="national-code">کد ملی</label>
                         <input class="form-control" type="text" id="national-code" name="national_code"
-                               value="{{ user.national_code |default_if_none:'' }}" maxlength="10" required>
+                               value="{{ user.national_code |default_if_none:'' }}" maxlength="10">
                         <small id="national-code-check-alert" class="form-text text-danger mt-1" style="display: none;">
                             <i class="fas fa-exclamation-triangle"></i>
                             کد ملی وارد شده معتبر نمی باشد.
