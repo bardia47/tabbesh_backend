@@ -21,7 +21,7 @@
 
 <body class="text-center">
 <!-- Form of sing up page -->
-<form class="form-signup" method="POST" action="{% url 'signup' %}">
+<form id="formSignUp" class="form-signup" method="POST" action="{% url 'signup' %}">
     {% csrf_token %}
     <!-- Content of sign up page -->
     <div class="container mt-3">
@@ -124,11 +124,12 @@
             </div>
             <div class="phone-number-field col-md-4 ">
                 <!-- pattern check phone number is valid or not -->
-                <input type="text" class="phone-number" pattern="[9][0-9]{9}" id="phone-number" name="phone_number"
+                <input type="text" class="phone-number" id="phoneNumber" name="phone_number"
                        required>
-                <small id="username-check-alert" class="form-text text-nowrap mt-2 text-md-left ml-3 text-white">
+                <small id="phoneNumberCheckAlert" class="form-text text-nowrap mt-2 text-md-left ml-3"
+                       style="display: none;">
                     <i class="fas fa-info-circle"></i>
-                    شماره تلفن را بدون صفر وارد کنید . مثال : 9121111111
+                    شماره وارد شده معتبر نمی باشد.
                 </small>
             </div>
         </div>
