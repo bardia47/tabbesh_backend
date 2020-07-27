@@ -7,3 +7,7 @@ class ProfileForm(forms.ModelForm):
         model = User
         fields = (
             'username', 'city', 'grades', 'first_name', 'last_name', 'national_code', 'address', 'gender')
+
+    def clean_username(self):
+        data = self.cleaned_data['username'].lower()
+        return data

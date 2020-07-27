@@ -50,8 +50,8 @@ def edit_profile(request):
 # Edit profile page --> change avatar form
 @login_required
 def change_avatar(request):
+    form = ProfileForm(instance=request.user)
     if request.method == 'POST':
-        form = ProfileForm()
         avatar = request.user.compressImage(request.FILES.get("file"))
         if avatar:
             if not request.user.avatar.url.startswith("/media/defaults"):

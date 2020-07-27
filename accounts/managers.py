@@ -17,6 +17,7 @@ class UserManager(BaseUserManager):
         except :
             role = apps.get_model(app_label='accounts', model_name='Role')
             user.role = role.objects.get(code=RoleCodes.STUDENT.value)
+        user.username=user.username.lower()
         user.set_default_avatar()  
         user.password = make_password(password)
         user.save(using=self._db)

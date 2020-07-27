@@ -153,7 +153,10 @@
                                 <img src="{% static 'home/images/icons/paragraph.svg'%}" alt="">
                                 توضیحات:
                             </p>
-                            <p class="course-description-p">{{course.description}}</p>
+                            {% autoescape off %}
+                            <p class="course-description-p">{{course.description | default_if_none:""}}</p>
+                            {% endautoescape %}
+
                         </div>
                         <!-- Course price -->
                         <div class="course-price">

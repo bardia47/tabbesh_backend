@@ -83,6 +83,9 @@ class User(AbstractBaseUser, PermissionsMixin):
                 self.avatar = "defaults/teacher.png"
             else :
                 self.avatar = "defaults/student.png"
+
+    def __str__(self):
+        return self.get_full_name()
         
 
 
@@ -154,8 +157,8 @@ class Course(models.Model):
     amount = models.FloatField("مبلغ", default=float(0))
     url = models.URLField("لینک", blank=True, null=True)
     image = models.ImageField(upload_to='courses_image/', default='defaults/course.jpg')
-    description = models.TextField(null=True, blank=True)
-
+    description = models.TextField('توضیحات خرید درس',null=True, blank=True)
+    private_description = models.TextField('توضیحات درس',null=True, blank=True)
     class Meta:
         ordering = ['start_date']
         verbose_name_plural = "دوره"
@@ -251,7 +254,12 @@ class Pay_History(models.Model):
 
     def submit_date_decorated(self):
         return jdatetime.datetime.fromgregorian(datetime=self.submit_date).strftime("%a, %d %b %Y %H:%M:%S")
-    
+
+    def get_courses(self):
+        courses_id_list = self.courses.split()
+        return list(Course.objects.filter(id__in=courses_id_list).values_list('title', flat=True))
+
+    get_courses.short_description='دروس خریداری شده'
     submit_date_decorated.short_description='تاریخ ثبت'
 
    
