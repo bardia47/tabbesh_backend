@@ -21,7 +21,7 @@ class UserManager(BaseUserManager):
         user.set_default_avatar()  
         user.password = make_password(password)
         user.save(using=self._db)
-
+        form.save_m2m()
         return user
 
 

@@ -108,7 +108,7 @@
                 <label for="grade">پایه</label>
             </div>
             <div class="col-md-4">
-                <select data-placeholder="پایه تحصیلی" id="grade" class="grade-choicen" tabindex="5" required>
+                <select data-placeholder="پایه تحصیلی" name="grades" class="grade-choicen" tabindex="5" required>
                     <option value="">پایه تحصیلی</option>
                     {% for element in form.fields.grades.queryset %}
                         <option value="{{ element.id }}">{{ element.title }}</option>
