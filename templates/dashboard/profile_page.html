@@ -5,197 +5,203 @@
 
 <!-- CSS files -->
 {% block CSSfiles %}
-<link rel="stylesheet" href="{% static 'dashboard/css/profile_page.css' %}">
+    <link rel="stylesheet" href="{% static 'dashboard/css/profile_page.css' %}">
 {% endblock %}
 
 <!-- Content of page -->
 {% block content %}
-<div class="container">
-    <h1>پروفایل</h1>
-    <hr>
-    <!-- Change avatar form & enctype requried for file input -->
-    <form class="form-horizontal" id="avatar_form" action="{% url 'change_avatar' %}" method="POST"
-        enctype="multipart/form-data">
-        <div class="row">
-            <!-- right column -->
-            <div class="col-md-3 text-center">
-                {% csrf_token %}
-                <img src="{{ user.avatar.url }}" id="avatar" class="avatar img-circle img-thumbnail" alt="avatar">
-                <div class="custom-file w-100 mt-2" lang="fa">
-                    <input type="file" id="file" name="file" class="custom-file-input" accept="image/*">
-                    <label class="custom-file-label text-left" for="file">روی آپلود کلیک کنید...</label>
+    <div class="container">
+        <h1>پروفایل</h1>
+        <hr>
+        <!-- Change avatar form & enctype requried for file input -->
+        <form class="form-horizontal" id="avatar_form" action="{% url 'change_avatar' %}" method="POST"
+              enctype="multipart/form-data">
+            <div class="row">
+                <!-- right column -->
+                <div class="col-md-3 text-center">
+                    {% csrf_token %}
+                    <img src="{{ user.avatar.url }}" id="avatar" class="avatar img-circle img-thumbnail" alt="avatar">
+                    <div class="custom-file w-100 mt-2" lang="fa">
+                        <input type="file" id="file" name="file" class="custom-file-input" accept="image/*">
+                        <label class="custom-file-label text-left" for="file">روی آپلود کلیک کنید...</label>
+                    </div>
+                    <input type="submit" name="upload" class="btn btn-primary my-2" value="تغییر عکس پروفایل">
+                    <hr>
+                    <br>
                 </div>
-                <input type="submit" name="upload" class="btn btn-primary my-2" value="تغییر عکس پروفایل">
-                <hr><br>
+        </form>
+
+
+        <!-- edit form column -->
+        <div class="col-md-9 personal-info">
+            <div class="alert alert-info alert-dismissable">
+                <a class="panel-close close" data-dismiss="alert">×</a>
+                <i class="fa fa-coffee"></i>
+                {% if error %}
+                    <strong>{{ error }}</strong>
+                {% else %}
+                    <strong>تمامی فیلد ها ضروری است و در صورت تغییر دادن چند مورد فقط آن موارد را تغییر دهید.</strong>
+                {% endif %}
             </div>
-    </form>
-
-
-    <!-- edit form column -->
-    <div class="col-md-9 personal-info">
-        <div class="alert alert-info alert-dismissable">
-            <a class="panel-close close" data-dismiss="alert">×</a>
-            <i class="fa fa-coffee"></i>
-            {% if error %}
-            <strong>{{ error }}</strong>
-            {% else %}
-            <strong>تمامی فیلد ها ضروری است و در صورت تغییر دادن چند مورد فقط آن موارد را تغییر دهید.</strong>
-            {% endif %}
-        </div>
-        <h3>اطلاعات شخصی</h3>
-        <!-- Change Profile form -->
-        <form action="{% url 'change_profile' %}" method="POST">
-            {% csrf_token %}
-            <div class="pl-2">
-                <div class="form-row">
-                    <div class="form-group col-md-4">
-                        <label class="control-label" for="first_name">نام</label>
-                        <input class="form-control w-100" id="first_name" name="first_name" type="text"
-                            value="{{ user.first_name }}" maxlength="30" required>
-                        <small id="name-check-alert" class="form-text text-danger mt-1" style="display: none;">
-                            <i class="fas fa-exclamation-triangle"></i>
-                            تنها حروف فارسی مجاز است.
-                        </small>
-                    </div>
-                    <div class="form-group col-md-4">
-                        <label class="control-label" for="last_name">نام خانوادگی</label>
-                        <input class="form-control w-100" id="last_name" name="last_name" type="text"
-                            value="{{ user.last_name }}" maxlength="30" required>
-                        <small id="lastname-check-alert" class="form-text text-danger mt-1" style="display: none;">
-                            <i class="fas fa-exclamation-triangle"></i>
-                            تنها حروف فارسی مجاز است.
-                        </small>
-                    </div>
-
-                </div>
-                <div class="form-group">
-                    <label class="control-label" for="username">نام کاربری</label>
-                    <div class="input-group mb-2 username-field">
-                        <div class="input-group-prepend">
-                            <div class="input-group-text">@</div>
+            <h3>اطلاعات شخصی</h3>
+            <!-- Change Profile form -->
+            <form action="{% url 'change_profile' %}" method="POST">
+                {% csrf_token %}
+                <div class="pl-2">
+                    <div class="form-row">
+                        <div class="form-group col-md-4">
+                            <label class="control-label" for="first_name">نام</label>
+                            <input class="form-control w-100" id="first_name" name="first_name" type="text"
+                                   value="{{ user.first_name }}" maxlength="30" required>
+                            <small id="name-check-alert" class="form-text text-danger mt-1" style="display: none;">
+                                <i class="fas fa-exclamation-triangle"></i>
+                                تنها حروف فارسی مجاز است.
+                            </small>
                         </div>
-                        <input type="text" class="form-control" id="username" name="username"
-                            value="{{ user.username |default_if_none:'' }}">
+                        <div class="form-group col-md-4">
+                            <label class="control-label" for="last_name">نام خانوادگی</label>
+                            <input class="form-control w-100" id="last_name" name="last_name" type="text"
+                                   value="{{ user.last_name }}" maxlength="30" required>
+                            <small id="lastname-check-alert" class="form-text text-danger mt-1" style="display: none;">
+                                <i class="fas fa-exclamation-triangle"></i>
+                                تنها حروف فارسی مجاز است.
+                            </small>
+                        </div>
+
                     </div>
-                    <small id="username-check-alert" class="form-text text-danger mt-1" style="display: none;">
-                        <i class="fas fa-exclamation-triangle"></i>
-                        نام کاربری تنها باید شامل حروف و اعداد انگلیسی باشد.
-                    </small>
-                </div>
-                <div class="form-group">
-                    <label class="control-label" for="national-code">کد ملی</label>
-                    <input class="form-control" type="text" id="national-code" name="national_code"
-                        value="{{ user.national_code |default_if_none:'' }}" maxlength="10" required>
-                    <small id="national-code-check-alert" class="form-text text-danger mt-1" style="display: none;">
-                        <i class="fas fa-exclamation-triangle"></i>
-                        کد ملی وارد شده معتبر نمی باشد.
-                    </small>
-                </div>
-                <div class="form-group">
-                    <label for="gender" class="control-label">جنسیت</label>
-                    <div class="col-lg-8">
-                        <select id="gender" name="gender" class="custom-select w-25 ml-n3 text-center" size="2"
-                            required>
-                            <option value="True" {% ifequal user.gender True %} selected="selected" {% endifequal %}>
-                                پسر</option>
-                            <option value="False" {% ifequal user.gender False %} selected="selected" {% endifequal %}>
-                                دختر
-                            </option>
-                        </select>
+                    <div class="form-group">
+                        <label class="control-label" for="username">نام کاربری</label>
+                        <div class="input-group mb-2 username-field">
+                            <div class="input-group-prepend">
+                                <div class="input-group-text">@</div>
+                            </div>
+                            <input type="text" class="form-control" id="username" name="username"
+                                   value="{{ user.username |default_if_none:'' }}">
+                        </div>
+                        <small id="username-check-alert" class="form-text text-danger mt-1" style="display: none;">
+                            <i class="fas fa-exclamation-triangle"></i>
+                            نام کاربری تنها باید شامل حروف و اعداد انگلیسی باشد.
+                        </small>
                     </div>
-                </div>
-                <div class="form-group">
-                    <label for="city" class="control-label">شهر</label>
-                    <div class="col-lg-8">
-                        <div class="ui-select">
-                            <select id="city" name="city" class="custom-select w-50 ml-n3 text-center" size="3"
-                                required>
-                                {% for element in form.fields.city.queryset %}
-                                <option value="{{ element.id }}" {% ifequal user.city.id element.id %}
-                                    selected="selected" {% endifequal %}>{{ element.title }}</option>
+                    <div class="form-group">
+                        <label class="control-label" for="national-code">کد ملی</label>
+                        <input class="form-control" type="text" id="national-code" name="national_code"
+                               value="{{ user.national_code |default_if_none:'' }}" maxlength="10" required>
+                        <small id="national-code-check-alert" class="form-text text-danger mt-1" style="display: none;">
+                            <i class="fas fa-exclamation-triangle"></i>
+                            کد ملی وارد شده معتبر نمی باشد.
+                        </small>
+                    </div>
+                    <div class="form-group">
+                        <label for="gender" class="control-label">جنسیت</label>
+                        <div class="col-lg-8">
+                            <select id="gender" name="gender" class="custom-select w-25 ml-n3 text-center" size="2"
+                                    required>
+                                <option value="True" {% ifequal user.gender True %}
+                                        selected="selected" {% endifequal %}>
+                                    پسر
+                                </option>
+                                <option value="False" {% ifequal user.gender False %}
+                                        selected="selected" {% endifequal %}>
+                                    دختر
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="city" class="control-label">شهر</label>
+                        <div class="col-lg-8">
+                            <div class="ui-select">
+                                <select id="city" name="city" class="custom-select w-50 ml-n3 text-center" size="3"
+                                        required>
+                                    {% for element in form.fields.city.queryset %}
+                                        <option value="{{ element.id }}" {% ifequal user.city.id element.id %}
+                                                selected="selected" {% endifequal %}>{{ element.title }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="grades" class="control-label">پایه تحصیلی</label>
+                        <div class="col-md-8">
+                            <select id="grades" name="grades" class="custom-select ml-n3 text-center w-50" required
+                                    size="3">
+                                {% for element in form.fields.grades.queryset %}
+                                    <option value="{{ element.id }}" {% ifequal user.grades.first.id element.id %}
+                                            selected
+                                    {% endifequal %}>{{ element.title }}</option>
                                 {% endfor %}
                             </select>
                         </div>
                     </div>
+                    <div class="form-group">
+                        <label class="control-label" for="phone_number">شماره تلفن</label>
+                        <input class="form-control" type="text" id="phone_number" name="phone_number"
+                               value="{{ user.phone_number }}" maxlength="12" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label"></label>
+                        <input type="submit" id="edit_profile" class="btn btn-primary mt-2" value="تغییر پروفایل">
+                    </div>
                 </div>
+            </form>
+            <hr>
+            <!-- Change password form -->
+            <form action="{% url 'change_password' %}" method="POST">
+                {% csrf_token %}
                 <div class="form-group">
-                    <label for="grades" class="control-label">پایه تحصیلی</label>
+                    <label class="col-md-3 control-label" for="old_password" required>تغییر رمز عبور</label>
                     <div class="col-md-8">
-                        <select id="grades" name="grades" class="custom-select ml-n3 text-center w-50" required
-                            size="3">
-                            {% for element in form.fields.grades.queryset %}
-                            <option value="{{ element.id }}" {% ifequal user.grades.first.id element.id %} selected
-                                {% endifequal %}>{{ element.title }}</option>
-                            {% endfor %}
-                        </select>
+                        <input class="form-control w-75" type="password" id="old_password" name="old_password"
+                               placeholder="رمز عبور خود را وارد کنید" maxlength="12" required>
+                        <input class="form-control mt-2 w-75" type="password" id="password" name="password"
+                               placeholder="رمز عبور جدید خود را وارد کنید" maxlength="12" required>
+                        <input class="form-control mt-2 w-75" type="password" id="password2" name="password2"
+                               placeholder="رمز عبور جدید را دوباره وارد کنید" maxlength="12" required>
+                        <small id="change-password-alert" class="form-text text-danger" style="display: none;">
+                            <i class="fas fa-exclamation-triangle"></i>
+                            اخطار: تکرار رمز عبور صحیح نمی باشد.
+                        </small>
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="control-label" for="phone_number">شماره تلفن</label>
-                    <input class="form-control" type="text" id="phone_number" name="phone_number"
-                        value="{{ user.phone_number }}" maxlength="12" readonly>
+                    <div class="col-md-8">
+                        <input type="submit" name="changePassword" id="changePassword" class="btn btn-primary"
+                               value="تغییر رمز عبور">
+                    </div>
                 </div>
-                <div class="form-group">
-                    <label class="control-label"></label>
-                    <input type="submit" id="edit_profile" class="btn btn-primary mt-2" value="تغییر پروفایل">
-                </div>
-            </div>
-        </form>
-        <hr>
-        <!-- Change password form -->
-        <form action="{% url 'change_password' %}" method="POST">
-            {% csrf_token %}
-            <div class="form-group">
-                <label class="col-md-3 control-label" for="old_password" required>تغییر رمز عبور</label>
-                <div class="col-md-8">
-                    <input class="form-control w-75" type="password" id="old_password" name="old_password"
-                        placeholder="رمز عبور خود را وارد کنید" maxlength="12" required>
-                    <input class="form-control mt-2 w-75" type="password" id="password" name="password"
-                        placeholder="رمز عبور جدید خود را وارد کنید" maxlength="12" required>
-                    <input class="form-control mt-2 w-75" type="password" id="password2" name="password2"
-                        placeholder="رمز عبور جدید را دوباره وارد کنید" maxlength="12" required>
-                    <small id="change-password-alert" class="form-text text-danger" style="display: none;">
-                        <i class="fas fa-exclamation-triangle"></i>
-                        اخطار: تکرار رمز عبور صحیح نمی باشد.
-                    </small>
-                </div>
-            </div>
-            <div class="form-group">
-                <div class="col-md-8">
-                    <input type="submit" name="changePassword" id="changePassword" class="btn btn-primary"
-                        value="تغییر رمز عبور">
-                </div>
-            </div>
-        </form>
+            </form>
+        </div>
     </div>
-</div>
-</div>
+    </div>
 
-<!-- Modal -->
-<div class="modal" id="modal" tabindex="-1" role="dialog">
-    <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title text-danger" style="font-family: 'Vazir_Bold';">خطا در آپلود عکس</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body text-center">
-                <strong>
-                    <p id="modal-body"></p>
-                </strong>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-danger text-center w-100" data-dismiss="modal">بستن</button>
+    <!-- Modal -->
+    <div class="modal" id="modal" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title text-danger" style="font-family: 'Vazir_Bold';">خطا در آپلود عکس</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body text-center">
+                    <strong>
+                        <p id="modal-body"></p>
+                    </strong>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger text-center w-100" data-dismiss="modal">بستن</button>
+                </div>
             </div>
         </div>
     </div>
-</div>
 
 {% endblock %}
 
 <!-- JS files -->
 {% block JSfile %}
-<script src="{% static 'dashboard/js/edit_profile.js' %}"></script>
+    <script src="{% static 'home/js/base.js' %}"></script>
+    <script src="{% static 'dashboard/js/edit_profile.js' %}"></script>
 {% endblock %}

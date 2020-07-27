@@ -20,7 +20,7 @@
 </head>
 
 <body class="text-center">
-<form class="form-signin" method="POST" action="{% url 'signin' %}">
+<form id="signInForm" class="form-signin" method="POST" action="{% url 'signin' %}">
     {% csrf_token %}
     <h1 class="title">ورود</h1>
     <div class="container">
@@ -33,7 +33,7 @@
         <!-- Password Input -->
         <div class="row" style="margin:10px; margin-bottom:20px">
             <p> رمز عبور </p>
-            <input type="password" id="inputPassword" name="password" class="form-control"
+            <input type="password" id="password" name="password" class="form-control"
                    placeholder="رمز عبور خود را با دقت وارد کنید ..." required style="background-color:#BEBEBD">
         </div>
     </div>
@@ -57,6 +57,9 @@
     {% endif %}
 </form>
 {% block JSfile %}
+    <script src="https://code.jquery.com/jquery-3.4.1.js"
+            integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU=" crossorigin="anonymous"></script>
+    <script src="{% static 'home/js/base.js' %}"></script>
     <script src="{% static 'signin/js/signin.js' %}"></script>
 {% endblock %}
 

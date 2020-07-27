@@ -34,8 +34,11 @@ $(document).ready(function () {
         }
     }
 
-    //Check new password & coniform password equal
+    //Check new password & conform password equal
     $('#password2').on('keyup', function () {
+        $('#old_password').val(persianToEnglishNumbers($('#old_password').val()));
+        $('#password').val(persianToEnglishNumbers($('#password').val()));
+        $('#password2').val(persianToEnglishNumbers($('#password2').val()));
         if ($('#password').val() == $('#password2').val() && $("#password2").is(":focus")) {
             $("#change-password-alert").hide()
         } else {
@@ -75,7 +78,7 @@ $(document).ready(function () {
         }
     });
 
-    // Check lastname contain persian character
+    // Check last name contain persian character
     $('#last_name').on('keyup', function () {
         let p = /^[\u0600-\u06FF\s]+$/;
         if ((p.test($('#last_name').val()) || !$('#last_name').val())) {
@@ -88,6 +91,7 @@ $(document).ready(function () {
     // Username valid check
     $('#username').on('keyup', function () {
         let p = /^[a-zA-Z0-9]+$/;
+        $('#username').val(persianToEnglishNumbers($('#username').val()));
         if (p.test($('#username').val())) {
             $('#username-check-alert').hide();
         } else {
@@ -96,6 +100,7 @@ $(document).ready(function () {
     });
 
     $('#national-code').on('keyup', function () {
+        $('#national-code').val(persianToEnglishNumbers($('#national-code').val()));
         if (isValidIranianNationalCode($('#national-code').val())) {
             $('#national-code-check-alert').hide();
         } else {
@@ -122,34 +127,3 @@ $(document).ready(function () {
 
 });
 
-
-document.addEventListener("DOMContentLoaded", function () {
-    var elements = document.getElementsByTagName("INPUT");
-    for (var i = 0; i < elements.length; i++) {
-        elements[i].oninvalid = function (e) {
-            e.target.setCustomValidity("");
-            if (!e.target.validity.valid) {
-                e.target.setCustomValidity("این مورد اجباری می باشد.");
-            }
-        };
-        elements[i].oninput = function (e) {
-            e.target.setCustomValidity("");
-        };
-    }
-});
-
-
-document.addEventListener("DOMContentLoaded", function () {
-    let elements = document.getElementsByTagName("SELECT");
-    for (let i = 0; i < elements.length; i++) {
-        elements[i].oninvalid = function (e) {
-            e.target.setCustomValidity("");
-            if (!e.target.validity.valid) {
-                e.target.setCustomValidity("لطفا یکی از موارد را انتخاب کنید.");
-            }
-        };
-        elements[i].oninput = function (e) {
-            e.target.setCustomValidity("");
-        };
-    }
-});

@@ -1,22 +1,16 @@
-$('#submit').click(function () {
-	var p = /^[0]\d+$/;
-	if (p.test($('#username').val())) {
-		$('#username').val($('#username').val().substring(1, $('#username').val().length));
-	}
+$("#signInForm").submit(function () {
+    let username = $('#username');
+    let password = $("#password");
+    username.val(persianToEnglishNumbers(username.val()));
+    password.val(persianToEnglishNumbers(password.val()));
+    let phoneNumberRegEx = /^(\+98|0)?9\d{9}$/;
+    if (phoneNumberRegEx.test(username.val())) {
+        // change phone number to standard format
+        if (username.val().startsWith("0")) {
+            username.val(username.val().slice(1))
+        } else if (username.startsWith("+98")) {
+            username.val(username.val().slice(3))
+        }
+    }
 });
 
-
-document.addEventListener("DOMContentLoaded", function () {
-	let elements = document.getElementsByTagName("INPUT");
-	for (let i = 0; i < elements.length; i++) {
-		elements[i].oninvalid = function (e) {
-			e.target.setCustomValidity("");
-			if (!e.target.validity.valid) {
-				e.target.setCustomValidity("این مورد اجباری می باشد.");
-			}
-		};
-		elements[i].oninput = function (e) {
-			e.target.setCustomValidity("");
-		};
-	}
-});

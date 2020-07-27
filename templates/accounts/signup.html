@@ -38,11 +38,11 @@
         <div class="row mb-2">
             <!-- Name field -->
             <div class="field-label col-md-2">
-                <label for="first_name">نام</label>
+                <label for="firstName">نام</label>
             </div>
             <div class="col-md-4">
-                <input type="text" id="first_name" name="first_name" required>
-                <small id="firstname-check-alert" class="form-text text-nowrap mt-2 text-md-left ml-3"
+                <input type="text" id="firstName" name="first_name" required>
+                <small id="firstNameCheckAlert" class="form-text text-nowrap mt-2 text-md-left ml-3"
                        style="display: none;">
                     <i class="fas fa-exclamation-triangle"></i>
                     تنها حروف فارسی مجاز است.
@@ -77,11 +77,11 @@
         <!-- Last name field -->
         <div class="row mb-2">
             <div class="col-md-2 field-label">
-                <label for="last_name">نام خانوادگی</label>
+                <label for="lastName">نام خانوادگی</label>
             </div>
             <div class="col-md-4">
-                <input type="text" id="last_name" name="last_name" required>
-                <small id="lastname-check-alert" class="form-text text-nowrap mt-2 text-md-left ml-3"
+                <input type="text" id="lastName" name="last_name" required>
+                <small id="lastNameCheckAlert" class="form-text text-nowrap mt-2 text-md-left ml-3"
                        style="display: none;">
                     <i class="fas fa-exclamation-triangle"></i>
                     تنها حروف فارسی مجاز است.
@@ -95,7 +95,7 @@
             </div>
             <div class="col-md-4">
                 <input type="text" id="username" name="username" required>
-                <small id="username-check-alert" class="form-text text-nowrap mt-2 text-md-left ml-3"
+                <small id="usernameCheckAlert" class="form-text text-nowrap mt-2 text-md-left ml-3"
                        style="display: none;">
                     <i class="fas fa-exclamation-triangle"></i>
                     نام کاربری تنها باید شامل حروف و اعداد انگلیسی باشد.
@@ -145,6 +145,7 @@
 {% block JSfile %}
     <script src="https://code.jquery.com/jquery-3.4.1.js"
             integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU=" crossorigin="anonymous"></script>
+    <script src="{% static 'home/js/base.js' %}"></script>
     <script src="{% static 'signup/js/signup.js' %}"></script>
 {% endblock %}
 </body>
