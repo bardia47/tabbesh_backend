@@ -256,7 +256,9 @@ class DocumentAdmin(admin.ModelAdmin):
             super().save_model(request, obj, form, change)
                     
 class PayHistoryAdmin(admin.ModelAdmin):
-    list_display = ['purchaser','amount', 'is_successful', 'get_submit_date_decorated','payment_code',]  
+    list_display = ['purchaser','amount', 'is_successful', 'get_submit_date_decorated','payment_code','get_courses']
+    fields = (
+        'purchaser', 'amount', 'is_successful', 'get_submit_date_decorated', 'payment_code', 'get_courses')
     exclude=['courses',]
     def get_submit_date_decorated(self, obj):
         if obj.submit_date:

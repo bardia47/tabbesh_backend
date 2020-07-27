@@ -14,7 +14,7 @@ def signup(request):
     if request.method == 'POST':
         form = UserForm(request.POST)
         form.gender = request.POST['gender']
-        user = User.objects.filter(Q(username=form.data['username']) | Q(
+        user = User.objects.filter(Q(username=form.data['username'].lower()) | Q(
             phone_number=form.data['phone_number']))
         if user.exists():
             form.error = 'نام کاربری یا شماره همراه در سیستم استفاده شده و قابل تکرار نمیباشد'
@@ -46,16 +46,17 @@ def signup(request):
 
 def signin(request):
     if request.method == 'POST':
+        username=request.POST['username'].lower()
         if request.POST['username'].isdigit():
             try:
-                user1 = User.objects.get(phone_number=request.POST['username'])
+                user1 = User.objects.get(phone_number=username)
             except User.DoesNotExist:
                 return render(request, 'accounts/signin.html', {'error': 'نام کاربری یا رمز عبور اشتباه است'})
             user = auth.authenticate(
                 username=user1.username, password=request.POST['password'])
         else:
             user = auth.authenticate(
-                username=request.POST['username'], password=request.POST['password'])
+                username=username, password=request.POST['password'])
         if user is not None:
             auth.login(request, user)
             return redirect('dashboard')
