@@ -39,6 +39,8 @@ function pagination(url) {
             }
         },
         error: function () {
+            var element = $( "#have-class");
+            if (!element.length|| element.val()!="False")
             alert("خطا در بارگزاری دروس ... لطفا دوباره امتحان کنید!")
         },
     });

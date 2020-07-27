@@ -14,6 +14,7 @@
 <!-- Content of page -->
 {% block content %}
     <!-- Course Rows -->
+    <input id="have-class" type="hidden" value="{{ have_class }}" >
     {% if not have_class %}
         <div class="container w-100 p-1 text-center" style="font-family: 'Vazir_Bold';">
             <div class="col-md-12 mt-3 mb-3">

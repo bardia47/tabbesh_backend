@@ -169,7 +169,7 @@ class Shopping(APIView):
         return Response(ser.data, template_name='dashboard/shopping.html')
 
 
-def getAllLessons(lesson_id, now):
+def getAllLessons(lesson_id):
     lessons = Lesson.objects.filter(id=lesson_id)
     whilelessons = lessons
     while True:
@@ -206,10 +206,26 @@ class GetLessonsViewSet(viewsets.ModelViewSet):
     search_fields = ('title',)
     ordering_fields = ('title',)
 
+    def list(self, request, *args, **kwargs):
+        queryset = self.filter_queryset(self.get_queryset())
+        if queryset.count()==0:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+        page = self.paginate_queryset(queryset)
+        if page is not None:
+            serializer = self.get_serializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
+
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
+
+
     def get_queryset(self):
          now = datetime.datetime.now()
          user = get_object_or_404(User, pk=self.request.user.id)
-         courses = user.courses.filter(end_date__gt=now)
+         query = Q()
+         if self.request.GET.get("lesson"):
+             query &= getAllLessons(self.request.GET.get("lesson"))
+         courses = user.courses.filter(query)
          return courses
 
 
@@ -223,7 +239,7 @@ class GetShoppingViewSet(viewsets.ModelViewSet):
         query = Q(end_date__gt=now)
         if self.request.GET.get("teacher") or self.request.GET.get("lesson") or  self.request.GET.get("grade"):
             if  self.request.GET.get("lesson"):
-                query &= getAllLessons( self.request.GET.get("lesson"), now)
+                query &= getAllLessons( self.request.GET.get("lesson"))
             if  self.request.GET.get("grade"):
                 query &= (Q(grade__id= self.request.GET.get("grade")) | Q(grade__id=None))
             if  self.request.GET.get("teacher"):
