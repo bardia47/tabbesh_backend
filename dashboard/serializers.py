@@ -47,7 +47,9 @@ class CourseLessonsSerializer(CourseBriefSerializer):
     is_active = serializers.SerializerMethodField('is_class_active')
 
     def is_class_active(self, obj):
-        return obj.get_next_class().is_class_active()
+        if obj.get_next_class() is not None:
+            return obj.get_next_class().is_class_active()
+        return False
 
     def get_first_class(self, obj):
         return obj.get_next_class().start_date
