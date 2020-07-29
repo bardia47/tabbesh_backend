@@ -93,12 +93,13 @@ class ShoppingSerializer(serializers.Serializer):
 #for shopping page
 class ShoppingCourseSerializer(CourseLessonsSerializer):
     course_calendars = serializers.SerializerMethodField('get_start_dates')
+    parent = serializers.SerializerMethodField('get_parent_lesson')
 
     class Meta:
         model = Course
         fields = ('id', 'title', 'start_date', 'end_date', 'code', 'amount', 'description', 'image', 'teacher',
                   'course_calendars')
-        fields = ('title', 'start_date', 'end_date', 'code', 'amount', 'description', 'image', 'teacher', 'course_calendars')
+        fields = ('title', 'start_date', 'end_date', 'code', 'amount', 'description', 'image', 'teacher', 'course_calendars','parent')
 
     def get_start_dates(self, obj):
         dates = []
@@ -106,6 +107,13 @@ class ShoppingCourseSerializer(CourseLessonsSerializer):
         for i in calendars:
             dates.append(i.start_date)
         return dates
+
+    def get_parent_lesson(self, obj):
+        lesson = obj.lesson
+        while (True):
+            if lesson.parent is None :
+                return LessonSerializer(instance=lesson).data
+
 
 
 class UserProfileSerializer(JSONFormSerializer, serializers.ModelSerializer):
