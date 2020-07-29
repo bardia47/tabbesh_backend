@@ -45,19 +45,32 @@ class CourseBriefSerializer(JSONFormSerializer, serializers.ModelSerializer):
 class CourseLessonsSerializer(CourseBriefSerializer):
     first_class = serializers.SerializerMethodField('get_first_class')
     is_active = serializers.SerializerMethodField('is_class_active')
+    parent = serializers.SerializerMethodField('get_parent_lesson')
 
     def is_class_active(self, obj):
-        if obj.get_next_class() is not None:
-            return obj.get_next_class().is_class_active()
+        next_class=obj.get_next_class()
+        if next_class is not None:
+            return next_class.is_class_active()
         return False
 
     def get_first_class(self, obj):
-        return obj.get_next_class().start_date
+        next_class=obj.get_next_class()
+        if next_class is not None:
+            return next_class.start_date
+        return None
+
+    def get_parent_lesson(self, obj):
+        lesson = obj.lesson
+        while (True):
+            if lesson.parent is None :
+                return LessonSerializer(instance=lesson).data
+            else:
+                lesson=lesson.parent
 
     class Meta:
         model = Course
         fields = ('code','title', 'start_date', 'end_date' ,'image', 'teacher','url' ,
-                  'is_active','first_class', 'description')
+                  'is_active','first_class', 'description','parent')
 
 
 class CourseCalendarSerializer(JSONFormSerializer, serializers.ModelSerializer):
@@ -93,7 +106,6 @@ class ShoppingSerializer(serializers.Serializer):
 #for shopping page
 class ShoppingCourseSerializer(CourseLessonsSerializer):
     course_calendars = serializers.SerializerMethodField('get_start_dates')
-    parent = serializers.SerializerMethodField('get_parent_lesson')
 
     class Meta:
         model = Course
@@ -113,6 +125,8 @@ class ShoppingCourseSerializer(CourseLessonsSerializer):
         while (True):
             if lesson.parent is None :
                 return LessonSerializer(instance=lesson).data
+            else:
+                lesson=lesson.parent
 
 
 

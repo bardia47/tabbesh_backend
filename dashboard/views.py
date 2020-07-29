@@ -210,10 +210,12 @@ class GetLessonsViewSet(viewsets.ModelViewSet):
         queryset = self.filter_queryset(self.get_queryset())
         if queryset.count()==0:
             return Response(status=status.HTTP_404_NOT_FOUND)
-        page = self.paginate_queryset(queryset)
-        if page is not None:
-            serializer = self.get_serializer(page, many=True)
-            return self.get_paginated_response(serializer.data)
+        print(request.headers['Accept'])
+        if 'text/javascript' in request.headers['Accept']:
+            page = self.paginate_queryset(queryset)
+            if page is not None:
+                serializer = self.get_serializer(page, many=True)
+                return self.get_paginated_response(serializer.data)
 
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
@@ -233,6 +235,19 @@ class GetShoppingViewSet(viewsets.ModelViewSet):
     queryset = Course.objects.all()
     serializer_class = ShoppingCourseSerializer
     http_method_names = ['get', ]
+
+    def list(self, request, *args, **kwargs):
+        queryset = self.filter_queryset(self.get_queryset())
+        print(request.headers['Accept'])
+        if 'text/javascript' in request.headers['Accept']:
+            page = self.paginate_queryset(queryset)
+            if page is not None:
+                serializer = self.get_serializer(page, many=True)
+                return self.get_paginated_response(serializer.data)
+
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
+
 
     def get_queryset(self):
         now = datetime.datetime.now()
