@@ -30,6 +30,7 @@ function pagination(url) {
     $.ajax({
         url: url,
         type: "GET",
+        dataType: "json",
         success: function (courseCards, textStatus, request) {
             $(".card-group").empty()
             $(".pagination").empty()
