@@ -25,8 +25,8 @@ function loading() {
 }
 
 // hostname of project -- example : https://127.0.0.1:8000
-let arrayHref = window.location.href.split("/")
-let hostName = arrayHref[0] + "//" + arrayHref[2]
+// let arrayHref = window.location.href.split("/")
+// let hostName = arrayHref[0] + "//" + arrayHref[2]
 let firstParameter = new URL(window.location.href).search.slice(1)
 let searchParameter
 // add to GET variable page to url parameter --> read : https://developer.mozilla.org/en-US/docs/Web/API/URLSearchParams/append
@@ -35,7 +35,7 @@ if (firstParameter) {
 } else {
     searchParameter = new URLSearchParams("?page=1")
 }
-let getShoppingURL = hostName + "/dashboard/get-shopping/?"
+let getShoppingURL =  "/dashboard/get-shopping/?"
 // first pagination when user request https://127.0.0.1:8000/dashboard/shopping/
 $(function () {
     pagination(urlMaker())
@@ -100,14 +100,14 @@ function renderShoppingCards(courseCards) {
                      <!-- Course calender  -->
                      <div class="course-calender">
                         <p>
-                           <img src="${hostName}/static/home/images/icons/clock.svg" alt="course clock time">
+                           <img src="/static/home/images/icons/clock.svg" alt="course clock time">
                            جلسات:
                         </p>
                      </div>
                      <!-- Start of the course  -->
                      <div class="course-start-date">
                         <p>
-                           <img src="${hostName}/static/home/images/icons/start-date.svg" alt="start course clock">
+                           <img src="/static/home/images/icons/start-date.svg" alt="start course clock">
                            شروع دوره:
                            <span>
                            ${startDateCourse.format("dddd")}
@@ -119,7 +119,7 @@ function renderShoppingCards(courseCards) {
                      <!-- End of the course  -->
                      <div class="course-end-date">
                         <p>
-                           <img src="${hostName}/static/home/images/icons/end-date.svg" alt="end course clock">
+                           <img src="/static/home/images/icons/end-date.svg" alt="end course clock">
                            اتمام دوره:
                            <span>
                            ${endDateCourse.format("dddd")}
@@ -131,7 +131,7 @@ function renderShoppingCards(courseCards) {
                      <!-- Description of the course  -->
                      <div class="course-description">
                         <p class="course-description-title">
-                           <img src="${hostName}/static/home/images/icons/paragraph.svg" alt="description">
+                           <img src="/static/home/images/icons/paragraph.svg" alt="description">
                            توضیحات:
                         </p>
                         <p class="course-description-p">${courseCard.description}</p>
@@ -139,7 +139,7 @@ function renderShoppingCards(courseCards) {
                      <!-- Course price -->
                      <div class="course-price">
                         <p>
-                           <img src="${hostName}/static/home/images/icons/price.svg" alt="price">
+                           <img src="$/static/home/images/icons/price.svg" alt="price">
                            قیمت:
                            <span class="price">${coursePriceTemplate}</span>
                         </p>
@@ -148,7 +148,7 @@ function renderShoppingCards(courseCards) {
                   <!-- Button add course to cart -->
                   <div class="card-footer add-to-cart">
                      <button class="btn add-to-cart-button">
-                     <img src="${hostName}/static/home/images/icons/add-to-cart.svg"
+                     <img src="/static/home/images/icons/add-to-cart.svg"
                         alt="button link to class">
                      اضافه به سبد خرید
                      </button>
@@ -164,7 +164,7 @@ function renderShoppingCards(courseCards) {
             let courseStandardTime = new persianDate(Date.parse(courseCalender))
             let courseCalenderTemplate = `
                 <p class="course-calender-time">
-                    <img src="${hostName}/static/home/images/icons/add-time.svg" class="animated"
+                    <img src="/static/home/images/icons/add-time.svg" class="animated"
                     alt="time icon">
                     ${courseStandardTime.format("dddd")} ها ساعت ${courseStandardTime.format("H:m")}
                 </p>
@@ -176,7 +176,7 @@ function renderShoppingCards(courseCards) {
     loading()
     // add shopping-cart js to DOM
     let imported = document.createElement('script')
-    imported.src = `${hostName}/static/dashboard/js/shopping-cart.js`
+    imported.src = `/static/dashboard/js/shopping-cart.js`
     document.body.appendChild(imported);
 }
 

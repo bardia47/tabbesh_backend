@@ -210,7 +210,6 @@ class GetLessonsViewSet(viewsets.ModelViewSet):
         queryset = self.filter_queryset(self.get_queryset())
         if queryset.count()==0:
             return Response(status=status.HTTP_404_NOT_FOUND)
-        print(request.headers['Accept'])
         if 'text/javascript' in request.headers['Accept']:
             page = self.paginate_queryset(queryset)
             if page is not None:
@@ -238,7 +237,6 @@ class GetShoppingViewSet(viewsets.ModelViewSet):
 
     def list(self, request, *args, **kwargs):
         queryset = self.filter_queryset(self.get_queryset())
-        print(request.headers['Accept'])
         if 'text/javascript' in request.headers['Accept']:
             page = self.paginate_queryset(queryset)
             if page is not None:

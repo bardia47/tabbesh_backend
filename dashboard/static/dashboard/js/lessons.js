@@ -7,12 +7,12 @@ function getUrlParameter(url, param) {
 }
 
 // hostname of project -- example : https://127.0.0.1:8000
-let arrayHref = window.location.href.split("/")
-let hostName = arrayHref[0] + "//" + arrayHref[2]
+// let arrayHref = window.location.href.split("/")
+//let hostName = arrayHref[0] + "//" + arrayHref[2]
 
 // first pagination when user request https://127.0.0.1:8000/dashboard/lessons/
 $(function () {
-    url = hostName + "/dashboard/get-lessons/?page=" + (getUrlParameter(window.location.href, "page") ? +getUrlParameter(window.location.href, "page") : "1")
+    url = "/dashboard/get-lessons/?page=" + (getUrlParameter(window.location.href, "page") ? +getUrlParameter(window.location.href, "page") : "1")
     pagination(url)
 })
 
@@ -57,14 +57,14 @@ function renderLessenCards(courseCards) {
         if (courseCard.is_active) {
              buttonToClassTemplate = `
                 <button class="btn btn-success mb-1">
-                    <img src="${hostName}/static/home/images/icons/click.svg" alt="button link to class">
+                    <img src="/static/home/images/icons/click.svg" alt="button link to class">
                     ورود به کلاس
                 </button>
             `
         } else {
              buttonToClassTemplate = `
                 <button class="btn btn-danger mb-1" disabled>
-                    <img src="${hostName}/static/home/images/icons/click.svg" alt="button link to class">
+                    <img src="/static/home/images/icons/click.svg" alt="button link to class">
                     کلاس شروع نشده
                 </button>
             `
@@ -87,7 +87,7 @@ function renderLessenCards(courseCards) {
                         <!-- Course calender for next class  -->
                         <div class="course-calender">
                             <p>
-                                <img src="${hostName}/static/home/images/icons/clock.svg" alt="">
+                                <img src="/static/home/images/icons/clock.svg" alt="">
                                 جلسه ی بعدی:
                                 <span>
                                 
@@ -102,7 +102,7 @@ function renderLessenCards(courseCards) {
                         <!-- End of the course  -->
                         <div class="course-end-date">
                             <p>
-                                <img src="${hostName}/static/home/images/icons/calendar.svg" alt="calender-icon" />
+                                <img src="/static/home/images/icons/calendar.svg" alt="calender-icon" />
                                 اتمام دوره:
                                 <span>
                                     ${endDateCourse.format("dddd")}
@@ -114,7 +114,7 @@ function renderLessenCards(courseCards) {
                         <!-- Description of the course  -->
                         <div class="course-description">
                             <p class="course-description-title">
-                                <img src="${hostName}/static/home/images/icons/paragraph.svg" alt="" />
+                                <img src="/static/home/images/icons/paragraph.svg" alt="" />
                                 توضیحات:
                             </p>
                             <p class="course-description-p">${courseCard.description}</p>
@@ -124,7 +124,7 @@ function renderLessenCards(courseCards) {
                     <div class="card-footer button-to-class p-0 py-3">
                         ${buttonToClassTemplate}
                         <button onclick="location.href='files/${courseCard.code}'" class="btn btn-dark mr-2" type="button">
-                            <img src="${hostName}/static/home/images/icons/document.svg" alt="button link to class" />
+                            <img src="/static/home/images/icons/document.svg" alt="button link to class" />
                             جزوه ها
                         </button>
                     </div>
