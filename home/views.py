@@ -16,5 +16,5 @@ def page_not_found(request, exception=None):
         return render(request, 'home/404-page.html' ,status=status.HTTP_404_NOT_FOUND)
 
 
-def sign_up_required(request, exception=None):
-    return render(request, 'accounts/signup.html' ,status=status.HTTP_403_FORBIDDEN)
+# def sign_up_required(request, exception=None):
+#     return render(request, 'accounts/signup.html' ,status=status.HTTP_403_FORBIDDEN)

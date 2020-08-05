@@ -33,7 +33,7 @@ urlpatterns = [
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 handler404 = page_not_found
-handler403 = sign_up_required
+#handler403 = sign_up_required
 admin.site.site_header = "صفحه ادمین"
 admin.site.site_title = "صفحه ادمین"
 admin.site.index_title = "صفحه ادمین"
