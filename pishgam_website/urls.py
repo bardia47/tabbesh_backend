@@ -15,7 +15,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from home.views import home, page_not_found,sign_up_required
+from home.views import home, page_not_found
 from accounts.views import *
 from django.conf import settings
 from django.conf.urls.static import static
