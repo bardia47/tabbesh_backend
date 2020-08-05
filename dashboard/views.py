@@ -221,12 +221,10 @@ class GetLessonsViewSet(viewsets.ModelViewSet):
 
 
     def get_queryset(self):
-         now = datetime.datetime.now()
-         user = get_object_or_404(User, pk=self.request.user.id)
          query = Q()
          if self.request.GET.get("lesson"):
              query &= getAllLessons(self.request.GET.get("lesson"))
-         courses = user.courses.filter(query)
+         courses = self.request.user.courses.filter(query)
          return courses
 
 

@@ -15,7 +15,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from home.views import home, page_not_found
+from home.views import home, page_not_found,sign_up_required
 from accounts.views import *
 from django.conf import settings
 from django.conf.urls.static import static
@@ -32,8 +32,8 @@ urlpatterns = [
     path('payment/', include('zarinpal.urls')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
-handler404 = 'home.views.page_not_found'
-handler403 = 'home.views.sign_up_required'
+handler404 = page_not_found
+handler403 = sign_up_required
 admin.site.site_header = "صفحه ادمین"
 admin.site.site_title = "صفحه ادمین"
 admin.site.index_title = "صفحه ادمین"

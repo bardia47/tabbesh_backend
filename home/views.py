@@ -1,5 +1,7 @@
 from django.shortcuts import render, redirect
-
+from rest_framework import status
+from django.contrib.auth.decorators import login_required
+from rest_framework.response import Response
 
 # Create your views here.
 
@@ -11,9 +13,9 @@ def home(request):
 
 # 404 page not found
 
+def page_not_found(request, exception=None):
+        return render(request, 'home/404-page.html' ,status=status.HTTP_404_NOT_FOUND)
 
-def page_not_found(request, exception):
-    return render(request, 'home/404-page.html')
 
-def sign_up_required(request, exception):
-    return render(request, 'accounts/signup.html' ,status=403)
+def sign_up_required(request, exception=None):
+    return render(request, 'accounts/signup.html' ,status=status.HTTP_403_FORBIDDEN)
