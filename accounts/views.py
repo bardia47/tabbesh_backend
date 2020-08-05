@@ -95,7 +95,7 @@ class SignIn(APIView):
                 username=request.data['username'], password=request.data['password'])
         if user is not None:
             auth.login(request, user)
-            nextUrl = request.GET.get("next")
+            nextUrl = request.GET.get('next')
             if nextUrl is None:
                 return redirect('dashboard')
             return redirect(nextUrl)
