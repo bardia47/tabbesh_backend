@@ -24,7 +24,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'nan_@dp+&g%75ke-ac%yn(8@2su8r9fn0!-hlzdmz1ia0!-f$x'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 #ALLOWED_HOSTS = ["127.0.0.1","tabbesh.ir","185.4.31.70"]
 ALLOWED_HOSTS = ['*']
 
@@ -171,7 +171,7 @@ REST_FRAMEWORK = {
     'DEFAULT_FILTER_BACKENDS': ('django_filters.rest_framework.DjangoFilterBackend',
                                 'rest_framework.filters.SearchFilter',
                                 'rest_framework.filters.OrderingFilter'),
-    
+    'EXCEPTION_HANDLER': 'accounts.exceptionHandler.api_exception_handler',
     'DEFAULT_PAGINATION_CLASS': 'accounts.pagination.Pagination',
     'PAGE_SIZE': 3
 

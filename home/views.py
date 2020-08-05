@@ -1,6 +1,5 @@
 from django.shortcuts import render, redirect
 from rest_framework import status
-from django.contrib.auth.decorators import login_required
 from rest_framework.response import Response
 
 # Create your views here.
