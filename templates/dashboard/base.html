@@ -110,25 +110,25 @@
                 </div>
             </div>
         </nav>
-        <!-- Contact us popup -->
-        <div class="d-inline-flex flex-row contact_us">
-            <!-- Contact us icon -->
-            <img id="contact_us_img" class="ml-3 animated pulse infinite" src="
-            {% static 'home/images/icons/support.svg' %}" width="70px" height="70px">
-            <!-- Popup content -->
-            <div id="contact_us_content" class="p-2 pt-3">
-                <p class="text-nowrap mb-2">
-                    روابط عمومی
-                    <span class="ml-4">09374789830</span>
-                    <img src="{% static 'home/images/icons/call-24-hours.svg' %}" width="30" height="30">
-                </p>
-                <p class="text-nowrap mb-2">
-                    پشتیبانی فنی
-                    <span class="ml-4">09391811412</span>
-                    <img src="{% static 'home/images/icons/call-24-hours.svg' %}" width="30" height="30">
-                </p>
-            </div>
-        </div>
+{#        <!-- Contact us popup -->#}
+{#        <div class="d-inline-flex flex-row contact_us">#}
+{#            <!-- Contact us icon -->#}
+{#            <img id="contact_us_img" class="ml-3 animated pulse infinite" src="#}
+{#            {% static 'home/images/icons/support.svg' %}" width="70px" height="70px">#}
+{#            <!-- Popup content -->#}
+{#            <div id="contact_us_content" class="p-2 pt-3">#}
+{#                <p class="text-nowrap mb-2">#}
+{#                    روابط عمومی#}
+{#                    <span class="ml-4">09374789830</span>#}
+{#                    <img src="{% static 'home/images/icons/call-24-hours.svg' %}" width="30" height="30">#}
+{#                </p>#}
+{#                <p class="text-nowrap mb-2">#}
+{#                    پشتیبانی فنی#}
+{#                    <span class="ml-4">09391811412</span>#}
+{#                    <img src="{% static 'home/images/icons/call-24-hours.svg' %}" width="30" height="30">#}
+{#                </p>#}
+{#            </div>#}
+{#        </div>#}
 
         {% block content %}
 
@@ -151,6 +151,10 @@
         integrity="sha384-a9xOd0rz8w0J8zqj1qJic7GPFfyMfoiuDjC9rqXlVOcGO/dmRqzMn34gZYDTel8k"
         crossorigin="anonymous">
 </script>
+
+<!-- raychat !-->
+<script src="{% static 'home/js/raychat.js' %}"></script>
+
 {% block JSfile %}
 {% endblock %}
 
