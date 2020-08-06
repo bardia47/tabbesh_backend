@@ -123,3 +123,10 @@ function isValidIranianNationalCode(input) {
     return (sum < 2 && check == sum) || (sum >= 2 && check + sum == 11);
 }
 
+$("#changeProfile").submit(function () {
+    // remove white space with trim
+    let firstName = $("#firstName");
+    let lastName = $("#lastName");
+    firstName.val(firstName.trim());
+    lastName.val(lastName.trim());
+});

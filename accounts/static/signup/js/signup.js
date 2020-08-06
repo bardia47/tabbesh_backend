@@ -56,7 +56,12 @@ function check() {
 }
 
 // change +98 & 09 to 9
-$("#form-sign-up").submit(function () {
+$("#form-sign-up").submit(function (e) {
+    // remove white space with trim
+    let firstName = $("#first-name");
+    let lastName = $("#last-name");
+    firstName.val(firstName.trim());
+    lastName.val(lastName.trim());
     let phoneNumber = $("#phone-number");
     if (phoneNumber.val().startsWith("0")) {
         phoneNumber.val(phoneNumber.val().slice(1))
