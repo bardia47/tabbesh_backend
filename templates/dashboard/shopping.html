@@ -45,7 +45,13 @@
                         <!-- Total cart items id and price for pass to back-end -->
                         <input id="totalId" type="hidden" name="total_id" value="">
                         <input id="totalPrice" type="hidden" name="total_pr" value="">
-                        <input type="submit" class="btn button-purchase" value="پرداخت">
+                        <input type="submit" class="btn button-purchase" id="payButton" value="پرداخت">
+
+                         <!-- compute discount -->
+                        <input type="text" class="form-control" id="discountCode">
+                         <button class="btn btn-purchase mb-1" id="discountButton">
+                        محاسبه
+                        </button>
                     </form>
                 </div>
                 <div class="cart-total-price">

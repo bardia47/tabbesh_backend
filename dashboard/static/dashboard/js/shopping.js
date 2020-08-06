@@ -215,3 +215,42 @@ $("select[id^='search']").change(function (event) {
     history.pushState({url: urlMaker()}, null, "?" + searchParameter);
     pagination(urlMaker())
 });
+
+
+$('#discountButton').click(function() {
+	$.ajax({
+		url : "/payment/compute-discount/",
+		dataType : "json",
+         type: "post",
+		data : {
+			code : $('#discountCode').attr("value"),
+            total_id : $('#totalId').attr("value"),
+		    total_pr : $('#totalPrice').attr("value")
+
+        },
+		beforeSend : function(xhr, settings) {
+			  $('#discountButton').prop("disabled",true);
+			  $('#payButton').prop("disabled",true);
+			  $('#discountCode').prop("readOnly",true);
+		},
+		success : function(data) {
+		    	  alert("کد تخفیف اعمال گردید!  ")
+                  $('#totalPrice').value=data['amount']
+
+		},
+		statusCode: {
+		      406: function( data ) {
+		          $('#discountButton').prop("disabled",false);
+		    	  alert("کد تخفیف معتبر نمیباشد")
+		      }
+		    },
+        error:function()
+        {
+           alert("خطا در اتصال به سامانه")
+        },
+		complete:function()
+		{
+			$('#payButton').prop("disabled",false);
+		}
+	});
+});

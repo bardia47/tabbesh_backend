@@ -106,11 +106,11 @@ class ShoppingSerializer(serializers.Serializer):
 # for shopping page
 class ShoppingCourseSerializer(CourseLessonsSerializer):
     course_calendars = serializers.SerializerMethodField('get_start_dates')
-
+    discount = serializers.SerializerMethodField('get_discount')
     class Meta:
         model = Course
         fields = ('id', 'title', 'start_date', 'end_date', 'code', 'amount', 'description', 'image', 'teacher',
-                  'course_calendars', 'parent')
+                  'course_calendars', 'parent','discount')
 
     def get_start_dates(self, obj):
         dates = []
@@ -120,12 +120,13 @@ class ShoppingCourseSerializer(CourseLessonsSerializer):
         return dates
 
     def get_parent_lesson(self, obj):
-        lesson = obj.lesson
-        while (True):
-            if lesson.parent is None:
-                return LessonSerializer(instance=lesson).data
-            else:
-                lesson = lesson.parent
+        return LessonSerializer(instance=obj.get_parent_lesson()).data
+
+    def get_discount(self, obj):
+        discount=obj.get_discount()
+        if discount:
+            return DiscountSerializer(instance=discount).data
+        return None
 
 
 class UserProfileSerializer(JSONFormSerializer, serializers.ModelSerializer):
@@ -168,3 +169,8 @@ class UserProfileShowSerializer(serializers.Serializer):
     user = UserProfileSerializer()
     grades = GradeSerializer(many=True)
     cities = CitySerializer(many=True)
+
+class DiscountSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Discount
+        fields = ('percent','end_date','title')

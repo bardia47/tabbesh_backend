@@ -12,6 +12,7 @@ from django.contrib.admin.options import InlineModelAdmin
 import datetime
 from django.urls import reverse
 from django.utils.safestring import mark_safe
+from django import forms
 
 class CourseInline(admin.StackedInline):
     model = User.courses.through
@@ -313,15 +314,60 @@ class PayHistoryAdmin(admin.ModelAdmin):
         ))
 
 
+
+class CourseDiscountFormSetInline(forms.models.BaseInlineFormSet):
+    def clean(self):
+        count = 0
+        for form in self.forms:
+            if form.cleaned_data and not form.cleaned_data.get('DELETE', False):
+                    discount_id=form.cleaned_data['discount'].id
+                    count=count+1
+                    discount = Discount.objects.filter(courses__id=form.cleaned_data['course'].id,code__isnull=True ).exclude(id=discount_id)
+                    if discount:
+                        raise forms.ValidationError("درس " + form.cleaned_data['course'].title + " دارای تخفیف میباشند")
+
+        if count>0:
+            discount = Discount.objects.filter(courses=None , code__isnull=True).exclude(id=discount_id)
+            if discount:
+                raise forms.ValidationError("تمامی دروس دارای تخفیف میباشند")
+        return self.cleaned_data
+
+class CourseDiscountInline(TabularInlineJalaliMixin,admin.TabularInline):
+    formset = CourseDiscountFormSetInline
+    model = Discount.courses.through
+    verbose_name_plural = "دروس مشمول تخفیف(در صورت خالی بودن تمام دروس شامل تخفیف میشوند)"
+    verbose_name = "دروس مشمول تخفیف"
+
+    def get_formset(self, request, obj=None, **kwargs):
+            formset = super(CourseDiscountInline, self).get_formset(request, obj, **kwargs)
+            form = formset.form
+            form.base_fields['course'].label = "دوره"
+            widget = form.base_fields['course'].widget
+            widget.label = 'دوره'
+            return formset
+
+
+
+class DiscountForm(forms.ModelForm):
+    class Meta:
+        model = Discount
+        fields = ('title', 'code', 'percent', 'start_date', 'end_date')
+
 class DiscountAdmin(ModelAdminJalaliMixin, admin.ModelAdmin):
     list_display = ['code', 'title','percent', 'get_start_jalali', 'get_end_jalali']
     search_fields = ['code', 'title']
+    form = DiscountForm
+    inlines = [
+        CourseDiscountInline
+    ]
 
     def get_start_jalali(self, obj):
         return datetime2jalali(obj.start_date).strftime('%y/%m/%d ')
 
     def get_end_jalali(self, obj):
-        return datetime2jalali(obj.end_date).strftime('%y/%m/%d')
+        if obj.end_date:
+            return datetime2jalali(obj.end_date).strftime('%y/%m/%d')
+        return ""
 
     get_start_jalali.short_description = 'تاریخ شروع'
     get_start_jalali.admin_order_field = 'start_date'

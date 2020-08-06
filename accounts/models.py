@@ -11,6 +11,7 @@ import datetime
 import jdatetime
 from django.core.exceptions import ValidationError
 from django.core.validators import MaxValueValidator, MinValueValidator
+from django.db.models import Q
 
 # import for compress images
 import sys 
@@ -204,7 +205,22 @@ class Course(models.Model):
             return None
         now = datetime.datetime.now()
         return  self.course_calendar_set.filter(end_date__gte=now).first()
-        
+
+
+    def get_parent_lesson(self, exclude=None):
+        lesson = self.lesson
+        while (True):
+            if lesson.parent is None:
+                return lesson
+            else:
+                lesson = lesson.parent
+
+    def get_discount(self, exclude=None):
+        discount = Discount.objects.filter(
+            (Q(courses__id=self.id) & Q(code__isnull=True)) | (Q(courses=None) & Q(code__isnull=True)))
+        if discount.exists():
+            return discount.first()
+        return None
        
 # Course_Calendar Model
 class Course_Calendar(models.Model):
@@ -288,7 +304,7 @@ class Pay_History(models.Model):
 
 class Discount(models.Model):
     title=models.CharField("نام تخفیف", max_length=30, null=True, blank=True , unique=True)
-    code = models.CharField("کد", max_length=10, unique=True)
+    code = models.CharField("کد", max_length=15, null=True, blank=True , unique=True)
     percent = models.IntegerField(
         default=10,
         validators=[
@@ -296,8 +312,8 @@ class Discount(models.Model):
             MinValueValidator(1)
             ]
     )
-    start_date = models.DateField("تاریخ شروع")
-    end_date = models.DateField("تاریخ پایان", null=True)
+    start_date = models.DateTimeField("تاریخ شروع")
+    end_date = models.DateTimeField("تاریخ پایان",null=True, blank=True)
     courses= models.ManyToManyField('Course', blank=True, verbose_name="درس های تخفیف خورده")
 
     class Meta:
@@ -307,7 +323,7 @@ class Discount(models.Model):
 
     def clean_fields(self, exclude=None):
         super().clean_fields(exclude=exclude)
-        if self.end_date is None or  self.end_date <= self.start_date:
+        if self.end_date and self.end_date <= self.start_date:
             raise ValidationError("تاریخ پایان باید پس از تاریخ شروع باشد یا خالی باشد")
 
    
