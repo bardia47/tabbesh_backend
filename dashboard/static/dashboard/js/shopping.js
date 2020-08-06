@@ -1,7 +1,7 @@
 // function for get Request.GET variable
 function getUrlParameter(url, param) {
-    urlArray = url.split("/")
-    paramets = urlArray[urlArray.length - 1]
+    urlArray = url.split("/");
+    paramets = urlArray[urlArray.length - 1];
     const urlParams = new URLSearchParams(paramets);
     return urlParams.get(param)
 }
@@ -11,15 +11,15 @@ function urlMaker() {
 }
 
 function loading() {
-    $(".card-group").hide()
-    $(".pagination-wrapper").hide()
-    $(".loading-search").show()
+    $(".card-group").hide();
+    $(".pagination-wrapper").hide();
+    $(".loading-search").show();
 
     setTimeout(function () {
-        $(".card-group").show()
-        $(".pagination-wrapper").show()
-        $(".loading-search").hide()
-        $(".card-group").show()
+        $(".card-group").show();
+        $(".pagination-wrapper").show();
+        $(".loading-search").hide();
+        $(".card-group").show();
         $(".pagination-wrapper").show()
     }, 1000);
 }
@@ -27,19 +27,19 @@ function loading() {
 // hostname of project -- example : https://127.0.0.1:8000
 // let arrayHref = window.location.href.split("/")
 // let hostName = arrayHref[0] + "//" + arrayHref[2]
-let firstParameter = new URL(window.location.href).search.slice(1)
-let searchParameter
+let firstParameter = new URL(window.location.href).search.slice(1);
+let searchParameter;
 // add to GET variable page to url parameter --> read : https://developer.mozilla.org/en-US/docs/Web/API/URLSearchParams/append
 if (firstParameter) {
     searchParameter = new URLSearchParams(firstParameter)
 } else {
     searchParameter = new URLSearchParams("?page=1")
 }
-let getShoppingURL =  "/dashboard/get-shopping/?"
+let getShoppingURL =  "/dashboard/get-shopping/?";
 // first pagination when user request https://127.0.0.1:8000/dashboard/shopping/
 $(function () {
     pagination(urlMaker())
-})
+});
 
 // pagination when user return to previous page --> hint: read about history javascript stack
 window.onpopstate = function (event) {
@@ -55,9 +55,9 @@ function pagination(url) {
         type: "GET",
         dataType: "json",
         success: function (shoppingCards, textStatus, request) {
-            $(".card-group").empty()
-            $(".pagination").empty()
-            renderShoppingCards(shoppingCards)
+            $(".card-group").empty();
+            $(".pagination").empty();
+            renderShoppingCards(shoppingCards);
             // check if page number is not 0 show pagination
             if (shoppingCards != 0) {
                 renderPagination(request.getResponseHeader('Last-Page'), url)
@@ -73,8 +73,8 @@ function pagination(url) {
 function renderShoppingCards(courseCards) {
     $.each(courseCards, function (index, courseCard) {
         // parse Date to ISO date format and use persianDate jQuery
-        let startDateCourse = new persianDate(Date.parse(courseCard.start_date))
-        let endDateCourse = new persianDate(Date.parse(courseCard.end_date))
+        let startDateCourse = new persianDate(Date.parse(courseCard.start_date));
+        let endDateCourse = new persianDate(Date.parse(courseCard.end_date));
         // price check -- for free courses
         if (courseCard.amount <= 0) {
             coursePriceTemplate = `رايگان!`
@@ -139,7 +139,7 @@ function renderShoppingCards(courseCards) {
                      <!-- Course price -->
                      <div class="course-price">
                         <p>
-                           <img src="$/static/home/images/icons/price.svg" alt="price">
+                           <img src="/static/home/images/icons/price.svg" alt="price">
                            قیمت:
                            <span class="price">${coursePriceTemplate}</span>
                         </p>
@@ -157,11 +157,11 @@ function renderShoppingCards(courseCards) {
                   <input type="hidden" class="course-id" value="${courseCard.id}">
                </div>
             </div>
-        `
-        $(".card-group").append(shoppingCardTemplate)
+        `;
+        $(".card-group").append(shoppingCardTemplate);
         // loop for course calender times
         $.each(courseCard.course_calendars, function (index, courseCalender) {
-            let courseStandardTime = new persianDate(Date.parse(courseCalender))
+            let courseStandardTime = new persianDate(Date.parse(courseCalender));
             let courseCalenderTemplate = `
                 <p class="course-calender-time">
                     <img src="/static/home/images/icons/add-time.svg" class="animated"
@@ -173,21 +173,18 @@ function renderShoppingCards(courseCards) {
         })
 
     });
+    addToCardButtons();
     loading()
-    // add shopping-cart js to DOM
-    let imported = document.createElement('script')
-    imported.src = `/static/dashboard/js/shopping-cart.js`
-    document.body.appendChild(imported);
 }
 
 // make pagination numbers
 function renderPagination(pageNumber, urlAjax) {
-    page = searchParameter.get("page") ? searchParameter.get("page") : "1"
+    page = searchParameter.get("page") ? searchParameter.get("page") : "1";
     for (let number = 1; number <= pageNumber; number++) {
         if (page == number) {
             $('.pagination').append(`<span aria-current="page" class="page-numbers current ml-3">${number}</span>`)
         } else {
-            searchParameter.set("page", number.toString())
+            searchParameter.set("page", number.toString());
             $('.pagination').append(`<a class="page-numbers ml-3" href="?${searchParameter}">${number}</a>`)
             if (page != "1") {
                 searchParameter.set("page", page)
@@ -217,4 +214,4 @@ $("select[id^='search']").change(function (event) {
     }
     history.pushState({url: urlMaker()}, null, "?" + searchParameter);
     pagination(urlMaker())
-})
+});

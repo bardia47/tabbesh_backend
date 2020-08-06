@@ -30,40 +30,40 @@ function addToCartClicked() {
 // create cart item
 function addItemToCart(id, title, price, teacher, imageSrc) {
     let cartTemplate = `
-<div class="row card-row">
-    <div class="col-md-12 cart-item ">
-    <div class="card">
-    <div class="card-body">
-      <div class="row">
-        <!-- Course image -->
-        <div class="col-md-1 cart-course-image">
-          <img src="${imageSrc}" alt="course image">
+    <div class="row card-row">
+        <div class="col-md-12 cart-item ">
+        <div class="card">
+        <div class="card-body">
+          <div class="row">
+            <!-- Course image -->
+            <div class="col-md-1 cart-course-image">
+              <img src="${imageSrc}" alt="course image">
+            </div>
+            <!-- Course title -->
+            <div class="col-md-2 cart-course-title">
+              <p class="cart-course-title">${title}</p>
+            </div>
+            <!--Course teacher name -->
+            <div class="col-md-2 cart-course-teacher-name">
+              <p>${teacher}</p>
+            </div>
+            <!-- Course price -->
+            <div class="col-md-3 cart-price">
+              <p style="font-family:'Vazir_Bold'">
+              <span style="font-family:'Vazir_Light'">قیمت : </span>
+              <span class="cart-price-text">${price}</span>
+              </p>
+          </div>
+          <!-- Button-to-delete -->
+            <div class="col-md-4 cart-button-to-delete">
+              <button class="btn btn-danger btn-remove"><img src="/static/home/images/icons/delete.svg" alt="button link to class">حذف</button>
+            </div>
+          </div>
         </div>
-        <!-- Course title -->
-        <div class="col-md-2 cart-course-title">
-          <p class="cart-course-title">${title}</p>
-        </div>
-        <!--Course teacher name -->
-        <div class="col-md-2 cart-course-teacher-name">
-          <p>${teacher}</p>
-        </div>
-        <!-- Course price -->
-        <div class="col-md-3 cart-price">
-          <p style="font-family:'Vazir_Bold'">
-          <span style="font-family:'Vazir_Light'">قیمت : </span>
-          <span class="cart-price-text">${price}</span>
-          </p>
       </div>
-      <!-- Button-to-delete -->
-        <div class="col-md-4 cart-button-to-delete">
-          <button class="btn btn-danger btn-remove"><img src="/static/home/images/icons/delete.svg" alt="button link to class">حذف</button>
-        </div>
+      <input type="hidden" class="cart-course-id" value="${id}">
       </div>
-    </div>
-  </div>
-  <input type="hidden" class="cart-course-id" value="${id}">
-  </div>
-</div>`;
+    </div>`;
     let cartList = $(".cart-list");
     cartList.append(cartTemplate);
     let cartItem = cartList.children(".row").last();
