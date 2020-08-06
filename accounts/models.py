@@ -10,6 +10,7 @@ from accounts.enums import RoleCodes
 import datetime
 import jdatetime
 from django.core.exceptions import ValidationError
+from django.core.validators import MaxValueValidator, MinValueValidator
 
 # import for compress images
 import sys 
@@ -52,6 +53,18 @@ class User(AbstractBaseUser, PermissionsMixin):
     USERNAME_FIELD = 'username'
     REQUIRED_FIELDS = [ 'first_name', 'last_name']
 
+    def __str__(self):
+        return self.get_full_name()
+
+    def get_full_name(self):
+        full_name = '%s %s' % (self.first_name, self.last_name)
+        return full_name.strip()
+
+    get_full_name.short_description = 'نام'
+
+    def get_short_name(self):
+        return self.first_name
+
       #compress images
     def compressImage(self,uploadedImage):
         imageTemproary = Image.open(uploadedImage)
@@ -63,14 +76,7 @@ class User(AbstractBaseUser, PermissionsMixin):
         uploadedImage = InMemoryUploadedFile(outputIoStream,'ImageField', "%s.jpg" % uploadedImage.name.split('.')[0], 'image/jpeg', sys.getsizeof(outputIoStream), None)
         return uploadedImage
 
-    def get_full_name(self):
-        full_name = '%s %s' % (self.first_name, self.last_name)
-        return full_name.strip()
 
-    get_full_name.short_description = 'نام'
-
-    def get_short_name(self):
-        return self.first_name
 
     def email_user(self, subject, message, from_email=None, **kwargs):
         send_mail(subject, message, from_email, [self.email], **kwargs)
@@ -84,7 +90,15 @@ class User(AbstractBaseUser, PermissionsMixin):
                 self.avatar = "defaults/teacher.png"
             else :
                 self.avatar = "defaults/student.png"
-        
+
+
+    def get_student_grade(self):
+            try:
+                return self.grades.all().first().title
+            except:
+                return ""
+
+    get_student_grade.short_description = 'پایه'
 
 
 # Roles Model
@@ -155,8 +169,8 @@ class Course(models.Model):
     amount = models.FloatField("مبلغ", default=float(0))
     url = models.URLField("لینک", blank=True, null=True)
     image = models.ImageField(upload_to='courses_image/', default='defaults/course.jpg')
-    description = models.TextField(null=True, blank=True)
-
+    description = models.TextField('توضیحات خرید درس',null=True, blank=True)
+    private_description = models.TextField('توضیحات درس',null=True, blank=True)
     class Meta:
         ordering = ['start_date']
         verbose_name_plural = "دوره"
@@ -194,7 +208,7 @@ class Course(models.Model):
        
 # Course_Calendar Model
 class Course_Calendar(models.Model):
-    course = models.ForeignKey('Course', on_delete=models.DO_NOTHING, verbose_name="دوره")
+    course = models.ForeignKey('Course', on_delete=models.CASCADE , verbose_name="دوره")
     start_date = models.DateTimeField("تاریخ شروع")
     end_date = models.DateTimeField("تاریخ پایان")
 
@@ -264,7 +278,36 @@ class Pay_History(models.Model):
 
     def submit_date_decorated(self):
         return jdatetime.datetime.fromgregorian(datetime=self.submit_date).strftime("%a, %d %b %Y %H:%M:%S")
-    
+
+    def get_courses(self):
+        courses_id_list = self.courses.split()
+        return list(Course.objects.filter(id__in=courses_id_list).values_list('title', flat=True))
+
+    get_courses.short_description='دروس خریداری شده'
     submit_date_decorated.short_description='تاریخ ثبت'
+
+class Discount(models.Model):
+    title=models.CharField("نام تخفیف", max_length=30, null=True, blank=True , unique=True)
+    code = models.CharField("کد", max_length=10, unique=True)
+    percent = models.IntegerField(
+        default=10,
+        validators=[
+            MaxValueValidator(100),
+            MinValueValidator(1)
+            ]
+    )
+    start_date = models.DateField("تاریخ شروع")
+    end_date = models.DateField("تاریخ پایان", null=True)
+    courses= models.ManyToManyField('Course', blank=True, verbose_name="درس های تخفیف خورده")
+
+    class Meta:
+        ordering = ['-start_date']
+        verbose_name_plural = "تخفیف"
+        verbose_name = "تخفیف"
+
+    def clean_fields(self, exclude=None):
+        super().clean_fields(exclude=exclude)
+        if self.end_date is None or  self.end_date <= self.start_date:
+            raise ValidationError("تاریخ پایان باید پس از تاریخ شروع باشد یا خالی باشد")
 
    

@@ -112,12 +112,12 @@ class Verify(APIView):
             # return HttpResponse('Transaction failed.\nStatus: ' + str(result.Status))
                 if request.accepted_renderer.format == 'html':
                     return render(request, 'dashboard/unsuccess_shopping.html', {'error': str(result.Status)})
-                return Response({'error': str(result.Status)},status.HTTP_406_NOT_ACCEPTABLE)
+                return Response({'error': "پرداخت ناموفق"},status.HTTP_406_NOT_ACCEPTABLE)
 
         else:
             new_pay.save()
         # return HttpResponse('Transaction failed or canceled by user')
             if request.accepted_renderer.format == 'html':
                 return render(request, 'dashboard/unsuccess_shopping.html')
-            return Response({'error': str(result.Status)},status.HTTP_406_NOT_ACCEPTABLE)
+            return Response({'error': "پرداخت ناموفق"},status.HTTP_406_NOT_ACCEPTABLE)
 

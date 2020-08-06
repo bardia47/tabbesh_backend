@@ -143,10 +143,7 @@ class UserProfileSerializer(JSONFormSerializer, serializers.ModelSerializer):
                   'last_name', 'username', 'grade', 'cityTitle', 'gender', 'national_code', 'phone_number', 'avatar')
 
     def get_student_grade(self, obj):
-        try:
-            return obj.grades.all().first().title
-        except:
-            return ""
+        return obj.get_student_grade()
 
     def get_city_title(self, obj):
         try:
