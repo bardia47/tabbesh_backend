@@ -48,13 +48,13 @@ class CourseLessonsSerializer(CourseBriefSerializer):
     parent = serializers.SerializerMethodField('get_parent_lesson')
 
     def is_class_active(self, obj):
-        next_class=obj.get_next_class()
+        next_class = obj.get_next_class()
         if next_class is not None:
             return next_class.is_class_active()
         return False
 
     def get_first_class(self, obj):
-        next_class=obj.get_next_class()
+        next_class = obj.get_next_class()
         if next_class is not None:
             return next_class.start_date
         return None
@@ -62,15 +62,15 @@ class CourseLessonsSerializer(CourseBriefSerializer):
     def get_parent_lesson(self, obj):
         lesson = obj.lesson
         while (True):
-            if lesson.parent is None :
+            if lesson.parent is None:
                 return LessonSerializer(instance=lesson).data
             else:
-                lesson=lesson.parent
+                lesson = lesson.parent
 
     class Meta:
         model = Course
-        fields = ('code','title', 'start_date', 'end_date' ,'image', 'teacher','url' ,
-                  'is_active','first_class', 'description','parent')
+        fields = ('code', 'title', 'start_date', 'end_date', 'image', 'teacher', 'url',
+                  'is_active', 'first_class', 'description', 'parent')
 
 
 class CourseCalendarSerializer(JSONFormSerializer, serializers.ModelSerializer):
@@ -78,14 +78,14 @@ class CourseCalendarSerializer(JSONFormSerializer, serializers.ModelSerializer):
 
     class Meta:
         model = Course_Calendar
-        fields = ('start_date','is_active')
+        fields = ('start_date', 'is_active')
 
     def get_is_active(self, obj):
         return obj.is_class_active()
 
     def to_representation(self, course_calendar):
-        data =  super(CourseCalendarSerializer, self).to_representation(course_calendar)
-        course=CourseLessonsSerializer(instance=course_calendar.course)
+        data = super(CourseCalendarSerializer, self).to_representation(course_calendar)
+        course = CourseLessonsSerializer(instance=course_calendar.course)
         data.update(course.data)
         return data
 
@@ -96,22 +96,21 @@ class DashboardSerializer(serializers.Serializer):
     calendar_time = serializers.DurationField(required=False, allow_null=True)
 
 
-#for shopping page
+# for shopping page
 class ShoppingSerializer(serializers.Serializer):
     teachers = TeacherSerializer(many=True)
     lessons = LessonSerializer(many=True)
     grades = GradeSerializer(many=True)
 
 
-#for shopping page
+# for shopping page
 class ShoppingCourseSerializer(CourseLessonsSerializer):
     course_calendars = serializers.SerializerMethodField('get_start_dates')
 
     class Meta:
         model = Course
         fields = ('id', 'title', 'start_date', 'end_date', 'code', 'amount', 'description', 'image', 'teacher',
-                  'course_calendars')
-        fields = ('title', 'start_date', 'end_date', 'code', 'amount', 'description', 'image', 'teacher', 'course_calendars','parent')
+                  'course_calendars', 'parent')
 
     def get_start_dates(self, obj):
         dates = []
@@ -123,11 +122,10 @@ class ShoppingCourseSerializer(CourseLessonsSerializer):
     def get_parent_lesson(self, obj):
         lesson = obj.lesson
         while (True):
-            if lesson.parent is None :
+            if lesson.parent is None:
                 return LessonSerializer(instance=lesson).data
             else:
-                lesson=lesson.parent
-
+                lesson = lesson.parent
 
 
 class UserProfileSerializer(JSONFormSerializer, serializers.ModelSerializer):
@@ -135,6 +133,7 @@ class UserProfileSerializer(JSONFormSerializer, serializers.ModelSerializer):
         model = User
         fields = ('first_name',
                   'last_name', 'username', 'email', 'grades', 'gender', 'phone_number', 'city', 'avatar')
+
     grade = serializers.SerializerMethodField('get_student_grade')
     cityTitle = serializers.SerializerMethodField('get_city_title')
 
@@ -144,18 +143,20 @@ class UserProfileSerializer(JSONFormSerializer, serializers.ModelSerializer):
                   'last_name', 'username', 'grade', 'cityTitle', 'gender', 'national_code', 'phone_number', 'avatar')
 
     def get_student_grade(self, obj):
-            try:
-                return obj.grades.all().first().title
-            except:
-                return ""
+        try:
+            return obj.grades.all().first().title
+        except:
+            return ""
 
     def get_city_title(self, obj):
-            try:
-                return obj.city.title
-            except:
-                return ""
+        try:
+            return obj.city.title
+        except:
+            return ""
 
-                # for post method and android
+            # for post method and android
+
+
 class UserSaveProfileSerializer(UserProfileSerializer):
     class Meta:
         model = User

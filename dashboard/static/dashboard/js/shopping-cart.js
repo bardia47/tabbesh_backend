@@ -1,74 +1,36 @@
-// Check page is loading or load
-if (document.readyState == 'loading') {
-    document.addEventListener('DOMContentLoaded', ready())
-} else {
-    ready()
+// event handler for all new card add to button
+function addToCardButtons() {
+    $(".add-to-cart-button").each(function () {
+        $(this).click(addToCartClicked);
+    });
 }
 
-function ready() {
-    // Remove cart item with button
-    let removeCartItemButtons = document.getElementsByClassName('btn-remove')
-    for (let i = 0; i < removeCartItemButtons.length; i++) {
-        let button = removeCartItemButtons[i]
-        button.addEventListener('click', removeCartItem)
-    }
 
-    // Add to cart with "Add to list Button"
-    let addToCartButtons = document.getElementsByClassName('add-to-cart-button')
-    for (let i = 0; i < addToCartButtons.length; i++) {
-        let button = addToCartButtons[i]
-        button.addEventListener('click', addToCartClicked)
-    }
-
-    $("#shopping-cart-form").submit(function (event) {
-        let cartRows = document.getElementsByClassName('cart-item')
-        if (cartRows.length === 0) {
+// add cart item with add-to-cart button
+function addToCartClicked() {
+    let courseCard = $(this).parents(".course-card").first();
+    let id = courseCard.find(".course-id").val();
+    let title = courseCard.find(".title").text();
+    let price = courseCard.find(".price").text();
+    let teacher = courseCard.find(".teacher-name").text();
+    let imageSrc = courseCard.find(".card-img-top").attr('src');
+    let duplicateCourse = false;
+    $(".cart-course-title").each(function (index, cardItemTitle) {
+        console.log(cardItemTitle)
+        console.log(title)
+        if ($(cardItemTitle).text() == title) {
             $("#errorModalForCart").modal();
-            $("#modal-body").text("سبد خرید شما خالی می باشد، یک درس را انتخاب کنید.")
-            event.preventDefault();
-        } else {
-            $("#shopping-cart-form").submit()
+            $("#modal-body").text("درس مورد نظر قبلا به سبد خرید اضافه شده است.");
+            duplicateCourse = true;
         }
     });
-
+    if (!duplicateCourse) addItemToCart(id, title, price, teacher, imageSrc)
 }
 
-// Remove Cart Item
-function removeCartItem(event) {
-    let buttonClicked = event.target
-    buttoncl = buttonClicked.parentElement.parentElement.parentElement.parentElement.parentElement
-    buttoncl.remove()
-    updateCartTotal()
-}
-
-// Add Cart Item With add-to-cart button
-function addToCartClicked(event) {
-    let button = event.target
-    let shopItem = button.parentElement.parentElement
-    let title = shopItem.getElementsByClassName('title')[0].textContent;
-    let price = shopItem.getElementsByClassName('price')[0].textContent;
-    let teacher = shopItem.getElementsByClassName('teacher-name')[0].textContent;
-    let imageSrc = shopItem.getElementsByClassName('card-img-top')[0].src;
-    let id = shopItem.getElementsByClassName('course-id')[0].value;
-    addItemToCart(title, price, teacher, imageSrc, id)
-    updateCartTotal()
-}
-
-// Create cart item
-function addItemToCart(title, price, teacher, imageSrc, id) {
-    let cartRow = document.createElement('div')
-    cartRow.classList.add('row')
-    cartRow.classList.add('card-row')
-    let cartItems = document.getElementsByClassName('cart-list')[0]
-    let cartItemNames = cartItems.getElementsByClassName('cart-course-title')
-    for (let i = 0; i < cartItemNames.length; i++) {
-        if (cartItemNames[i].textContent == title) {
-            $("#errorModalForCart").modal();
-            $("#modal-body").text("درس مورد نظر قبلا به سبد خرید اضافه شده است.")
-            return
-        }
-    }
-    let cartRowContents = `
+// create cart item
+function addItemToCart(id, title, price, teacher, imageSrc) {
+    let cartTemplate = `
+<div class="row card-row">
     <div class="col-md-12 cart-item ">
     <div class="card">
     <div class="card-body">
@@ -100,33 +62,54 @@ function addItemToCart(title, price, teacher, imageSrc, id) {
     </div>
   </div>
   <input type="hidden" class="cart-course-id" value="${id}">
-  </div>`
-    cartRow.innerHTML = cartRowContents
-    cartItems.append(cartRow)
-    cartRow.getElementsByClassName('btn-remove')[0].addEventListener('click', removeCartItem)
-    cartItems.parentElement.scrollIntoView();
+  </div>
+</div>`;
+    let cartList = $(".cart-list");
+    cartList.append(cartTemplate);
+    let cartItem = cartList.children(".row").last();
+    // remove cart item handler
+    cartItem.find(".btn-remove").click(function () {
+        $(this).parents(".card-row").remove();
+        $(".shopping-title")[0].scrollIntoView();
+        updateCartTotal()
+    });
+    animatedToCardList();
+    updateCartTotal()
 }
 
 // Update cart total price
 function updateCartTotal() {
-    let cartRows = document.getElementsByClassName('cart-item')
-    let total = 0
-    let total_id = ""
-    for (let i = 0; i < cartRows.length; i++) {
-        let cartRow = cartRows[i]
-        let priceElement = cartRow.getElementsByClassName('cart-price-text')[0]
-        if (priceElement.innerText == "رايگان!") {
-            price = 0;
-        } else {
-            price = parseFloat(priceElement.innerText)
-        }
-        let id = cartRow.getElementsByClassName('cart-course-id')[0].value
-        total = total + price
-        total_id = total_id + id + " "
+    let totalPrice = 0;
+    let totalId = "";
+    $(".cart-item").each(function (index, cartItem) {
+        let itemPrice = $(cartItem).find(".cart-price-text");
+        let itemId = $(cartItem).find(".cart-course-id");
+        // check if price is رایگان change to 0
+        if ($(itemPrice).text() !== "رايگان!") totalPrice += parseFloat($(itemPrice).text());
+        // make total id and price for back-end in hidden input
+        totalId = totalId + itemId.val() + " "
+    });
+    totalPrice = Math.round(totalPrice * 100) / 100;
+    $(".total-price").text(totalPrice);
+    $("#totalPrice").val(totalPrice);
+    $("#totalId").val(totalId);
+}
+
+
+// shopping cart button
+$("#shopping-cart-form").submit(function (event) {
+    console.log($("#totalId").val());
+    if ($(".cart-item").length == 0) {
+        $("#errorModalForCart").modal();
+        $("#modal-body").text("سبد خرید شما خالی می باشد، یک درس را انتخاب کنید.");
+        event.preventDefault();
     }
-    total = Math.round(total * 100) / 100
-    document.getElementsByClassName('total-price')[0].innerText = total.toLocaleString()
-    // send total id to input
-    document.getElementById('total_id').value = total_id
-    document.getElementById('total_pr').value = total
+});
+
+
+// animate to top of cart list
+function animatedToCardList() {
+    $([document.documentElement, document.body]).animate({
+        scrollTop: $(".shopping-content").offset().top
+    }, 500);
 }
