@@ -225,8 +225,14 @@ class Course(models.Model):
     def get_amount_payable(self, exclude=None):
        discount= self.get_discount()
        if discount:
-            return self.amount* (100-discount.percent)
+            return self.amount* (100-discount.percent)/100
        return self.amount
+
+    def get_discount_amount(self, exclude=None):
+       discount= self.get_discount()
+       if discount:
+            return self.amount* (discount.percent)/100
+       return 0
 
 
 # Course_Calendar Model

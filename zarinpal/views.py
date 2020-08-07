@@ -157,5 +157,8 @@ def compute_discount(courses_id_list, amount,discount):
   if discount.courses.count==0:
       return amount*discount.percent/100
   else :
-      sum_amount= discount.courses.filter(id__in=courses_id_list).aggregate(Sum('amount'))['amount__sum']
+      courses = Course.objects.filter(id__in=courses_id_list)
+      sum_amount=0
+      for course in courses:
+          sum_amount += course.get_discount_amount()
       return sum_amount*discount.percent/100
