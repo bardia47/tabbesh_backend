@@ -221,7 +221,14 @@ class Course(models.Model):
         if discount.exists():
             return discount.first()
         return None
-       
+
+    def get_amount_payable(self, exclude=None):
+       discount= self.get_discount()
+       if discount:
+            return self.amount* (100-discount.percent)
+       return self.amount
+
+
 # Course_Calendar Model
 class Course_Calendar(models.Model):
     course = models.ForeignKey('Course', on_delete=models.CASCADE , verbose_name="دوره")

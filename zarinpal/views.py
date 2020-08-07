@@ -22,7 +22,7 @@ def is_valid(courses_id_list, amount,discount):
     courses = Course.objects.filter(id__in=courses_id_list)
     total_price = 0
     for course in courses:
-        total_price += course.amount
+        total_price += course.get_amount_payable()
     if discount is not None:
         total_price=total_price-compute_discount(courses_id_list, amount,discount)
     return True if total_price == amount else False
