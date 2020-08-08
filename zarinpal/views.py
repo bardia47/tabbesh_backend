@@ -160,5 +160,5 @@ def compute_discount(courses_id_list, amount,discount):
       courses = Course.objects.filter(id__in=courses_id_list)
       sum_amount=0
       for course in courses:
-          sum_amount += course.get_discount_amount()
+          sum_amount += course.get_amount_payable()
       return sum_amount*discount.percent/100
