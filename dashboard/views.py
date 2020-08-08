@@ -15,7 +15,7 @@ from rest_framework import viewsets
 from .serializers import *
 from rest_framework import status
 from django.http import response
-
+from rest_framework.decorators import api_view,renderer_classes
 # for load or dump jsons
 import json
 
@@ -186,17 +186,6 @@ def getAllLessons(lesson_id):
     return query
 
 
-# File manager page
-@login_required
-def filemanager(request, code):
-    course = Course.objects.get(code=code)
-    try:
-        request.user.courses.get(id=course.id)
-    except:
-        return redirect('/dashboard/shopping/')
-    documents = course.document_set.all()
-    return render(request, 'dashboard/filemanager.html', {'course': course, 'documents': documents})
-
 
 class GetLessonsViewSet(viewsets.ModelViewSet):
     queryset = Course.objects.all()
@@ -265,3 +254,17 @@ class GetShoppingViewSet(viewsets.ModelViewSet):
             query = query & ~queryNot
         courses = Course.objects.filter(query)
         return courses
+
+@api_view(['GET', ])
+@renderer_classes([TemplateHTMLRenderer, JSONRenderer])
+def filemanager(request, code):
+        course = Course.objects.get(code=code)
+        try:
+            request.user.courses.get(id=course.id)
+        except:
+            if request.accepted_renderer.format == 'html':
+                return redirect('/dashboard/shopping/')
+            return Response(status=status.HTTP_402_PAYMENT_REQUIRED)
+        documents = course.document_set.all()
+        fileSerializer= FilesSerializer(instance={'documents': documents, 'course': course})
+        return Response(fileSerializer.data,template_name='dashboard/filemanager.html')

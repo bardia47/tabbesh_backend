@@ -1,5 +1,7 @@
 {% extends 'dashboard/base.html' %}
 {% load static %}
+{% load jformat %}
+
 <!-- Title block of base.html -->
 {% block title %}جزوات{% endblock %}
 
@@ -51,7 +53,7 @@
             <tr>
                 <th style="font-family:'Yekan-Number'" scope="row">1</th>
                 <td>{{doc.title}}</td>
-                <td>{{doc.sender.get_full_name}}</td>
+                <td>{{doc.sender}}</td>
                 <td>{{doc.upload_date_decorated}}</td>
                 <td> {{doc.description}}</td>
                 <td style="text-align:center"><a href="{{ doc.upload_document.url }}" target="_blank">

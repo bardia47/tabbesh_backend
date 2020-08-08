@@ -174,3 +174,22 @@ class DiscountSerializer(serializers.ModelSerializer):
     class Meta:
         model = Discount
         fields = ('percent','end_date','title')
+
+
+class DocumentSerializer(serializers.ModelSerializer):
+    sender=serializers.SerializerMethodField('get_sender_full_name')
+    upload_date_decorated=serializers.SerializerMethodField('get_upload_date_decorated')
+    class Meta:
+        model = Document
+        fields = ('title','sender','title','upload_date','upload_date_decorated','description','upload_document')
+
+    def get_sender_full_name(self, obj):
+        return obj.sender.get_full_name()
+
+    def get_upload_date_decorated(self, obj):
+        return obj.upload_date_decorated()
+
+class FilesSerializer(serializers.Serializer):
+    course = CourseBriefSerializer()
+    documents = DocumentSerializer(many=True)
+

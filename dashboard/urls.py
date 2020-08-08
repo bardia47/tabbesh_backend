@@ -17,7 +17,7 @@ urlpatterns = [
 #     path('edit_profile/change_password',
 #          change_password, name="change_password"),
     path('shopping/', Shopping.as_view(), name="shopping"),
-    path('lessons/files/<str:code>', filemanager),
+    path('lessons/files/<str:code>/', filemanager),
 ]
 
 urlpatterns += router.urls
