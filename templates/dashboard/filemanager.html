@@ -15,11 +15,11 @@
 <div class="container">
     <div class="row mb-2">
         <div class="col-md-1 file-manager-image">
-            <img src="{% static 'dashboard/images/default_profile.png'%}" width="50" height="50">
+            <img src="{{course.image}}" width="50" height="50">
         </div>
         <div class="col-md-3 file-manager title">
             <p class="m-0"><strong>{{ course.title }}</strong></p>
-            <h6 class="p-0"><small>{{ course.teacher.get_full_name }}</small></h6>
+            <h6 class="p-0"><small>{{ course.teacher }}</small></h6>
         </div>
 
 
