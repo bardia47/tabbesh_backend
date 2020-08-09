@@ -130,11 +130,6 @@ class ShoppingCourseSerializer(CourseLessonsSerializer):
 
 
 class UserProfileSerializer(JSONFormSerializer, serializers.ModelSerializer):
-    class Meta:
-        model = User
-        fields = ('first_name',
-                  'last_name', 'username', 'email', 'grades', 'gender', 'phone_number', 'city', 'avatar')
-
     grade = serializers.SerializerMethodField('get_student_grade')
     cityTitle = serializers.SerializerMethodField('get_city_title')
 
@@ -193,3 +188,14 @@ class FilesSerializer(serializers.Serializer):
     course = CourseBriefSerializer()
     documents = DocumentSerializer(many=True)
 
+
+class StudentBriefSerializer(UserProfileSerializer):
+    class Meta:
+        model = User
+        fields = ('first_name','last_name', 'grade', 'cityTitle')
+
+
+
+class ClassListSerializer(serializers.Serializer):
+    course = CourseBriefSerializer()
+    students = StudentBriefSerializer(many=True)

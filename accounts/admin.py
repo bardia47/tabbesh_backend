@@ -192,7 +192,7 @@ class CourseAdmin(ModelAdminJalaliMixin, admin.ModelAdmin):
     inlines = [
         CourseCalendarInline,
     ]
-    list_display = ['code', 'title', 'get_start_jalali', 'get_end_jalali', 'teacher_full_name']
+    list_display = ['code', 'title', 'get_start_jalali', 'get_end_jalali', 'teacher_full_name','student_link']
     search_fields = ['code', 'title']
 
     def teacher_full_name(self, obj):
@@ -215,6 +215,13 @@ class CourseAdmin(ModelAdminJalaliMixin, admin.ModelAdmin):
     def render_change_form(self, request, context, *args, **kwargs):
         context['adminform'].form.fields['teacher'].queryset = User.objects.filter(role__code=RoleCodes.TEACHER.value)
         return super(CourseAdmin, self).render_change_form(request, context, *args, **kwargs)
+
+    def student_link(self, obj):
+        return mark_safe('<a href="{}">{}</a>'.format(
+            reverse("student_list", args=(obj.code,)),
+            "لیست دانش آموزان"
+        ))
+    student_link.short_description = ' لیست دانش آموزان'
 
 
 class CourseCalendarAdmin(ModelAdminJalaliMixin, admin.ModelAdmin):

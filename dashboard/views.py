@@ -16,6 +16,10 @@ from .serializers import *
 from rest_framework import status
 from django.http import response
 from rest_framework.decorators import api_view,renderer_classes
+from rest_framework import generics
+import base64
+from django.core.files.base import ContentFile
+
 # for load or dump jsons
 import json
 
@@ -95,7 +99,15 @@ class EditProfile(APIView):
                 return Response()
 
         if method == 'changeAvatar':
-            avatar = request.user.compressImage(request.FILES.get("file"))
+            try:
+                file=request.data['file']
+                file_name=request.data['file_name']
+                format, imgstr = file.split(';base64,')
+                ext = format.split('/')[-1]
+                avatar = ContentFile(base64.b64decode(imgstr), name=file_name +"."+ ext)
+            except:
+                avatar = request.user.compressImage(request.FILES.get("file"))
+
             if avatar:
                 if not request.user.avatar.url.startswith("/media/defaults"):
                     request.user.avatar.delete()
@@ -255,16 +267,46 @@ class GetShoppingViewSet(viewsets.ModelViewSet):
         courses = Course.objects.filter(query)
         return courses
 
-@api_view(['GET', ])
-@renderer_classes([TemplateHTMLRenderer, JSONRenderer])
-def filemanager(request, code):
-        course = Course.objects.get(code=code)
+# @api_view(['GET', ])
+# @renderer_classes([TemplateHTMLRenderer, JSONRenderer])
+# def filemanager(request, code):
+#         course = Course.objects.get(code=code)
+#         try:
+#             request.user.courses.get(id=course.id)
+#         except:
+#             if request.accepted_renderer.format == 'html':
+#                 return redirect('/dashboard/shopping/')
+#             return Response(status=status.HTTP_402_PAYMENT_REQUIRED)
+#
+
+
+class FileManager(generics.RetrieveAPIView):
+    renderer_classes = [TemplateHTMLRenderer, JSONRenderer]
+    queryset = Course.objects.all()
+    serializer_class = FilesSerializer
+    lookup_field = 'code'
+
+    def retrieve(self, request, *args, **kwargs):
+        instance = self.get_object()
         try:
-            request.user.courses.get(id=course.id)
+            request.user.courses.get(id=instance.id)
         except:
             if request.accepted_renderer.format == 'html':
                 return redirect('/dashboard/shopping/')
-            return Response(status=status.HTTP_402_PAYMENT_REQUIRED)
-        documents = course.document_set.all()
-        fileSerializer= FilesSerializer(instance={'documents': documents, 'course': course})
-        return Response(fileSerializer.data,template_name='dashboard/filemanager.html')
+        documents = instance.document_set.all()
+        fileSerializer = FilesSerializer(instance={'documents': documents, 'course': instance})
+        return Response(fileSerializer.data, template_name='dashboard/filemanager.html')
+
+
+class ClassList(generics.RetrieveAPIView):
+    renderer_classes = [BrowsableAPIRenderer, JSONRenderer]
+    queryset = Course.objects.all()
+    serializer_class = FilesSerializer
+    lookup_field = 'code'
+
+    def retrieve(self, request, *args, **kwargs):
+        instance = self.get_object()
+        students = instance.user_set.all()
+        listSerializer = ClassListSerializer(instance={'students': students, 'course': instance},context={'course_id': instance.id})
+        return Response(listSerializer.data)
+

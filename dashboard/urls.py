@@ -7,6 +7,7 @@ router = DefaultRouter()
 router.register('get-lessons', GetLessonsViewSet)
 router.register('get-shopping', GetShoppingViewSet)
 
+
 urlpatterns = [
     path('', Dashboard.as_view(), name='dashboard'),
     path('lessons/', Lessons.as_view(), name="lessons"),
@@ -17,7 +18,9 @@ urlpatterns = [
 #     path('edit_profile/change_password',
 #          change_password, name="change_password"),
     path('shopping/', Shopping.as_view(), name="shopping"),
-    path('lessons/files/<str:code>/', filemanager),
+    path('lessons/files/<str:code>/', FileManager.as_view()),
+    path('lessons/list/<str:code>/', ClassList.as_view(),name="student_list"),
+
 ]
 
 urlpatterns += router.urls
