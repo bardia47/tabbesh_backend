@@ -2,12 +2,11 @@
 <html dir="rtl">
 {% load static %}
 {% load jformat %}
-
+{% load cache %}
+{% load have_role %}
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>{% block title %}{% endblock %}</title>
 
     <!-- CSS files -->
     <link rel="shortcut icon" type="image/png" href="{% static 'home/images/favicon.ico' %}"/>
@@ -26,6 +25,9 @@
 <body>
 <div class="wrapper">
     <!-- Sidebar  -->
+{% cache 10000 sidebar request.user.username %}
+{% block sidebar %}
+
     <nav id="sidebar">
         <!-- Brand name title -->
         <div class="row">
@@ -39,38 +41,43 @@
         <div class="row account-title">
             <!-- Profile picture -->
             <div class="col-md-4">
-                <img src="{{ user.avatar.url }}" alt="تصویر پروفایل">
+                <img src="{{ request.user.avatar.url }}" alt="تصویر پروفایل">
             </div>
+        {% is_teacher request.user as teacher %}
             <!-- Name & Grade -->
             <div class="col-md-8">
                 <div class="row">
                     <div class="col-md-12">
-                        <p class="account-title-name">{{ user.get_full_name }}
+                        <p class="account-title-name">{% if teacher  %}استاد {% endif %}{{ request.user.get_full_name }}
                         <p>
                     </div>
                     <div class="col-md-12">
                         <!-- Give grade title from m2m field grade -->
-                        <p class="account-title-grade">{% for grade in user.grades.all %}{{ grade }}{% endfor %}
+                        <p class="account-title-grade">{% for grade in request.user.grades.all %}{{ grade }}{% endfor %}
                     </div>
                 </div>
             </div>
         </div>
         <!-- Sidebar menus ! block for active menu -->
         <div class="container">
+        {% if not teacher  %}
             <div class="row sidebar-menu {% block dashboard_active %}{% endblock %}">
                 <img src="{% static 'home/images/icons/home.svg' %}" alt="آیکون">
                 <a href="{% url 'dashboard' %}">داشبورد</a>
             </div>
+        {% endif %}
             <hr>
             <div class="row sidebar-menu {% block lesson_active %}{% endblock %}">
                 <img src="{% static 'home/images/icons/book-open.svg' %}" alt="آیکون">
                 <a href="{% url 'lessons' %}">دروس من</a>
             </div>
+        {% if not teacher  %}
             <hr>
             <div class="row sidebar-menu {% block shopping_active %}{% endblock %}">
                 <img src="{% static 'home/images/icons/shopping-cart.svg' %}" alt="آیکون"></img>
                 <a href="{% url 'shopping' %}">خرید درس</a>
             </div>
+        {% endif %}
         </div>
         <!-- Footer of sidebar -->
         <div class="footer">
@@ -85,6 +92,8 @@
             </a>
         </div>
     </nav>
+    {% endblock %}
+    {% endcache %}
 
     <!-- Page content  -->
     <div id="content">

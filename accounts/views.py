@@ -15,6 +15,7 @@ from rest_framework import status
 from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.authtoken.serializers import AuthTokenSerializer
 from django.core.exceptions import ObjectDoesNotExist
+from accounts.enums import RoleCodes
 
 # Create your views here.
 
@@ -97,6 +98,8 @@ class SignIn(APIView):
             auth.login(request, user)
             nextUrl = request.GET.get('next')
             if nextUrl is None:
+                if (user.role.code==RoleCodes.TEACHER.value):
+                    return redirect('lessons')
                 return redirect('dashboard')
             return redirect(nextUrl)
         else:

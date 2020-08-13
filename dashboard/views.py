@@ -5,8 +5,6 @@ from accounts.enums import RoleCodes
 from django.db.models import Q
 from operator import or_
 from functools import reduce
-from django.contrib.auth.decorators import login_required
-from django.contrib.auth.hashers import make_password
 from rest_framework.views import APIView
 from rest_framework.renderers import TemplateHTMLRenderer, JSONRenderer, \
     BrowsableAPIRenderer
@@ -19,7 +17,7 @@ from rest_framework.decorators import api_view,renderer_classes
 from rest_framework import generics
 import base64
 from django.core.files.base import ContentFile
-
+from accounts.utils import  Utils
 # for load or dump jsons
 import json
 
@@ -80,6 +78,7 @@ class EditProfile(APIView):
                 newdict = {'errors': serializer.errors}
                 newdict.update(showSer.data)
                 return Response(newdict, status=status.HTTP_406_NOT_ACCEPTABLE)
+            Utils.cleanMenuCache(request)
             return Response(showSer.data)
 
         if method == 'changePassword':
@@ -114,6 +113,7 @@ class EditProfile(APIView):
                 request.user.avatar = avatar
                 request.user.save()
                 showSer = UserProfileShowSerializer(instance={'grades': grades, 'cities': cities, "user": request.user})
+                Utils.cleanMenuCache(request)
                 return Response(showSer.data)
 
 
@@ -225,7 +225,11 @@ class GetLessonsViewSet(viewsets.ModelViewSet):
          query = Q()
          if self.request.GET.get("lesson"):
              query &= getAllLessons(self.request.GET.get("lesson"))
-         courses = self.request.user.courses.filter(query)
+         if (self.request.user.role.code==RoleCodes.TEACHER.value):
+             query &= Q(teacher__id= self.request.user.id)
+             courses=Course.objects.filter(query)
+         else:
+            courses = self.request.user.courses.filter(query)
          return courses
 
 
@@ -298,15 +302,4 @@ class FileManager(generics.RetrieveAPIView):
         return Response(fileSerializer.data, template_name='dashboard/filemanager.html')
 
 
-class ClassList(generics.RetrieveAPIView):
-    renderer_classes = [BrowsableAPIRenderer, JSONRenderer]
-    queryset = Course.objects.all()
-    serializer_class = FilesSerializer
-    lookup_field = 'code'
-
-    def retrieve(self, request, *args, **kwargs):
-        instance = self.get_object()
-        students = instance.user_set.all()
-        listSerializer = ClassListSerializer(instance={'students': students, 'course': instance},context={'course_id': instance.id})
-        return Response(listSerializer.data)
 

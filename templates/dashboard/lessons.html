@@ -1,6 +1,8 @@
 {% extends 'dashboard/base.html' %}
 {% load static %}
 {% load jformat %}
+{% load have_role %}
+
 <!-- Title block of base.html -->
 {% block title %}دروس من{% endblock %}
 
@@ -13,9 +15,12 @@
 {% block lesson_active %}active-menu{% endblock %}
 <!-- Content of page -->
 {% block content %}
+
     <!-- Course Rows -->
+        {% is_teacher request.user as teacher %}
+
     <input id="have-class" type="hidden" value="{{ have_class }}" >
-    {% if not have_class %}
+    {% if not have_class and not teacher %}
         <div class="container w-100 p-1 text-center" style="font-family: 'Vazir_Bold';">
             <div class="col-md-12 mt-3 mb-3">
                 <img class="m-auto" src="{% static 'home/images/icons/sad-emoji.svg' %}" width="130" height="130">

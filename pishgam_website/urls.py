@@ -30,6 +30,7 @@ urlpatterns = [
     path('signout/', SignOut.as_view() , name='signout'),
     path('dashboard/', include('dashboard.urls')),
     path('payment/', include('zarinpal.urls')),
+    path('report/', include('report.urls')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 handler404 = page_not_found

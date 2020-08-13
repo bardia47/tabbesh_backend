@@ -54,10 +54,10 @@ STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.ManifestStaticFilesSto
 # Application definition
 
 INSTALLED_APPS = [
+    'accounts',
     'rest_framework',
     'rest_framework.authtoken',
     'jalali_date',
-    'accounts',
     'zarinpal',
     'django.contrib.admin',
     'django.contrib.auth',

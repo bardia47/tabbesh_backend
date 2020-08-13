@@ -78,3 +78,6 @@ pip install apscheduler
 
 --> hint: for start scheduler run server with python manage.py runserver --noreload
     because it run app config twice!
+
+
+    pip install python-memcached
