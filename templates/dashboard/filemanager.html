@@ -51,7 +51,7 @@
             {% else %}
             {% for doc in documents %}
             <tr>
-                <th style="font-family:'Yekan-Number'" scope="row">1</th>
+                <th style="font-family:'Vazir_Bold'" scope="row">{{ forloop.counter }}</th>
                 <td>{{doc.title}}</td>
                 <td>{{doc.sender}}</td>
                 <td>{{doc.upload_date_decorated}}</td>
