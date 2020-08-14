@@ -25,7 +25,7 @@
 <body>
 <div class="wrapper">
     <!-- Sidebar  -->
-{% cache 10000 sidebar request.user.username %}
+{% cache 1000 sidebar request.user.username %}
 {% block sidebar %}
 
     <nav id="sidebar">

@@ -98,7 +98,7 @@ class SignIn(APIView):
             auth.login(request, user)
             nextUrl = request.GET.get('next')
             if nextUrl is None:
-                if (user.role.code==RoleCodes.TEACHER.value):
+                if (user.is_teacher()):
                     return redirect('lessons')
                 return redirect('dashboard')
             return redirect(nextUrl)

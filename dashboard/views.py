@@ -225,7 +225,7 @@ class GetLessonsViewSet(viewsets.ModelViewSet):
          query = Q()
          if self.request.GET.get("lesson"):
              query &= getAllLessons(self.request.GET.get("lesson"))
-         if (self.request.user.role.code==RoleCodes.TEACHER.value):
+         if (self.request.user.is_teacher()):
              query &= Q(teacher__id= self.request.user.id)
              courses=Course.objects.filter(query)
          else:
@@ -293,10 +293,11 @@ class FileManager(generics.RetrieveAPIView):
     def retrieve(self, request, *args, **kwargs):
         instance = self.get_object()
         try:
-            request.user.courses.get(id=instance.id)
+            if (not request.user.is_teacher()):
+             request.user.courses.get(id=instance.id)
         except:
-            if request.accepted_renderer.format == 'html':
-                return redirect('/dashboard/shopping/')
+             if request.accepted_renderer.format == 'html':
+                 return redirect('/dashboard/shopping/')
         documents = instance.document_set.all()
         fileSerializer = FilesSerializer(instance={'documents': documents, 'course': instance})
         return Response(fileSerializer.data, template_name='dashboard/filemanager.html')

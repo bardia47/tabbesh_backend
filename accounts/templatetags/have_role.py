@@ -4,4 +4,4 @@ register = template.Library()
 
 @register.simple_tag
 def is_teacher(user):
-    return user.role.code==RoleCodes.TEACHER.value
+    return user.is_teacher()

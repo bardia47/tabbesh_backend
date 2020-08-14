@@ -87,7 +87,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     
     def set_default_avatar(self):
         if not self.avatar :
-            if self.role.code == RoleCodes.TEACHER.value:     
+            if self.is_teacher():
                 self.avatar = "defaults/teacher.png"
             else :
                 self.avatar = "defaults/student.png"
@@ -100,6 +100,9 @@ class User(AbstractBaseUser, PermissionsMixin):
                 return ""
 
     get_student_grade.short_description = 'پایه'
+
+    def is_teacher(self):
+       return self.role.code == RoleCodes.TEACHER.value
 
 
 # Roles Model
