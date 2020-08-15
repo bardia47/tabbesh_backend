@@ -34,29 +34,34 @@
                     </h4>
                 </div>
                 <!-- Cart items add with shopping.js -->
+                <div id="cartListItems"></div>
                 <!-- End cart items -->
             </div>
             <!-- Cart footer section -->
             <div class="card cart-footer">
                 <!-- Cart purchase button -->
-                <div>
-                    <form id="shopping-cart-form" action="{% url 'payment_request' %}" method="post">
-                        {% csrf_token %}
-                        <!-- Total cart items id and price for pass to back-end -->
-                        <input id="totalId" type="hidden" name="total_id" value="">
-                        <input id="totalPrice" type="hidden" name="total_pr" value="">
-                        <input type="submit" class="btn button-purchase" id="payButton" value="پرداخت">
-
-                         <!-- compute discount -->
-                        <input type="text" class="form-control" id="discountCode">
-                         <button class="btn btn-purchase mb-1" id="discountButton">
-                        محاسبه
-                        </button>
-                    </form>
-                </div>
-                <div class="cart-total-price">
-                    مبلغ قابل پرداخت : <b class="total-price">0</b> تومان
-                </div>
+                <form id="shopping-cart-form" action="{% url 'payment_request' %}" method="post">
+                    {% csrf_token %}
+                    <!-- Total cart items id and price for pass to back-end -->
+                    <input id="totalId" type="hidden" name="total_id" value="">
+                    <input id="totalPrice" type="hidden" name="total_pr" value="">
+                    <div class="cart-total-price row px-2">
+                        <div class="col-md-8 d-flex text-sm-center align-items-center mb-2 discount">
+                            <!-- compute discount -->
+                            <label class="mb-0 text-nowrap" for="discountCode">کد تخفیف:</label>
+                            <input type="text" class="form-control mx-2 w-25" id="discountCode" name="code"">
+                            <button type="button" class="btn btn-info mr-auto text-white" id="discountButton">
+                                اعمال کد تخفیف
+                            </button>
+                        </div>
+                        <div class="col-md-4 text-sm-center mb-3">
+                            <p class="mb-0 text-md-right">
+                                مبلغ قابل پرداخت : <b class="total-price">0</b> تومان
+                            </p>
+                        </div>
+                    </div>
+                    <input type="submit" class="btn button-purchase" id="payButton" value="پرداخت">
+                </form>
             </div>
         </div>
         <hr>
@@ -118,26 +123,56 @@
         </div>
 
 
-        <!-- Modal Eror for duplicate course in cart -->
-        <div class="modal fade" id="errorModalForCart" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        <!-- Modal error for duplicate course in cart -->
+        <div class="modal fade" id="errorModal" tabindex="-1" role="dialog" aria-labelledby="duplicateModalLabel"
              aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title text-danger" id="exampleModalLabel" style="font-family: 'Vazir_Bold';">
+                        <h1 class="modal-title text-danger h5"
+                            style="font-family: 'Vazir_Bold';">
                             مشکل
-                            در خرید دوره</h5>
+                            در خرید دوره</h1>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
                     <div class="modal-body">
                         <strong>
-                            <p id="modal-body"></p>
+                            <p class="modal-body-p"></p>
                         </strong>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-danger w-100" data-dismiss="modal">فهمیدم!</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal discount success -->
+        <div class="modal fade" id="discountModal" tabindex="-1" role="dialog"
+             aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-body text-center discount-modal">
+                        <img src="{% static "dashboard/images/icons/discount.svg" %}" width="120px" height="120px">
+                        <p class="mt-3">
+                            تخفیف با موفقیت اعمال شد
+                        </p>
+                        <p>
+                            به خاطرش
+                            <span id="profitPrice"></span>
+                            تومن سود کردی :)
+                        </p>
+                        <p>
+                            مبلغ قابل پرداخت:
+                            <span id="discountPrice"></span>
+                            تومان
+                        </p>
+                    </div>
+                    <div class="modal-footer">
+                        <button id="modalDiscountButton" type="button" class="btn button-purchase w-100" data-dismiss="modal">بریم پرداختش کنیم
+                        </button>
                     </div>
                 </div>
             </div>

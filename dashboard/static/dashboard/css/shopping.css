@@ -69,28 +69,6 @@
     text-align: center
 }
 
-.cart-footer button {
-    background-color: #649d66;
-    border: none;
-    color: white;
-    font-size: 16px;
-    cursor: pointer;
-    height: 50px;
-    text-align: center;
-}
-
-.cart-footer button:focus,
-.cart-footer button:hover {
-    background-color: #06623b;
-    border: none;
-    color: white;
-    font-size: 16px;
-    cursor: pointer;
-    height: 50px;
-    text-align: center;
-    box-shadow: none;
-}
-
 .cart-total-price {
     font-family: 'Vazir_light';
     margin-top: 5px;
@@ -99,6 +77,7 @@
 .button-purchase {
     background-color: #649d66;
     color: #FFFFFF;
+    height: 50px;
 }
 
 .button-purchase:hover {
@@ -107,10 +86,11 @@
 }
 
 /* Shopping card with filter CSS */
-.shopping-cards{
+.shopping-cards {
     text-align: center;
     min-height: 200px;
 }
+
 .shopping-search-title h1 {
     text-align: center;
     padding: 5px;
@@ -319,12 +299,12 @@
     margin-right: 5px;
 }
 
-.add-to-cart-button{
+.add-to-cart-button {
     background-color: #649d66;
     color: #FFFFFF;
 }
 
-.add-to-cart-button:hover{
+.add-to-cart-button:hover {
     background-color: #06623b;
     color: #FFFFFF;
 }
@@ -470,3 +450,22 @@
     height: 50px;
 }
 
+/* discount modal field */
+.discount-modal p {
+    font-family: "Vazir_Medium", sans-serif;
+    font-size: 18px;
+}
+
+/* responsive mode for discount */
+@media (max-width: 576px) {
+    .discount {
+        flex-direction: column !important;
+    }
+    #discountCode {
+        width: 60% !important;
+    }
+    #discountButton {
+        margin-left: 0px !important;
+        margin-top: 10px;
+    }
+}
