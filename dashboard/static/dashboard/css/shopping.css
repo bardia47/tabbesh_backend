@@ -123,6 +123,7 @@
 /* Shopping Cards CSS */
 
 .course-card {
+    text-align: right !important;
     font-size: 1em;
     overflow: hidden;
     padding: 0;

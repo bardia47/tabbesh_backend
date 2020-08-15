@@ -44,7 +44,7 @@ function addToCartClicked() {
     let courseCard = $(this).parents(".course-card").first();
     let id = courseCard.find(".course-id").val();
     let title = courseCard.find(".title").text();
-    let price = courseCard.find(".price").text();
+    let price = courseCard.find("#price").val();
     let teacher = courseCard.find(".teacher-name").text();
     let imageSrc = courseCard.find(".card-img-top").attr('src');
     let status = false;
@@ -161,7 +161,7 @@ $('#discountButton').click(function () {
                     $("#discountPrice").text(data.amount);
                     // disable close modal when click outside
                     $("#discountModal").modal({backdrop: 'static', keyboard: false}).modal();
-                    let discountPriceTemplate = `<span style="color: red;text-decoration: line-through">${oldTotalPrice.val()}</span> ${data.amount}`
+                    let discountPriceTemplate = `<span style="color: #e8505b;text-decoration: line-through">${oldTotalPrice.val()}</span> ${data.amount}`
                     oldTotalPrice.val(data.amount);
                     $(".total-price").empty().append(discountPriceTemplate)
                 } else {

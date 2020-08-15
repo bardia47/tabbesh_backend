@@ -75,15 +75,28 @@ function renderShoppingCards(courseCards) {
         // parse Date to ISO date format and use persianDate jQuery
         let startDateCourse = new persianDate(Date.parse(courseCard.start_date));
         let endDateCourse = new persianDate(Date.parse(courseCard.end_date));
+        let coursePriceTemplate;
+        let discountPrice;
         // price check -- for free courses
         if (courseCard.amount <= 0) {
             coursePriceTemplate = `رايگان!`
         } else {
-            coursePriceTemplate = `
-            ${courseCard.amount}
-            <span class="currency">تومان</span>
-            `
+            // check course price have discount or not
+            if (courseCard.discount == null) {
+                coursePriceTemplate = `
+                ${courseCard.amount}
+                <span class="currency">تومان</span>
+                `
+            } else {
+                discountPrice = (parseFloat(courseCard.amount) * (100 - parseInt(courseCard.discount.percent))) / 100;
+                coursePriceTemplate = `
+                <span class="price" style="color: #e8505b;text-decoration: line-through">${courseCard.amount}</span>
+                ${discountPrice}
+                <span class="currency">تومان</span>
+                `
+            }
         }
+        // shopping card template
         let shoppingCardTemplate = `
             <div class="col-md-4 mb-3">
                <div class="card course-card h-100">
@@ -138,10 +151,16 @@ function renderShoppingCards(courseCards) {
                      </div>
                      <!-- Course price -->
                      <div class="course-price">
+                        <p style="text-align: center ; color: #e8505b">
+                        <img src="/static/dashboard/images/icons/course-discount.svg" width="25px" height="25px">
+                         با تخفیف 
+                         ${courseCard.discount.title}
+                        </p>
                         <p>
                            <img src="/static/home/images/icons/price.svg" alt="price">
                            قیمت:
                            <span class="price">${coursePriceTemplate}</span>
+                           <input id="price" type="text" value=" ${discountPrice} تومان" hidden>
                         </p>
                      </div>
                   </div>
