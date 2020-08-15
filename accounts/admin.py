@@ -360,6 +360,10 @@ class DiscountForm(forms.ModelForm):
         model = Discount
         fields = ('title', 'code', 'percent', 'start_date', 'end_date')
 
+    def __init__(self, *args, **kwargs):
+            super(DiscountForm, self).__init__(*args, **kwargs)
+            self.fields['code'].required = True
+
 class DiscountAdmin(ModelAdminJalaliMixin, admin.ModelAdmin):
     list_display = ['code', 'title','percent', 'get_start_jalali', 'get_end_jalali']
     search_fields = ['code', 'title']
@@ -367,6 +371,9 @@ class DiscountAdmin(ModelAdminJalaliMixin, admin.ModelAdmin):
     inlines = [
         CourseDiscountInline
     ]
+
+    def get_queryset(self, request):
+        return Discount.objects.filter(code__isnull=False)
 
     def get_start_jalali(self, obj):
         return datetime2jalali(obj.start_date).strftime('%y/%m/%d ')
@@ -381,6 +388,23 @@ class DiscountAdmin(ModelAdminJalaliMixin, admin.ModelAdmin):
     get_end_jalali.short_description = 'تاریخ پایان'
     get_end_jalali.admin_order_field = 'end_date'
 
+class DiscountWithoutCode(Discount):
+    class Meta:
+        proxy = True
+        verbose_name = 'تخفیف بدون کد'
+        verbose_name_plural = 'تخفیف بدون کد'
+
+class DiscountWithoutCodeForm(forms.ModelForm):
+    class Meta:
+        model = DiscountWithoutCode
+        fields = ('title', 'percent', 'start_date', 'end_date')
+
+class DiscountWithoutCodeAdmin(DiscountAdmin):
+    form= DiscountWithoutCodeForm
+
+    def get_queryset(self, request):
+        return Discount.objects.filter(code__isnull=True)
+
 admin.site.register(User, UserAdmin)
 admin.site.register(TeacherUser, TeacherAdmin)
 admin.site.register(City, CityAdmin)
@@ -392,4 +416,5 @@ admin.site.unregister(Group)
 admin.site.register(Document, DocumentAdmin)
 admin.site.register(Pay_History, PayHistoryAdmin)
 admin.site.register(Discount, DiscountAdmin)
+admin.site.register(DiscountWithoutCode, DiscountWithoutCodeAdmin)
 
