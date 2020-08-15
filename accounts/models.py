@@ -333,6 +333,8 @@ class Discount(models.Model):
         ordering = ['-start_date']
         verbose_name_plural = "تخفیف"
         verbose_name = "تخفیف"
+    def __str__(self):
+        return self.title
 
     def clean_fields(self, exclude=None):
         super().clean_fields(exclude=exclude)

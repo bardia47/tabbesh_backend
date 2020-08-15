@@ -13,6 +13,7 @@ import datetime
 from django.urls import reverse
 from django.utils.safestring import mark_safe
 from django import forms
+from django.forms.models import BaseInlineFormSet
 
 class CourseInline(admin.StackedInline):
     model = User.courses.through
@@ -187,10 +188,29 @@ class CourseCalendarInline(TabularInlineJalaliMixin, admin.TabularInline):
     model = Course_Calendar
     max_num = 3
 
+class DiscountWithoutCodeInlineFormSet(admin.TabularInline):
+    model = Course.discount_set.through
+    max_num = 1
+
+    verbose_name_plural = "تخفیف بدون کد"
+    verbose_name =  "تخفیف بدون کد"
+
+    def get_queryset(self, request):
+        qs = super(DiscountWithoutCodeInlineFormSet, self).get_queryset(request)
+        return qs.filter(discount__code__isnull=True)
+
+    def formfield_for_foreignkey(self, db_field, request=None, **kwargs):
+        field = super(DiscountWithoutCodeInlineFormSet, self).formfield_for_foreignkey(
+            db_field, request, **kwargs)
+        if db_field.name == 'discount':
+            field.limit_choices_to = {'code__isnull': "True"}
+        return field
+
 
 class CourseAdmin(ModelAdminJalaliMixin, admin.ModelAdmin):
     inlines = [
         CourseCalendarInline,
+        DiscountWithoutCodeInlineFormSet
     ]
     list_display = ['code', 'title', 'get_start_jalali', 'get_end_jalali', 'teacher_full_name','student_link']
     search_fields = ['code', 'title']
