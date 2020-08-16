@@ -5,32 +5,31 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="sign in page">
-    <meta name="author" content="taabesh website">
+    <meta name="description" content="Sign in page">
+    <meta name="author" content="Taabesh website">
     <title>ورود</title>
     <!-- favicon !-->
     <link rel="shortcut icon" type="image/png" href="{% static 'home/images/favicon.ico' %}"/>
     <!-- CSS Files -->
     <link rel="stylesheet" href="https://cdn.rtlcss.com/bootstrap/v4.2.1/css/bootstrap.min.css"
           integrity="sha384-vus3nQHTD+5mpDiZ4rkEPlnkcyTP+49BhJ4wJeJunw06ZAp+wzzeBPUXr42fi8If" crossorigin="anonymous">
-    <script src="{% static 'dashboard/js/jquery-3.3.1.slim.min.js' %}"></script>
     <link rel="stylesheet" href="{% static 'signin/css/signin.css' %}">
     <link rel="stylesheet" href="{% static 'home/css/fonts.css' %}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css">
 </head>
 
-<body>
-<form id="sign-in-form" class="sign-in-form" method="POST" action="{% url 'signin' %}">
+<body class="text-center">
+<form id="sign-in-form"  class="sign-in-form"  method="POST" action="{{ request.get_full_path }}" enctype='application/json'>
     {% csrf_token %}
     <h1 class="title">ورود</h1>
     <div class="container">
-        <!-- phone number or username input -->
+        <!-- Email OR Username Input -->
         <div class="row" style="margin:10px">
             <label class="p" for="username"> نام کاربری یا شماره تلفن</label>
             <input type="text" id="username" name="username" class="form-control"
                    placeholder="شماره تلفن یا نام کاربری خود را وارد کنید ..." required autofocus>
         </div>
-        <!-- password input -->
+        <!-- Password Input -->
         <div class="row" style="margin:10px; margin-bottom:20px">
             <label class="p" for="password">رمز عبور</label>
             <input type="password" id="password" name="password" class="form-control"
@@ -40,26 +39,71 @@
     <button id="submit" class="btn btn-lg btn-warning btn-block sign-in-button" type="submit">ورود</button>
     <p class="footer-p mt-2 mb-3"> حساب کاربری ندارید؟ <span><a href="{% url 'signup' %}">ثبت نام کنید</a></span></p>
     {% if error %}
-        <small class="form-text mb-1 mt-n1 mt-n3" style="font-family: 'Vazir_Bold'; color: #9d0b0b;">
+        <small class="form-text mb-1 mt-n2" style="font-family: 'Vazir_Bold'; color: #9d0b0b;">
             <i class="fas fa-exclamation-triangle"></i>
             {{ error }}
         </small>
         <p class="footer-p-forget"><span><a href="{% url 'signup' %}">در صورت فراموشی رمز کلیک کنید</a></span></p>
     {% endif %}
-    {% if signup_success %}
+    {% if success %}
         <small class="form-text mb-1 mt-n2" style="font-family: 'Vazir_Bold'; color: white;">
             <i class="fas fa-info-circle"></i>
-            {{ signup_success }}
+            {{ success }}
             <br>
             <i class="fas fa-envelope"></i>
             رمز عبور به شماره تلفن پیامک داده شد
         </small>
+    {% else %}
+        <p id="forgetPasswordTag" class="footer-p-forget mt-1">در صورت فراموشی رمز کلیک کنید</p>
     {% endif %}
 </form>
+
+
+<!-- modal form for forget password !-->
+<div class="modal fade" id="forgetPasswordModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <!-- form for submit forget password !-->
+        <form method="POST" action="{% url 'forget_password' %}" >
+             {% csrf_token %}
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title text-danger" id="exampleModalLabel" style="font-family: 'Vazir_Bold';">
+                        فراموشی رمز
+                        عبور</h5>
+                    <button type="submit" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="phoneNumber" class="form-text text-nowrap mt-2 text-md-left">شماره تلفن خود را وارد کنید</label>
+                        <input id="phoneNumber" name="phone_number"type="text" class="form-control w-100" pattern="[9][0-9]{9}" required>
+                        <small class="form-text text-nowrap mt-2 text-md-left">
+                            <i class="fas fa-info-circle"></i>
+                            شماره تلفن را بدون صفر وارد کنید .
+                        </small>
+                        <small class="form-text text-nowrap mt-2 text-md-left">
+                            <i class="fas fa-info-circle"></i>
+                            رمز عبور پیامک داده می شود.
+                        </small>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-danger w-100">دریافت رمز عبور</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
 {% block JSfile %}
-    <script src="https://code.jquery.com/jquery-3.4.1.js"
-            integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU=" crossorigin="anonymous"></script>
-    <script src="{% static 'home/js/base.js' %}"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+            integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+            crossorigin="anonymous"></script>
+    <script src="https://cdn.rtlcss.com/bootstrap/v4.2.1/js/bootstrap.min.js"
+            integrity="sha384-a9xOd0rz8w0J8zqj1qJic7GPFfyMfoiuDjC9rqXlVOcGO/dmRqzMn34gZYDTel8k"
+            crossorigin="anonymous"></script>
     <script src="{% static 'signin/js/signin.js' %}"></script>
     <!-- raychat !-->
     <script src="{% static 'home/js/raychat.js' %}"></script>

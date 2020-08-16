@@ -16,22 +16,24 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from home.views import home, page_not_found
-from accounts.views import signup, signin, signout
+from accounts.views import *
 from django.conf import settings
 from django.conf.urls.static import static
-
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', home, name='home'),
     path('404-page-not-found/', page_not_found, name="page-not-found"),
-    path('signup/', signup, name='signup'),
-    path('signin/', signin, name='signin'),
-    path('signout/', signout, name='signout'),
+    path('signup/', SignUp.as_view(), name="signup"),
+    path('signin/', SignIn.as_view(), name='signin'),
+    path('signin/forget-password/', ForgetPassword.as_view(), name='forget_password'),
+    path('api/token/', MyTokenObtainPairView.as_view(), name='api_token_auth'),
+    path('signout/', SignOut.as_view() , name='signout'),
     path('dashboard/', include('dashboard.urls')),
     path('payment/', include('zarinpal.urls')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
-handler404 = 'home.views.page_not_found'
+handler404 = page_not_found
+#handler403 = sign_up_required
 admin.site.site_header = "صفحه ادمین"
 admin.site.site_title = "صفحه ادمین"
 admin.site.index_title = "صفحه ادمین"

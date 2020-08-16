@@ -67,4 +67,14 @@ pip install Pillow
 
 pip install zeep
 pip install soap
+
 راه اندازی درگاه بانکی زرین پال
+pip install html-json-forms
+pip install djangorestframework-simplejwt
+pip install django-filter
+
+Advanced Python Scheduler --> document : https://apscheduler.readthedocs.io/en/stable/
+pip install apscheduler
+
+--> hint: for start scheduler run server with python manage.py runserver --noreload
+    because it run app config twice!

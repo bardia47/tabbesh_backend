@@ -1,13 +1,13 @@
 body {
-  display: -ms-flexbox;
-  display: flex;
-  -ms-flex-align: center;
-  align-items: center;
-  padding-top: 100px;
-  padding-bottom: 40px;
-  background: url('../images/sign_in_poster.jpg') no-repeat center center fixed;
-  background-size: cover;
-  height: 100%;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-align: center;
+    align-items: center;
+    padding-top: 100px;
+    padding-bottom: 40px;
+    background: url('../images/sign_in_poster.jpg') no-repeat center center fixed;
+    background-size: cover;
+    height: 100%;
 }
 
 .p , p{
@@ -18,9 +18,9 @@ body {
 }
 
 a {
-  color: #FFDE03;
-  font-size: 18px;
-  text-decoration: none;
+    color: #FFDE03;
+    font-size: 18px;
+    text-decoration: none;
 }
 
 .sign-in-form {
@@ -69,9 +69,9 @@ a {
 .btn-primary:focus,
 .btn-primary:active,
 .btn-primary.active,
-.open>.dropdown-toggle.btn-primary {
-  color: #000000;
-  background-color: #E4E4E4;
+.open > .dropdown-toggle.btn-primary {
+    color: #000000;
+    background-color: #E4E4E4;
 }
 
 /* Font of place holder of inputs */
@@ -106,6 +106,8 @@ a {
 
 .footer-p-forget {
   font-family: 'Vazir_Medium', sans-serif;
+  cursor: pointer;
+  font-size: 12px;
   margin-top: -5px;
 }
 
@@ -113,4 +115,27 @@ a {
   font-family: 'Vazir_Light', sans-serif;
   font-size: 12px;
   color: #263f44;
+}
+
+/* centering modal with ghost element trick
+   --> read this article : https://css-tricks.com/centering-in-the-unknown/ */
+
+.modal {
+    text-align: center;
+    font-family: 'Vazir_Light' !important;
+}
+
+@media screen and (min-width: 768px) {
+    .modal:before {
+        display: inline-block;
+        vertical-align: middle;
+        content: " ";
+        height: 100%;
+    }
+}
+
+.modal-dialog {
+    display: inline-block;
+    text-align: left;
+    vertical-align: middle;
 }
