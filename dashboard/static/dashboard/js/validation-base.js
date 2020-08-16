@@ -10,6 +10,16 @@ function persianToEnglishNumbers(convertedNumbers) {
     return convertedNumbers;
 }
 
+// Check valid iranian national code
+function isValidIranianNationalCode(input) {
+    if (!/^\d{10}$/.test(input)) return false;
+    let check = parseInt(input[9]);
+    let sum = 0;
+    for (let i = 0; i < 9; ++i) sum += parseInt(input[i]) * (10 - i);
+    sum %= 11;
+    return (sum < 2 && check == sum) || (sum >= 2 && check + sum == 11);
+}
+
 
 document.addEventListener("DOMContentLoaded", function () {
     let elements = document.getElementsByTagName("INPUT");
