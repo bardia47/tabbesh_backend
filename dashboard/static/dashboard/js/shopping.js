@@ -76,7 +76,9 @@ function renderShoppingCards(courseCards) {
         let startDateCourse = new persianDate(Date.parse(courseCard.start_date));
         let endDateCourse = new persianDate(Date.parse(courseCard.end_date));
         let coursePriceTemplate;
-        let discountPrice;
+        // default is price without discount
+        let discountPrice = parseFloat(courseCard.amount);
+        let discountTitleTemplate = ``;
         // price check -- for free courses
         if (courseCard.amount <= 0) {
             coursePriceTemplate = `رايگان!`
@@ -88,7 +90,16 @@ function renderShoppingCards(courseCards) {
                 <span class="currency">تومان</span>
                 `
             } else {
+                // add discount title if course have discount
+                discountTitleTemplate = `
+                <p style="text-align: center ; color: #e8505b">
+                    <img src="/static/dashboard/images/icons/course-discount.svg" width="25px" height="25px">
+                 با تخفیف   
+                    ${courseCard.discount.title}
+                </p>
+                `;
                 discountPrice = (parseFloat(courseCard.amount) * (100 - parseInt(courseCard.discount.percent))) / 100;
+                console.log(discountPrice)
                 coursePriceTemplate = `
                 <span class="price" style="color: #e8505b;text-decoration: line-through">${courseCard.amount}</span>
                 ${discountPrice}
@@ -126,6 +137,7 @@ function renderShoppingCards(courseCards) {
                            ${startDateCourse.format("dddd")}
                            ${startDateCourse.format("D")}
                            ${startDateCourse.format("MMMM")}
+                           ${startDateCourse.format("YYYY")}
                            </span>
                         </p>
                      </div>
@@ -138,6 +150,7 @@ function renderShoppingCards(courseCards) {
                            ${endDateCourse.format("dddd")}
                            ${endDateCourse.format("D")}
                            ${endDateCourse.format("MMMM")}
+                           ${endDateCourse.format("YYYY")}
                            </span>
                         </p>
                      </div>
@@ -151,11 +164,7 @@ function renderShoppingCards(courseCards) {
                      </div>
                      <!-- Course price -->
                      <div class="course-price">
-                        <p style="text-align: center ; color: #e8505b">
-                        <img src="/static/dashboard/images/icons/course-discount.svg" width="25px" height="25px">
-                         با تخفیف 
-                         ${courseCard.discount.title}
-                        </p>
+                        ${discountTitleTemplate}
                         <p>
                            <img src="/static/home/images/icons/price.svg" alt="price">
                            قیمت:

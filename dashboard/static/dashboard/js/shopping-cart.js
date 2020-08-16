@@ -45,6 +45,7 @@ function addToCartClicked() {
     let id = courseCard.find(".course-id").val();
     let title = courseCard.find(".title").text();
     let price = courseCard.find("#price").val();
+    if (parseFloat(price) === 0) price = "رايگان!";
     let teacher = courseCard.find(".teacher-name").text();
     let imageSrc = courseCard.find(".card-img-top").attr('src');
     let status = false;
