@@ -157,9 +157,13 @@ class UserSaveProfileSerializer(UserProfileSerializer):
                   'last_name', 'username', 'email', 'gender', 'national_code',
                   'grades', 'city', 'avatar')
 
-    # for get method
+    def validate_username(self, value):
+        user = User.objects.filter(Q(username=value.lower()))
+        if user.exists():
+            raise serializers.ValidationError('کاربر با این نام کاربری از قبل موجود است.')
+        return value.lower()
 
-
+# for get method
 class UserProfileShowSerializer(serializers.Serializer):
     user = UserProfileSerializer()
     grades = GradeSerializer(many=True)

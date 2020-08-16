@@ -15,6 +15,7 @@ from rest_framework import status
 from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.authtoken.serializers import AuthTokenSerializer
 from django.core.exceptions import ObjectDoesNotExist
+from rest_framework import exceptions
 
 
 # Create your views here.
@@ -93,8 +94,9 @@ class SignIn(APIView):
             user = auth.authenticate(
                 username=user1.username, password=request.data['password'])
         else:
+            username=request.data['username'].lower()
             user = auth.authenticate(
-                username=request.data['username'], password=request.data['password'])
+                username=username, password=request.data['password'])
         if user is not None:
             auth.login(request, user)
             nextUrl = request.GET.get('next')
