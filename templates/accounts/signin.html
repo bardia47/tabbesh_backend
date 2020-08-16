@@ -19,7 +19,7 @@
 </head>
 
 <body class="text-center">
-<form id="sign-in-form"  class="sign-in-form"  method="POST" action="{{ request.get_full_path }}" enctype='application/json'>
+<form id="sign-in-form"  class="sign-in-form"  method="POST" action="{% url 'signin' %}{% if request.GET.next %}?next={{ request.GET.next }}{% endif %}" enctype='application/json'>
     {% csrf_token %}
     <h1 class="title">ورود</h1>
     <div class="container">

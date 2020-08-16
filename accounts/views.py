@@ -61,8 +61,8 @@ class ForgetPassword(APIView):
             user1 = User.objects.get(phone_number=request.data['phone_number'])
             to = "0" + request.data['phone_number']
             randPass = random.randint(10000000, 99999999)
-            text = Sms.signupText.value.replace('{}', str(randPass))
-            sendSms = SmsWebServices.send_sms(to, text)
+            text = str(randPass)
+            sendSms = SmsWebServices.send_sms(to, text, Sms.signupBodyId.value)
             if sendSms is not None:
                 error = sendSms
         except User.DoesNotExist:

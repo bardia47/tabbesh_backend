@@ -188,7 +188,7 @@ class CourseCalendarInline(TabularInlineJalaliMixin, admin.TabularInline):
     model = Course_Calendar
     max_num = 3
 
-class DiscountWithoutCodeInlineFormSet(admin.TabularInline):
+class DiscountWithoutCodeInline(admin.TabularInline):
     model = Course.discount_set.through
     max_num = 1
 
@@ -196,11 +196,11 @@ class DiscountWithoutCodeInlineFormSet(admin.TabularInline):
     verbose_name =  "تخفیف بدون کد"
 
     def get_queryset(self, request):
-        qs = super(DiscountWithoutCodeInlineFormSet, self).get_queryset(request)
+        qs = super(DiscountWithoutCodeInline, self).get_queryset(request)
         return qs.filter(discount__code__isnull=True)
 
     def formfield_for_foreignkey(self, db_field, request=None, **kwargs):
-        field = super(DiscountWithoutCodeInlineFormSet, self).formfield_for_foreignkey(
+        field = super(DiscountWithoutCodeInline, self).formfield_for_foreignkey(
             db_field, request, **kwargs)
         if db_field.name == 'discount':
             field.limit_choices_to = {'code__isnull': "True"}
@@ -210,7 +210,7 @@ class DiscountWithoutCodeInlineFormSet(admin.TabularInline):
 class CourseAdmin(ModelAdminJalaliMixin, admin.ModelAdmin):
     inlines = [
         CourseCalendarInline,
-        DiscountWithoutCodeInlineFormSet
+        DiscountWithoutCodeInline
     ]
     list_display = ['code', 'title', 'get_start_jalali', 'get_end_jalali', 'teacher_full_name','student_link']
     search_fields = ['code', 'title']
@@ -342,25 +342,23 @@ class PayHistoryAdmin(admin.ModelAdmin):
 
 
 
-class CourseDiscountFormSetInline(forms.models.BaseInlineFormSet):
+class CourseDiscountFormSet(forms.models.BaseInlineFormSet):
     def clean(self):
         count = 0
         for form in self.forms:
-            if form.cleaned_data and not form.cleaned_data.get('DELETE', False):
+               if not form.errors and form.is_valid and  form.cleaned_data and not form.cleaned_data.get('DELETE') :
                     discount_id=form.cleaned_data['discount'].id
-                    count=count+1
                     discount = Discount.objects.filter(courses__id=form.cleaned_data['course'].id,code__isnull=True ).exclude(id=discount_id)
+                    count = count + 1
                     if discount:
                         raise forms.ValidationError("درس " + form.cleaned_data['course'].title + " دارای تخفیف میباشند")
-
         if count>0:
             discount = Discount.objects.filter(courses=None , code__isnull=True).exclude(id=discount_id)
             if discount:
                 raise forms.ValidationError("تمامی دروس دارای تخفیف میباشند")
-        return self.cleaned_data
 
 class CourseDiscountInline(TabularInlineJalaliMixin,admin.TabularInline):
-    formset = CourseDiscountFormSetInline
+    formset = CourseDiscountFormSet
     model = Discount.courses.through
     verbose_name_plural = "دروس مشمول تخفیف(در صورت خالی بودن تمام دروس شامل تخفیف میشوند)"
     verbose_name = "دروس مشمول تخفیف"
