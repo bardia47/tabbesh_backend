@@ -1,6 +1,7 @@
 <!doctype html>
 <html lang="en" dir="rtl">
 {% load static %}
+{% load rest_framework %}
 
 <head>
     <meta charset="utf-8">
@@ -8,146 +9,160 @@
     <meta name="description" content="Sign up page">
     <meta name="author" content="Taabesh website">
     <title>ثبت نام</title>
-    <!-- favicon !-->
-    <link rel="shortcut icon" type="image/png" href="{% static 'home/images/favicon.ico' %}"/>
     <!-- CSS Files -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css" rel="stylesheet">
     <!--load all styles -->
     <link rel="stylesheet" href="https://cdn.rtlcss.com/bootstrap/v4.2.1/css/bootstrap.min.css"
-          integrity="sha384-vus3nQHTD+5mpDiZ4rkEPlnkcyTP+49BhJ4wJeJunw06ZAp+wzzeBPUXr42fi8If" crossorigin="anonymous">
+        integrity="sha384-vus3nQHTD+5mpDiZ4rkEPlnkcyTP+49BhJ4wJeJunw06ZAp+wzzeBPUXr42fi8If" crossorigin="anonymous">
     <link rel="stylesheet" href="{% static 'signup/css/signup.css' %}">
     <link rel="stylesheet" href="{% static 'home/css/fonts.css' %}">
 </head>
 
 <body class="text-center">
-<!-- Form of sing up page -->
-<form id="form-sign-up" class="form-signup" method="POST" action="{% url 'signup' %}">
-    {% csrf_token %}
-    <!-- Content of sign up page -->
-    <div class="container mt-3">
-        <!-- Header of sign up -->
-        <div class="row mb-4">
-            <div class="col-md-4">
-                <img class="avatar" src="{% static 'signup/images/avatar.png' %}">
+    <!-- Form of sing up page -->
+    <form class="form-signup" method="POST" action="{% url 'signup' %}" enctype='application/json'>
+        {% csrf_token %}
+        <!-- Content of sign up page -->
+        <div class="container mt-3">
+            <!-- Header of sign up -->
+            <div class="row mb-4">
+                <div class="col-md-4">
+                    <img class="avatar" src="{% static 'signup/images/avatar.png' %}"> </img>
+                </div>
+                <div class="col-md-8">
+                    <h1 class="title">ثبت نام</h1>
+                </div>
             </div>
-            <div class="col-md-8">
-                <h1 class="title">ثبت نام</h1>
-            </div>
-        </div>
-        <!-- Name & Gender field -->
-        <div class="row mb-2">
-            <!-- Name field -->
-            <div class="field-label col-md-2">
-                <label for="first-name">نام</label>
-            </div>
-            <div class="col-md-4">
-                <input type="text" id="first-name" name="first_name" required>
-                <small id="first-name-check-alert" class="form-text text-nowrap mt-2 text-md-left ml-3"
-                       style="display: none;">
-                    <i class="fas fa-exclamation-triangle"></i>
-                    تنها حروف فارسی مجاز است.
-                </small>
-            </div>
-            <!-- Gender field -->
-            <div class="col-md-6">
-                <div class="row">
-                    <div class="col-md-4 field-label">
-                        <label>جنسیت</label>
-                    </div>
-                    <!-- Radio buttons -->
-                    <div class="col-md-8">
-                        <div class="row">
-                            <div class="col-md-6 col-sm-6 custom-radio custom-control-inline">
-                                <span style="color: #fff;"> پسر </span>
-                                <input type="radio" class="custom-control-input" id="gender_boy" name="gender"
-                                       value="True" checked="checked">
-                                <label class="custom-control-label yellow " for="gender_boy"></label>
-                            </div>
-                            <div class="col-md-6 col-sm-6 custom-radio custom-control-inline">
-                                <span style="color: #fff;"> دختر </span>
-                                <input type="radio" class="custom-control-input" id="gender_girl" name="gender"
-                                       value="False">
-                                <label class="custom-control-label yellow" for="gender_girl"></label>
+            <!-- Name & Gender field -->
+            <div class="row mb-2">
+                <!-- Name field -->
+                <div class="field-label col-md-2">
+                    <label for="first_name">نام</label>
+                </div>
+                <div class="col-md-4">
+                    <input type="text" id="first_name" name="first_name"  value="{{ serializer.data.first_name }}"required>
+                    <small id="firstname-check-alert" class="form-text text-nowrap mt-2 text-md-left ml-3"
+                        style="display: none;">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        تنها حروف فارسی مجاز است.
+                    </small>
+                </div>
+                <!-- Gender field -->
+                <div class="col-md-6">
+                    <div class="row">
+                        <div class="col-md-4 field-label">
+                            <label>جنسیت</label>
+                        </div>
+                        <!-- Radio buttons -->
+                        <div class="col-md-8">
+                            <div class="row">
+                                <div class="col-md-6 col-sm-6 custom-radio custom-control-inline">
+                                    <span style="color: #fff;"> پسر </span>
+                                    <input type="radio" class="custom-control-input" id="gender_boy" name="gender"
+                                        value="True" checked="checked">
+                                    <label class="custom-control-label yellow " for="gender_boy"></label>
+                                </div>
+                                <div class="col-md-6 col-sm-6 custom-radio custom-control-inline">
+                                    <span style="color: #fff;"> دختر </span>
+                                    <input type="radio" class="custom-control-input" id="gender_girl" name="gender"
+                                        value="False">
+                                    <label class="custom-control-label yellow" for="gender_girl"></label>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-        <!-- Last name field -->
-        <div class="row mb-2">
-            <div class="col-md-2 field-label">
-                <label for="last-name">نام خانوادگی</label>
+            <!-- Last name field -->
+            <div class="row mb-2">
+                <div class="col-md-2 field-label">
+                    <label for="last-name">نام خانوادگی</label>
+                </div>
+                <div class="col-md-4">
+                    <input type="text" id="last-name" name="last_name"  value="{{ serializer.data.last_name }}" required>
+                    <small id="last-name-check-alert" class="form-text text-nowrap mt-2 text-md-left ml-3"
+                        style="display: none;">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        تنها حروف فارسی مجاز است.
+                    </small>
+                </div>
             </div>
-            <div class="col-md-4">
-                <input type="text" id="last-name" name="last_name" required>
-                <small id="last-name-check-alert" class="form-text text-nowrap mt-2 text-md-left ml-3"
-                       style="display: none;">
-                    <i class="fas fa-exclamation-triangle"></i>
-                    تنها حروف فارسی مجاز است.
-                </small>
+            <!-- Username field -->
+            <div class="row mb-2">
+                <div class="col-md-2 field-label">
+                    <label for="username">نام کاربری</label>
+                </div>
+                <div class="col-md-4">
+                    <input type="text" id="username" name="username"  value="{{ serializer.data.username }}" required>
+                    <small id="username-check-alert" class="form-text text-nowrap mt-2 text-md-left ml-3"
+                        style="display: none;">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        نام کاربری تنها باید شامل حروف و اعداد انگلیسی باشد.
+                    </small>
+                </div>
             </div>
-        </div>
-        <!-- Username field -->
-        <div class="row mb-2">
-            <div class="col-md-2 field-label">
-                <label for="username">نام کاربری</label>
+            <!-- Grade field -->
+            <div class="row mb-2">
+                <div class="col-md-2 field-label">
+                    <label for="grade">پایه</label>
+                </div>
+                <div class="col-md-4">
+                    <select data-placeholder="پایه تحصیلی" name="grades[0]" class="grade-choicen" tabindex="5" required>
+                        <option value="">پایه تحصیلی</option>
+                        {% for element in grades %}
+                        <option value="{{ element.id }}" {% if element.id == grades0|add:"0" %} selected {% endif %}>{{ element.title }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
             </div>
-            <div class="col-md-4">
-                <input type="text" id="username" name="username" required>
-                <small id="username-check-alert" class="form-text text-nowrap mt-2 text-md-left ml-3"
-                       style="display: none;">
-                    <i class="fas fa-exclamation-triangle"></i>
-                    نام کاربری تنها باید شامل حروف و اعداد انگلیسی باشد.
-                </small>
+                        <!-- City field -->
+            <div class="row mb-2">
+                <div class="col-md-2 field-label">
+                    <label for="grade">شهر</label>
+                </div>
+                <div class="col-md-4">
+                    <select data-placeholder="شهر" name="city" class="city-choicen" tabindex="5" >
+                        <option value="">شهر</option>
+                        {% for element in city %}
+                        {# if dont work if you can fix it :) #}
+                        <option value="{{ element.id }}" {% if element.id == serializer.data.city|add:"0" %} selected {% endif %}>{{ element.title }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
             </div>
-        </div>
-        <!-- Grade field -->
-        <div class="row mb-2">
-            <div class="col-md-2 field-label">
-                <label for="grade">پایه</label>
-            </div>
-            <div class="col-md-4">
-                <select data-placeholder="پایه تحصیلی" name="grades" class="grade-choicen" tabindex="5" required>
-                    <option value="">پایه تحصیلی</option>
-                    {% for element in form.fields.grades.queryset %}
-                        <option value="{{ element.id }}">{{ element.title }}</option>
-                    {% endfor %}
-                </select>
-
-            </div>
-        </div>
-        <!-- Phone number field -->
-        <div class="row mb-4 mt-4">
-            <div class="col-md-2 field-label">
-                <label for="phone-number">شماره تماس</label>
-            </div>
-            <div class="phone-number-field col-md-4 ">
-                <!-- pattern check phone number is valid or not -->
-                <input type="text" class="phone-number" id="phone-number" name="phone_number"
+            <!-- Phone number field -->
+            <div class="row mb-4 mt-4">
+                <div class="col-md-2 field-label">
+                    <label for="phone-number">شماره تماس</label>
+                </div>
+                <div class="phone-number-field col-md-4 ">
+                    <!-- pattern check phone number is valid or not -->
+                    <input type="text" class="phone-number" id="phone-number" name="phone_number"
                        required>
                 <small id="phone-number-check-alert" class="form-text text-nowrap mt-2 text-md-left ml-3"
                        style="display: none;">
                     <i class="fas fa-info-circle"></i>
                     شماره وارد شده معتبر نمی باشد.
                 </small>
+                </div>
             </div>
-        </div>
-        <button id="submit" class="btn btn-lg btn-warning btn-block sign-up-button" type="submit">ثبت نام</button>
-        {% if form.error %}
+            <button id="submit" class="btn btn-lg btn-warning btn-block sign-up-button" type="submit">ثبت نام</button>
+    		{% for field in serializer %}
+			{% if field.errors %}
+      		{% for error in field.errors %}
             <small id="error" class="h6 form-text text-nowrap mt-n3" style="font-weight: bolder;">
-                <i class="fas fa-exclamation-triangle"></i>
-                {{ form.error }}
+                <i class="fas fa-exclamation-triangle">{{ error }}</i>
             </small>
-        {% endif %}
-    </div>
-</form>
-{% block JSfile %}
+            {% endfor %}
+    		{% endif %}
+    		{% endfor %}
+        </div>
+    </form>
+    {% block JSfile %}
     <script src="https://code.jquery.com/jquery-3.4.1.js"
-            integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU=" crossorigin="anonymous"></script>
-    <script src="{% static 'home/js/base.js' %}"></script>
+        integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU=" crossorigin="anonymous"></script>
     <script src="{% static 'signup/js/signup.js' %}"></script>
-{% endblock %}
+    {% endblock %}
 </body>
 
 </html>

@@ -14,3 +14,8 @@ $("#sign-in-form").submit(function () {
     }
 });
 
+
+$('#forgetPasswordTag').click(function () {
+
+    $('#forgetPasswordModal').modal('show')
+});

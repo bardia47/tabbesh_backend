@@ -10,6 +10,8 @@ from accounts.enums import RoleCodes
 import datetime
 import jdatetime
 from django.core.exceptions import ValidationError
+from django.core.validators import MaxValueValidator, MinValueValidator
+from django.db.models import Q
 
 # import for compress images
 import sys 
@@ -42,16 +44,6 @@ class User(AbstractBaseUser, PermissionsMixin):
     is_superuser = models.BooleanField(default=False)
     is_staff = models.BooleanField(default=True)
 
-    #compress images
-    def compressImage(self,uploadedImage):
-        imageTemproary = Image.open(uploadedImage)
-        outputIoStream = BytesIO()
-        imageTemproaryResized = imageTemproary.resize((20,20), Image.ANTIALIAS) 
-        imageTemproary = imageTemproary.convert('RGB')
-        imageTemproary.save(outputIoStream , format='JPEG', quality=60)
-        outputIoStream.seek(0)
-        uploadedImage = InMemoryUploadedFile(outputIoStream,'ImageField', "%s.jpg" % uploadedImage.name.split('.')[0], 'image/jpeg', sys.getsizeof(outputIoStream), None)
-        return uploadedImage
     class Meta:
         verbose_name_plural = "کاربر"
         verbose_name = "کاربر"
@@ -60,7 +52,10 @@ class User(AbstractBaseUser, PermissionsMixin):
     objects = UserManager()
 
     USERNAME_FIELD = 'username'
-    REQUIRED_FIELDS = ['email', 'first_name', 'last_name']
+    REQUIRED_FIELDS = [ 'first_name', 'last_name']
+
+    def __str__(self):
+        return self.get_full_name()
 
     def get_full_name(self):
         full_name = '%s %s' % (self.first_name, self.last_name)
@@ -70,6 +65,19 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     def get_short_name(self):
         return self.first_name
+
+      #compress images
+    def compressImage(self,uploadedImage):
+        imageTemproary = Image.open(uploadedImage)
+        outputIoStream = BytesIO()
+        imageTemproaryResized = imageTemproary.resize((20,20), Image.ANTIALIAS)
+        imageTemproary = imageTemproary.convert('RGB')
+        imageTemproary.save(outputIoStream , format='JPEG', quality=60)
+        outputIoStream.seek(0)
+        uploadedImage = InMemoryUploadedFile(outputIoStream,'ImageField', "%s.jpg" % uploadedImage.name.split('.')[0], 'image/jpeg', sys.getsizeof(outputIoStream), None)
+        return uploadedImage
+
+
 
     def email_user(self, subject, message, from_email=None, **kwargs):
         send_mail(subject, message, from_email, [self.email], **kwargs)
@@ -86,7 +94,15 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     def __str__(self):
         return self.get_full_name()
-        
+
+
+    def get_student_grade(self):
+            try:
+                return self.grades.all().first().title
+            except:
+                return ""
+
+    get_student_grade.short_description = 'پایه'
 
 
 # Roles Model
@@ -182,9 +198,49 @@ class Course(models.Model):
             raise ValidationError("تاریخ پایان باید پس از تاریخ شروع باشد")
 
 
+    def get_first_class(self, exclude=None):
+        if len(self.course_calendar_set.all())==0:
+            return None
+        return  self.course_calendar_set.first()
+
+    def get_next_class(self, exclude=None):
+        if len(self.course_calendar_set.all())==0:
+            return None
+        now = datetime.datetime.now()
+        return  self.course_calendar_set.filter(end_date__gte=now).first()
+
+
+    def get_parent_lesson(self, exclude=None):
+        lesson = self.lesson
+        while (True):
+            if lesson.parent is None:
+                return lesson
+            else:
+                lesson = lesson.parent
+
+    def get_discount(self, exclude=None):
+        discount = Discount.objects.filter(
+            (Q(courses__id=self.id) & Q(code__isnull=True)) | (Q(courses=None) & Q(code__isnull=True)))
+        if discount.exists():
+            return discount.first()
+        return None
+
+    def get_amount_payable(self, exclude=None):
+       discount= self.get_discount()
+       if discount:
+            return self.amount* (100-discount.percent)/100
+       return self.amount
+
+    def get_discount_amount(self, exclude=None):
+       discount= self.get_discount()
+       if discount:
+            return self.amount* (discount.percent)/100
+       return 0
+
+
 # Course_Calendar Model
 class Course_Calendar(models.Model):
-    course = models.ForeignKey('Course', on_delete=models.DO_NOTHING, verbose_name="دوره")
+    course = models.ForeignKey('Course', on_delete=models.CASCADE , verbose_name="دوره")
     start_date = models.DateTimeField("تاریخ شروع")
     end_date = models.DateTimeField("تاریخ پایان")
 
@@ -262,4 +318,30 @@ class Pay_History(models.Model):
     get_courses.short_description='دروس خریداری شده'
     submit_date_decorated.short_description='تاریخ ثبت'
 
-   
+class Discount(models.Model):
+    title=models.CharField("نام تخفیف", max_length=30, null=True, blank=True , unique=True)
+    code = models.CharField("کد", max_length=15, null=True, blank=True , unique=True)
+    percent = models.IntegerField(
+        default=10,
+        validators=[
+            MaxValueValidator(100),
+            MinValueValidator(1)
+            ]
+    )
+    start_date = models.DateTimeField("تاریخ شروع")
+    end_date = models.DateTimeField("تاریخ پایان",null=True, blank=True)
+    courses= models.ManyToManyField('Course', blank=True, verbose_name="درس های تخفیف خورده")
+
+    class Meta:
+        ordering = ['-start_date']
+        verbose_name_plural = "تخفیف"
+        verbose_name = "تخفیف"
+    def __str__(self):
+        return self.title
+
+    def clean_fields(self, exclude=None):
+        super().clean_fields(exclude=exclude)
+        if self.end_date and self.end_date <= self.start_date:
+            raise ValidationError("تاریخ پایان باید پس از تاریخ شروع باشد یا خالی باشد")
+
+

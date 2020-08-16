@@ -1,3 +1,4 @@
+
 """
 Django settings for pishgam_website project.
 
@@ -11,6 +12,7 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 """
 
 import os
+from django.conf.global_settings import LOGIN_REDIRECT_URL
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -23,6 +25,7 @@ SECRET_KEY = 'nan_@dp+&g%75ke-ac%yn(8@2su8r9fn0!-hlzdmz1ia0!-f$x'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
+
 #ALLOWED_HOSTS = ["127.0.0.1","tabbesh.ir","185.4.31.70"]
 ALLOWED_HOSTS = ['*']
 
@@ -45,9 +48,14 @@ LOGGING = {
     },
 }
 
+STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.ManifestStaticFilesStorage'
+
+
 # Application definition
 
 INSTALLED_APPS = [
+    'rest_framework',
+    'rest_framework.authtoken',
     'jalali_date',
     'accounts',
     'zarinpal',
@@ -147,6 +155,33 @@ JALALI_DATE_DEFAULTS = {
     },
 }
 
+REST_FRAMEWORK = {
+        'DEFAULT_RENDERER_CLASSES': [
+          'rest_framework.renderers.JSONRenderer',
+    'rest_framework.renderers.BrowsableAPIRenderer',
+    ],
+    'DEFAULT_PARSER_CLASSES': [
+        'rest_framework.parsers.JSONParser',
+        'rest_framework.parsers.FormParser',
+    'rest_framework.parsers.MultiPartParser'
+    ],
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.TokenAuthentication',
+
+    ),
+    'DEFAULT_PERMISSION_CLASSES': ('rest_framework.permissions.IsAuthenticated',),
+
+    'DEFAULT_FILTER_BACKENDS': ('django_filters.rest_framework.DjangoFilterBackend',
+                                'rest_framework.filters.SearchFilter',
+                                'rest_framework.filters.OrderingFilter'),
+    'EXCEPTION_HANDLER': 'accounts.exceptionHandler.api_exception_handler',
+    'DEFAULT_PAGINATION_CLASS': 'accounts.pagination.Pagination',
+    'PAGE_SIZE': 3
+
+}
+
+
 # Internationalization
 # https://docs.djangoproject.com/en/2.2/topics/i18n/
 
@@ -172,6 +207,8 @@ STATICFILES_DIRS = [
 
 ]
 LOGIN_URL = '/signin/'
+LOGIN_REDIRECT_URL = '/signin/'
+
 AUTH_USER_MODEL = 'accounts.User'
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
