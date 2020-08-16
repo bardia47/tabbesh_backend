@@ -9,10 +9,10 @@
 
     <title>{% block title %}{% endblock %}</title>
     <!-- favicon !-->
-    <link rel="shortcut icon" type="image/png" href="{% static 'home/images/favicon.ico' %}"/>
+    <link rel="shortcut icon" type="image/png" href="{% static 'home/images/favicon.ico' %}" />
     <!-- CSS files -->
     <link rel="stylesheet" href="https://cdn.rtlcss.com/bootstrap/v4.2.1/css/bootstrap.min.css"
-          integrity="sha384-vus3nQHTD+5mpDiZ4rkEPlnkcyTP+49BhJ4wJeJunw06ZAp+wzzeBPUXr42fi8If" crossorigin="anonymous">
+        integrity="sha384-vus3nQHTD+5mpDiZ4rkEPlnkcyTP+49BhJ4wJeJunw06ZAp+wzzeBPUXr42fi8If" crossorigin="anonymous">
     <link rel="stylesheet" href="{% static 'home/css/fonts.css' %}">
     <link rel="stylesheet" href="{% static 'dashboard/css/base.css' %}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.2/animate.css">
@@ -24,139 +24,144 @@
 </head>
 
 <body>
-<div class="wrapper">
-    <!-- Sidebar  -->
-    <nav id="sidebar">
-        <!-- Brand name title -->
-        <div class="row">
-            <div class="col-md-12 brand-title ">
-                <a href="{% url 'home' %}">
-                    <h1>تابــش</h1>
+    <div class="wrapper">
+        <!-- Sidebar  -->
+        <nav id="sidebar">
+            <!-- Brand name title -->
+            <div class="row">
+                <div class="col-md-12 brand-title ">
+                    <a href="{% url 'home' %}">
+                        <h1>تابــش</h1>
+                    </a>
+                </div>
+            </div>
+            <!-- Account title include [profile picture , name , grade ] -->
+            <div class="row account-title">
+                <!-- Profile picture -->
+                <div class="col-md-4">
+                    <img src="{{ user.avatar.url }}" alt="تصویر پروفایل">
+                </div>
+                <!-- Name & Grade -->
+                <div class="col-md-8">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <p class="account-title-name">{{ user.get_full_name }}
+                                <p>
+                        </div>
+                        <div class="col-md-12">
+                            <!-- Give grade title from m2m field grade -->
+                            <p class="account-title-grade">{% for grade in user.grades.all %}{{ grade }}{% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Sidebar menus ! block for active menu -->
+            <div class="container">
+                <div class="row sidebar-menu {% block dashboard_active %}{% endblock %}">
+                    <img src="{% static 'home/images/icons/home.svg' %}" alt="آیکون">
+                    <a href="{% url 'dashboard' %}">داشبورد</a>
+                </div>
+                <hr>
+                <div class="row sidebar-menu {% block lesson_active %}{% endblock %}">
+                    <img src="{% static 'home/images/icons/book-open.svg' %}" alt="آیکون">
+                    <a href="{% url 'lessons' %}">دروس من</a>
+                </div>
+                <hr>
+                <div class="row sidebar-menu {% block shopping_active %}{% endblock %}">
+                    <img src="{% static 'home/images/icons/shopping-cart.svg' %}" alt="آیکون">
+                    <a href="{% url 'shopping' %}">خرید درس</a>
+                </div>
+                <hr>
+                <div class="row sidebar-menu">
+                    <img src="{% static 'home/images/icons/admin.svg' %}" alt="آیکون">
+                    <a href="{% url 'admin:index' %}">صفحه ادمین</a>
+                </div>
+            </div>
+            <!-- Footer of sidebar -->
+            <div class="footer">
+                <a href="https://eitaa.com/taabbesh">
+                    <img src="{% static 'dashboard/images/icons/eitta-logo.png' %}" alt="eitta logo">
+                </a>
+                <a href="https://t.me/taabbesh">
+                    <img src="{% static 'dashboard/images/icons/telegram-logo.svg' %}" alt="telegram logo">
+                </a>
+                <a href="https://www.instagram.com/tabbeshclass/">
+                    <img src="{% static 'dashboard/images/icons/instagram-logo.svg' %}" alt="instagram logo">
                 </a>
             </div>
-        </div>
-        <!-- Account title include [profile picture , name , grade ] -->
-        <div class="row account-title">
-            <!-- Profile picture -->
-            <div class="col-md-4">
-                <img src="{{ user.avatar.url }}" alt="تصویر پروفایل">
-            </div>
-            <!-- Name & Grade -->
-            <div class="col-md-8">
-                <div class="row">
-                    <div class="col-md-12">
-                        <p class="account-title-name">{{ user.get_full_name }}
-                        <p>
-                    </div>
-                    <div class="col-md-12">
-                        <!-- Give grade title from m2m field grade -->
-                        <p class="account-title-grade">{% for grade in user.grades.all %}{{ grade }}{% endfor %}
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- Sidebar menus ! block for active menu -->
-        <div class="container">
-            <div class="row sidebar-menu {% block dashboard_active %}{% endblock %}">
-                <img src="{% static 'home/images/icons/home.svg' %}" alt="آیکون">
-                <a href="{% url 'dashboard' %}">داشبورد</a>
-            </div>
-            <hr>
-            <div class="row sidebar-menu {% block lesson_active %}{% endblock %}">
-                <img src="{% static 'home/images/icons/book-open.svg' %}" alt="آیکون">
-                <a href="{% url 'lessons' %}">دروس من</a>
-            </div>
-            <hr>
-            <div class="row sidebar-menu {% block shopping_active %}{% endblock %}">
-                <img src="{% static 'home/images/icons/shopping-cart.svg' %}" alt="آیکون">
-                <a href="{% url 'shopping' %}">خرید درس</a>
-            </div>
-        </div>
-        <!-- Footer of sidebar -->
-        <div class="footer">
-            <a href="https://eitaa.com/taabbesh">
-                <img src="{% static 'dashboard/images/icons/eitta-logo.png' %}" alt="eitta logo">
-            </a>
-            <a href="https://t.me/taabbesh">
-                <img src="{% static 'dashboard/images/icons/telegram-logo.svg' %}" alt="telegram logo">
-            </a>
-            <a href="https://www.instagram.com/tabbeshclass/">
-                <img src="{% static 'dashboard/images/icons/instagram-logo.svg' %}" alt="instagram logo">
-            </a>
-        </div>
-    </nav>
-
-    <!-- Page content  -->
-    <div id="content">
-
-        <!-- Navigation bar -->
-        <nav id="nav" class="navbar navbar-inverse sticky-top">
-            <div id="nav-items" class="container-fluid ">
-                <!-- Toggle button -->
-                <button type="button" id="sidebarCollapse" class="btn btn-warning">
-                    <img class="navbar-full-screen" src="{% static 'home/images/icons/full-screen.svg' %}">
-                </button>
-                <!-- Nav menus -->
-                <div id="nav-menu" style="display: inline-block;">
-                    <ul class="nav navbar-nav navbar-right ">
-                        <li class="text-nowrap"><a href="{% url 'edit_profile' %}"><span><img
-                                src="{% static 'home/images/icons/profile.svg' %}" alt="آیکون"></span> صفحه ی
-                            پروفایل</a>
-                        </li>
-                        <li><a href="{% url 'signout' %}"><span><img
-                                src=" {% static 'home/images/icons/logout.svg' %}"
-                                alt="آیکون"></span>خروج</a></li>
-                    </ul>
-                </div>
-            </div>
         </nav>
-{#        <!-- Contact us popup -->#}
-{#        <div class="d-inline-flex flex-row contact_us">#}
-{#            <!-- Contact us icon -->#}
-{#            <img id="contact_us_img" class="ml-3 animated pulse infinite" src="#}
-{#            {% static 'home/images/icons/support.svg' %}" width="70px" height="70px">#}
-{#            <!-- Popup content -->#}
-{#            <div id="contact_us_content" class="p-2 pt-3">#}
-{#                <p class="text-nowrap mb-2">#}
-{#                    روابط عمومی#}
-{#                    <span class="ml-4">09374789830</span>#}
-{#                    <img src="{% static 'home/images/icons/call-24-hours.svg' %}" width="30" height="30">#}
-{#                </p>#}
-{#                <p class="text-nowrap mb-2">#}
-{#                    پشتیبانی فنی#}
-{#                    <span class="ml-4">09391811412</span>#}
-{#                    <img src="{% static 'home/images/icons/call-24-hours.svg' %}" width="30" height="30">#}
-{#                </p>#}
-{#            </div>#}
-{#        </div>#}
 
-        {% block content %}
+        <!-- Page content  -->
+        <div id="content">
 
-        {% endblock %}
+            <!-- Navigation bar -->
+            <nav id="nav" class="navbar navbar-inverse sticky-top">
+                <div id="nav-items" class="container-fluid ">
+                    <!-- Toggle button -->
+                    <button type="button" id="sidebarCollapse" class="btn btn-warning">
+                        <img class="navbar-full-screen" src="{% static 'home/images/icons/full-screen.svg' %}">
+                    </button>
+                    <!-- Nav menus -->
+                    <div id="nav-menu" style="display: inline-block;">
+                        <ul class="nav navbar-nav navbar-right ">
+                            <li class="text-nowrap"><a href="{% url 'edit_profile' %}"><span><img
+                                            src="{% static 'home/images/icons/profile.svg' %}" alt="آیکون"></span> صفحه
+                                    ی
+                                    پروفایل</a>
+                            </li>
+                            <li><a href="{% url 'signout' %}"><span><img
+                                            src=" {% static 'home/images/icons/logout.svg' %}"
+                                            alt="آیکون"></span>خروج</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+            {#        <!-- Contact us popup -->#}
+            {#        <div class="d-inline-flex flex-row contact_us">#}
+            {#            <!-- Contact us icon -->#}
+            {#            <img id="contact_us_img" class="ml-3 animated pulse infinite" src="#}
+            {#            {% static 'home/images/icons/support.svg' %}" width="70px" height="70px">#}
+            {#            <!-- Popup content -->#}
+            {#            <div id="contact_us_content" class="p-2 pt-3">#}
+            {#                <p class="text-nowrap mb-2">#}
+            {#                    روابط عمومی#}
+            {#                    <span class="ml-4">09374789830</span>#}
+            {#                    <img src="{% static 'home/images/icons/call-24-hours.svg' %}" width="30" height="30">#}
+            {#                </p>#}
+            {#                <p class="text-nowrap mb-2">#}
+            {#                    پشتیبانی فنی#}
+            {#                    <span class="ml-4">09391811412</span>#}
+            {#                    <img src="{% static 'home/images/icons/call-24-hours.svg' %}" width="30" height="30">#}
+            {#                </p>#}
+            {#            </div>#}
+            {#        </div>#}
+
+            {% block content %}
+
+            {% endblock %}
+        </div>
     </div>
-</div>
 
-<!-- JS files -->
-<!-- jQuery CDN for toggler button -->
-<script src="https://code.jquery.com/jquery-3.4.1.js"
+    <!-- JS files -->
+    <!-- jQuery CDN for toggler button -->
+    <script src="https://code.jquery.com/jquery-3.4.1.js"
         integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU=" crossorigin="anonymous"></script>
-<!-- JS file for base.html  -->
-<script src="{% static 'dashboard/js/base.js' %}"></script>
-<!-- Bootstrap JS file -->
-<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+    <!-- JS file for base.html  -->
+    <script src="{% static 'dashboard/js/base.js' %}"></script>
+    <!-- Bootstrap JS file -->
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
         integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous">
-</script>
-<script
-        src="https://cdn.rtlcss.com/bootstrap/v4.2.1/js/bootstrap.min.js"
-        integrity="sha384-a9xOd0rz8w0J8zqj1qJic7GPFfyMfoiuDjC9rqXlVOcGO/dmRqzMn34gZYDTel8k"
-        crossorigin="anonymous">
-</script>
+    </script>
+    <script src="https://cdn.rtlcss.com/bootstrap/v4.2.1/js/bootstrap.min.js"
+        integrity="sha384-a9xOd0rz8w0J8zqj1qJic7GPFfyMfoiuDjC9rqXlVOcGO/dmRqzMn34gZYDTel8k" crossorigin="anonymous">
+    </script>
 
-<!-- raychat !-->
-<script src="{% static 'home/js/raychat.js' %}"></script>
+    <!-- raychat !-->
+    <script src="{% static 'home/js/raychat.js' %}"></script>
 
-{% block JSfile %}
-{% endblock %}
+    {% block JSfile %}
+    {% endblock %}
 
 </body>
+
 </html>
