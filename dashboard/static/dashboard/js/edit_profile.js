@@ -112,8 +112,8 @@ $(document).ready(function () {
         // remove white space with trim
         let firstName = $("#firstName");
         let lastName = $("#lastName");
-        firstName.val(firstName.trim());
-        lastName.val(lastName.trim());
+        firstName.val(firstName.val().trim());
+        lastName.val(lastName.val().trim());
     });
 
 });

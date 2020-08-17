@@ -130,7 +130,7 @@ function renderShoppingCards(courseCards) {
                      </div>
                      <!-- Start of the course  -->
                      <div class="course-start-date">
-                        <p>
+                        <p class="text-nowrap">
                            <img src="/static/home/images/icons/start-date.svg" alt="start course clock">
                            شروع دوره:
                            <span>
@@ -143,7 +143,7 @@ function renderShoppingCards(courseCards) {
                      </div>
                      <!-- End of the course  -->
                      <div class="course-end-date">
-                        <p>
+                        <p class="text-nowrap">
                            <img src="/static/home/images/icons/end-date.svg" alt="end course clock">
                            اتمام دوره:
                            <span>

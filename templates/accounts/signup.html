@@ -21,7 +21,7 @@
 
 <body class="text-center">
 <!-- Form of sing up page -->
-<form id="form-sign-up" class="form-signup" method="POST" action="{% url 'signup' %}">
+<form id="formSignup" class="form-signup" method="POST" action="{% url 'signup' %}">
     {% csrf_token %}
     <!-- Content of sign up page -->
     <div class="container mt-3">
@@ -38,11 +38,11 @@
         <div class="row mb-2">
             <!-- Name field -->
             <div class="field-label col-md-2">
-                <label for="first-name">نام</label>
+                <label for="firstName">نام</label>
             </div>
             <div class="col-md-4">
-                <input type="text" id="first-name" name="first_name"   value="{{ serializer.data.first_name }}"required>
-                <small id="first-name-check-alert" class="form-text text-nowrap mt-2 text-md-left ml-3"
+                <input type="text" id="firstName" name="first_name" value="{{ serializer.data.first_name }}" required>
+                <small id="firstNameAlert" class="form-text text-nowrap mt-2 text-md-left ml-3"
                        style="display: none;">
                     <i class="fas fa-exclamation-triangle"></i>
                     تنها حروف فارسی مجاز است.
@@ -59,15 +59,15 @@
                         <div class="row">
                             <div class="col-md-6 col-sm-6 custom-radio custom-control-inline">
                                 <span style="color: #fff;"> پسر </span>
-                                <input type="radio" class="custom-control-input" id="gender_boy" name="gender"
+                                <input type="radio" class="custom-control-input" id="genderBoy" name="gender"
                                        value="True" checked="checked">
-                                <label class="custom-control-label yellow " for="gender_boy"></label>
+                                <label class="custom-control-label yellow " for="genderBoy"></label>
                             </div>
                             <div class="col-md-6 col-sm-6 custom-radio custom-control-inline">
                                 <span style="color: #fff;"> دختر </span>
-                                <input type="radio" class="custom-control-input" id="gender_girl" name="gender"
+                                <input type="radio" class="custom-control-input" id="genderGirl" name="gender"
                                        value="False">
-                                <label class="custom-control-label yellow" for="gender_girl"></label>
+                                <label class="custom-control-label yellow" for="genderGirl"></label>
                             </div>
                         </div>
                     </div>
@@ -77,11 +77,11 @@
         <!-- Last name field -->
         <div class="row mb-2">
             <div class="col-md-2 field-label">
-                <label for="last-name">نام خانوادگی</label>
+                <label for="lastName">نام خانوادگی</label>
             </div>
             <div class="col-md-4">
-                <input type="text" id="last-name" name="last_name"  value="{{ serializer.data.last_name }}"required>
-                <small id="last-name-check-alert" class="form-text text-nowrap mt-2 text-md-left ml-3"
+                <input type="text" id="lastName" name="last_name" value="{{ serializer.data.last_name }}" required>
+                <small id="lastNameAlert" class="form-text text-nowrap mt-2 text-md-left ml-3"
                        style="display: none;">
                     <i class="fas fa-exclamation-triangle"></i>
                     تنها حروف فارسی مجاز است.
@@ -95,7 +95,7 @@
             </div>
             <div class="col-md-4">
                 <input type="text" id="username" name="username" value="{{ serializer.data.username }}" required>
-                <small id="username-check-alert" class="form-text text-nowrap mt-2 text-md-left ml-3"
+                <small id="usernameAlert" class="form-text text-nowrap mt-2 text-md-left ml-3"
                        style="display: none;">
                     <i class="fas fa-exclamation-triangle"></i>
                     نام کاربری تنها باید شامل حروف و اعداد انگلیسی باشد.
@@ -108,55 +108,62 @@
                 <label for="grade">پایه</label>
             </div>
             <div class="col-md-4">
-                    <select data-placeholder="پایه تحصیلی" name="grades[0]" class="grade-choicen" tabindex="5" required>
-                        <option value="">پایه تحصیلی</option>
-                        {% for element in grades %}
-                        <option value="{{ element.id }}" {% if element.id == grades0|add:"0" %} selected {% endif %}>{{ element.title }}</option>
-                        {% endfor %}
-                    </select>
+                <select data-placeholder="پایه تحصیلی" name="grades[0]" class="grade-choicen" tabindex="5" required>
+                    <option value="">پایه تحصیلی</option>
+                    {% for element in grades %}
+                        <option value="{{ element.id }}" {% if element.id == grades0|add:"0" %}
+                                selected {% endif %}>{{ element.title }}</option>
+                    {% endfor %}
+                </select>
             </div>
         </div>
         <!-- City field -->
-            <div class="row mb-2">
-                <div class="col-md-2 field-label">
-                    <label for="grade">شهر</label>
-                </div>
-                <div class="col-md-4">
-                    <select data-placeholder="شهر" name="city" class="city-choicen" tabindex="5" >
-                        <option value="">شهر</option>
-                        {% for element in city %}
-                        {# if dont work if you can fix it :) #}
-                        <option value="{{ element.id }}" {% if element.id == serializer.data.city|add:"0" %} selected {% endif %}>{{ element.title }}</option>
-                        {% endfor %}
-                    </select>
-                </div>
+        <div class="row mb-2">
+            <div class="col-md-2 field-label">
+                <label for="grade">شهر</label>
             </div>
+            <div class="col-md-4">
+                <select data-placeholder="شهر" name="city" class="city-choicen" tabindex="5">
+                    <option value="">شهر</option>
+                    {% for element in city %}
+                        {# if dont work if you can fix it :) #}
+                        <option value="{{ element.id }}" {% if element.id == serializer.data.city|add:"0" %}
+                                selected {% endif %}>{{ element.title }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
         <!-- Phone number field -->
         <div class="row mb-4 mt-4">
             <div class="col-md-2 field-label">
-                <label for="phone-number">شماره تماس</label>
+                <label for="phoneNumber">شماره تماس</label>
             </div>
-            <div class="phone-number-field col-md-4 ">
+            <div class="phone-number-field col-md-4">
                 <!-- pattern check phone number is valid or not -->
-                <input type="text" class="phone-number" id="phone-number" name="phone_number"
-                value="{{ serializer.data.phone_number }}"   required>
-                <small id="phone-number-check-alert" class="form-text text-nowrap mt-2 text-md-left ml-3"
+                <input type="text" class="phone-number" id="phoneNumber" name="phone_number"
+                       value="{{ serializer.data.phone_number }}" required>
+                <small id="phoneNumberAlert" class="form-text text-nowrap mt-2 text-md-left ml-3"
                        style="display: none;">
                     <i class="fas fa-info-circle"></i>
                     شماره وارد شده معتبر نمی باشد.
                 </small>
             </div>
         </div>
-        <button id="submit" class="btn btn-lg btn-warning btn-block sign-up-button" type="submit">ثبت نام</button>
-      {% for field in serializer %}
-			{% if field.errors %}
-      		{% for error in field.errors %}
-            <small id="error" class="h6 form-text text-nowrap mt-n3" style="font-weight: bolder;">
-                <i class="fas fa-exclamation-triangle">{{ error }}</i>
-            </small>
-            {% endfor %}
-    		{% endif %}
-    		{% endfor %}
+        <button id="submit" class="btn btn-lg btn-warning btn-block sign-up-button mb-2" type="submit">ثبت نام</button>
+        <p class="footer-p mt-2 mb-3">
+            حساب کاربری دارید؟
+            <span><a href="{% url 'signin' %}">وارد شوید.</a></span>
+        </p>
+        {% for field in serializer %}
+            {% if field.errors %}
+                {% for error in field.errors %}
+                    <small id="error" class="h6 form-text text-nowrap vazir-bold" style="font-weight: bolder;">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        {{ error }}
+                    </small>
+                {% endfor %}
+            {% endif %}
+        {% endfor %}
     </div>
 </form>
 {% block JSfile %}

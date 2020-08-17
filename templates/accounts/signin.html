@@ -6,7 +6,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="Sign in page">
-    <meta name="author" content="Taabesh website">
+    <meta name="author" content="Tabbesh website">
     <title>ورود</title>
     <!-- favicon !-->
     <link rel="shortcut icon" type="image/png" href="{% static 'home/images/favicon.ico' %}"/>
@@ -19,7 +19,9 @@
 </head>
 
 <body class="text-center">
-<form id="sign-in-form"  class="sign-in-form"  method="POST" action="{% url 'signin' %}{% if request.GET.next %}?next={{ request.GET.next }}{% endif %}" enctype='application/json'>
+<form id="signInForm" class="sign-in-form" method="POST"
+      action="{% url 'signin' %}{% if request.GET.next %}?next={{ request.GET.next }}{% endif %}"
+      enctype='application/json'>
     {% csrf_token %}
     <h1 class="title">ورود</h1>
     <div class="container">
@@ -37,16 +39,15 @@
         </div>
     </div>
     <button id="submit" class="btn btn-lg btn-warning btn-block sign-in-button" type="submit">ورود</button>
-    <p class="footer-p mt-2 mb-3"> حساب کاربری ندارید؟ <span><a href="{% url 'signup' %}">ثبت نام کنید</a></span></p>
+    <p class="footer-p mt-2"> حساب کاربری ندارید؟ <span><a href="{% url 'signup' %}">ثبت نام کنید</a></span></p>
     {% if error %}
-        <small class="form-text mb-1 mt-n2" style="font-family: 'Vazir_Bold'; color: #9d0b0b;">
+        <small class="form-text mb-1" style="font-family: 'Vazir_Bold'; color: #9d0b0b;">
             <i class="fas fa-exclamation-triangle"></i>
             {{ error }}
         </small>
-        <p class="footer-p-forget"><span><a href="{% url 'signup' %}">در صورت فراموشی رمز کلیک کنید</a></span></p>
     {% endif %}
     {% if success %}
-        <small class="form-text mb-1 mt-n2" style="font-family: 'Vazir_Bold'; color: white;">
+        <small class="form-text mb-1" style="font-family: 'Vazir_Bold'; color: white;">
             <i class="fas fa-info-circle"></i>
             {{ success }}
             <br>
@@ -60,42 +61,44 @@
 
 
 <!-- modal form for forget password !-->
-<div class="modal fade" id="forgetPasswordModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-     aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <!-- form for submit forget password !-->
-        <form method="POST" action="{% url 'forget_password' %}" >
-             {% csrf_token %}
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title text-danger" id="exampleModalLabel" style="font-family: 'Vazir_Bold';">
-                        فراموشی رمز
-                        عبور</h5>
-                    <button type="submit" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <div class="form-group">
-                        <label for="phoneNumber" class="form-text text-nowrap mt-2 text-md-left">شماره تلفن خود را وارد کنید</label>
-                        <input id="phoneNumber" name="phone_number"type="text" class="form-control w-100" pattern="[9][0-9]{9}" required>
-                        <small class="form-text text-nowrap mt-2 text-md-left">
-                            <i class="fas fa-info-circle"></i>
-                            شماره تلفن را بدون صفر وارد کنید .
-                        </small>
-                        <small class="form-text text-nowrap mt-2 text-md-left">
-                            <i class="fas fa-info-circle"></i>
-                            رمز عبور پیامک داده می شود.
-                        </small>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="submit" class="btn btn-danger w-100">دریافت رمز عبور</button>
-                </div>
-            </div>
-        </form>
-    </div>
-</div>
+{#<div class="modal fade" id="forgetPasswordModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"#}
+{#     aria-hidden="true">#}
+{#    <div class="modal-dialog" role="document">#}
+{#        <!-- form for submit forget password !-->#}
+{#        <form method="POST" action="{% url 'forget_password' %}">#}
+{#            {% csrf_token %}#}
+{#            <div class="modal-content">#}
+{#                <div class="modal-header">#}
+{#                    <h5 class="modal-title text-danger" id="exampleModalLabel" style="font-family: 'Vazir_Bold';">#}
+{#                        فراموشی رمز#}
+{#                        عبور</h5>#}
+{#                    <button type="submit" class="close" data-dismiss="modal" aria-label="Close">#}
+{#                        <span aria-hidden="true">&times;</span>#}
+{#                    </button>#}
+{#                </div>#}
+{#                <div class="modal-body">#}
+{#                    <div class="form-group">#}
+{#                        <label for="phoneNumber" class="form-text text-nowrap mt-2 text-md-left">شماره تلفن خود را وارد#}
+{#                            کنید</label>#}
+{#                        <input id="phoneNumber" name="phone_number" type="text" class="form-control w-100"#}
+{#                               pattern="[9][0-9]{9}" required>#}
+{#                        <small class="form-text text-nowrap mt-2 text-md-left">#}
+{#                            <i class="fas fa-info-circle"></i>#}
+{#                            شماره تلفن را بدون صفر وارد کنید .#}
+{#                        </small>#}
+{#                        <small class="form-text text-nowrap mt-2 text-md-left">#}
+{#                            <i class="fas fa-info-circle"></i>#}
+{#                            رمز عبور پیامک داده می شود.#}
+{#                        </small>#}
+{#                    </div>#}
+{#                </div>#}
+{#                <div class="modal-footer">#}
+{#                    <button type="submit" class="btn btn-danger w-100">دریافت رمز عبور</button>#}
+{#                </div>#}
+{#            </div>#}
+{#        </form>#}
+{#    </div>#}
+{#</div>#}
 
 {% block JSfile %}
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
@@ -104,6 +107,8 @@
     <script src="https://cdn.rtlcss.com/bootstrap/v4.2.1/js/bootstrap.min.js"
             integrity="sha384-a9xOd0rz8w0J8zqj1qJic7GPFfyMfoiuDjC9rqXlVOcGO/dmRqzMn34gZYDTel8k"
             crossorigin="anonymous"></script>
+    <!-- base validation js -->
+    <script src="{% static 'dashboard/js/validation-base.js' %}"></script>
     <script src="{% static 'signin/js/signin.js' %}"></script>
     <!-- raychat !-->
     <script src="{% static 'home/js/raychat.js' %}"></script>

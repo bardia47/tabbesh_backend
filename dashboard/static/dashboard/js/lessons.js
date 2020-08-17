@@ -40,9 +40,9 @@ function pagination(url) {
             }
         },
         error: function () {
-            var element = $( "#have-class");
-            if (!element.length|| element.val()!="False")
-            alert("خطا در بارگزاری دروس ... لطفا دوباره امتحان کنید!")
+            var element = $("#have-class");
+            if (!element.length || element.val() != "False")
+                alert("خطا در بارگزاری دروس ... لطفا دوباره امتحان کنید!")
         },
     });
 }
@@ -55,14 +55,14 @@ function renderLessenCards(courseCards) {
         let nextClassDate = new persianDate(Date.parse(courseCard.first_class))
         // check class is active or not
         if (courseCard.is_active) {
-             buttonToClassTemplate = `
+            buttonToClassTemplate = `
                 <button class="btn btn-success mb-1">
                     <img src="/static/home/images/icons/click.svg" alt="button link to class">
                     ورود به کلاس
                 </button>
             `
         } else {
-             buttonToClassTemplate = `
+            buttonToClassTemplate = `
                 <button class="btn btn-danger mb-1" disabled>
                     <img src="/static/home/images/icons/click.svg" alt="button link to class">
                     کلاس شروع نشده
@@ -101,13 +101,14 @@ function renderLessenCards(courseCards) {
                         </div>
                         <!-- End of the course  -->
                         <div class="course-end-date">
-                            <p>
+                            <p class="text-nowrap">
                                 <img src="/static/home/images/icons/calendar.svg" alt="calender-icon" />
                                 اتمام دوره:
                                 <span>
                                     ${endDateCourse.format("dddd")}
                                     ${endDateCourse.format("D")}
                                     ${endDateCourse.format("MMMM")}
+                                    ${endDateCourse.format("YYYY")}
                                 </span>
                             </p>
                         </div>
