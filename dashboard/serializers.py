@@ -46,7 +46,6 @@ class CourseLessonsSerializer(CourseBriefSerializer):
     first_class = serializers.SerializerMethodField('get_first_class')
     is_active = serializers.SerializerMethodField('is_class_active')
     parent = serializers.SerializerMethodField('get_parent_lesson')
-    description = serializers.CharField(source='private_description')
 
     def is_class_active(self, obj):
         next_class = obj.get_next_class()
@@ -71,7 +70,7 @@ class CourseLessonsSerializer(CourseBriefSerializer):
     class Meta:
         model = Course
         fields = ('code', 'title', 'start_date', 'end_date', 'image', 'teacher', 'url',
-                  'is_active', 'first_class', 'description', 'parent')
+                  'is_active', 'first_class', 'private_description', 'parent')
 
 
 class CourseCalendarSerializer(JSONFormSerializer, serializers.ModelSerializer):
@@ -108,6 +107,7 @@ class ShoppingSerializer(serializers.Serializer):
 class ShoppingCourseSerializer(CourseLessonsSerializer):
     course_calendars = serializers.SerializerMethodField('get_start_dates')
     discount = serializers.SerializerMethodField('get_discount')
+
     class Meta:
         model = Course
         fields = ('id', 'title', 'start_date', 'end_date', 'code', 'amount', 'description', 'image', 'teacher',

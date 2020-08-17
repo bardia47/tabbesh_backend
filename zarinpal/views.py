@@ -25,7 +25,7 @@ def is_valid(courses_id_list, amount,discount):
         total_price += course.get_amount_payable()
     if discount is not None:
         total_price=total_price-compute_discount(courses_id_list, amount,discount)
-    return True if total_price == amount else False
+    return True if int(total_price) == amount else False
 
 
 class SendRequest(APIView):
@@ -35,14 +35,14 @@ class SendRequest(APIView):
         user = request.user
         courses_id_list = request.data["total_id"].split()
         try:
-            amount = int(request.data["total_pr"])
+            amount = int(float(request.data["total_pr"]))
             code = request.data['code']
             if code and code !='':
                 now = datetime.datetime.now()
                 query = Q(start_date__lte=now)
                 query &= Q(code=code)
                 query &= (Q(end_date__gte=now) | Q(end_date=None))
-                query &= (Q(courses__id__in=courses_id_list) | Q(courses=None))
+               # query &= (Q(courses__id__in=courses_id_list) | Q(courses=None))
 
                 discount = Discount.objects.get(query)
             else:
@@ -145,21 +145,24 @@ class ComputeDiscount(APIView):
        query = Q(start_date__lte=now)
        query &= Q(code=code)
        query &= (Q(end_date__gte=now) | Q(end_date=None))
-       query &= (Q(courses__id__in=courses_id_list) | Q(courses=None))
+       # query &= (Q(courses__id__in=courses_id_list) | Q(courses=None))
        try:
            discount = Discount.objects.get(query)
        except :
            return Response( status.HTTP_406_NOT_ACCEPTABLE)
        amount = int(request.data["total_pr"])
-       amount=amount-compute_discount(courses_id_list,amount,discount)
+       discount_amount=compute_discount(courses_id_list,amount,discount)
+       if discount_amount==0:
+           return Response(status.HTTP_406_NOT_ACCEPTABLE)
+       amount=amount-discount_amount
        return Response({'amount': amount })
 
 
 def compute_discount(courses_id_list, amount,discount):
-  if discount.courses.count==0:
+  if discount.courses.count()==0:
       return amount*discount.percent/100
   else :
-      courses = Course.objects.filter(id__in=courses_id_list)
+      courses = Course.objects.filter(id__in=courses_id_list,discount__id=discount.id)
       sum_amount=0
       for course in courses:
           sum_amount += course.get_amount_payable()
