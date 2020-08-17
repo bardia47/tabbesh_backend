@@ -223,7 +223,7 @@ class Course(models.Model):
         query = Q(start_date__lte=now)
         query &=Q(code__isnull=True)
         query &=(Q(end_date__gte=now) | Q(end_date=None))
-        query &= (Q(courses__id=self.id)  |  Q(code__isnull=True))
+        query &= (Q(courses__id=self.id)  |  Q(courses=None))
         discount = Discount.objects.filter(query)
         if discount.exists():
             return discount.first()
