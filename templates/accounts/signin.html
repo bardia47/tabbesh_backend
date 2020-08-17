@@ -19,8 +19,7 @@
 </head>
 
 <body class="text-center">
-<form id="sign-in-form" class="sign-in-form" method="POST" action="{{ request.get_full_path }}"
-      enctype='application/json'>
+<form id="sign-in-form"  class="sign-in-form"  method="POST" action="{% url 'signin' %}{% if request.GET.next %}?next={{ request.GET.next }}{% endif %}" enctype='application/json'>
     {% csrf_token %}
     <h1 class="title">ورود</h1>
     <div class="container">
@@ -65,8 +64,8 @@
      aria-hidden="true">
     <div class="modal-dialog" role="document">
         <!-- form for submit forget password !-->
-        <form method="POST" action="{% url 'forget_password' %}">
-            {% csrf_token %}
+        <form method="POST" action="{% url 'forget_password' %}" >
+             {% csrf_token %}
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title text-danger" id="exampleModalLabel" style="font-family: 'Vazir_Bold';">
@@ -78,10 +77,8 @@
                 </div>
                 <div class="modal-body">
                     <div class="form-group">
-                        <label for="phoneNumber" class="form-text text-nowrap mt-2 text-md-left">شماره تلفن خود را وارد
-                            کنید</label>
-                        <input id="phoneNumber" name="phone_number" type="text" class="form-control w-100"
-                               pattern="[9][0-9]{9}" required>
+                        <label for="phoneNumber" class="form-text text-nowrap mt-2 text-md-left">شماره تلفن خود را وارد کنید</label>
+                        <input id="phoneNumber" name="phone_number"type="text" class="form-control w-100" pattern="[9][0-9]{9}" required>
                         <small class="form-text text-nowrap mt-2 text-md-left">
                             <i class="fas fa-info-circle"></i>
                             شماره تلفن را بدون صفر وارد کنید .
@@ -107,8 +104,7 @@
     <script src="https://cdn.rtlcss.com/bootstrap/v4.2.1/js/bootstrap.min.js"
             integrity="sha384-a9xOd0rz8w0J8zqj1qJic7GPFfyMfoiuDjC9rqXlVOcGO/dmRqzMn34gZYDTel8k"
             crossorigin="anonymous"></script>
-    <!-- base validation js -->
-    <script src="{% static 'dashboard/js/validation-base.js' %}"></script>
+    <script src="{% static 'signin/js/signin.js' %}"></script>
     <!-- raychat !-->
     <script src="{% static 'home/js/raychat.js' %}"></script>
 {% endblock %}

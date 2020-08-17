@@ -194,7 +194,7 @@ class Course(models.Model):
         
     def clean_fields(self, exclude=None):
         super().clean_fields(exclude=exclude)
-        if self.end_date < self.start_date :
+        if self.end_date and self.start_date and self.end_date < self.start_date :
             raise ValidationError("تاریخ پایان باید پس از تاریخ شروع باشد")
 
 
@@ -341,7 +341,7 @@ class Discount(models.Model):
 
     def clean_fields(self, exclude=None):
         super().clean_fields(exclude=exclude)
-        if self.end_date and self.end_date <= self.start_date:
+        if self.end_date and self.start_date and self.end_date <= self.start_date:
             raise ValidationError("تاریخ پایان باید پس از تاریخ شروع باشد یا خالی باشد")
 
 

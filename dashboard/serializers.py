@@ -46,6 +46,7 @@ class CourseLessonsSerializer(CourseBriefSerializer):
     first_class = serializers.SerializerMethodField('get_first_class')
     is_active = serializers.SerializerMethodField('is_class_active')
     parent = serializers.SerializerMethodField('get_parent_lesson')
+    description = serializers.CharField(source='private_description')
 
     def is_class_active(self, obj):
         next_class = obj.get_next_class()
