@@ -42,6 +42,8 @@ class SendRequest(APIView):
                 query = Q(start_date__lte=now)
                 query &= Q(code=code)
                 query &= (Q(end_date__gte=now) | Q(end_date=None))
+                query &= (Q(courses__id__in=courses_id_list) | Q(courses=None))
+
                 discount = Discount.objects.get(query)
             else:
                 discount=None
@@ -136,18 +138,18 @@ class Verify(APIView):
 
 class ComputeDiscount(APIView):
     renderer_classes = [TemplateHTMLRenderer, JSONRenderer]
-
     def post(self, request):
+       courses_id_list = request.data["total_id"].split()
        code= request.data['code']
        now = datetime.datetime.now()
        query = Q(start_date__lte=now)
        query &= Q(code=code)
        query &= (Q(end_date__gte=now) | Q(end_date=None))
+       query &= (Q(courses__id__in=courses_id_list) | Q(courses=None))
        try:
            discount = Discount.objects.get(query)
        except :
            return Response( status.HTTP_406_NOT_ACCEPTABLE)
-       courses_id_list = request.data["total_id"].split()
        amount = int(request.data["total_pr"])
        amount=amount-compute_discount(courses_id_list,amount,discount)
        return Response({'amount': amount })

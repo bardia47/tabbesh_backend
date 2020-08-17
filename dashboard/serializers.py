@@ -46,6 +46,7 @@ class CourseLessonsSerializer(CourseBriefSerializer):
     first_class = serializers.SerializerMethodField('get_first_class')
     is_active = serializers.SerializerMethodField('is_class_active')
     parent = serializers.SerializerMethodField('get_parent_lesson')
+    description = serializers.CharField(source='private_description')
 
     def is_class_active(self, obj):
         next_class = obj.get_next_class()
@@ -158,7 +159,7 @@ class UserSaveProfileSerializer(UserProfileSerializer):
                   'grades', 'city', 'avatar')
 
     def validate_username(self, value):
-        user = User.objects.filter(Q(username=value.lower()))
+        user = User.objects.filter(Q(username=value.lower())).exclude(id=self.instance.id)
         if user.exists():
             raise serializers.ValidationError('کاربر با این نام کاربری از قبل موجود است.')
         return value.lower()

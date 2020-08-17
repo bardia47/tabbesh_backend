@@ -194,7 +194,7 @@ class Course(models.Model):
         
     def clean_fields(self, exclude=None):
         super().clean_fields(exclude=exclude)
-        if self.end_date < self.start_date :
+        if self.end_date and self.start_date and self.end_date < self.start_date :
             raise ValidationError("تاریخ پایان باید پس از تاریخ شروع باشد")
 
 
@@ -219,8 +219,12 @@ class Course(models.Model):
                 lesson = lesson.parent
 
     def get_discount(self, exclude=None):
-        discount = Discount.objects.filter(
-            (Q(courses__id=self.id) & Q(code__isnull=True)) | (Q(courses=None) & Q(code__isnull=True)))
+        now = datetime.datetime.now()
+        query = Q(start_date__lte=now)
+        query &=Q(code__isnull=True)
+        query &=(Q(end_date__gte=now) | Q(end_date=None))
+        query &= (Q(courses__id=self.id)  |  Q(courses=None))
+        discount = Discount.objects.filter(query)
         if discount.exists():
             return discount.first()
         return None
@@ -321,7 +325,7 @@ class Pay_History(models.Model):
 class Discount(models.Model):
     title=models.CharField("نام تخفیف", max_length=30, null=True, blank=True , unique=True)
     code = models.CharField("کد", max_length=15, null=True, blank=True , unique=True)
-    percent = models.IntegerField(
+    percent = models.IntegerField("درصد",
         default=10,
         validators=[
             MaxValueValidator(100),
@@ -337,11 +341,11 @@ class Discount(models.Model):
         verbose_name_plural = "تخفیف"
         verbose_name = "تخفیف"
     def __str__(self):
-        return self.title
+        return str(self.title)
 
     def clean_fields(self, exclude=None):
         super().clean_fields(exclude=exclude)
-        if self.end_date and self.end_date <= self.start_date:
+        if self.end_date and self.start_date and self.end_date <= self.start_date:
             raise ValidationError("تاریخ پایان باید پس از تاریخ شروع باشد یا خالی باشد")
 
 

@@ -103,13 +103,14 @@ function renderLessenCards(courseCards) {
                         </div>
                         <!-- End of the course  -->
                         <div class="course-end-date">
-                            <p>
+                            <p class="text-nowrap">
                                 <img src="/static/home/images/icons/calendar.svg" alt="calender-icon" />
                                 اتمام دوره:
                                 <span>
                                     ${endDateCourse.format("dddd")}
                                     ${endDateCourse.format("D")}
                                     ${endDateCourse.format("MMMM")}
+                                    ${endDateCourse.format("YYYY")}
                                 </span>
                             </p>
                         </div>

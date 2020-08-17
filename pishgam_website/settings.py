@@ -177,7 +177,7 @@ REST_FRAMEWORK = {
                                 'rest_framework.filters.OrderingFilter'),
     'EXCEPTION_HANDLER': 'accounts.exceptionHandler.api_exception_handler',
     'DEFAULT_PAGINATION_CLASS': 'accounts.pagination.Pagination',
-    'PAGE_SIZE': 3
+    'PAGE_SIZE': 6
 
 }
 

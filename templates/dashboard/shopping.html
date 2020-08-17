@@ -49,7 +49,7 @@
                         <div class="col-md-8 d-flex text-sm-center align-items-center mb-2 discount">
                             <!-- compute discount -->
                             <label class="mb-0 text-nowrap" for="discountCode">کد تخفیف:</label>
-                            <input type="text" class="form-control mx-2 w-25" id="discountCode" name="code"">
+                            <input type="text" class="form-control mx-2 w-25" id="discountCode" name="code">
                             <button type="button" class="btn btn-info mr-auto text-white" id="discountButton">
                                 اعمال کد تخفیف
                             </button>
@@ -171,7 +171,8 @@
                         </p>
                     </div>
                     <div class="modal-footer">
-                        <button id="modalDiscountButton" type="button" class="btn button-purchase w-100" data-dismiss="modal">بریم پرداختش کنیم
+                        <button id="modalDiscountButton" type="button" class="btn button-purchase w-100"
+                                data-dismiss="modal">بریم پرداختش کنیم
                         </button>
                     </div>
                 </div>
@@ -182,6 +183,8 @@
 
 <!-- JS files -->
 {% block JSfile %}
+    <!-- base validation js -->
+    <script src="{% static 'dashboard/js/validation-base.js' %}"></script>
     <script src="{% static "dashboard/js/shopping-cart.js" %}"></script>
     <script src="{% static 'dashboard/js/shopping.js' %}"></script>
     <!-- persian date formatter -- hint: read doc: https://github.com/babakhani/PersianDate -->

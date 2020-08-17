@@ -23,7 +23,6 @@ function errorModal(modalId, modalHeader, modalMessage) {
 // disable and reset discount
 function discountStatus(status) {
     if (status === "disable") {
-        console.log("Hi")
         $("#discountCode").prop("read-only", true);
         $("#discountButton").prop("disabled", true);
     }
@@ -138,6 +137,8 @@ $("#shopping-cart-form").submit(function (event) {
 
 
 $('#discountButton').click(function () {
+    let discountCode = $("#discountCode");
+    discountCode.val(persianToEnglishNumbers(discountCode.val()));
     if ($(".cart-item").length === 0) {
         errorModal("#errorModal", "مشکل در خرید دوره", "سبد خرید شما خالی می باشد، یک درس را انتخاب کنید.")
     } else {
