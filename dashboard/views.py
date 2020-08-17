@@ -225,7 +225,7 @@ class GetLessonsViewSet(viewsets.ModelViewSet):
          query = Q()
          if self.request.GET.get("lesson"):
              query &= getAllLessons(self.request.GET.get("lesson"))
-         courses = self.request.user.courses.filter(query)
+         courses = self.request.user.courses.filter(query).order_by('-end_date')
          return courses
 
 

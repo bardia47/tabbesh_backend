@@ -413,6 +413,7 @@ class DiscountWithoutCode(Discount):
         verbose_name_plural = 'تخفیف بدون کد'
 
 class DiscountWithoutCodeForm(forms.ModelForm):
+    title = forms.CharField(required=True,label="نام تخفیف")
     class Meta:
         model = DiscountWithoutCode
         fields = ('title', 'percent', 'start_date', 'end_date')

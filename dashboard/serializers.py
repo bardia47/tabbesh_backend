@@ -159,7 +159,7 @@ class UserSaveProfileSerializer(UserProfileSerializer):
                   'grades', 'city', 'avatar')
 
     def validate_username(self, value):
-        user = User.objects.filter(Q(username=value.lower()))
+        user = User.objects.filter(Q(username=value.lower())).exclude(id=self.instance.id)
         if user.exists():
             raise serializers.ValidationError('کاربر با این نام کاربری از قبل موجود است.')
         return value.lower()
