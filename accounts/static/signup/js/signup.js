@@ -32,7 +32,7 @@ $("#username").on("keyup", function () {
 
 // phone number validation check
 $("#phoneNumber").on("keyup", function () {
-    let phoneNumberRegEx = /^(\+98|0)?9\d{9}$/;
+    let phoneNumberRegEx = /^0?9\d{9}$/;
     let phoneNumber = $("#phoneNumber");
     phoneNumber.val(persianToEnglishNumbers(phoneNumber.val()));
     if (phoneNumberRegEx.test(phoneNumber.val()) || !phoneNumber.val()) {
@@ -65,7 +65,5 @@ $("#formSignup").submit(function (e) {
     let phoneNumber = $("#phoneNumber");
     if (phoneNumber.val().startsWith("0")) {
         phoneNumber.val(phoneNumber.val().slice(1))
-    } else if (phoneNumber.startsWith("+98")) {
-        phoneNumber.val(phoneNumber.val().slice(3))
     }
 });
