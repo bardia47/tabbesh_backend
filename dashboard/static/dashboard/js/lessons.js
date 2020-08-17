@@ -40,9 +40,9 @@ function pagination(url) {
             }
         },
         error: function () {
-            var element = $( "#have-class");
-            if (!element.length|| element.val()!="False")
-            alert("خطا در بارگزاری دروس ... لطفا دوباره امتحان کنید!")
+            var element = $("#have-class");
+            if (!element.length || element.val() != "False")
+                alert("خطا در بارگزاری دروس ... لطفا دوباره امتحان کنید!")
         },
     });
 }
@@ -55,14 +55,16 @@ function renderLessenCards(courseCards) {
         let nextClassDate = new persianDate(Date.parse(courseCard.first_class))
         // check class is active or not
         if (courseCard.is_active) {
-             buttonToClassTemplate = `
+            buttonToClassTemplate = `
                 <button class="btn btn-success mb-1">
                     <img src="/static/home/images/icons/click.svg" alt="button link to class">
                     ورود به کلاس
                 </button>
             `
+        } else if (true) {
+
         } else {
-             buttonToClassTemplate = `
+            buttonToClassTemplate = `
                 <button class="btn btn-danger mb-1" disabled>
                     <img src="/static/home/images/icons/click.svg" alt="button link to class">
                     کلاس شروع نشده

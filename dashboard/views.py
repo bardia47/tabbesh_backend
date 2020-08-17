@@ -168,7 +168,7 @@ class Lessons(APIView):
     def get(self, request):
         now = datetime.datetime.now()
         if request.accepted_renderer.format == 'html':
-            return Response({"have_class" : request.user.courses.all().count()!=0} ,template_name='dashboard/lessons.html')
+            return Response({"have_class" : request.user.courses.filter(end_date__gt=now).count()!=0} ,template_name='dashboard/lessons.html')
 # Shopping Page
 class Shopping(APIView):
     renderer_classes = [TemplateHTMLRenderer, JSONRenderer]
