@@ -43,7 +43,6 @@ $(function () {
 
 // pagination when user return to previous page --> hint: read about history javascript stack
 window.onpopstate = function (event) {
-    console.log(event.state.url);
     pagination(event.state.url)
 };
 
@@ -72,6 +71,7 @@ function pagination(url) {
 // Add course card to div card group
 function renderShoppingCards(courseCards) {
     $.each(courseCards, function (index, courseCard) {
+        console.log(courseCard.description)
         // parse Date to ISO date format and use persianDate jQuery
         let startDateCourse = new persianDate(Date.parse(courseCard.start_date));
         let endDateCourse = new persianDate(Date.parse(courseCard.end_date));
@@ -99,7 +99,6 @@ function renderShoppingCards(courseCards) {
                 </p>
                 `;
                 discountPrice = (parseFloat(courseCard.amount) * (100 - parseInt(courseCard.discount.percent))) / 100;
-                console.log(discountPrice)
                 coursePriceTemplate = `
                 <span class="price" style="color: #e8505b;text-decoration: line-through">${courseCard.amount}</span>
                 ${discountPrice}
@@ -237,7 +236,6 @@ $("select[id^='search']").change(function (event) {
         searchParameter.set($(this).data("search"), $(this).val());
         searchParameter.delete("page");
     } else {
-        console.log($(this).data("search"))
         searchParameter.delete($(this).data("search"));
     }
     history.pushState({url: urlMaker()}, null, "?" + searchParameter);
