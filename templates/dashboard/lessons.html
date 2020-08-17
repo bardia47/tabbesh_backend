@@ -32,21 +32,25 @@
         </div>
     {% else %}
         <!-- active courses section -->
-        <div id="activeCourses">
-            <h1 class="text-left vazir-bold mb-1" style="font-size: 20px;">
+        <div class="container">
+            <h1 class="text-left vazir-bold mb-3" style="font-size: 20px;">
                 <img class="mr-2" src="{% static 'dashboard/images/icons/active-course.svg' %}" width="48" height="48">
-                دروس فعال شما
+                دوره های در حال برگزاری
             </h1>
+            <div  id="activeCourses" class="row">
 
+            </div>
         </div>
     {% endif %}
     <hr>
     <!-- finished courses section -->
-    <div id="finishedCourses">
-        <h1 class="text-left vazir-bold mb-3" style="font-size: 20px;">
+    <div class="container">
+        <h1 class="text-left vazir-bold mb-3 gray-img" style="font-size: 20px;">
             <img class="mr-2" src="{% static 'dashboard/images/icons/finished-course.svg' %}" width="40" height="40">
-            دروسی که قبلا در آن ها حضور داشتید
+            دوره هایی که قبلا در آن ها حضور داشتید
         </h1>
+        <div id="finishedCourses" class="row">
+        </div>
     </div>
     <div class="container">
         <div class="card-group" style="display: none">
