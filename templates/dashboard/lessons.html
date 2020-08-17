@@ -6,44 +6,52 @@
 
 <!-- CSS files -->
 {% block CSSfiles %}
-    <link rel="stylesheet" href="{% static 'dashboard/css/lessons.css' %}">
+<link rel="stylesheet" href="{% static 'dashboard/css/lessons.css' %}">
 {% endblock %}
 
 <!-- Active menu of sidebar -->
 {% block lesson_active %}active-menu{% endblock %}
 <!-- Content of page -->
 {% block content %}
-    <!-- Course Rows -->
-    <input id="have-class" type="hidden" value="{{ have_class }}" >
-    {% if not have_class %}
-        <div class="container w-100 p-1 text-center" style="font-family: 'Vazir_Bold';">
-            <div class="col-md-12 mt-3 mb-3">
-                <img class="m-auto" src="{% static 'home/images/icons/sad-emoji.svg' %}" width="130" height="130">
-            </div>
-            <div class="col-md-12">
-                <p class="text-center" style="font-size: 25px;">در حال حاضر هیچ کلاسی برای حضور در اون نداری!</p>
-            </div>
-            <div class="col-md-12">
-                <p class="mt-2 text-center" style="font-family: 'Vazir_Light'; font-size: 20px;">
-                    می خوای کلاس جدید ثبت نام کنی ؟
-                </p>
-                <a class="btn btn-dark text-white m-1 mr-4" href="{% url 'shopping' %}">آره بزن بریم</a>
-            </div>
-        </div>
-    {% endif %}
-    <div class="container">
-        <div class="card-group" style="display: none">
-        </div>
-        <div class="pagination-wrapper mt-2 text-center" style="display: none">
-            <div class="pagination">
-            </div>
+<!-- Course Rows -->
+<input id="have-class" type="hidden" value="{{ have_class }}">
+{% if not have_class %}
+<div class="container w-100 p-1 text-center margin-set" style="font-family: 'Vazir_Bold';">
+    <div class="col-md-12">
+        <img class="m-auto" src="{% static 'home/images/icons/sad-emoji.svg' %}" width="90" height="90">
+    </div>
+    <div class="col-md-12">
+        <p class="text-center" style="font-size: 20px;">در حال حاضر هیچ کلاسی برای حضور در اون نداری!</p>
+    </div>
+    <div class="col-md-12">
+        <p class="mt-2 text-center" style="font-family: 'Vazir_Light'; font-size: 15px;">
+            می خوای کلاس جدید ثبت نام کنی ؟
+        </p>
+        <a class="btn btn-dark text-white m-1 mr-4" href="{% url 'shopping' %}">آره بزن بریم</a>
+    </div>
+    <hr>
+    <div class="col-md-12">
+        <span>
+            <p class="text-left" style="font-size: 20px;"><img class="mr-2"
+                    src="{% static 'home/images/icons/subject.svg' %}" width="48" height="48">دروسی که
+                قبلا در آن ها حضور داشته اید</p>
+        </span>
+    </div>
+</div>
+{% endif %}
+<div class="container">
+    <div class="card-group" style="display: none">
+    </div>
+    <div class="pagination-wrapper mt-2 text-center" style="display: none">
+        <div class="pagination">
         </div>
     </div>
+</div>
 {% endblock %}
 
 <!-- JS files -->
 {% block JSfile %}
-    <script src="{% static "dashboard/js/lessons.js" %}"></script>
-    <!-- persian date formatter -- hint: read doc: https://github.com/babakhani/PersianDate -->
-    <script src="{% static "home/js/persian-date.min.js" %}"></script>
+<script src="{% static "dashboard/js/lessons.js" %}"></script>
+<!-- persian date formatter -- hint: read doc: https://github.com/babakhani/PersianDate -->
+<script src="{% static "home/js/persian-date.min.js" %}"></script>
 {% endblock %}
