@@ -342,23 +342,9 @@ class PayHistoryAdmin(admin.ModelAdmin):
 
 
 
-class CourseDiscountFormSet(forms.models.BaseInlineFormSet):
-    def clean(self):
-        count = 0
-        for form in self.forms:
-               if not form.errors and form.is_valid and  form.cleaned_data and not form.cleaned_data.get('DELETE') :
-                    discount_id=form.cleaned_data['discount'].id
-                    discount = Discount.objects.filter(courses__id=form.cleaned_data['course'].id,code__isnull=False ).exclude(id=discount_id)
-                    count = count + 1
-                    if discount:
-                        raise forms.ValidationError("درس " + form.cleaned_data['course'].title + " دارای تخفیف میباشند")
-        if count>0:
-            discount = Discount.objects.filter(courses=None , code__isnull=True).exclude(id=discount_id)
-            if discount:
-                raise forms.ValidationError("تمامی دروس دارای تخفیف میباشند")
+
 
 class CourseDiscountInline(TabularInlineJalaliMixin,admin.TabularInline):
-    formset = CourseDiscountFormSet
     model = Discount.courses.through
     verbose_name_plural = "دروس مشمول تخفیف(در صورت خالی بودن تمام دروس شامل تخفیف میشوند)"
     verbose_name = "دروس مشمول تخفیف"
