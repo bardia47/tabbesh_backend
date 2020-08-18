@@ -60,6 +60,19 @@ function pagination(url) {
             // check if page number is not 0 show pagination
             if (shoppingCards != 0) {
                 renderPagination(request.getResponseHeader('Last-Page'), url)
+            } else {
+                let notFoundCourseTemplate = `
+                <div class="container w-100 p-1 text-center vazir-bold">
+                    <div class="col-md-12 mt-3 mb-3">
+                        <img class="m-auto" src="/static/dashboard/images/icons/course-not-found.svg" width="130" height="130" alt="not found course">
+                    </div>
+                    <div class="col-md-12">
+                        <p class="text-center" style="font-size: 25px;">دوره ای با این ویژگی ها یافت نشد !</p>
+                        <p class="text-center vazir-light" style="font-size: 20px;">با ویژگی های دیگر امتحان کنید</p>
+                    </div>
+                </div>
+                `;
+                $(".card-group").append(notFoundCourseTemplate);
             }
         },
         error: function () {
