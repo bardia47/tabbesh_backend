@@ -131,7 +131,7 @@ function renderLessenCards(courseCards) {
                     </div>
                 </div>
             </div>
-        `
+        `;
         $(".card-group").append(lessonCardTemplate)
     });
     $(".card-group").show()
@@ -155,6 +155,6 @@ function renderPagination(pageNumber, urlAjax) {
         pagination($(this).attr("href"))
     });
     // $('.pagination').append(`<a class="next page-numbers" href="${hostName}"> Next </a>`)
-    $(".pagination-wrapper").show()
+    $(".pagination-wrapper").show();
     $("html, body").animate({scrollTop: 0}, "slow");
 }

@@ -7,65 +7,64 @@
 
 <!-- CSS files -->
 {% block CSSfiles %}
-<link rel="stylesheet" href="{% static 'dashboard/css/filemanager.css' %}">
+    <link rel="stylesheet" href="{% static 'dashboard/css/filemanager.css' %}">
 {% endblock %}
 
 <!-- Content of page -->
 {% block content %}
-<div class="container">
-    <div class="row mb-2">
-        <div class="col-md-1 file-manager-image">
-            <img src="{{course.image}}" width="50" height="50">
+    <div class="container">
+        <div class="row mb-2">
+            <div class="col-md-1 file-manager-image">
+                <img src="{{ course.image }}" width="50" height="50">
+            </div>
+            <div class="col-md-3 file-manager title">
+                <p class="m-0"><strong>{{ course.title }}</strong></p>
+                <h6 class="p-0"><small>{{ course.teacher }}</small></h6>
+            </div>
+
+
         </div>
-        <div class="col-md-3 file-manager title">
-            <p class="m-0"><strong>{{ course.title }}</strong></p>
-            <h6 class="p-0"><small>{{ course.teacher }}</small></h6>
+        <div class="table-responsive-sm">
+            <table class="table table-hover">
+                <thead>
+                <tr>
+                    <th scope="col"><img src="{% static 'home/images/icons/folder.svg' %}" width="25" height="25"></th>
+                    <th scope="col">عنوان</th>
+                    <th scope="col">فرستنده</th>
+                    <th scope="col">تاریخ</th>
+                    <th scope="col">توضیحات</th>
+                    <th scope="col">دانلود</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% ifequal course.document_set.count 0 %}
+                    <tr>
+                        <td class="p-3" style="font-family:'Vazir_Bold'; font-size: 15px;" colspan="6" scope="row">
+                            <img class="mb-2" src="{% static 'home/images/icons/file-manager-empty.svg' %}" width="35"
+                                 height="35">
+                            <br>
+                            متاسفانه جزوه ای یافت نشد !
+                        </td>
+                    </tr>
+                {% else %}
+                    {% for doc in documents %}
+                        <tr>
+                            <th style="font-family:'Vazir_Bold'" scope="row">{{ forloop.counter }}</th>
+                            <td>{{ doc.title }}</td>
+                            <td>{{ doc.sender }}</td>
+                            <td>{{ doc.upload_date_decorated }}</td>
+                            <td> {{ doc.description }}</td>
+                            <td style="text-align:center"><a href="{{ doc.upload_document }}" target="_blank">
+                                <img src="{% static 'home/images/icons/download.svg' %}" width="20" height="20"></a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                {% endifequal %}
+                </tbody>
+            </table>
         </div>
-
-
-
-
-
     </div>
-    <table class="table table-hover">
-        <thead>
-            <tr>
-                <th scope="col"><img src="{% static 'home/images/icons/folder.svg'%}" width="25" height="25"></th>
-                <th scope="col">عنوان</th>
-                <th scope="col">فرستنده</th>
-                <th scope="col">تاریخ</th>
-                <th scope="col">توضیحات</th>
-                <th scope="col">دانلود</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% ifequal course.document_set.count 0 %}
-            <tr>
-                <td class="p-3" style="font-family:'Vazir_Bold'; font-size: 15px;" colspan="6" scope="row">
-                    <img class="mb-2" src="{% static 'home/images/icons/file-manager-empty.svg'%}" width="35"
-                        height="35">
-                    <br>
-                    متاسفانه جزوه ای یافت نشد !
-                </td>
-            </tr>
-            {% else %}
-            {% for doc in documents %}
-            <tr>
-                <th style="font-family:'Vazir_Bold'" scope="row">{{ forloop.counter }}</th>
-                <td>{{doc.title}}</td>
-                <td>{{doc.sender}}</td>
-                <td>{{doc.upload_date_decorated}}</td>
-                <td> {{doc.description}}</td>
-                <td style="text-align:center"><a href="{{ doc.upload_document }}" target="_blank">
-                        <img src="{% static 'home/images/icons/download.svg'%}" width="20" height="20"></a></td>
-            </tr>
-            {% endfor %}
-            {% endifequal %}
-        </tbody>
-    </table>
-</div>
 {% endblock %}
-
 <!-- JS files -->
 {% block JSfile %}
 {% endblock %}

@@ -67,7 +67,7 @@ function pagination(url) {
                         <img class="m-auto" src="/static/dashboard/images/icons/course-not-found.svg" width="130" height="130" alt="not found course">
                     </div>
                     <div class="col-md-12">
-                        <p class="text-center" style="font-size: 25px;">دوره ای با این ویژگی ها یافت نشد !</p>
+                        <p class="text-center" style="font-size: 25px;">دوره با این ویژگی ها یافت نشد !</p>
                         <p class="text-center vazir-light" style="font-size: 20px;">با ویژگی های دیگر امتحان کنید</p>
                     </div>
                 </div>
@@ -84,7 +84,6 @@ function pagination(url) {
 // Add course card to div card group
 function renderShoppingCards(courseCards) {
     $.each(courseCards, function (index, courseCard) {
-        console.log(courseCard.description)
         // parse Date to ISO date format and use persianDate jQuery
         let startDateCourse = new persianDate(Date.parse(courseCard.start_date));
         let endDateCourse = new persianDate(Date.parse(courseCard.end_date));
