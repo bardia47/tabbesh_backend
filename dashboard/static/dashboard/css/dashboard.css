@@ -279,7 +279,7 @@ time.icon span {
   margin-right: 5px;
 }
 
-.button-to-class button {
+.button-to-class a {
   background-color: #ffc107;
   border: none;
   color: white;
@@ -289,7 +289,7 @@ time.icon span {
   text-align: center;
 }
 
-.button-to-class button:hover {
+.button-to-class a:hover {
   background-color: #10375c;
   border: none;
   color: white;
