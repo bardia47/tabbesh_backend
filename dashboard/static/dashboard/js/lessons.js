@@ -92,6 +92,10 @@ function renderLessenCards(courseCards) {
         } else {
             grayImg = "gray-img";
         }
+        // check first class is null
+        if (courseCard.first_class == null){
+            nextClassTemplate = ``;
+        }
         let lessonCardTemplate = `
             <!-- Course Cards -->
             <div class="col-md-4 mb-3 ${grayImg}">

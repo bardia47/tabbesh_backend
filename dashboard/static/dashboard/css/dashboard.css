@@ -279,23 +279,21 @@ time.icon span {
   margin-right: 5px;
 }
 
-.button-to-class a {
+.button-to-class .btn-to-class {
   background-color: #ffc107;
   border: none;
   color: white;
   font-size: 16px;
   cursor: pointer;
-  height: 50px;
   text-align: center;
 }
 
-.button-to-class a:hover {
+.button-to-class .btn-to-class:hover {
   background-color: #10375c;
   border: none;
   color: white;
   font-size: 16px;
   cursor: pointer;
-  height: 50px;
   text-align: center;
 }
 
