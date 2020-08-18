@@ -71,6 +71,13 @@
                 <img src="{% static 'home/images/icons/shopping-cart.svg' %}" alt="آیکون">
                 <a href="{% url 'shopping' %}">خرید درس</a>
             </div>
+            {% if user.role.title == "admin" %}
+                <hr>
+                <div class="row sidebar-menu">
+                    <img src="{% static 'home/images/icons/admin.svg' %}" alt="آیکون">
+                    <a href="{% url 'admin:index' %}">صفحه ادمین</a>
+                </div>
+            {% endif %}
         </div>
         <!-- Footer of sidebar -->
         <div class="footer">
@@ -110,25 +117,25 @@
                 </div>
             </div>
         </nav>
-{#        <!-- Contact us popup -->#}
-{#        <div class="d-inline-flex flex-row contact_us">#}
-{#            <!-- Contact us icon -->#}
-{#            <img id="contact_us_img" class="ml-3 animated pulse infinite" src="#}
-{#            {% static 'home/images/icons/support.svg' %}" width="70px" height="70px">#}
-{#            <!-- Popup content -->#}
-{#            <div id="contact_us_content" class="p-2 pt-3">#}
-{#                <p class="text-nowrap mb-2">#}
-{#                    روابط عمومی#}
-{#                    <span class="ml-4">09374789830</span>#}
-{#                    <img src="{% static 'home/images/icons/call-24-hours.svg' %}" width="30" height="30">#}
-{#                </p>#}
-{#                <p class="text-nowrap mb-2">#}
-{#                    پشتیبانی فنی#}
-{#                    <span class="ml-4">09391811412</span>#}
-{#                    <img src="{% static 'home/images/icons/call-24-hours.svg' %}" width="30" height="30">#}
-{#                </p>#}
-{#            </div>#}
-{#        </div>#}
+        {#        <!-- Contact us popup -->#}
+        {#        <div class="d-inline-flex flex-row contact_us">#}
+        {#            <!-- Contact us icon -->#}
+        {#            <img id="contact_us_img" class="ml-3 animated pulse infinite" src="#}
+        {#            {% static 'home/images/icons/support.svg' %}" width="70px" height="70px">#}
+        {#            <!-- Popup content -->#}
+        {#            <div id="contact_us_content" class="p-2 pt-3">#}
+        {#                <p class="text-nowrap mb-2">#}
+        {#                    روابط عمومی#}
+        {#                    <span class="ml-4">09374789830</span>#}
+        {#                    <img src="{% static 'home/images/icons/call-24-hours.svg' %}" width="30" height="30">#}
+        {#                </p>#}
+        {#                <p class="text-nowrap mb-2">#}
+        {#                    پشتیبانی فنی#}
+        {#                    <span class="ml-4">09391811412</span>#}
+        {#                    <img src="{% static 'home/images/icons/call-24-hours.svg' %}" width="30" height="30">#}
+        {#                </p>#}
+        {#            </div>#}
+        {#        </div>#}
 
         {% block content %}
 
