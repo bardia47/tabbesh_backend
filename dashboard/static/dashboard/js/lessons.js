@@ -118,7 +118,7 @@ function renderLessenCards(courseCards) {
                                 <img src="/static/home/images/icons/paragraph.svg" alt="" />
                                 توضیحات:
                             </p>
-                            <p class="course-description-p">${courseCard.description}</p>
+                            <p class="course-description-p">${courseCard.private_description}</p>
                         </div>
                     </div>
                     <!-- Button link to class -->
