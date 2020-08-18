@@ -76,15 +76,15 @@ function renderLessenCards(courseCards) {
                 `;
             if (courseCard.is_active) {
                 buttonToClassTemplate = `
-                <button class="btn btn-success mb-1">
+                <a class="btn btn-success mb-1" href="${courseCard.url}" target="_blank">
                     <img src="/static/home/images/icons/click.svg" alt="button link to class">
                     ورود به کلاس
-                </button>
+                </a>
                 `;
             } else {
                 buttonToClassTemplate = `
                 <button class="btn btn-danger mb-1" disabled>
-                    <img src="/static/home/images/icons/click.svg" alt="button link to class">
+                    <img src="/static/home/images/icons/click.svg" alt="disable button to class">
                     کلاس شروع نشده
                 </button>
                 `;
