@@ -198,10 +198,10 @@
                         <!-- Button link to class -->
                         <div class="col-md-4 button-to-class">
                             {% if klass.is_class_active %}
-                            <button class="btn" onclick="window.location.href = '{{ klass.course.url }}';">
-                                <img src="{% static 'home/images/icons/click.svg' %}" alt="button link to class">بریم سر
-                                کلاس
-                            </button>
+                            <a class="btn pt-2" href="{{ klass.course.url }}" target="_blank">
+                                <img src="{% static 'home/images/icons/click.svg' %}" alt="button link to class">
+                                بریم سر کلاس
+                            </a>
                             {% endif %}
                         </div>
                     </div>
