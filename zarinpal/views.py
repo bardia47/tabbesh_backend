@@ -10,7 +10,8 @@ from rest_framework.response import Response
 from rest_framework import status
 from django.db.models import Q
 from django.db.models import Sum
-
+from .enums import ZarinPal
+from accounts.utils import TextUtils
 import datetime
 MERCHANT = '0c5db223-a20f-4789-8c88-56d78e29ff63'
 client = Client('https://www.zarinpal.com/pg/services/WebGate/wsdl')
@@ -52,8 +53,6 @@ class SendRequest(APIView):
                 return render(request, 'dashboard/unsuccess_shopping.html')
             return Response({'massage':'خرید ناموفق'}, status=status.HTTP_406_NOT_ACCEPTABLE)
         if courses_id_list and is_valid(courses_id_list, amount,discount):
-            description = "List of courses id ==> " + \
-                str(courses_id_list) + " Total price ==> " + str(amount)
             # handel free courses
             if amount == 0 :
                 for course_id in courses_id_list:
@@ -65,6 +64,7 @@ class SendRequest(APIView):
                
         # request to zarinpal
             else:
+                    description = pay_description(courses_id_list,amount,discount,request.user)
                     url = request.scheme+"://"+request.get_host() + CallbackURL
                     result = client.service.PaymentRequest(
                         MERCHANT, amount, description, email, mobile, url)
@@ -167,3 +167,14 @@ def compute_discount(courses_id_list, amount,discount):
       for course in courses:
           sum_amount += course.get_amount_payable()
       return sum_amount*discount.percent/100
+
+
+def pay_description(courses_id_list, amount,discount,user):
+    text= ZarinPal.descriptionText.value
+    if discount:
+        discount_text=TextUtils.replacer(ZarinPal.dicountText.value,[discount.code])
+    else :
+        discount_text=None
+    text = TextUtils.replacer(text,[TextUtils.convert_list_to_string(list(Course.objects.filter(id__in=courses_id_list).values_list('title', flat=True))),discount_text,user.get_full_name()])
+    return text
+

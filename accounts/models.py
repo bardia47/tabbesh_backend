@@ -66,16 +66,16 @@ class User(AbstractBaseUser, PermissionsMixin):
     def get_short_name(self):
         return self.first_name
 
-      #compress images
-    def compressImage(self,uploadedImage):
-        imageTemproary = Image.open(uploadedImage)
-        outputIoStream = BytesIO()
-        imageTemproaryResized = imageTemproary.resize((20,20), Image.ANTIALIAS)
-        imageTemproary = imageTemproary.convert('RGB')
-        imageTemproary.save(outputIoStream , format='JPEG', quality=60)
-        outputIoStream.seek(0)
-        uploadedImage = InMemoryUploadedFile(outputIoStream,'ImageField', "%s.jpg" % uploadedImage.name.split('.')[0], 'image/jpeg', sys.getsizeof(outputIoStream), None)
-        return uploadedImage
+    #   #compress images
+    # def compressImage(self,uploadedImage):
+    #     imageTemproary = Image.open(uploadedImage)
+    #     outputIoStream = BytesIO()
+    #     imageTemproaryResized = imageTemproary.resize((20,20), Image.ANTIALIAS)
+    #     imageTemproary = imageTemproary.convert('RGB')
+    #     imageTemproary.save(outputIoStream , format='JPEG', quality=60)
+    #     outputIoStream.seek(0)
+    #     uploadedImage = InMemoryUploadedFile(outputIoStream,'ImageField', "%s.jpg" % uploadedImage.name.split('.')[0], 'image/jpeg', sys.getsizeof(outputIoStream), None)
+    #     return uploadedImage
 
 
 

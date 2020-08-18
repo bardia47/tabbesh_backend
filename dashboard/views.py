@@ -19,7 +19,7 @@ from rest_framework.decorators import api_view,renderer_classes
 from rest_framework import generics
 import base64
 from django.core.files.base import ContentFile
-
+from accounts.utils import Utils
 # for load or dump jsons
 import json
 
@@ -106,7 +106,7 @@ class EditProfile(APIView):
                 ext = format.split('/')[-1]
                 avatar = ContentFile(base64.b64decode(imgstr), name=file_name +"."+ ext)
             except:
-                avatar = request.user.compressImage(request.FILES.get("file"))
+                avatar = Utils.compressImage(request.FILES.get("file"))
 
             if avatar:
                 if not request.user.avatar.url.startswith("/media/defaults"):
