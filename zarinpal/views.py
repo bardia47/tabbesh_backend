@@ -25,7 +25,7 @@ def is_valid(courses_id_list, amount,discount):
     for course in courses:
         total_price += course.get_amount_payable()
     if discount is not None:
-        total_price=total_price-compute_discount(courses_id_list, amount,discount)
+        total_price=total_price-compute_discount(courses_id_list, total_price,discount)
     return True if int(total_price) == amount else False
 
 
