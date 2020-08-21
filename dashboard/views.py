@@ -78,6 +78,7 @@ class EditProfile(APIView):
                 newdict = {'errors': serializer.errors}
                 newdict.update(showSer.data)
                 return Response(newdict, status=status.HTTP_406_NOT_ACCEPTABLE)
+            Utils.cleanMenuCache(request)
             return Response(showSer.data)
 
         if method == 'changePassword':
