@@ -6,25 +6,55 @@ function addToCardButtons() {
 }
 
 
+// animate to top of cart list
+function animatedToCardList() {
+    $([document.documentElement, document.body]).animate({
+        scrollTop: $(".shopping-content").offset().top
+    }, 500);
+}
+
+// error modal function -> get modal id & header & message
+function errorModal(modalId, modalHeader, modalMessage) {
+    $(modalId).find(".modal-title").text(modalHeader);
+    $(modalId).find(".modal-body-p").text(modalMessage);
+    $(modalId).modal()
+}
+
+// disable and reset discount
+function discountStatus(status) {
+    if (status === "disable") {
+        $("#discountCode").prop("read-only", true);
+        $("#discountButton").prop("disabled", true);
+    }
+    // reset discount --> no required
+    // else if (status === "reset") {  // reset cart items and hidden inputs
+    //     errorModal("#errorModal", "خطا در اعمال کد تخفیف", "کد تخفیف شما باطل شد.");
+    //     $("#totalId").val("");
+    //     $("#totalPrice").val("").prop("read-only", false);
+    //     $("#discountCode").val("");
+    //     $("#cartListItems").empty();
+    //     $(".total-price").text("0");
+    //     $("#discountButton").prop("disabled", false);
+    // }
+}
+
 // add cart item with add-to-cart button
 function addToCartClicked() {
     let courseCard = $(this).parents(".course-card").first();
     let id = courseCard.find(".course-id").val();
     let title = courseCard.find(".title").text();
-    let price = courseCard.find(".price").text();
+    let price = courseCard.find("#price").val();
+    if (parseFloat(price) === 0) price = "رايگان!";
     let teacher = courseCard.find(".teacher-name").text();
     let imageSrc = courseCard.find(".card-img-top").attr('src');
-    let duplicateCourse = false;
+    let status = false;
     $(".cart-course-title").each(function (index, cardItemTitle) {
-        console.log(cardItemTitle)
-        console.log(title)
-        if ($(cardItemTitle).text() == title) {
-            $("#errorModalForCart").modal();
-            $("#modal-body").text("درس مورد نظر قبلا به سبد خرید اضافه شده است.");
-            duplicateCourse = true;
+        if ($(cardItemTitle).text() === title) {
+            errorModal("#errorModal", "مشکل در خرید دوره", "درس مورد نظر قبلا به سبد خرید اضافه شده است.");
+            status = true;
         }
     });
-    if (!duplicateCourse) addItemToCart(id, title, price, teacher, imageSrc)
+    if (!status) addItemToCart(id, title, price, teacher, imageSrc)
 }
 
 // create cart item
@@ -64,7 +94,7 @@ function addItemToCart(id, title, price, teacher, imageSrc) {
       <input type="hidden" class="cart-course-id" value="${id}">
       </div>
     </div>`;
-    let cartList = $(".cart-list");
+    let cartList = $("#cartListItems");
     cartList.append(cartTemplate);
     let cartItem = cartList.children(".row").last();
     // remove cart item handler
@@ -75,6 +105,7 @@ function addItemToCart(id, title, price, teacher, imageSrc) {
     });
     animatedToCardList();
     updateCartTotal()
+
 }
 
 // Update cart total price
@@ -98,18 +129,56 @@ function updateCartTotal() {
 
 // shopping cart button
 $("#shopping-cart-form").submit(function (event) {
-    console.log($("#totalId").val());
-    if ($(".cart-item").length == 0) {
-        $("#errorModalForCart").modal();
-        $("#modal-body").text("سبد خرید شما خالی می باشد، یک درس را انتخاب کنید.");
+    if ($(".cart-item").length === 0) {
+        errorModal("#errorModal", "مشکل در خرید دوره", "سبد خرید شما خالی می باشد، یک درس را انتخاب کنید.")
         event.preventDefault();
     }
 });
 
 
-// animate to top of cart list
-function animatedToCardList() {
-    $([document.documentElement, document.body]).animate({
-        scrollTop: $(".shopping-content").offset().top
-    }, 500);
-}
+$('#discountButton').click(function () {
+    let discountCode = $("#discountCode");
+    discountCode.val(persianToEnglishNumbers(discountCode.val()));
+    if ($(".cart-item").length === 0) {
+        errorModal("#errorModal", "مشکل در خرید دوره", "سبد خرید شما خالی می باشد، یک درس را انتخاب کنید.")
+    } else {
+        $.ajax({
+            url: "/payment/compute-discount/",
+            dataType: "json",
+            type: "POST",
+            data: {
+                csrfmiddlewaretoken: $("input[name='csrfmiddlewaretoken']").val(),
+                code: $('#discountCode').val(),
+                total_id: $('#totalId').val(),
+                total_pr: $('#totalPrice').val()
+            },
+            beforeSend: function (xhr, settings) {
+            },
+            success: function (data, textStatus, xhr) {
+                if (data !== 406) {
+                    discountStatus("disable");
+                    let oldTotalPrice = $("#totalPrice");
+                    let profitPrice = parseFloat(oldTotalPrice.val()) - parseFloat(data.amount);
+                    $("#profitPrice").text(profitPrice);
+                    $("#discountPrice").text(data.amount);
+                    // disable close modal when click outside
+                    $("#discountModal").modal({backdrop: 'static', keyboard: false}).modal();
+                    let discountPriceTemplate = `<span style="color: #e8505b;text-decoration: line-through">${oldTotalPrice.val()}</span> ${data.amount}`
+                    oldTotalPrice.val(data.amount);
+                    $(".total-price").empty().append(discountPriceTemplate)
+                } else {
+                    errorModal("#errorModal", "خطا در اعمال تخفیف", "کد تخفیف شما معتبر نمی باشد، دوباره امتحان کنید.")
+                }
+
+            },
+            error: function (xhr, status, error) {
+                alert(error);
+            }
+        });
+    }
+});
+
+
+$("#modalDiscountButton").click(function () {
+    $("form#shopping-cart-form").submit()
+});

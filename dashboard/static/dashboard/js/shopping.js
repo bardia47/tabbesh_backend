@@ -35,7 +35,7 @@ if (firstParameter) {
 } else {
     searchParameter = new URLSearchParams("?page=1")
 }
-let getShoppingURL =  "/dashboard/get-shopping/?";
+let getShoppingURL = "/dashboard/get-shopping/?";
 // first pagination when user request https://127.0.0.1:8000/dashboard/shopping/
 $(function () {
     pagination(urlMaker())
@@ -43,7 +43,6 @@ $(function () {
 
 // pagination when user return to previous page --> hint: read about history javascript stack
 window.onpopstate = function (event) {
-    console.log(event.state.url);
     pagination(event.state.url)
 };
 
@@ -61,6 +60,19 @@ function pagination(url) {
             // check if page number is not 0 show pagination
             if (shoppingCards != 0) {
                 renderPagination(request.getResponseHeader('Last-Page'), url)
+            } else {
+                let notFoundCourseTemplate = `
+                <div class="container w-100 p-1 text-center vazir-bold">
+                    <div class="col-md-12 mt-3 mb-3">
+                        <img class="m-auto" src="/static/dashboard/images/icons/course-not-found.svg" width="130" height="130" alt="not found course">
+                    </div>
+                    <div class="col-md-12">
+                        <p class="text-center" style="font-size: 25px;">دوره با این ویژگی ها یافت نشد !</p>
+                        <p class="text-center vazir-light" style="font-size: 20px;">با ویژگی های دیگر امتحان کنید</p>
+                    </div>
+                </div>
+                `;
+                $(".card-group").append(notFoundCourseTemplate);
             }
         },
         error: function () {
@@ -75,15 +87,38 @@ function renderShoppingCards(courseCards) {
         // parse Date to ISO date format and use persianDate jQuery
         let startDateCourse = new persianDate(Date.parse(courseCard.start_date));
         let endDateCourse = new persianDate(Date.parse(courseCard.end_date));
+        let coursePriceTemplate;
+        // default is price without discount
+        let discountPrice = parseFloat(courseCard.amount);
+        let discountTitleTemplate = ``;
         // price check -- for free courses
         if (courseCard.amount <= 0) {
             coursePriceTemplate = `رايگان!`
         } else {
-            coursePriceTemplate = `
-            ${courseCard.amount}
-            <span class="currency">تومان</span>
-            `
+            // check course price have discount or not
+            if (courseCard.discount == null) {
+                coursePriceTemplate = `
+                ${courseCard.amount}
+                <span class="currency">تومان</span>
+                `
+            } else {
+                // add discount title if course have discount
+                discountTitleTemplate = `
+                <p style="text-align: center ; color: #e8505b">
+                    <img src="/static/dashboard/images/icons/course-discount.svg" width="25px" height="25px">
+                 با تخفیف   
+                    ${courseCard.discount.title}
+                </p>
+                `;
+                discountPrice = (parseFloat(courseCard.amount) * (100 - parseInt(courseCard.discount.percent))) / 100;
+                coursePriceTemplate = `
+                <span class="price" style="color: #e8505b;text-decoration: line-through">${courseCard.amount}</span>
+                ${discountPrice}
+                <span class="currency">تومان</span>
+                `
+            }
         }
+        // shopping card template
         let shoppingCardTemplate = `
             <div class="col-md-4 mb-3">
                <div class="card course-card h-100">
@@ -106,25 +141,27 @@ function renderShoppingCards(courseCards) {
                      </div>
                      <!-- Start of the course  -->
                      <div class="course-start-date">
-                        <p>
+                        <p class="text-nowrap">
                            <img src="/static/home/images/icons/start-date.svg" alt="start course clock">
                            شروع دوره:
                            <span>
                            ${startDateCourse.format("dddd")}
                            ${startDateCourse.format("D")}
                            ${startDateCourse.format("MMMM")}
+                           ${startDateCourse.format("YYYY")}
                            </span>
                         </p>
                      </div>
                      <!-- End of the course  -->
                      <div class="course-end-date">
-                        <p>
+                        <p class="text-nowrap">
                            <img src="/static/home/images/icons/end-date.svg" alt="end course clock">
                            اتمام دوره:
                            <span>
                            ${endDateCourse.format("dddd")}
                            ${endDateCourse.format("D")}
                            ${endDateCourse.format("MMMM")}
+                           ${endDateCourse.format("YYYY")}
                            </span>
                         </p>
                      </div>
@@ -138,10 +175,12 @@ function renderShoppingCards(courseCards) {
                      </div>
                      <!-- Course price -->
                      <div class="course-price">
+                        ${discountTitleTemplate}
                         <p>
                            <img src="/static/home/images/icons/price.svg" alt="price">
                            قیمت:
                            <span class="price">${coursePriceTemplate}</span>
+                           <input id="price" type="text" value=" ${discountPrice} تومان" hidden>
                         </p>
                      </div>
                   </div>
@@ -209,7 +248,6 @@ $("select[id^='search']").change(function (event) {
         searchParameter.set($(this).data("search"), $(this).val());
         searchParameter.delete("page");
     } else {
-        console.log($(this).data("search"))
         searchParameter.delete($(this).data("search"));
     }
     history.pushState({url: urlMaker()}, null, "?" + searchParameter);
@@ -217,40 +255,3 @@ $("select[id^='search']").change(function (event) {
 });
 
 
-$('#discountButton').click(function() {
-	$.ajax({
-		url : "/payment/compute-discount/",
-		dataType : "json",
-         type: "post",
-		data : {
-			code : $('#discountCode').attr("value"),
-            total_id : $('#totalId').attr("value"),
-		    total_pr : $('#totalPrice').attr("value")
-
-        },
-		beforeSend : function(xhr, settings) {
-			  $('#discountButton').prop("disabled",true);
-			  $('#payButton').prop("disabled",true);
-			  $('#discountCode').prop("readOnly",true);
-		},
-		success : function(data) {
-		    	  alert("کد تخفیف اعمال گردید!  ")
-                  $('#totalPrice').value=data['amount']
-
-		},
-		statusCode: {
-		      406: function( data ) {
-		          $('#discountButton').prop("disabled",false);
-		    	  alert("کد تخفیف معتبر نمیباشد")
-		      }
-		    },
-        error:function()
-        {
-           alert("خطا در اتصال به سامانه")
-        },
-		complete:function()
-		{
-			$('#payButton').prop("disabled",false);
-		}
-	});
-});

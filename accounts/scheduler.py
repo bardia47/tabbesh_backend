@@ -15,14 +15,16 @@ def update_course_calenders():
     # we cant import in top because account app not register when this code run ...
     now = datetime.datetime.now()
     courses = Course.objects.filter(end_date__gt=now)
-    classes = Course_Calendar.objects.filter(course__in=courses)
+    for course in courses:
+        classes = Course_Calendar.objects.filter(course__id=course.id)
     # update all classes time
-    for class_course_calender in classes:
-        while class_course_calender.end_date < now:
-            print(class_course_calender.end_date)
-            class_course_calender.start_date += datetime.timedelta(days=7)
-            class_course_calender.end_date += datetime.timedelta(days=7)
-            class_course_calender.save()
+        for class_course_calender in classes:
+            while class_course_calender.end_date < now:
+                class_course_calender.start_date += datetime.timedelta(days=7)
+                class_course_calender.end_date += datetime.timedelta(days=7)
+                if  class_course_calender.end_date>course.end_date :
+                    break
+                class_course_calender.save()
     # print log when course calender update ...
   #  print("course calenders update at " + str(now))
 # we need log for this 

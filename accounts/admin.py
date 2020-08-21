@@ -13,7 +13,8 @@ import datetime
 from django.urls import reverse
 from django.utils.safestring import mark_safe
 from django import forms
-
+from django.forms.models import BaseInlineFormSet
+from .utils import Utils
 class CourseInline(admin.StackedInline):
     model = User.courses.through
     verbose_name_plural = "دوره ها"
@@ -82,10 +83,16 @@ class UserCreationForm(forms.ModelForm):
             user.save()
         return user
 
-        if commit:
-            user.save()
-        return user
-
+    def clean_avatar(self):
+        data = self.cleaned_data['avatar']
+        try:
+            if (self.files['avatar']):
+                data=Utils.compressImage(data)
+                if not self.instance.avatar.url.startswith("/media/defaults"):
+                    self.instance.avatar.delete()
+        except:
+            pass
+        return data
 
 class UserChangeForm(UserCreationForm):
     password1 = forms.CharField(label='رمز', required=False, widget=forms.PasswordInput)
@@ -100,26 +107,6 @@ class UserChangeForm(UserCreationForm):
         labels = {
             'date_joined_decorated': "تاریخ عضویت",
         }
-
-    def save(self, commit=True):
-        user = super(UserChangeForm, self).save(commit=False)
-        if user.role.code == RoleCodes.ADMIN.value:
-            user.is_superuser = True
-        else:
-            user.is_superuser = False
-
-        if self.data.get("password1") != '':
-            password = make_password(self.cleaned_data["password1"])
-            user.password = password
-        user.set_default_avatar()
-        if commit:
-            user.save()
-        return user
-
-        if commit:
-            user.save()
-        return user
-
 
 class UserAdmin(BaseUserAdmin):
     readonly_fields = ('date_joined_decorated',)
@@ -187,10 +174,45 @@ class CourseCalendarInline(TabularInlineJalaliMixin, admin.TabularInline):
     model = Course_Calendar
     max_num = 3
 
+class DiscountWithoutCodeInline(admin.TabularInline):
+    model = Course.discount_set.through
+    max_num = 1
+
+    verbose_name_plural = "تخفیف بدون کد"
+    verbose_name =  "تخفیف بدون کد"
+
+    def get_queryset(self, request):
+        qs = super(DiscountWithoutCodeInline, self).get_queryset(request)
+        return qs.filter(discount__code__isnull=True)
+
+    def formfield_for_foreignkey(self, db_field, request=None, **kwargs):
+        field = super(DiscountWithoutCodeInline, self).formfield_for_foreignkey(
+            db_field, request, **kwargs)
+        if db_field.name == 'discount':
+            field.limit_choices_to = {'code__isnull': "True"}
+        return field
+
+
+
+class CourseForm(forms.ModelForm):
+    def clean_image(self):
+        data = self.cleaned_data['image']
+        try:
+            if (self.files['image']):
+                data = Utils.compressImage(data)
+                if not self.instance.image.url.startswith("/media/defaults"):
+                    self.instance.image.delete()
+        except:
+            pass
+        return data
+
+
 
 class CourseAdmin(ModelAdminJalaliMixin, admin.ModelAdmin):
+    form=CourseForm
     inlines = [
         CourseCalendarInline,
+        DiscountWithoutCodeInline
     ]
     list_display = ['code', 'title', 'get_start_jalali', 'get_end_jalali', 'teacher_full_name','student_link']
     search_fields = ['code', 'title']
@@ -322,25 +344,9 @@ class PayHistoryAdmin(admin.ModelAdmin):
 
 
 
-class CourseDiscountFormSetInline(forms.models.BaseInlineFormSet):
-    def clean(self):
-        count = 0
-        for form in self.forms:
-            if form.cleaned_data and not form.cleaned_data.get('DELETE', False):
-                    discount_id=form.cleaned_data['discount'].id
-                    count=count+1
-                    discount = Discount.objects.filter(courses__id=form.cleaned_data['course'].id,code__isnull=True ).exclude(id=discount_id)
-                    if discount:
-                        raise forms.ValidationError("درس " + form.cleaned_data['course'].title + " دارای تخفیف میباشند")
 
-        if count>0:
-            discount = Discount.objects.filter(courses=None , code__isnull=True).exclude(id=discount_id)
-            if discount:
-                raise forms.ValidationError("تمامی دروس دارای تخفیف میباشند")
-        return self.cleaned_data
 
 class CourseDiscountInline(TabularInlineJalaliMixin,admin.TabularInline):
-    formset = CourseDiscountFormSetInline
     model = Discount.courses.through
     verbose_name_plural = "دروس مشمول تخفیف(در صورت خالی بودن تمام دروس شامل تخفیف میشوند)"
     verbose_name = "دروس مشمول تخفیف"
@@ -360,6 +366,10 @@ class DiscountForm(forms.ModelForm):
         model = Discount
         fields = ('title', 'code', 'percent', 'start_date', 'end_date')
 
+    def __init__(self, *args, **kwargs):
+            super(DiscountForm, self).__init__(*args, **kwargs)
+            self.fields['code'].required = True
+
 class DiscountAdmin(ModelAdminJalaliMixin, admin.ModelAdmin):
     list_display = ['code', 'title','percent', 'get_start_jalali', 'get_end_jalali']
     search_fields = ['code', 'title']
@@ -367,6 +377,9 @@ class DiscountAdmin(ModelAdminJalaliMixin, admin.ModelAdmin):
     inlines = [
         CourseDiscountInline
     ]
+
+    def get_queryset(self, request):
+        return Discount.objects.filter(code__isnull=False)
 
     def get_start_jalali(self, obj):
         return datetime2jalali(obj.start_date).strftime('%y/%m/%d ')
@@ -381,6 +394,49 @@ class DiscountAdmin(ModelAdminJalaliMixin, admin.ModelAdmin):
     get_end_jalali.short_description = 'تاریخ پایان'
     get_end_jalali.admin_order_field = 'end_date'
 
+class DiscountWithoutCode(Discount):
+    class Meta:
+        proxy = True
+        verbose_name = 'تخفیف بدون کد'
+        verbose_name_plural = 'تخفیف بدون کد'
+
+class DiscountWithoutCodeForm(forms.ModelForm):
+    title = forms.CharField(required=True,label="نام تخفیف")
+    class Meta:
+        model = DiscountWithoutCode
+        fields = ('title', 'percent', 'start_date', 'end_date')
+
+
+
+
+class CourseDiscountWithoutCodeFormSet(forms.models.BaseInlineFormSet):
+    def clean(self):
+        count = 0
+        for form in self.forms:
+               if not form.errors and form.is_valid and  form.cleaned_data and not form.cleaned_data.get('DELETE') :
+                    discount_id=form.cleaned_data['discount'].id
+                    discount = Discount.objects.filter(courses__id=form.cleaned_data['course'].id,code__isnull=True ).exclude(id=discount_id)
+                    count = count + 1
+                    if discount:
+                        raise forms.ValidationError("درس " + form.cleaned_data['course'].title + " دارای تخفیف میباشند")
+        if count>0:
+            discount = Discount.objects.filter(courses=None , code__isnull=True).exclude(id=discount_id)
+            if discount:
+                raise forms.ValidationError("تمامی دروس دارای تخفیف میباشند")
+
+
+
+class CourseDiscountWithoutCodeInline(CourseDiscountInline):
+    formset = CourseDiscountWithoutCodeFormSet
+
+class DiscountWithoutCodeAdmin(DiscountAdmin):
+    form= DiscountWithoutCodeForm
+    inlines = [
+        CourseDiscountWithoutCodeInline
+    ]
+    def get_queryset(self, request):
+        return Discount.objects.filter(code__isnull=True)
+
 admin.site.register(User, UserAdmin)
 admin.site.register(TeacherUser, TeacherAdmin)
 admin.site.register(City, CityAdmin)
@@ -392,4 +448,5 @@ admin.site.unregister(Group)
 admin.site.register(Document, DocumentAdmin)
 admin.site.register(Pay_History, PayHistoryAdmin)
 admin.site.register(Discount, DiscountAdmin)
+admin.site.register(DiscountWithoutCode, DiscountWithoutCodeAdmin)
 

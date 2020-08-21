@@ -2,8 +2,7 @@ import sys
 from PIL import Image
 from io import BytesIO
 from django.core.files.uploadedfile import InMemoryUploadedFile
-from django.core.cache import cache
-from django.core.cache.utils import make_template_fragment_key
+
 class Utils:
           #compress images
     def compressImage(uploadedImage):
@@ -16,10 +15,20 @@ class Utils:
         uploadedImage = InMemoryUploadedFile(outputIoStream,'ImageField', "%s.jpg" % uploadedImage.name.split('.')[0], 'image/jpeg', sys.getsizeof(outputIoStream), None)
         return uploadedImage
 
+class TextUtils:
+    def convert_list_to_string(list, seperator=','):
+            """ Convert list to string, by joining all item in list with given separator.
+                Returns the concatenated string """
+            return seperator.join(list)
 
-    def cleanMenuCache(request):
-          if request.accepted_renderer.format == 'html':
-              # cache key for {% cache 10000 sidebar username %} templatetag
-              key = make_template_fragment_key('sidebar', [request.user.username])
-              print(cache.get(key))
-              cache.delete(key)  # invalidates cached template fragment
+    def replacer(old_text,string_list):
+        i=0
+        counter='{'+str(i)+'}'
+        while(old_text.find(counter)!=-1):
+          if (string_list[i] is not None):
+              old_text= old_text.replace(counter,str(string_list[i]))
+          else :
+            old_text = old_text.replace(counter, "")
+          i=i+1
+          counter = '{' + str(i) + '}'
+        return old_text

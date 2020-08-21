@@ -22,21 +22,27 @@ $(document).ready(function () {
                         $('.avatar').attr('src', e.target.result);
                     }
                 }
-            }
+            };
 
             reader.onerror = function () {
                 $("#modal").modal();
                 $("#modal-body").text("آپلود فایل به مشکل خورده است! لطفا دوباره تلاش کنید.")
-            }
+            };
 
             reader.readAsDataURL(input.files[0]);
 
         }
-    }
+    };
 
-    //Check new password & coniform password equal
-    $('#password2').on('keyup', function () {
-        if ($('#password').val() == $('#password2').val() && $("#password2").is(":focus")) {
+    //Check new password & conform password equal
+    $('#conformPassword').on('keyup', function () {
+        let oldPassword = $('#oldPassword'),
+            newPassword = $('#newPassword'),
+            conformPassword = $('#conformPassword');
+        oldPassword.val(persianToEnglishNumbers(oldPassword.val()));
+        newPassword.val(persianToEnglishNumbers(newPassword.val()));
+        conformPassword.val(persianToEnglishNumbers(conformPassword.val()));
+        if (newPassword.val() === conformPassword.val() && $("#conformPassword").is(":focus")) {
             $("#change-password-alert").hide()
         } else {
             $("#change-password-alert").show()
@@ -45,9 +51,9 @@ $(document).ready(function () {
 
     // Check if click ثبت button the other inputs form not required
     $('#edit_profile').click(function () {
-        $('[name="old_password"]').prop('required', false);
-        $('#password').prop('required', false);
-        $('#password2').prop('required', false);
+        $('#oldPassword').prop('required', false);
+        $('#newPassword').prop('required', false);
+        $('#conformPassword').prop('required', false);
     });
 
     // Check if click تغییر رمز عبور button the other inputs form not required
@@ -65,92 +71,49 @@ $(document).ready(function () {
     });
 
 
-    // Check firstname contain persian character
-    $('#first_name').on('keyup', function () {
+    // check first name & last name contains persian character
+    $("#firstName , #lastName").on("keyup", function () {
         let p = /^[\u0600-\u06FF\s]+$/;
-        if ((p.test($('#first_name').val()) || !$('#first_name').val())) {
-            $('#name-check-alert').hide()
+        if (p.test($(this).val()) || !$(this).val()) {
+            $($(this).siblings("small")).hide();
+            if (check()) {
+                $("#submit").prop("disabled", false);
+            }
         } else {
-            $('#name-check-alert').show()
-        }
-    });
+            $($(this).siblings("small")).show();
+            $("#submit").prop("disabled", true);
 
-    // Check lastname contain persian character
-    $('#last_name').on('keyup', function () {
-        let p = /^[\u0600-\u06FF\s]+$/;
-        if ((p.test($('#last_name').val()) || !$('#last_name').val())) {
-            $('#lastname-check-alert').hide()
-        } else {
-            $('#lastname-check-alert').show()
         }
     });
 
     // Username valid check
     $('#username').on('keyup', function () {
         let p = /^[a-zA-Z0-9]+$/;
+        $('#username').val(persianToEnglishNumbers($('#username').val()));
         if (p.test($('#username').val())) {
-            $('#username-check-alert').hide();
+            $('#usernameAlert').hide();
         } else {
-            $('#username-check-alert').show();
+            $('#usernameAlert').show();
         }
     });
 
-    $('#national-code').on('keyup', function () {
-        if (isValidIranianNationalCode($('#national-code').val())) {
-            $('#national-code-check-alert').hide();
+    // national code validation
+    $("#nationalCode").on('keyup', function () {
+        let nationalCode = $("#nationalCode");
+        nationalCode.val(persianToEnglishNumbers(nationalCode.val()));
+        if (isValidIranianNationalCode(nationalCode.val())) {
+            $("#nationalCodeAlert").hide();
         } else {
-            $('#national-code-check-alert').show();
+            $("#nationalCodeAlert").show();
         }
     });
 
-
-    // Check valid iranian national code 
-    function isValidIranianNationalCode(input) {
-        if (!/^\d{10}$/.test(input))
-            return false;
-
-        var check = parseInt(input[9]);
-        var sum = 0;
-        var i;
-        for (i = 0; i < 9; ++i) {
-            sum += parseInt(input[i]) * (10 - i);
-        }
-        sum %= 11;
-
-        return (sum < 2 && check == sum) || (sum >= 2 && check + sum == 11);
-    }
+    $("#changeProfile").submit(function () {
+        // remove white space with trim
+        let firstName = $("#firstName");
+        let lastName = $("#lastName");
+        firstName.val(firstName.val().trim());
+        lastName.val(lastName.val().trim());
+    });
 
 });
-
-
-document.addEventListener("DOMContentLoaded", function () {
-    var elements = document.getElementsByTagName("INPUT");
-    for (var i = 0; i < elements.length; i++) {
-        elements[i].oninvalid = function (e) {
-            e.target.setCustomValidity("");
-            if (!e.target.validity.valid) {
-                e.target.setCustomValidity("این مورد اجباری می باشد.");
-            }
-        };
-        elements[i].oninput = function (e) {
-            e.target.setCustomValidity("");
-        };
-    }
-});
-
-
-document.addEventListener("DOMContentLoaded", function () {
-    let elements = document.getElementsByTagName("SELECT");
-    for (let i = 0; i < elements.length; i++) {
-        elements[i].oninvalid = function (e) {
-            e.target.setCustomValidity("");
-            if (!e.target.validity.valid) {
-                e.target.setCustomValidity("لطفا یکی از موارد را انتخاب کنید.");
-            }
-        };
-        elements[i].oninput = function (e) {
-            e.target.setCustomValidity("");
-        };
-    }
-});
-

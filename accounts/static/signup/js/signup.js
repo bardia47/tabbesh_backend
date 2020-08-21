@@ -1,87 +1,69 @@
-// Check firstname contain persian character
-$('#first_name').on('keyup', function () {
-	let p = /^[\u0600-\u06FF\s]+$/;
-	if (p.test($('#first_name').val()) || !$('#first_name').val()) {
-		$('#firstname-check-alert').hide();
-		if (check()) {
-			$("#submit").prop("disabled", false);
-		}
-	} else {
-		$('#firstname-check-alert').show();
-		$("#submit").prop("disabled", true);
+// check first name & last name contains persian character
+$("#firstName , #lastName").on("keyup", function () {
+    let p = /^[\u0600-\u06FF\s]+$/;
+    if (p.test($(this).val()) || !$(this).val()) {
+        $($(this).siblings("small")).hide();
+        if (check()) {
+            $("#submit").prop("disabled", false);
+        }
+    } else {
+        $($(this).siblings("small")).show();
+        $("#submit").prop("disabled", true);
 
-	}
+    }
 });
 
+// username valid check
+$("#username").on("keyup", function () {
+    let p = /^[a-zA-Z0-9]+$/;
+    let username = $("#username");
+    username.val(persianToEnglishNumbers(username.val()));
+    if (p.test(username.val()) || !username.val()) {
+        $("#usernameAlert").hide();
+        if (check()) {
+            $("#submit").prop("disabled", false);
+        }
+    } else {
+        $("#usernameAlert").show();
+        $("#submit").prop("disabled", true);
 
-// Check lastname contain persian character
-$('#last_name').on('keyup', function () {
-	let p = /^[\u0600-\u06FF\s]+$/;
-	if (p.test($('#last_name').val()) || !$('#last_name').val()) {
-		$('#lastname-check-alert').hide();
-		if (check()) {
-			$("#submit").prop("disabled", false);
-		}
-	} else {
-		$('#lastname-check-alert').show();
-		$("#submit").prop("disabled", true);
-
-	}
+    }
 });
 
-// Username valid check
-$('#username').on('keyup', function () {
-	let p = /^[a-zA-Z0-9]+$/;
-	if (p.test($('#username').val()) || !$('#username').val()) {
-		$('#username-check-alert').hide();
-		if (check()) {
-			$("#submit").prop("disabled", false);
-		}
-	} else {
-		$('#username-check-alert').show();
-		$("#submit").prop("disabled", true);
+// phone number validation check
+$("#phoneNumber").on("keyup", function () {
+    let phoneNumberRegEx = /^0?9\d{9}$/;
+    let phoneNumber = $("#phoneNumber");
+    phoneNumber.val(persianToEnglishNumbers(phoneNumber.val()));
+    if (phoneNumberRegEx.test(phoneNumber.val()) || !phoneNumber.val()) {
+        $("#phoneNumberAlert").hide();
+        if (check()) {
+            $("#submit").prop("disabled", false);
+        }
+    } else {
+        $("#phoneNumberAlert").show();
+        $("#submit").prop("disabled", true);
 
-	}
+    }
 });
-
 
 function check() {
-	if (!$('#username-check-alert').is(':visible') &&
-		!$('#firstname-check-alert').is(':visible') &&
-		!$('#lastname-check-alert').is(':visible')) {
-		return true;
-	}
-	return false;
+    return !$("#usernameAlert").is(":visible") &&
+        !$("#firstNameAlert").is(":visible") &&
+        !$("#lastNameAlert").is(":visible") &&
+        !$("#phoneNumberAlert").is(":visible");
+
 }
 
-// change error message of empty input ( required input )
-document.addEventListener("DOMContentLoaded", function () {
-	let elements = document.getElementsByTagName("INPUT");
-	for (let i = 0; i < elements.length; i++) {
-		elements[i].oninvalid = function (e) {
-			e.target.setCustomValidity("");
-			if (!e.target.validity.valid) {
-				e.target.setCustomValidity("این مورد اجباری می باشد.");
-			}
-		};
-		elements[i].oninput = function (e) {
-			e.target.setCustomValidity("");
-		};
-	}
-});
-
-// change error message of empty select ( required input )
-document.addEventListener("DOMContentLoaded", function () {
-	let elements = document.getElementsByTagName("SELECT");
-	for (let i = 0; i < elements.length; i++) {
-		elements[i].oninvalid = function (e) {
-			e.target.setCustomValidity("");
-			if (!e.target.validity.valid) {
-				e.target.setCustomValidity("لطفا یکی از موارد را انتخاب کنید.");
-			}
-		};
-		elements[i].oninput = function (e) {
-			e.target.setCustomValidity("");
-		};
-	}
+// change +98 & 09 to 9
+$("#formSignup").submit(function (e) {
+    // remove white space with trim
+    let firstName = $("#firstName");
+    let lastName = $("#lastName");
+    firstName.val(firstName.val().trim());
+    lastName.val(lastName.val().trim());
+    let phoneNumber = $("#phoneNumber");
+    if (phoneNumber.val().startsWith("0")) {
+        phoneNumber.val(phoneNumber.val().slice(1))
+    }
 });

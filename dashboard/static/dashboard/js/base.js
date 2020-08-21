@@ -4,11 +4,11 @@ $(window).on('load', function () {
         $(".extend-content").show()
         $('#loading').hide();
     }, 500);
-    ready()
+    pageReady()
 });
 
 
-function ready() {
+function pageReady() {
     // loading page js
     $(document).ready(function () {
         $("#sidebarCollapse").click(function () {

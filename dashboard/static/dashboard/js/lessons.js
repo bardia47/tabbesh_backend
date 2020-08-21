@@ -1,7 +1,7 @@
 // function for get Request.GET variable
 function getUrlParameter(url, param) {
-    urlArray = url.split("/")
-    paramets = urlArray[urlArray.length - 1]
+    urlArray = url.split("/");
+    paramets = urlArray[urlArray.length - 1];
     const urlParams = new URLSearchParams(paramets);
     return urlParams.get(param)
 }
@@ -14,7 +14,7 @@ function getUrlParameter(url, param) {
 $(function () {
     url = "/dashboard/get-lessons/?page=" + (getUrlParameter(window.location.href, "page") ? +getUrlParameter(window.location.href, "page") : "1")
     pagination(url)
-})
+});
 
 // pagination when user return to previous page --> hint: read about history javascript stack
 window.onpopstate = function (event) {
@@ -32,17 +32,18 @@ function pagination(url) {
         type: "GET",
         dataType: "json",
         success: function (courseCards, textStatus, request) {
-            $(".card-group").empty()
-            $(".pagination").empty()
-            renderLessenCards(courseCards)
-            if (courseCards != 0) {
+            $("#activeCourses").empty();
+            $("#finishedCourses").empty();
+            $(".pagination").empty();
+            renderLessenCards(courseCards);
+            if (courseCards !== 0) {
                 renderPagination(request.getResponseHeader('Last-Page'), url)
             }
         },
         error: function () {
-            var element = $( "#have-class");
-            if (!element.length|| element.val()!="False")
-            alert("خطا در بارگزاری دروس ... لطفا دوباره امتحان کنید!")
+            var element = $("#have-class");
+            if (!element.length || element.val() !== "False")
+                alert("خطا در بارگزاری دروس ... لطفا دوباره امتحان کنید!")
         },
     });
 }
@@ -51,31 +52,57 @@ function pagination(url) {
 function renderLessenCards(courseCards) {
     $.each(courseCards, function (index, courseCard) {
         // parse Date to ISO date format and use persianDate jQuery
-        let endDateCourse = new persianDate(Date.parse(courseCard.end_date))
-        let nextClassDate = new persianDate(Date.parse(courseCard.first_class))
-        // check class is active or not
-        if (courseCard.is_active) {
-             buttonToClassTemplate = `
-                <button class="btn btn-success mb-1">
+        let endDateCourse = new persianDate(Date.parse(courseCard.end_date));
+        let nextClassDate = new persianDate(Date.parse(courseCard.first_class));
+        let nowDate = new persianDate();
+        let grayImg = "";
+        let classActive = endDateCourse >= nowDate;
+        let buttonToClassTemplate = ``;
+        let nextClassTemplate = ``;
+        if (classActive) {
+            nextClassTemplate = `
+                <p>
+                    <img class="${grayImg}" src="/static/home/images/icons/clock.svg" alt="course calender">
+                    جلسه ی بعدی:
+                    <span>
+                    
+                        ${nextClassDate.format("dddd")}
+                        ${nextClassDate.format("D")}
+                        ام
+                        ساعت
+                        ${nextClassDate.format("hh:mm")}
+                     </span>
+                </p>
+                `;
+            if (courseCard.is_active) {
+                buttonToClassTemplate = `
+                <a class="btn btn-success mb-1" href="${courseCard.url}" target="_blank">
                     <img src="/static/home/images/icons/click.svg" alt="button link to class">
                     ورود به کلاس
-                </button>
-            `
-        } else {
-             buttonToClassTemplate = `
+                </a>
+                `;
+            } else {
+                buttonToClassTemplate = `
                 <button class="btn btn-danger mb-1" disabled>
-                    <img src="/static/home/images/icons/click.svg" alt="button link to class">
+                    <img src="/static/home/images/icons/click.svg" alt="disable button to class">
                     کلاس شروع نشده
                 </button>
-            `
+                `;
+            }
+        } else {
+            grayImg = "gray-img";
+        }
+        // check first class is null
+        if (courseCard.first_class == null){
+            nextClassTemplate = ``;
         }
         let lessonCardTemplate = `
             <!-- Course Cards -->
-            <div class="col-md-4 mb-3">
+            <div class="col-md-4 mb-3 ${grayImg}">
                 <!-- Course Card  -->
                 <div class="card course-card h-100">
                     <!-- Course poster -->
-                    <img class="card-img-top course-card-image" src="${courseCard.image}" />
+                    <img class="card-img-top course-card-image" src="${courseCard.image}" alt="course poster" />
                     <!-- Course content -->
                     <div class="card-body course-card-block">
                         <!-- Course title  -->
@@ -86,28 +113,18 @@ function renderLessenCards(courseCards) {
                         </div>
                         <!-- Course calender for next class  -->
                         <div class="course-calender">
-                            <p>
-                                <img src="/static/home/images/icons/clock.svg" alt="">
-                                جلسه ی بعدی:
-                                <span>
-                                
-                                    ${nextClassDate.format("dddd")}
-                                    ${nextClassDate.format("D")}
-                                    ام
-                                    ساعت
-                                    ${nextClassDate.format("H:m")}
-                                 </span>
-                            </p>
+                            ${nextClassTemplate}
                         </div>
                         <!-- End of the course  -->
                         <div class="course-end-date">
-                            <p>
+                            <p class="text-nowrap">
                                 <img src="/static/home/images/icons/calendar.svg" alt="calender-icon" />
                                 اتمام دوره:
                                 <span>
                                     ${endDateCourse.format("dddd")}
                                     ${endDateCourse.format("D")}
                                     ${endDateCourse.format("MMMM")}
+                                    ${endDateCourse.format("YYYY")}
                                 </span>
                             </p>
                         </div>
@@ -117,7 +134,7 @@ function renderLessenCards(courseCards) {
                                 <img src="/static/home/images/icons/paragraph.svg" alt="" />
                                 توضیحات:
                             </p>
-                            <p class="course-description-p">${courseCard.description}</p>
+                            <p class="course-description-p">${courseCard.private_description}</p>
                         </div>
                     </div>
                     <!-- Button link to class -->
@@ -130,16 +147,18 @@ function renderLessenCards(courseCards) {
                     </div>
                 </div>
             </div>
-        `
-        $(".card-group").append(lessonCardTemplate)
+        `;
+        if (classActive) $("#activeCourses").append(lessonCardTemplate);
+        else $("#finishedCourses").append(lessonCardTemplate)
+
     });
     $(".card-group").show()
 }
 
 // make pagination numbers
 function renderPagination(pageNumber, urlAjax) {
-    url = urlAjax.substring(0, urlAjax.indexOf('?'))
-    page = (getUrlParameter(window.location.href, "page") ? getUrlParameter(window.location.href, "page") : "1")
+    url = urlAjax.substring(0, urlAjax.indexOf('?'));
+    page = (getUrlParameter(window.location.href, "page") ? getUrlParameter(window.location.href, "page") : "1");
     // $('.pagination').append(`<a class="next page-numbers" href="${hostName}/dashboard/get_lessons/"> Prev </a>`)
     for (let number = 1; number <= pageNumber; number++) {
         if (page == number) {
@@ -154,6 +173,6 @@ function renderPagination(pageNumber, urlAjax) {
         pagination($(this).attr("href"))
     });
     // $('.pagination').append(`<a class="next page-numbers" href="${hostName}"> Next </a>`)
-    $(".pagination-wrapper").show()
+    $(".pagination-wrapper").show();
     $("html, body").animate({scrollTop: 0}, "slow");
 }

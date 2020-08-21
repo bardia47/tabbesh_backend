@@ -5,40 +5,44 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=width-device, initial-scale=1">
+    <!-- favicon !-->
+    <link rel="shortcut icon" type="image/png" href="{% static 'home/images/favicon.ico' %}"/>
     <!-- CSS Files -->
-    <link rel="stylesheet" type="text/css" href="{% static "home/css/fonts.css" %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'home/css/fonts.css' %}">
     <link rel="stylesheet" href="https://cdn.rtlcss.com/bootstrap/v4.2.1/css/bootstrap.min.css"
-        integrity="sha384-vus3nQHTD+5mpDiZ4rkEPlnkcyTP+49BhJ4wJeJunw06ZAp+wzzeBPUXr42fi8If" crossorigin="anonymous">
-    <link rel="stylesheet" type="text/css" href="{% static "home/css/home.css" %}">
+          integrity="sha384-vus3nQHTD+5mpDiZ4rkEPlnkcyTP+49BhJ4wJeJunw06ZAp+wzzeBPUXr42fi8If" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="{% static 'home/css/home.css' %}">
     <link rel="stylesheet" type="text/css"
-        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css">
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css">
     <title>آموزش آنلاین - تتا</title>
 </head>
 
 <body>
-    <div class="d-flex container-fluied flex-column align-items-center justify-content-center" style="height: 100%;">
-        <div class="bg-dark  mb-2 poster" style="border-radius: 20px;">
-            <div class="mb-2 p-1">
-                <p class="text-center mb-1" style="font-family: 'Vazir_Bold'; font-size: 40px;">
-                    حس <span style="color: #ad1d45;">خـــــوب</span>
-                    <br>
-                    آنلاین <span style="color: #f9d276;">بـــــودن</span>
-                </p>
-            </div>
-            <div class="row justify-content-center">
-                <a href="{% url 'signin' %}" class="btn btn-sign-up mr-2">ورود</a>
-                <a href="{% url 'signup' %}" class="btn btn-sign-in">ثبت نام</a>
-            </div>
+<div class="d-flex container-fluied flex-column align-items-center justify-content-center" style="height: 100%;">
+    <div class="bg-dark  mb-2 poster" style="border-radius: 20px;">
+        <div class="mb-2 p-1">
+            <p class="text-center mb-1" style="font-family: 'Vazir_Bold'; font-size: 40px;">
+                حس <span style="color: #ad1d45;">خـــــوب</span>
+                <br>
+                آنلاین <span style="color: #f9d276;">بـــــودن</span>
+            </p>
+        </div>
+        <div class="row justify-content-center">
+            <a href="{% url 'signin' %}" class="btn btn-sign-up mr-2">ورود</a>
+            <a href="{% url 'signup' %}" class="btn btn-sign-in">ثبت نام</a>
         </div>
     </div>
-    <!-- Footer -->
-    <footer class="footer">
-        <p>
-            © کلیه حقوق متعلق به تیم
-            <a href="mailto:tetha.nine@gmail.com" style="color: #ffb961;">تتا</a>
-            می باشد.
-        </p>
-    </footer>
+</div>
+<!-- Footer -->
+<footer class="footer">
+    <p>
+        © کلیه حقوق متعلق به تیم
+        <a href="mailto:tetha.nine@gmail.com" style="color: #ffb961;">تتا</a>
+        می باشد.
+    </p>
+</footer>
+<!-- raychat !-->
+<script src="{% static 'home/js/raychat.js' %}"></script>
 </body>
 
 </html>

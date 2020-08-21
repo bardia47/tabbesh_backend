@@ -17,7 +17,7 @@ from rest_framework.decorators import api_view,renderer_classes
 from rest_framework import generics
 import base64
 from django.core.files.base import ContentFile
-from accounts.utils import  Utils
+from accounts.utils import Utils
 # for load or dump jsons
 import json
 
@@ -78,7 +78,6 @@ class EditProfile(APIView):
                 newdict = {'errors': serializer.errors}
                 newdict.update(showSer.data)
                 return Response(newdict, status=status.HTTP_406_NOT_ACCEPTABLE)
-            Utils.cleanMenuCache(request)
             return Response(showSer.data)
 
         if method == 'changePassword':
@@ -105,7 +104,7 @@ class EditProfile(APIView):
                 ext = format.split('/')[-1]
                 avatar = ContentFile(base64.b64decode(imgstr), name=file_name +"."+ ext)
             except:
-                avatar = request.user.compressImage(request.FILES.get("file"))
+                avatar = Utils.compressImage(request.FILES.get("file"))
 
             if avatar:
                 if not request.user.avatar.url.startswith("/media/defaults"):
@@ -132,8 +131,8 @@ class EditProfile(APIView):
 #     else:
 #         error = 'تغییر پروفایل با مشکل رو به رو شد'
 #         return render(request, 'dashboard/profile_page.html', {'form': form, 'error': error})
-# 
-# 
+#
+#
 # # Edit profile page --> change field except avatar field
 # @login_required
 # def change_profile(request):
@@ -203,22 +202,22 @@ class GetLessonsViewSet(viewsets.ModelViewSet):
     queryset = Course.objects.all()
     serializer_class = CourseLessonsSerializer
     http_method_names = ['get', ]
-
     search_fields = ('title',)
     ordering_fields = ('title',)
+    pagination_class = None
 
-    def list(self, request, *args, **kwargs):
-        queryset = self.filter_queryset(self.get_queryset())
-        if queryset.count()==0:
-            return Response(status=status.HTTP_404_NOT_FOUND)
-        if 'text/javascript' in request.headers['Accept']:
-            page = self.paginate_queryset(queryset)
-            if page is not None:
-                serializer = self.get_serializer(page, many=True)
-                return self.get_paginated_response(serializer.data)
-
-        serializer = self.get_serializer(queryset, many=True)
-        return Response(serializer.data)
+    # def list(self, request, *args, **kwargs):
+    #     queryset = self.filter_queryset(self.get_queryset())
+    #     if queryset.count()==0:
+    #         return Response(status=status.HTTP_404_NOT_FOUND)
+    #     if 'text/javascript' in request.headers['Accept']:
+    #         page = self.paginate_queryset(queryset)
+    #         if page is not None:
+    #             serializer = self.get_serializer(page, many=True)
+    #             return self.get_paginated_response(serializer.data)
+    #
+    #     serializer = self.get_serializer(queryset, many=True)
+    #     return Response(serializer.data)
 
 
     def get_queryset(self):
@@ -230,6 +229,7 @@ class GetLessonsViewSet(viewsets.ModelViewSet):
              courses=Course.objects.filter(query)
          else:
             courses = self.request.user.courses.filter(query)
+         courses = courses.order_by('-end_date')
          return courses
 
 
@@ -253,6 +253,11 @@ class GetShoppingViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         now = datetime.datetime.now()
         query = Q(end_date__gt=now)
+        if self.request.user.courses.all():
+            queryNot = reduce(or_, (Q(id=course.id)
+                                    for course in self.request.user.courses.all()))
+            query = query & ~queryNot
+
         if self.request.GET.get("teacher") or self.request.GET.get("lesson") or  self.request.GET.get("grade"):
             if  self.request.GET.get("lesson"):
                 query &= getAllLessons( self.request.GET.get("lesson"))
@@ -260,15 +265,16 @@ class GetShoppingViewSet(viewsets.ModelViewSet):
                 query &= (Q(grade__id= self.request.GET.get("grade")) | Q(grade__id=None))
             if  self.request.GET.get("teacher"):
                 query &= Q(teacher__id= self.request.GET.get("teacher"))
+            courses = Course.objects.filter(query)
         else:
             if ( self.request.user.grades.count() > 0):
-                query &= (Q(grade__id= self.request.user.grades.first().id) | Q(grade__id=None))
+                query1 = query & (Q(grade__id= self.request.user.grades.first().id) | Q(grade__id=None))
+                courses1 = Course.objects.filter(query1)
+                query2 = query & ~(Q(grade__id=self.request.user.grades.first().id) | Q(grade__id=None))
+                courses2 = Course.objects.filter(query2)
+                courses=courses1.union(query2)
 
-        if self.request.user.courses.all():
-            queryNot = reduce(or_, (Q(id=course.id)
-                                    for course in self.request.user.courses.all()))
-            query = query & ~queryNot
-        courses = Course.objects.filter(query)
+
         return courses
 
 # @api_view(['GET', ])
@@ -303,4 +309,15 @@ class FileManager(generics.RetrieveAPIView):
         return Response(fileSerializer.data, template_name='dashboard/filemanager.html')
 
 
+class ClassList(generics.RetrieveAPIView):
+    renderer_classes = [BrowsableAPIRenderer, JSONRenderer]
+    queryset = Course.objects.all()
+    serializer_class = FilesSerializer
+    lookup_field = 'code'
+
+    def retrieve(self, request, *args, **kwargs):
+        instance = self.get_object()
+        students = instance.user_set.all()
+        listSerializer = ClassListSerializer(instance={'students': students, 'course': instance},context={'course_id': instance.id})
+        return Response(listSerializer.data)
 

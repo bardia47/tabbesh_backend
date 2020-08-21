@@ -7,7 +7,7 @@
 
 <!-- CSS files -->
 {% block CSSfiles %}
-<link rel="stylesheet" href="{% static 'dashboard/css/dashboard.css' %}">
+    <link rel="stylesheet" href="{% static 'dashboard/css/dashboard.css' %}">
 {% endblock %}
 
 <!-- Active menu of sidebar -->
@@ -15,212 +15,232 @@
 
 <!-- Content of dashboard page  -->
 {% block content %}
-<div class="container">
-    <!-- Countdown & date section -->
-    <div class="row">
-        <!--- Countdown to first class --->
-        <div class="col-md-7">
-            <!-- Title of countdown -->
-            <h1 class="text-center"> زمان تا شروع کلاس بعدی </h1>
-            <div class="row flex-row-reverse countdown justify-content-center">
-                <!-- Days section of countdown -->
-                <div class="bloc-time days mb-3 ">
-                    <h6> روز </h6>
-                    <div class="figure days days-1">
-                        <span class="top">-</span>
-                        <span class="top-back">
+    <div class="container">
+        <!-- Countdown & date section -->
+        <div class="row">
+            <!--- Countdown to first class --->
+            <div class="col-md-7">
+                <!-- Title of countdown -->
+                <h1 class="text-center"> زمان تا شروع کلاس بعدی </h1>
+                <div class="row flex-row-reverse countdown justify-content-center">
+                    <!-- Days section of countdown -->
+                    <div class="bloc-time days mb-3 ">
+                        <h6> روز </h6>
+                        <div class="figure days days-1">
+                            <span class="top">-</span>
+                            <span class="top-back">
                             <span>-</span>
                         </span>
-                        <span class="bottom">-</span>
-                        <span class="bottom-back">
+                            <span class="bottom">-</span>
+                            <span class="bottom-back">
                             <span>-</span>
                         </span>
+                        </div>
+                        <div class="figure days days-2">
+                            <span class="top">-</span>
+                            <span class="top-back">
+                            <span>-</span>
+                        </span>
+                            <span class="bottom">-</span>
+                            <span class="bottom-back">
+                            <span>-</span>
+                        </span>
+                        </div>
                     </div>
-                    <div class="figure days days-2">
-                        <span class="top">-</span>
-                        <span class="top-back">
-                            <span>-</span>
-                        </span>
-                        <span class="bottom">-</span>
-                        <span class="bottom-back">
-                            <span>-</span>
-                        </span>
-                    </div>
-                </div>
-                <!-- Hours section of countdown -->
-                <div class="bloc-time hours mb-3">
-                    <h6> ساعت </h6>
-                    <div class="figure hours hours-1">
-                        <span class="top">-</span>
-                        <span class="top-back">
+                    <!-- Hours section of countdown -->
+                    <div class="bloc-time hours mb-3">
+                        <h6> ساعت </h6>
+                        <div class="figure hours hours-1">
+                            <span class="top">-</span>
+                            <span class="top-back">
                             <span>2</span>
                         </span>
-                        <span class="bottom">-</span>
-                        <span class="bottom-back">
+                            <span class="bottom">-</span>
+                            <span class="bottom-back">
                             <span>-</span>
                         </span>
-                    </div>
+                        </div>
 
-                    <div class="figure hours hours-2 ">
-                        <span class="top">-</span>
-                        <span class="top-back">
+                        <div class="figure hours hours-2 ">
+                            <span class="top">-</span>
+                            <span class="top-back">
                             <span>-</span>
                         </span>
-                        <span class="bottom">-</span>
-                        <span class="bottom-back">
+                            <span class="bottom">-</span>
+                            <span class="bottom-back">
                             <span>-</span>
                         </span>
+                        </div>
+                    </div>
+                    <!-- Minutes section of countdown -->
+                    <div id="minutes-block" class="bloc-time min mb-3">
+                        <h6> دقیقه </h6>
+                        <div class="figure min min-1">
+                            <span class="top">-</span>
+                            <span class="top-back">
+                            <span>-</span>
+                        </span>
+                            <span class="bottom">-</span>
+                            <span class="bottom-back">
+                            <span>-</span>
+                        </span>
+                        </div>
+
+                        <div class="figure min min-2">
+                            <span class="top">-</span>
+                            <span class="top-back">
+                            <span>-</span>
+                        </span>
+                            <span class="bottom">-</span>
+                            <span class="bottom-back">
+                            <span>-</span>
+                        </span>
+                        </div>
+                    </div>
+                    <!-- Seconds section of countdown -->
+                    <div id="second-block" class="bloc-time sec mb-3"
+                         data-init-value="{{ calendar_time.total_seconds }}">
+                        <h6> ثانیه </h6>
+                        <div class="figure sec sec-1">
+                            <span class="top">-</span>
+                            <span class="top-back">
+                            <span>-</span>
+                        </span>
+                            <span class="bottom">-</span>
+                            <span class="bottom-back">
+                            <span>-</span>
+                        </span>
+                        </div>
+
+                        <div class="figure sec sec-2">
+                            <span class="top">-</span>
+                            <span class="top-back">
+                            <span>-</span>
+                        </span>
+                            <span class="bottom">-</span>
+                            <span class="bottom-back">
+                            <span>-</span>
+                        </span>
+                        </div>
                     </div>
                 </div>
-                <!-- Minutes section of countdown -->
-                <div id="minutes-block" class="bloc-time min mb-3">
-                    <h6> دقیقه </h6>
-                    <div class="figure min min-1">
-                        <span class="top">-</span>
-                        <span class="top-back">
-                            <span>-</span>
-                        </span>
-                        <span class="bottom">-</span>
-                        <span class="bottom-back">
-                            <span>-</span>
-                        </span>
-                    </div>
-
-                    <div class="figure min min-2">
-                        <span class="top">-</span>
-                        <span class="top-back">
-                            <span>-</span>
-                        </span>
-                        <span class="bottom">-</span>
-                        <span class="bottom-back">
-                            <span>-</span>
-                        </span>
-                    </div>
-                </div>
-                <!-- Seconds section of countdown -->
-                <div id="second-block" class="bloc-time sec mb-3" data-init-value="{{ calendar_time.total_seconds }}">
-                    <h6> ثانیه </h6>
-                    <div class="figure sec sec-1">
-                        <span class="top">-</span>
-                        <span class="top-back">
-                            <span>-</span>
-                        </span>
-                        <span class="bottom">-</span>
-                        <span class="bottom-back">
-                            <span>-</span>
-                        </span>
-                    </div>
-
-                    <div class="figure sec sec-2">
-                        <span class="top">-</span>
-                        <span class="top-back">
-                            <span>-</span>
-                        </span>
-                        <span class="bottom">-</span>
-                        <span class="bottom-back">
-                            <span>-</span>
-                        </span>
-                    </div>
+            </div>
+            <!-- Responsive date with jformat -->
+            <div class="col-md-5">
+                <div class="row calender justify-content-start mt-3">
+                    <time class="icon">
+                        <em>{{ now |jformat:"%A" }}</em>
+                        <strong>{{ now |jformat:"%B" }}</strong>
+                        <span> {{ now |jformat:"%-d" }} </span>
+                    </time>
                 </div>
             </div>
         </div>
-        <!-- Responsive date with jformat -->
-        <div class="col-md-5">
-            <div class="row calender justify-content-start mt-3">
-                <time class="icon">
-                    <em>{{ now |jformat:"%A" }}</em>
-                    <strong>{{ now |jformat:"%B" }}</strong>
-                    <span> {{ now |jformat:"%-d" }} </span>
-                </time>
-            </div>
-        </div>
-    </div>
-    <hr>
-    <!-- Course cards -->
-    <div class="row">
-        <div class="col-md-12 card-section">
-            <!-- Course cards title -->
-            <div class="card-title">
-                <h4>کلاس های امروز و فردای شما</h4>
-            </div>
-            {% if not classes %}
-            <div class="shadow-lg container w-100 my-n2 text-center rounded" style="font-family: 'Vazir_Bold';">
-                <div class="col-md-12 mb-1">
-                    <img class="m-auto" src="{% static 'home/images/icons/no-class.svg'%}" width="90" height="90">
+        <hr>
+        <!-- Course cards -->
+        <div class="row">
+            <div class="col-md-12 card-section">
+                <!-- Course cards title -->
+                <div class="card-title">
+                    <h4>کلاس های امروز و فردای شما</h4>
                 </div>
-                <div class="col-md-12">
-                    <p class="text-center" style="font-size: 20px;">امروز و فردا کلاسی نداری :(</p>
-                </div>
-                <div class="col-md-12 my-n2">
-                    <p class="text-center" style="font-family: 'Vazir_Light'; font-size: 15px;">
-                        می خوای کلاس جدید ثبت نام کنی ؟
-                    </p>
-                    <a class="btn btn-dark text-white mb-2" href="{% url 'shopping' %}">آره بزن بریم </a>
-                </div>
-            </div>
-            {% endif %}
-            <!-- Loop for Courses  -->
-            {% for klass in classes %}
-            <div class="card">
-                <div class="card-body">
-                    <div class="row">
-                        <!-- Course image -->
-                        <div class="col-md-1 course-image">
-                            <img src="{{ klass.course.image.url }}" alt="course image">
+                {% if not classes %}
+                    <div class="shadow-lg container w-100 my-n2 text-center rounded" style="font-family: 'Vazir_Bold';">
+                        <div class="col-md-12 mb-1">
+                            <img class="m-auto" src="{% static 'home/images/icons/no-class.svg' %}" width="90"
+                                 height="90">
                         </div>
-                        <!-- Course title -->
-                        <div class="col-md-2 course-title">
-                            <p class="course-title">{{ klass.course.title }}</p>
+                        <div class="col-md-12">
+                            <p class="text-center" style="font-size: 20px;">امروز و فردا کلاسی نداری :(</p>
                         </div>
-                        <!--Course teacher name -->
-                        <div class="col-md-2 course-teacher-name">
-                            <p>{{ klass.course.teacher.get_full_name }}</p>
-                        </div>
-                        <!-- Course date -->
-                        <div class="col-md-3 course-date">
-                            {% if klass.is_class_active %}
-                            <p><img src="{% static 'home/images/icons/live.svg' %}" style="width: 30px; height: 30px;"
-                                    alt="calender icon">
-                                در حال برگزاری
+                        <div class="col-md-12 my-n2">
+                            <p class="text-center" style="font-family: 'Vazir_Light'; font-size: 15px;">
+                                می خوای کلاس جدید ثبت نام کنی ؟
                             </p>
-                            {% else %}
-                            <p><img src="{% static 'home/images/icons/calendar.svg' %}" alt="calender icon">
-                                {% if klass.start_date|date:"d" == now|date:"d" %}
-                                امروز
-                                {% else %}
-                                فردا
-                                {% endif %}
-                                ساعت {{ klass.start_date|date:"H:i" }} شروع میشه
-                            </p>
-                            {% endif %}
-                        </div>
-
-                        <!-- Button link to class -->
-                        <div class="col-md-4 button-to-class">
-                            {% if klass.is_class_active %}
-                            <button class="btn" onclick="window.location.href = '{{ klass.course.url }}';">
-                                <img src="{% static 'home/images/icons/click.svg' %}" alt="button link to class">بریم سر
-                                کلاس
-                            </button>
-                            {% endif %}
+                            <a class="btn btn-dark text-white mb-2" href="{% url 'shopping' %}">آره بزن بریم </a>
                         </div>
                     </div>
-                </div>
+                {% endif %}
+                <!-- Loop for Courses  -->
+                {% for klass in classes %}
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="row">
+                                <!-- Course image -->
+                                <div class="col-md-1 course-image">
+                                    <img src="{{ klass.course.image.url }}" alt="course image">
+                                </div>
+                                <!-- Course title -->
+                                <div class="col-md-2 course-title">
+                                    <p class="course-title">{{ klass.course.title }}</p>
+                                </div>
+                                <!--Course teacher name -->
+                                <div class="col-md-2 course-teacher-name">
+                                    <p>{{ klass.course.teacher.get_full_name }}</p>
+                                </div>
+                                <!-- Course date -->
+                                <div class="col-md-3 course-date">
+                                    {% if klass.is_class_active %}
+                                        <p><img src="{% static 'home/images/icons/live.svg' %}"
+                                                style="width: 30px; height: 30px;"
+                                                alt="calender icon">
+                                            در حال برگزاری
+                                        </p>
+                                    {% else %}
+                                        {# check class is finished or not #}
+                                        {% if now >= klass.end_date %}
+                                            <p><img src="{% static 'home/images/icons/tick.svg' %}"
+                                                    style="width: 30px; height: 30px;"
+                                                    alt="calender icon">
+                                                کلاس تموم شده
+                                            </p>
+                                        {% else %}
+                                            <p><img src="{% static 'home/images/icons/calendar.svg' %}"
+                                                    alt="calender icon">
+                                                {% if klass.start_date|date:"d" == now|date:"d" %}
+                                                    امروز
+                                                {% else %}
+                                                    فردا
+                                                {% endif %}
+                                                ساعت {{ klass.start_date|date:"H:i" }} شروع میشه
+                                            </p>
+                                        {% endif %}
+                                    {% endif %}
+                                </div>
+
+                                <!-- Button link to class -->
+                                <div class="col-md-4 button-to-class">
+                                    {% if klass.is_class_active %}
+                                        <a class="btn btn-to-class pt-2" href="{{ klass.course.url }}" target="_blank">
+                                            <img src="{% static 'home/images/icons/click.svg' %}"
+                                                 alt="button link to class">
+                                            بریم سر کلاس
+                                        </a>
+                                    {% else %}
+                                        <a class="btn pt-2 btn-dark" href="lessons/files/{{ klass.course.code }}" target="_blank">
+                                            <img src="{% static 'home/images/icons/document.svg' %}"
+                                                 alt="button link to class">
+                                            برو جزوتو ببین
+                                        </a>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+
             </div>
-            {% endfor %}
 
         </div>
 
+
     </div>
-
-
-</div>
 
 {% endblock %}
 
 <!-- JS files -->
 {% block JSfile %}
-<script src="{% static 'dashboard/js/dashboard-timer.js' %}"></script>
-<!-- JS file for timer -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/latest/TweenMax.min.js"></script>
+    <script src="{% static 'dashboard/js/dashboard-timer.js' %}"></script>
+    <!-- JS file for timer -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/latest/TweenMax.min.js"></script>
 {% endblock %}

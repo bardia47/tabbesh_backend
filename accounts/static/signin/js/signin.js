@@ -1,28 +1,30 @@
-$('#submit').click(function () {
-    var p = /^[0]\d+$/;
-    if (p.test($('#username').val())) {
-        $('#username').val($('#username').val().substring(1, $('#username').val().length));
-    }
-});
-
-
-document.addEventListener("DOMContentLoaded", function () {
-    let elements = document.getElementsByTagName("INPUT");
-    for (let i = 0; i < elements.length; i++) {
-        elements[i].oninvalid = function (e) {
-            e.target.setCustomValidity("");
-            if (!e.target.validity.valid) {
-                e.target.setCustomValidity("این مورد اجباری می باشد.");
+$(function () {
+    $("#signInForm").submit(function () {
+        let username = $("#username");
+        let password = $("#password");
+        username.val(persianToEnglishNumbers(username.val()));
+        password.val(persianToEnglishNumbers(password.val()));
+        let phoneNumberRegEx = /^0?9\d{9}$/;
+        if (phoneNumberRegEx.test(username.val())) {
+            // change phone number to standard format
+            if (username.val().startsWith("0")) {
+                username.val(username.val().slice(1))
             }
-        };
-        elements[i].oninput = function (e) {
-            e.target.setCustomValidity("");
-        };
-    }
-});
+        }
+    });
 
-
-$('#forgetPasswordTag').click(function () {
-
-    $('#forgetPasswordModal').modal('show')
+    let sendForgetPasswordMessage = false;
+    $('#forgetPasswordTag').click(function () {
+        // for forget password
+        // $('#forgetPasswordModal').modal('show')
+        window.Raychat.toggle();
+        setTimeout(
+            function () {
+                if (!sendForgetPasswordMessage) {
+                    window.Raychat.sendOfflineMessage('در صورت فراموشی رمز، نام و نام خانوادگی و شماره تلفن را در اینجا وارد کنید تا همکاران ما رمز عبور جدید را ارسال کنند.');
+                    window.Raychat.sendOfflineMessage('مثال: محمد محمدی 09123456789');
+                    sendForgetPasswordMessage = true;
+                }
+            }, 2000);
+    });
 });

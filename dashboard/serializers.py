@@ -70,7 +70,7 @@ class CourseLessonsSerializer(CourseBriefSerializer):
     class Meta:
         model = Course
         fields = ('code', 'title', 'start_date', 'end_date', 'image', 'teacher', 'url',
-                  'is_active', 'first_class', 'description', 'parent')
+                  'is_active', 'first_class', 'private_description', 'parent')
 
 
 class CourseCalendarSerializer(JSONFormSerializer, serializers.ModelSerializer):
@@ -107,6 +107,7 @@ class ShoppingSerializer(serializers.Serializer):
 class ShoppingCourseSerializer(CourseLessonsSerializer):
     course_calendars = serializers.SerializerMethodField('get_start_dates')
     discount = serializers.SerializerMethodField('get_discount')
+
     class Meta:
         model = Course
         fields = ('id', 'title', 'start_date', 'end_date', 'code', 'amount', 'description', 'image', 'teacher',
@@ -157,9 +158,13 @@ class UserSaveProfileSerializer(UserProfileSerializer):
                   'last_name', 'username', 'email', 'gender', 'national_code',
                   'grades', 'city', 'avatar')
 
-    # for get method
+    def validate_username(self, value):
+        user = User.objects.filter(Q(username=value.lower())).exclude(id=self.instance.id)
+        if user.exists():
+            raise serializers.ValidationError('کاربر با این نام کاربری از قبل موجود است.')
+        return value.lower()
 
-
+# for get method
 class UserProfileShowSerializer(serializers.Serializer):
     user = UserProfileSerializer()
     grades = GradeSerializer(many=True)

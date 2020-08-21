@@ -18,10 +18,16 @@ class UserSerializer(JSONFormSerializer,serializers.ModelSerializer):
     role = serializers.PrimaryKeyRelatedField(queryset=Role.objects.all(),required=False)
     class Meta:
         model = User
-        fields = ('username',  'email','first_name',
+        fields = ('username','first_name',
                   'last_name', 'grades', 'gender', 'phone_number','password','role','city')
 
-        
+    def validate_username(self, value):
+        user = User.objects.filter(Q(username=value.lower()))
+        if user.exists():
+            raise serializers.ValidationError('کاربر با این نام کاربری از قبل موجود است.')
+        return value.lower()
+
+
     def validate(self,data):
         try :
             data['role']

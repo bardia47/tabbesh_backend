@@ -21,21 +21,42 @@
 
     <input id="have-class" type="hidden" value="{{ have_class }}" >
     {% if not have_class and not teacher %}
-        <div class="container w-100 p-1 text-center" style="font-family: 'Vazir_Bold';">
-            <div class="col-md-12 mt-3 mb-3">
-                <img class="m-auto" src="{% static 'home/images/icons/sad-emoji.svg' %}" width="130" height="130">
+        <div class="container w-100 p-1 text-center margin-set" style="font-family: 'Vazir_Bold';">
+            <div class="col-md-12">
+                <img class="m-auto" src="{% static 'home/images/icons/sad-emoji.svg' %}" width="90" height="90">
             </div>
             <div class="col-md-12">
-                <p class="text-center" style="font-size: 25px;">در حال حاضر هیچ کلاسی برای حضور در اون نداری!</p>
+                <p class="text-center" style="font-size: 20px;">در حال حاضر هیچ کلاسی برای حضور در اون نداری!</p>
             </div>
             <div class="col-md-12">
-                <p class="mt-2 text-center" style="font-family: 'Vazir_Light'; font-size: 20px;">
+                <p class="mt-2 text-center vazir-light" style="font-size: 15px;">
                     می خوای کلاس جدید ثبت نام کنی ؟
                 </p>
                 <a class="btn btn-dark text-white m-1 mr-4" href="{% url 'shopping' %}">آره بزن بریم</a>
             </div>
         </div>
+    {% else %}
+        <!-- active courses section -->
+        <div class="container">
+            <h1 class="text-left vazir-bold mb-3" style="font-size: 20px;">
+                <img class="mr-2" src="{% static 'dashboard/images/icons/active-course.svg' %}" width="48" height="48">
+                دوره های در حال برگزاری
+            </h1>
+            <div  id="activeCourses" class="row">
+
+            </div>
+        </div>
     {% endif %}
+    <hr>
+    <!-- finished courses section -->
+    <div class="container">
+        <h1 class="text-left vazir-bold mb-3 gray-img" style="font-size: 20px;">
+            <img class="mr-2" src="{% static 'dashboard/images/icons/finished-course.svg' %}" width="40" height="40">
+            دوره هایی که قبلا در آن ها حضور داشتید
+        </h1>
+        <div id="finishedCourses" class="row">
+        </div>
+    </div>
     <div class="container">
         <div class="card-group" style="display: none">
         </div>

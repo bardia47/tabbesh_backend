@@ -66,16 +66,16 @@ class User(AbstractBaseUser, PermissionsMixin):
     def get_short_name(self):
         return self.first_name
 
-      #compress images
-    def compressImage(self,uploadedImage):
-        imageTemproary = Image.open(uploadedImage)
-        outputIoStream = BytesIO()
-        imageTemproaryResized = imageTemproary.resize((20,20), Image.ANTIALIAS) 
-        imageTemproary = imageTemproary.convert('RGB')
-        imageTemproary.save(outputIoStream , format='JPEG', quality=60)
-        outputIoStream.seek(0)
-        uploadedImage = InMemoryUploadedFile(outputIoStream,'ImageField', "%s.jpg" % uploadedImage.name.split('.')[0], 'image/jpeg', sys.getsizeof(outputIoStream), None)
-        return uploadedImage
+    #   #compress images
+    # def compressImage(self,uploadedImage):
+    #     imageTemproary = Image.open(uploadedImage)
+    #     outputIoStream = BytesIO()
+    #     imageTemproaryResized = imageTemproary.resize((20,20), Image.ANTIALIAS)
+    #     imageTemproary = imageTemproary.convert('RGB')
+    #     imageTemproary.save(outputIoStream , format='JPEG', quality=60)
+    #     outputIoStream.seek(0)
+    #     uploadedImage = InMemoryUploadedFile(outputIoStream,'ImageField', "%s.jpg" % uploadedImage.name.split('.')[0], 'image/jpeg', sys.getsizeof(outputIoStream), None)
+    #     return uploadedImage
 
 
 
@@ -92,6 +92,9 @@ class User(AbstractBaseUser, PermissionsMixin):
             else :
                 self.avatar = "defaults/student.png"
 
+    def __str__(self):
+        return self.get_full_name()
+
 
     def get_student_grade(self):
             try:
@@ -103,6 +106,9 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     def is_teacher(self):
        return self.role.code == RoleCodes.TEACHER.value
+
+    def is_admin(self):
+        return self.role.code == RoleCodes.ADMIN.value
 
 
 # Roles Model
@@ -170,7 +176,9 @@ class Course(models.Model):
     teacher = models.ForeignKey(User, on_delete=models.DO_NOTHING, verbose_name="مدرس")
     start_date = models.DateTimeField("تاریخ شروع")
     end_date = models.DateTimeField("تاریخ پایان")
-    amount = models.FloatField("مبلغ", default=float(0))
+    amount = models.FloatField("مبلغ", default=float(0),
+    validators=[ MinValueValidator(0) ]
+     )
     url = models.URLField("لینک", blank=True, null=True)
     image = models.ImageField(upload_to='courses_image/', default='defaults/course.jpg')
     description = models.TextField('توضیحات خرید درس',null=True, blank=True)
@@ -194,12 +202,12 @@ class Course(models.Model):
         
     def clean_fields(self, exclude=None):
         super().clean_fields(exclude=exclude)
-        if self.end_date < self.start_date :
+        if self.end_date and self.start_date and self.end_date < self.start_date :
             raise ValidationError("تاریخ پایان باید پس از تاریخ شروع باشد")
-        
-    
+
+
     def get_first_class(self, exclude=None):
-        if len(self.course_calendar_set.all())==0: 
+        if len(self.course_calendar_set.all())==0:
             return None
         return  self.course_calendar_set.first()
 
@@ -219,8 +227,12 @@ class Course(models.Model):
                 lesson = lesson.parent
 
     def get_discount(self, exclude=None):
-        discount = Discount.objects.filter(
-            (Q(courses__id=self.id) & Q(code__isnull=True)) | (Q(courses=None) & Q(code__isnull=True)))
+        now = datetime.datetime.now()
+        query = Q(start_date__lte=now)
+        query &=Q(code__isnull=True)
+        query &=(Q(end_date__gte=now) | Q(end_date=None))
+        query &= (Q(courses__id=self.id)  |  Q(courses=None))
+        discount = Discount.objects.filter(query)
         if discount.exists():
             return discount.first()
         return None
@@ -321,7 +333,7 @@ class Pay_History(models.Model):
 class Discount(models.Model):
     title=models.CharField("نام تخفیف", max_length=30, null=True, blank=True , unique=True)
     code = models.CharField("کد", max_length=15, null=True, blank=True , unique=True)
-    percent = models.IntegerField(
+    percent = models.IntegerField("درصد",
         default=10,
         validators=[
             MaxValueValidator(100),
@@ -336,10 +348,12 @@ class Discount(models.Model):
         ordering = ['-start_date']
         verbose_name_plural = "تخفیف"
         verbose_name = "تخفیف"
+    def __str__(self):
+        return str(self.title)
 
     def clean_fields(self, exclude=None):
         super().clean_fields(exclude=exclude)
-        if self.end_date and self.end_date <= self.start_date:
+        if self.end_date and self.start_date and self.end_date <= self.start_date:
             raise ValidationError("تاریخ پایان باید پس از تاریخ شروع باشد یا خالی باشد")
 
-   
+

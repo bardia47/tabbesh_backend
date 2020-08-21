@@ -53,24 +53,24 @@
             </div>
             <h3>اطلاعات شخصی</h3>
             <!-- Change Profile form -->
-            <form action="{% url 'edit_profile' %}" method="POST">
+            <form id="changeProfile" action="{% url 'edit_profile' %}" method="POST">
                 {% csrf_token %}
                 <div class="pl-2">
                     <div class="form-row">
                         <div class="form-group col-md-4">
-                            <label class="control-label" for="first_name">نام</label>
-                            <input class="form-control w-100" id="first_name" name="first_name" type="text"
+                            <label class="control-label" for="firstName">نام</label>
+                            <input class="form-control w-100" id="firstName" name="first_name" type="text"
                                    value="{{ user.first_name }}" maxlength="30" required>
-                            <small id="name-check-alert" class="form-text text-danger mt-1" style="display: none;">
+                            <small id="firstNameAlert" class="form-text text-danger mt-1" style="display: none;">
                                 <i class="fas fa-exclamation-triangle"></i>
                                 تنها حروف فارسی مجاز است.
                             </small>
                         </div>
                         <div class="form-group col-md-4">
-                            <label class="control-label" for="last_name">نام خانوادگی</label>
-                            <input class="form-control w-100" id="last_name" name="last_name" type="text"
+                            <label class="control-label" for="lastName">نام خانوادگی</label>
+                            <input class="form-control w-100" id="lastName" name="last_name" type="text"
                                    value="{{ user.last_name }}" maxlength="30" required>
-                            <small id="lastname-check-alert" class="form-text text-danger mt-1" style="display: none;">
+                            <small id="lastNameAlert" class="form-text text-danger mt-1" style="display: none;">
                                 <i class="fas fa-exclamation-triangle"></i>
                                 تنها حروف فارسی مجاز است.
                             </small>
@@ -86,16 +86,16 @@
                             <input type="text" class="form-control" id="username" name="username"
                                    value="{{ user.username |default_if_none:'' }}">
                         </div>
-                        <small id="username-check-alert" class="form-text text-danger mt-1" style="display: none;">
+                        <small id="usernameAlert" class="form-text text-danger mt-1" style="display: none;">
                             <i class="fas fa-exclamation-triangle"></i>
                             نام کاربری تنها باید شامل حروف و اعداد انگلیسی باشد.
                         </small>
                     </div>
                     <div class="form-group">
-                        <label class="control-label" for="national_code">کد ملی</label>
-                        <input class="form-control" type="text" id="national_code" name="national_code"
+                        <label class="control-label" for="nationalCode">کد ملی</label>
+                        <input class="form-control national-code" type="text" id="nationalCode" name="national_code"
                                value="{{ user.national_code |default_if_none:'' }}" maxlength="10" required>
-                        <small id="national-code-check-alert" class="form-text text-danger mt-1" style="display: none;">
+                        <small id="nationalCodeAlert" class="form-text text-danger mt-1" style="display: none;">
                             <i class="fas fa-exclamation-triangle"></i>
                             کد ملی وارد شده معتبر نمی باشد.
                         </small>
@@ -159,13 +159,13 @@
             <form action="{% url 'edit_profile' %}?method=changePassword" method="POST">
                 {% csrf_token %}
                 <div class="form-group">
-                    <label class="col-md-3 control-label" for="old_password" required>تغییر رمز عبور</label>
+                    <label class="col-md-3 control-label" for="oldPassword" required>تغییر رمز عبور</label>
                     <div class="col-md-8">
-                        <input class="form-control w-75" type="password" id="old_password" name="old_password"
+                        <input class="form-control w-75" type="password" id="oldPassword" name="old_password"
                                placeholder="رمز عبور خود را وارد کنید" maxlength="12" required>
-                        <input class="form-control mt-2 w-75" type="password" id="password" name="password"
+                        <input class="form-control mt-2 w-75" type="password" id="newPassword" name="password"
                                placeholder="رمز عبور جدید خود را وارد کنید" maxlength="12" required>
-                        <input class="form-control mt-2 w-75" type="password" id="password2" name="password2"
+                        <input class="form-control mt-2 w-75" type="password" id="conformPassword" name="password2"
                                placeholder="رمز عبور جدید را دوباره وارد کنید" maxlength="12" required>
                         <small id="change-password-alert" class="form-text text-danger" style="display: none;">
                             <i class="fas fa-exclamation-triangle"></i>
@@ -210,5 +210,7 @@
 
 <!-- JS files -->
 {% block JSfile %}
+    <!-- base validation js -->
+    <script src="{% static 'dashboard/js/validation-base.js' %}"></script>
     <script src="{% static 'dashboard/js/edit_profile.js' %}"></script>
 {% endblock %}
