@@ -156,7 +156,14 @@
             </form>
             <hr>
             <!-- Change password form -->
-            <form action="{% url 'edit_profile' %}?method=changePassword" method="POST">
+            <form action="{% url 'edit_profile' %}?method=changePassword" id ="changePassword" method="POST">
+                {% if 'new_login' in request.session %}
+                <div class="alert alert-info alert-dismissable">
+                <a class="panel-close close" data-dismiss="alert">×</a>
+                <i class="fa fa-coffee"></i>
+                    <strong>لطفا رمز عبور خود را تغییر دهید</strong>
+                </div>
+                {% endif %}
                 {% csrf_token %}
                 <div class="form-group">
                     <label class="col-md-3 control-label" for="oldPassword" required>تغییر رمز عبور</label>

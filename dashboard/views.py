@@ -93,6 +93,8 @@ class EditProfile(APIView):
                 request.user.password = make_password(request.data['password'])
                 request.user.save()
                 if request.accepted_renderer.format == 'html':
+                    if request.session.get('new_login'):
+                        del request.session['new_login']
                     return redirect('signin')
                 return Response()
 
@@ -270,7 +272,6 @@ class GetShoppingViewSet(viewsets.ModelViewSet):
             if ( self.request.user.grades.count() > 0):
                 query1 = query & (Q(grade__id= self.request.user.grades.first().id) | Q(grade__id=None))
                 query2 = query & ~(Q(grade__id=self.request.user.grades.first().id) | Q(grade__id=None))
-
                 courses=(Course.objects
                 .filter(query1 | query2 ).annotate(
                 search_type_ordering=Case(
@@ -279,11 +280,6 @@ class GetShoppingViewSet(viewsets.ModelViewSet):
                     default=Value(0),
                     output_field=IntegerField()))
                   .order_by('-search_type_ordering'))
-
-
-
-
-
         return courses
 
 # @api_view(['GET', ])

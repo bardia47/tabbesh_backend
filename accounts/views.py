@@ -46,34 +46,9 @@ class SignUp(APIView):
             return Response(serializer.errors, status=status.HTTP_406_NOT_ACCEPTABLE)
         serializer.save()
         if request.accepted_renderer.format == 'html':
+            request.session['new_login']=True
             return render(request, 'accounts/signin.html', {'success': 'ثبت نام با موفقیت انجام شد.'})
         return Response({'success': 'ثبت نام با موفقیت انجام شد.'})
-
-
-@permission_classes((AllowAny,))
-class ForgetPassword(APIView):
-    renderer_classes = [TemplateHTMLRenderer, JSONRenderer]
-
-    def post(self, request):
-        error = None
-        try:
-            user1 = User.objects.get(phone_number=request.data['phone_number'])
-            to = "0" + request.data['phone_number']
-            randPass = random.randint(10000000, 99999999)
-            text = str(randPass)
-            sendSms = SmsWebServices.send_sms(to, text, Sms.signupBodyId.value)
-            if sendSms is not None:
-                error = sendSms
-        except User.DoesNotExist:
-            error = 'شماره تلفن وارد شده در سامانه موجود نمیباشد'
-
-        if error is not None:
-            return Response({'error': error}, template_name='accounts/signin.html')
-        else:
-            user1.password = make_password(randPass)
-            user1.save()
-            return Response({'success': 'ارسال با موفقیت انجام شد'}, template_name='accounts/signin.html')
-
 
 @permission_classes((AllowAny,))
 class SignIn(APIView):
@@ -99,6 +74,8 @@ class SignIn(APIView):
         if user is not None:
             auth.login(request, user)
             nextUrl = request.GET.get('next')
+            if  request.session.get('new_login') is not None:
+                nextUrl='/dashboard/edit_profile/#changePassword'
             if nextUrl is None:
                 if (user.is_teacher()):
                     return redirect('lessons')
@@ -136,4 +113,30 @@ class SignOut(APIView):
             return Response(status=status.HTTP_200_OK)
         auth.logout(request)
         return redirect('home')
+
+
+
+@permission_classes((AllowAny,))
+class ForgetPassword(APIView):
+    renderer_classes = [TemplateHTMLRenderer, JSONRenderer]
+
+    def post(self, request):
+        error = None
+        try:
+            user1 = User.objects.get(phone_number=request.data['phone_number'])
+            to = "0" + request.data['phone_number']
+            randPass = random.randint(10000000, 99999999)
+            text = str(randPass)
+            sendSms = SmsWebServices.send_sms(to, text, Sms.signupBodyId.value)
+            if sendSms is not None:
+                error = sendSms
+        except User.DoesNotExist:
+            error = 'شماره تلفن وارد شده در سامانه موجود نمیباشد'
+
+        if error is not None:
+            return Response({'error': error}, template_name='accounts/signin.html')
+        else:
+            user1.password = make_password(randPass)
+            user1.save()
+            return Response({'success': 'ارسال با موفقیت انجام شد'}, template_name='accounts/signin.html')
 

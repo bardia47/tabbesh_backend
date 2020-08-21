@@ -49,6 +49,7 @@ LOGGING = {
 }
 
 STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.ManifestStaticFilesStorage'
+SESSION_COOKIE_SECURE = False
 
 
 # Application definition
