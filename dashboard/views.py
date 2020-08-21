@@ -20,7 +20,7 @@ from django.core.files.base import ContentFile
 from accounts.utils import Utils
 # for load or dump jsons
 import json
-
+from django.db.models import Case, Value, When , IntegerField
 
 class Dashboard(APIView):
     renderer_classes = [TemplateHTMLRenderer, JSONRenderer]
@@ -269,10 +269,19 @@ class GetShoppingViewSet(viewsets.ModelViewSet):
         else:
             if ( self.request.user.grades.count() > 0):
                 query1 = query & (Q(grade__id= self.request.user.grades.first().id) | Q(grade__id=None))
-                courses1 = Course.objects.filter(query1)
                 query2 = query & ~(Q(grade__id=self.request.user.grades.first().id) | Q(grade__id=None))
-                courses2 = Course.objects.filter(query2)
-                courses=courses1.union(query2)
+
+                courses=(Course.objects
+                .filter(query1 | query2 ).annotate(
+                search_type_ordering=Case(
+                    When(query1, then=Value(2)),
+                    When(query2, then=Value(1)),
+                    default=Value(0),
+                    output_field=IntegerField()))
+                  .order_by('-search_type_ordering'))
+
+
+
 
 
         return courses
