@@ -79,14 +79,11 @@ class EditProfile(APIView):
                 newdict = {'errors': serializer.errors}
                 newdict.update(showSer.data)
                 return Response(newdict, status=status.HTTP_406_NOT_ACCEPTABLE)
+            Utils.cleanMenuCache(request)
             return Response(showSer.data)
 
         if method == 'changePassword':
             showSer = UserProfileShowSerializer(instance={'grades': grades, 'cities': cities, "user": request.user})
-            print(request.user.password)
-            print(request.data['old_password'])
-            s = request.user.check_password(request.data['old_password'])
-            print(s)
             if not request.user.check_password(request.data['old_password']):
                 # define dict this type for same concept like serializer.errors
                 newdict = {'errors': {
@@ -98,6 +95,8 @@ class EditProfile(APIView):
                 request.user.password = make_password(request.data['password'])
                 request.user.save()
                 if request.accepted_renderer.format == 'html':
+                    if request.session.get('new_login'):
+                        del request.session['new_login']
                     return redirect('signin')
                 return Response()
 
