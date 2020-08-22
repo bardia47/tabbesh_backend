@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import  *
+from .views import *
 from django.conf import settings
 from django.conf.urls.static import static
 from rest_framework.routers import DefaultRouter
@@ -18,8 +18,9 @@ urlpatterns = [
 #     path('edit_profile/change_password',
 #          change_password, name="change_password"),
     path('shopping/', Shopping.as_view(), name="shopping"),
-    path('lessons/files/<str:code>/', FileManager.as_view()),
-    path('lessons/list/<str:code>/', ClassList.as_view(),name="student_list"),
+    path('lessons/files/<str:code>/', FileManager.as_view({'post': 'create', 'get': 'retrieve'}), name='retrieve_files'),
+    path('lessons/files/<str:code>/<int:document_id>/', UpdateFile.as_view({'post': 'update'}), name='update'),
+    path('lessons/list/<str:code>/', ClassList.as_view(), name="student_list"),
 
 ]
 
@@ -27,5 +28,4 @@ urlpatterns += router.urls
 
 
 if settings.DEBUG:
-    urlpatterns += static(settings.MEDIA_URL,
-                          document_root=settings.MEDIA_ROOT)
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

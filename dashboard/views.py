@@ -13,14 +13,15 @@ from rest_framework import viewsets
 from .serializers import *
 from rest_framework import status
 from django.http import response
-from rest_framework.decorators import api_view,renderer_classes
+from rest_framework.decorators import api_view, renderer_classes
 from rest_framework import generics
 import base64
 from django.core.files.base import ContentFile
 from accounts.utils import Utils
 # for load or dump jsons
 import json
-from django.db.models import Case, Value, When , IntegerField
+from django.db.models import Case, Value, When, IntegerField
+
 
 class Dashboard(APIView):
     renderer_classes = [TemplateHTMLRenderer, JSONRenderer]
@@ -78,11 +79,14 @@ class EditProfile(APIView):
                 newdict = {'errors': serializer.errors}
                 newdict.update(showSer.data)
                 return Response(newdict, status=status.HTTP_406_NOT_ACCEPTABLE)
-            Utils.cleanMenuCache(request)
             return Response(showSer.data)
 
         if method == 'changePassword':
             showSer = UserProfileShowSerializer(instance={'grades': grades, 'cities': cities, "user": request.user})
+            print(request.user.password)
+            print(request.data['old_password'])
+            s = request.user.check_password(request.data['old_password'])
+            print(s)
             if not request.user.check_password(request.data['old_password']):
                 # define dict this type for same concept like serializer.errors
                 newdict = {'errors': {
@@ -94,18 +98,16 @@ class EditProfile(APIView):
                 request.user.password = make_password(request.data['password'])
                 request.user.save()
                 if request.accepted_renderer.format == 'html':
-                    if request.session.get('new_login'):
-                        del request.session['new_login']
                     return redirect('signin')
                 return Response()
 
         if method == 'changeAvatar':
             try:
-                file=request.data['file']
-                file_name=request.data['file_name']
+                file = request.data['file']
+                file_name = request.data['file_name']
                 format, imgstr = file.split(';base64,')
                 ext = format.split('/')[-1]
-                avatar = ContentFile(base64.b64decode(imgstr), name=file_name +"."+ ext)
+                avatar = ContentFile(base64.b64decode(imgstr), name=file_name + "." + ext)
             except:
                 avatar = Utils.compressImage(request.FILES.get("file"))
 
@@ -170,7 +172,10 @@ class Lessons(APIView):
     def get(self, request):
         now = datetime.datetime.now()
         if request.accepted_renderer.format == 'html':
-            return Response({"have_class" : request.user.courses.filter(end_date__gt=now).count()!=0} ,template_name='dashboard/lessons.html')
+            return Response({"have_class": request.user.courses.filter(end_date__gt=now).count() != 0},
+                            template_name='dashboard/lessons.html')
+
+
 # Shopping Page
 class Shopping(APIView):
     renderer_classes = [TemplateHTMLRenderer, JSONRenderer]
@@ -200,7 +205,6 @@ def getAllLessons(lesson_id):
     return query
 
 
-
 class GetLessonsViewSet(viewsets.ModelViewSet):
     queryset = Course.objects.all()
     serializer_class = CourseLessonsSerializer
@@ -222,18 +226,17 @@ class GetLessonsViewSet(viewsets.ModelViewSet):
     #     serializer = self.get_serializer(queryset, many=True)
     #     return Response(serializer.data)
 
-
     def get_queryset(self):
-         query = Q()
-         if self.request.GET.get("lesson"):
-             query &= getAllLessons(self.request.GET.get("lesson"))
-         if (self.request.user.is_teacher()):
-             query &= Q(teacher__id= self.request.user.id)
-             courses=Course.objects.filter(query)
-         else:
+        query = Q()
+        if self.request.GET.get("lesson"):
+            query &= getAllLessons(self.request.GET.get("lesson"))
+        if self.request.user.is_teacher():
+            query &= Q(teacher__id=self.request.user.id)
+            courses = Course.objects.filter(query)
+        else:
             courses = self.request.user.courses.filter(query)
-         courses = courses.order_by('-end_date')
-         return courses
+        courses = courses.order_by('-end_date')
+        return courses
 
 
 class GetShoppingViewSet(viewsets.ModelViewSet):
@@ -252,7 +255,6 @@ class GetShoppingViewSet(viewsets.ModelViewSet):
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
 
-
     def get_queryset(self):
         now = datetime.datetime.now()
         query = Q(end_date__gt=now)
@@ -261,27 +263,30 @@ class GetShoppingViewSet(viewsets.ModelViewSet):
                                     for course in self.request.user.courses.all()))
             query = query & ~queryNot
 
-        if self.request.GET.get("teacher") or self.request.GET.get("lesson") or  self.request.GET.get("grade"):
-            if  self.request.GET.get("lesson"):
-                query &= getAllLessons( self.request.GET.get("lesson"))
-            if  self.request.GET.get("grade"):
-                query &= (Q(grade__id= self.request.GET.get("grade")) | Q(grade__id=None))
-            if  self.request.GET.get("teacher"):
-                query &= Q(teacher__id= self.request.GET.get("teacher"))
+        if self.request.GET.get("teacher") or self.request.GET.get("lesson") or self.request.GET.get("grade"):
+            if self.request.GET.get("lesson"):
+                query &= getAllLessons(self.request.GET.get("lesson"))
+            if self.request.GET.get("grade"):
+                query &= (Q(grade__id=self.request.GET.get("grade")) | Q(grade__id=None))
+            if self.request.GET.get("teacher"):
+                query &= Q(teacher__id=self.request.GET.get("teacher"))
             courses = Course.objects.filter(query)
         else:
-            if ( self.request.user.grades.count() > 0):
-                query1 = query & (Q(grade__id= self.request.user.grades.first().id) | Q(grade__id=None))
+            if self.request.user.grades.count() > 0:
+                query1 = query & (Q(grade__id=self.request.user.grades.first().id) | Q(grade__id=None))
                 query2 = query & ~(Q(grade__id=self.request.user.grades.first().id) | Q(grade__id=None))
-                courses=(Course.objects
-                .filter(query1 | query2 ).annotate(
-                search_type_ordering=Case(
-                    When(query1, then=Value(2)),
-                    When(query2, then=Value(1)),
-                    default=Value(0),
-                    output_field=IntegerField()))
-                  .order_by('-search_type_ordering'))
+
+                courses = (Course.objects
+                           .filter(query1 | query2).annotate(
+                    search_type_ordering=Case(
+                        When(query1, then=Value(2)),
+                        When(query2, then=Value(1)),
+                        default=Value(0),
+                        output_field=IntegerField()))
+                           .order_by('-search_type_ordering'))
+
         return courses
+
 
 # @api_view(['GET', ])
 # @renderer_classes([TemplateHTMLRenderer, JSONRenderer])
@@ -296,23 +301,74 @@ class GetShoppingViewSet(viewsets.ModelViewSet):
 #
 
 
-class FileManager(generics.RetrieveAPIView):
+class FileManager(viewsets.ModelViewSet):
     renderer_classes = [TemplateHTMLRenderer, JSONRenderer]
     queryset = Course.objects.all()
-    serializer_class = FilesSerializer
+    serializer_class = DocumentSerializer
     lookup_field = 'code'
 
     def retrieve(self, request, *args, **kwargs):
         instance = self.get_object()
         try:
-            if (not request.user.is_teacher()):
-             request.user.courses.get(id=instance.id)
+            if not request.user.is_teacher():
+                request.user.courses.get(id=instance.id)
         except:
-             if request.accepted_renderer.format == 'html':
-                 return redirect('/dashboard/shopping/')
+            if request.accepted_renderer.format == 'html':
+                return redirect('/dashboard/shopping/')
         documents = instance.document_set.all()
         fileSerializer = FilesSerializer(instance={'documents': documents, 'course': instance})
         return Response(fileSerializer.data, template_name='dashboard/filemanager.html')
+        # return Response(template_name='dashboard/test.html')
+
+    def create(self, request, *args, **kwargs):
+        # request and the course should be for a same teacher
+        if not request.user.is_teacher():
+            return redirect('dashboard')
+        try:
+            course = Course.objects.get(code=self.kwargs['code'])
+            if course.teacher != request.user:
+                return redirect('dashboard')
+        except:
+            return redirect('dashboard')
+        # for test
+        # request.data['course'] = course.id
+        # request.data['sender'] = 2
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        return Response({"success": "yes"}, status=status.HTTP_200_OK)
+
+
+class UpdateFile(viewsets.ModelViewSet):
+    renderer_classes = [BrowsableAPIRenderer, JSONRenderer]
+    serializer_class = DocumentSerializer
+    # code for get course
+    lookup_field = ('document_id', 'code',)
+
+    def get_queryset(self):
+        queryset = Document.objects.get(pk=self.kwargs['document_id'])
+        return queryset
+
+    def update(self, request, *args, **kwargs):
+        # request and the course should be for a same teacher
+        if not request.user.is_teacher():
+            return redirect('dashboard')
+        try:
+            course = Course.objects.get(code=self.kwargs['code'])
+            if course.teacher != request.user:
+                return redirect('dashboard')
+        except:
+            return redirect('dashboard')
+        # we can set course and sender here
+        instance = self.get_queryset()
+        serializer = self.get_serializer(instance, data=request.data, partial=True)
+        serializer.is_valid(raise_exception=True)
+        self.perform_update(serializer)
+
+        if getattr(instance, '_prefetched_objects_cache', None):
+            instance._prefetched_objects_cache = {}
+
+        return Response({"success": "yes"}, status=status.HTTP_200_OK)
 
 
 class ClassList(generics.RetrieveAPIView):
@@ -324,6 +380,6 @@ class ClassList(generics.RetrieveAPIView):
     def retrieve(self, request, *args, **kwargs):
         instance = self.get_object()
         students = instance.user_set.all()
-        listSerializer = ClassListSerializer(instance={'students': students, 'course': instance},context={'course_id': instance.id})
+        listSerializer = ClassListSerializer(instance={'students': students, 'course': instance},
+                                             context={'course_id': instance.id})
         return Response(listSerializer.data)
-

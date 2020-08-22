@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<form method="POST" action="{% url 'add' '1' %}" enctype="multipart/form-data">
+    {% csrf_token %}
+    <input type="hidden" name="sender" value="{{ request.user.id }}">
+    <input type="hidden" name="course" value="{{ 1 }}">
+    <input type="hidden" name="title" value="first first">
+    <input type="hidden" name="description" value="first first">
+    <input type="hidden" name="upload_document"
+           value="nckwldnvlkews<InMemoryUploadedFile: Screenshot from 2020-04-23 20-57-05.png (image/png)>">
+
+    <button type="submit">helllooo</button>
+
+</form>
+
+<form method="POST" action="{% url 'update' '1' '1' %}">
+    {% csrf_token %}
+    <input type="hidden" name="sender" value="{{ request.user.id }}">
+    <input type="hidden" name="course" value="{{ 1 }}">
+    <input type="hidden" name="title" value="hello">
+    <input type="hidden" name="description" value="helllo">
+    <input type="hidden" name="upload_document"
+           value="nckwldnvlkews<InMemoryUploadedFile: Screenshot from 2020-04-23 20-57-05.png (image/png)>">
+    <button type="submit">byeeee</button>
+</form>
+</body>
+</html>

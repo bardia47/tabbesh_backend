@@ -10,7 +10,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from django.db.models import Q
 from django.db.models import Sum
-from .enums import ZarinPal
+# from .enums import ZarinPal
 from accounts.utils import TextUtils
 import datetime
 
@@ -172,9 +172,11 @@ def compute_discount(courses_id_list, amount, discount):
 
 
 def pay_description(courses_id_list, amount, discount, user):
-    text = ZarinPal.descriptionText.value
+    # text = ZarinPal.descriptionText.value
+    text = ''
     if discount:
-        discount_text = TextUtils.replacer(ZarinPal.dicountText.value, [discount.code])
+        print('')
+        # discount_text = TextUtils.replacer(ZarinPal.dicountText.value, [discount.code])
     else:
         discount_text = None
     text = TextUtils.replacer(text, [TextUtils.convert_list_to_string(

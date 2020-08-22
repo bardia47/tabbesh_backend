@@ -177,17 +177,20 @@ class DiscountSerializer(serializers.ModelSerializer):
 
 
 class DocumentSerializer(serializers.ModelSerializer):
-    sender=serializers.SerializerMethodField('get_sender_full_name')
-    upload_date_decorated=serializers.SerializerMethodField('get_upload_date_decorated')
+    sender_name = serializers.SerializerMethodField('get_sender_full_name')
+    upload_date_decorated = serializers.SerializerMethodField('get_upload_date_decorated')
+
     class Meta:
         model = Document
-        fields = ('title','sender','title','upload_date','upload_date_decorated','description','upload_document')
+        read_only_fields = ('upload_date',)
+        fields = ['sender_name', 'title', 'sender', 'course', 'upload_date', 'upload_date_decorated', 'description', 'upload_document']
 
     def get_sender_full_name(self, obj):
         return obj.sender.get_full_name()
 
     def get_upload_date_decorated(self, obj):
         return obj.upload_date_decorated()
+
 
 class FilesSerializer(serializers.Serializer):
     course = CourseBriefSerializer()
@@ -198,7 +201,6 @@ class StudentBriefSerializer(UserProfileSerializer):
     class Meta:
         model = User
         fields = ('first_name','last_name', 'grade', 'cityTitle')
-
 
 
 class ClassListSerializer(serializers.Serializer):

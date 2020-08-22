@@ -285,10 +285,10 @@ def document_directory_path(instance, filename):
 # Documents_model
 class Document(models.Model):
     course = models.ForeignKey('Course', on_delete=models.DO_NOTHING, verbose_name="دوره")
-    upload_document= models.FileField('فایل',upload_to=document_directory_path, null=True, blank=True)
-    upload_date = models.DateTimeField("تاریخ بارگذاری")
+    upload_document= models.FileField('فایل', upload_to=document_directory_path, null=True, blank=True)
+    upload_date = models.DateTimeField("تاریخ بارگذاری", auto_now_add=True)
     title = models.CharField("عنوان", max_length=30)
-    description = models.TextField("توضیحات",null=True, blank=True)
+    description = models.TextField("توضیحات", null=True, blank=True)
     sender = models.ForeignKey(User, on_delete=models.DO_NOTHING, verbose_name="فرد بارگذار")
 
     class Meta:
