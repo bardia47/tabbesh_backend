@@ -271,11 +271,11 @@ class GetShoppingViewSet(viewsets.ModelViewSet):
                 query &= Q(teacher__id=self.request.GET.get("teacher"))
             courses = Course.objects.filter(query)
         else:
+            courses = Course.objects.filter(query)
             if self.request.user.grades.count() > 0:
-                query1 = query & (Q(grade__id=self.request.user.grades.first().id) | Q(grade__id=None))
-                query2 = query & ~(Q(grade__id=self.request.user.grades.first().id) | Q(grade__id=None))
-
-                courses = (Course.objects
+                query1 =  (Q(grade__id=self.request.user.grades.first().id) | Q(grade__id=None))
+                query2 = ~(Q(grade__id=self.request.user.grades.first().id) | Q(grade__id=None))
+                courses = (courses
                            .filter(query1 | query2).annotate(
                     search_type_ordering=Case(
                         When(query1, then=Value(2)),
