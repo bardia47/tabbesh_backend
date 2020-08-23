@@ -51,9 +51,7 @@ class SendRequest(APIView):
             else:
                 discount = None
         except:
-            if request.accepted_renderer.format == 'html':
-                return render(request, 'dashboard/unsuccess_shopping.html')
-            return Response({'massage': 'خرید ناموفق'}, status=status.HTTP_406_NOT_ACCEPTABLE)
+            discount = None
         if courses_id_list and is_valid(courses_id_list, amount, discount):
             # handel free courses
             if amount == 0:
@@ -67,7 +65,10 @@ class SendRequest(APIView):
             # request to zarinpal
             else:
                 description = pay_description(courses_id_list, amount, discount, request.user)
-                url = request.scheme + "://" + request.get_host() + CallbackURL
+                try:
+                    url = request.data['url']
+                except:
+                    url = request.scheme + "://" + request.get_host() + CallbackURL
                 result = client.service.PaymentRequest(
                     MERCHANT, amount, description, email, mobile, url)
                 if result.Status == 100:
