@@ -6,12 +6,12 @@ function getUrlParameter(url, param) {
     return urlParams.get(param)
 }
 
-// hostname of project -- example : https://127.0.0.1:8000
-// let arrayHref = window.location.href.split("/")
-//let hostName = arrayHref[0] + "//" + arrayHref[2]
-
-// first pagination when user request https://127.0.0.1:8000/dashboard/lessons/
+// initial page javascript
 $(function () {
+
+    // set menu active
+    $("#lessonsMenu").addClass("active-menu");
+
     url = "/dashboard/get-lessons/?page=" + (getUrlParameter(window.location.href, "page") ? +getUrlParameter(window.location.href, "page") : "1")
     pagination(url)
 });
@@ -93,7 +93,7 @@ function renderLessenCards(courseCards) {
             grayImg = "gray-img";
         }
         // check first class is null
-        if (courseCard.first_class == null){
+        if (courseCard.first_class == null) {
             nextClassTemplate = ``;
         }
         let lessonCardTemplate = `

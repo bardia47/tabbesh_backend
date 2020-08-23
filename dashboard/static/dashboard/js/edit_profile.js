@@ -1,4 +1,19 @@
-$(document).ready(function () {
+function activeMenu() {
+    let menuTemplate = `
+    <hr>
+    <div id="editProfileMenu" class="row sidebar-menu active-menu">
+        <img src="/static/home/images/icons/edit-pofile-menu.svg" alt="edit profile menu">
+        <a href="">تغییر پروفایل</a>
+    </div>
+    `;
+    $("#sidebarMenus").append(menuTemplate);
+}
+
+
+$(function () {
+
+    // active menu
+    activeMenu();
 
     // Profile image valid check
     $("#file").on('change', function () {
@@ -115,5 +130,4 @@ $(document).ready(function () {
         firstName.val(firstName.val().trim());
         lastName.val(lastName.val().trim());
     });
-
 });
