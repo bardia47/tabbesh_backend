@@ -308,7 +308,7 @@ class DocumentAdmin(admin.ModelAdmin):
 
     def save_model(self, request, obj, form, change):
         obj.sender = request.user
-        obj.upload_date = datetime.datetime.now()
+        # obj.upload_date = datetime.datetime.now()
         super().save_model(request, obj, form, change)
 
 
