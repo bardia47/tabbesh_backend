@@ -27,82 +27,83 @@
 <body>
 <div class="wrapper">
     <!-- Sidebar  -->
-{% cache 1000 sidebar request.user.username %}
-{% block sidebar %}
-
-    <nav id="sidebar">
-        <!-- Brand name title -->
-        <div class="row">
-            <div class="col-md-12 brand-title ">
-                <a href="{% url 'home' %}">
-                    <h1>تابــش</h1>
-                </a>
-            </div>
-        </div>
-        <!-- Account title include [profile picture , name , grade ] -->
-        <div class="row account-title">
-            <!-- Profile picture -->
-            <div class="col-md-4">
-                <img src="{{ request.user.avatar.url }}" alt="تصویر پروفایل">
-            </div>
-        {% is_teacher request.user as teacher %}
-            <!-- Name & Grade -->
-            <div class="col-md-8">
+    {% cache 1000 sidebar request.user.username %}
+        {% block sidebar %}
+            <nav id="sidebar">
+                <!-- Brand name title -->
                 <div class="row">
-                    <div class="col-md-12">
-                        <p class="account-title-name">{% if teacher  %}استاد {% endif %}{{ request.user.get_full_name }}
-                        <p>
-                    </div>
-                    <div class="col-md-12">
-                        <!-- Give grade title from m2m field grade -->
-                        <p class="account-title-grade">{% for grade in request.user.grades.all %}{{ grade }}{% endfor %}
+                    <div class="col-md-12 brand-title ">
+                        <a href="{% url 'home' %}">
+                            <h1>تابــش</h1>
+                        </a>
                     </div>
                 </div>
-            </div>
-        </div>
-        <!-- Sidebar menus ! block for active menu -->
-        <div class="container">
-        {% if not teacher  %}
-            <div class="row sidebar-menu {% block dashboard_active %}{% endblock %}">
-                <img src="{% static 'home/images/icons/home.svg' %}" alt="آیکون">
-                <a href="{% url 'dashboard' %}">داشبورد</a>
-            </div>
-        {% endif %}
-            <hr>
-            <div class="row sidebar-menu {% block lesson_active %}{% endblock %}">
-                <img src="{% static 'home/images/icons/book-open.svg' %}" alt="آیکون">
-                <a href="{% url 'lessons' %}">دروس من</a>
-            </div>
-        {% if not teacher  %}
-            <hr>
-            <div class="row sidebar-menu {% block shopping_active %}{% endblock %}">
-                <img src="{% static 'home/images/icons/shopping-cart.svg' %}" alt="آیکون"></img>
-                <a href="{% url 'shopping' %}">خرید درس</a>
-            </div>
-        {% endif %}
-        {% is_admin request.user as admin %}
-         {% if admin %}
-                <hr>
-                <div class="row sidebar-menu">
-                    <img src="{% static 'home/images/icons/admin.svg' %}" alt="آیکون">
-                    <a href="{% url 'admin:index' %}" target="_blank">صفحه ادمین</a>
+                <!-- Account title include [profile picture , name , grade ] -->
+                <div class="row account-title">
+                    <!-- Profile picture -->
+                    <div class="col-md-4">
+                        <img src="{{ request.user.avatar.url }}" alt="تصویر پروفایل">
+                    </div>
+                    {% is_teacher request.user as teacher %}
+                    <!-- Name & Grade -->
+                    <div class="col-md-8">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <p class="account-title-name">{% if teacher %}
+                                    استاد {% endif %}{{ request.user.get_full_name }}
+                                <p>
+                            </div>
+                            <div class="col-md-12">
+                                <!-- Give grade title from m2m field grade -->
+                                <p class="account-title-grade">
+                                    {% for grade in request.user.grades.all %}{{ grade }}{% endfor %}
+                            </div>
+                        </div>
+                    </div>
                 </div>
-            {% endif %}
-        </div>
-        <!-- Footer of sidebar -->
-        <div class="footer">
-            <a href="https://eitaa.com/taabbesh">
-                <img src="{% static 'dashboard/images/icons/eitta-logo.png' %}" alt="eitta logo">
-            </a>
-            <a href="https://t.me/taabbesh">
-                <img src="{% static 'dashboard/images/icons/telegram-logo.svg' %}" alt="telegram logo">
-            </a>
-            <a href="https://www.instagram.com/tabbeshclass/">
-                <img src="{% static 'dashboard/images/icons/instagram-logo.svg' %}" alt="instagram logo">
-            </a>
-        </div>
-    </nav>
-    {% endblock %}
+                <!-- Sidebar menus ! block for active menu -->
+                <div id="sidebarMenus" class="container">
+                    {% if not teacher %}
+                        <div id="dashboardMenu" class="row sidebar-menu">
+                            <img src="{% static 'home/images/icons/home.svg' %}" alt="آیکون">
+                            <a href="{% url 'dashboard' %}">داشبورد</a>
+                        </div>
+                    {% endif %}
+                    <hr>
+                    <div id="lessonsMenu" class="row sidebar-menu">
+                        <img src="{% static 'home/images/icons/book-open.svg' %}" alt="آیکون">
+                        <a href="{% url 'lessons' %}">دروس من</a>
+                    </div>
+                    {% if not teacher %}
+                        <hr>
+                        <div id="shoppingMenu" class="row sidebar-menu">
+                            <img src="{% static 'home/images/icons/shopping-cart.svg' %}" alt="آیکون">
+                            <a href="{% url 'shopping' %}">خرید درس</a>
+                        </div>
+                    {% endif %}
+                    {% is_admin request.user as admin %}
+                    {% if admin %}
+                        <hr>
+                        <div id="adminMenu" class="row sidebar-menu">
+                            <img src="{% static 'home/images/icons/admin-menu.svg' %}" alt="آیکون">
+                            <a href="{% url 'admin:index' %}" target="_blank">صفحه ادمین</a>
+                        </div>
+                    {% endif %}
+                </div>
+                <!-- Footer of sidebar -->
+                <div class="footer">
+                    <a href="https://eitaa.com/taabbesh">
+                        <img src="{% static 'dashboard/images/icons/eitta-logo.png' %}" alt="eitta logo">
+                    </a>
+                    <a href="https://t.me/taabbesh">
+                        <img src="{% static 'dashboard/images/icons/telegram-logo.svg' %}" alt="telegram logo">
+                    </a>
+                    <a href="https://www.instagram.com/tabbeshclass/">
+                        <img src="{% static 'dashboard/images/icons/instagram-logo.svg' %}" alt="instagram logo">
+                    </a>
+                </div>
+            </nav>
+        {% endblock %}
     {% endcache %}
 
     <!-- Page content  -->

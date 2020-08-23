@@ -10,9 +10,6 @@
     <link rel="stylesheet" href="{% static 'dashboard/css/dashboard.css' %}">
 {% endblock %}
 
-<!-- Active menu of sidebar -->
-{% block dashboard_active %}active-menu{% endblock %}
-
 <!-- Content of dashboard page  -->
 {% block content %}
     <div class="container">
@@ -240,6 +237,8 @@
 
 <!-- JS files -->
 {% block JSfile %}
+    <script src="{% static 'dashboard/js/dashboard.js' %}"></script>
+    <!-- JS files for timer -->
     <script src="{% static 'dashboard/js/dashboard-timer.js' %}"></script>
     <!-- JS file for timer -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/latest/TweenMax.min.js"></script>
