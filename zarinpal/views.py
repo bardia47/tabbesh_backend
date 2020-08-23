@@ -65,7 +65,10 @@ class SendRequest(APIView):
             # request to zarinpal
             else:
                 description = pay_description(courses_id_list, amount, discount, request.user)
-                url = request.scheme + "://" + request.get_host() + CallbackURL
+                try:
+                    url = request.data['url']
+                except:
+                    url = request.scheme + "://" + request.get_host() + CallbackURL
                 result = client.service.PaymentRequest(
                     MERCHANT, amount, description, email, mobile, url)
                 if result.Status == 100:
