@@ -1,0 +1,124 @@
+{% extends 'dashboard/base.html' %}
+{% load static %}
+{% load jformat %}
+<!-- title of teacher course panel -->
+{% block title %}مدیریت کلاس{% endblock %}
+
+<!-- cSS files -->
+{% block CSSfiles %}
+    <!-- DropZone JS files -->
+    <link rel="stylesheet" href="{% static 'home/css/drag-upload.css' %}">
+    <!-- add css files here -->
+    <link rel="stylesheet" href="{% static 'dashboard/css/teacher_course_panel.css' %}">
+    <!-- file manager css -->
+    <link rel="stylesheet" href="{% static 'dashboard/css/filemanager.css' %}">
+{% endblock %}
+
+<!-- content of page -->
+{% block content %}
+    <div class="container w-100">
+        <!-- tabs button -->
+        <div class="tab vazir-bold">
+            <button class="tab-link" data-content="#fileManager">جزوه ها</button>
+            <button class="tab-link" data-content="#studentsList">لیست دانش آموزان</button>
+            <button class="tab-link">کلاس بعدی</button>
+        </div>
+        <!-- file manager tab -->
+        <div id="fileManager" class="tab-content active">
+        </div>
+
+
+        <!-- student tab -->
+        <div id="studentsList" class="tab-content">
+        </div>
+
+
+    </div>
+
+    {#        <!-- NextClass Tab -->#}
+    {#        <div id="NextClass" class="tab-content">#}
+    {##}
+    {#            <div class="container">#}
+    {##}
+    {#                <div class="row mb-2">#}
+    {#                    <div class="file-manager-image">#}
+    {#                        <img src="{% static 'home/images/مهدی_شهبازی.jpg' %}" width="50" height="50">#}
+    {#                    </div>#}
+    {#                    <div class="ml-3 file-manager title">#}
+    {#                        <p class="m-0"><strong>شیمی دهم</strong></p>#}
+    {#                        <h6 class="p-0"><small>مهدی شهبازی</small></h6>#}
+    {#                    </div>#}
+    {#                </div>#}
+    {##}
+    {#                <hr>#}
+    {#                <div class="row d-flex">#}
+    {#                    <div class="col-md-2 ml-4">#}
+    {#                        <img src="{% static 'home/images/icons/online-class.svg' %}" width="50" height="50">#}
+    {#                    </div>#}
+    {##}
+    {#                    <div class="col-md-4 mt-3">#}
+    {#                        <h5>کلاس بعدی :</h5>#}
+    {#                    </div>#}
+    {##}
+    {#                    <div class="col-md-5 mt-2">#}
+    {#                    <span><a class="a-style" href="" style="font-size: 20px;"><img class="mr-1"#}
+    {#                                                                                   src="{% static 'home/images/icons/entry.svg' %}"#}
+    {#                                                                                   width="42" height="42">#}
+    {#                            ورود به کلاس#}
+    {#                        </a></span>#}
+    {#                    </div>#}
+    {##}
+    {#                </div>#}
+    {#                <hr>#}
+    {##}
+    {##}
+    {#            </div>#}
+    {##}
+    {#        </div>#}
+
+
+    <!-- Modal -->
+    <div class="modal fade" id="uploadModal" tabindex="-1" role="dialog"
+         aria-labelledby="uploadModalTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title vazir-medium" id="uploadModalTitle">اضافه کردن جزوه ی جدید</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form action="google.com">
+                    <div class="modal-body">
+                        <label for="name">
+                            <h6>عنوان جزوه </h6>
+                        </label><br>
+                        <input class="input" type="text" id="name" name="name"><br>
+                        <hr>
+                        <h6 class="mb-3">توضیحات </h6>
+                        <textarea class="input width" name="description" id="description"
+                                  rows="5"></textarea>
+                        <hr>
+                    </div>
+                    <div class="modal-footer justify-content-center">
+                        <!-- upload file -->
+                        <button class="btn btn-success" type="submit">ذخیره</button>
+                        <button class="btn btn-danger" type="reset">لغو</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+<!-- JS files -->
+{% block JSfile %}
+    <!-- course students component -->
+    <script src="{% static 'dashboard/js/course-students.js' %}"></script>
+    <!-- student list component -->
+    <script src="{% static 'dashboard/js/filemanager.js' %}"></script>
+    <!-- DropZone JS file -->
+    <script src="{% static 'home/js/drag-upload.js' %}"></script>
+    <!-- add js files here -->
+    <script src="{% static "dashboard/js/teacher_course_panel.js" %}"></script>
+{% endblock %}

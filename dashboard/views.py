@@ -388,3 +388,6 @@ class ClassList(generics.RetrieveAPIView):
         listSerializer = ClassListSerializer(instance={'students': students, 'course': instance},
                                              context={'course_id': instance.id})
         return Response(listSerializer.data)
+
+def teacher_course_panel(request):
+    return render(request, 'dashboard/teacher_course_panel.html')
