@@ -14,3 +14,5 @@ class Sms(Enum):
     signupBodyId=20677
     wrongNumber = '11'
     _from = '50004000772777'
+
+    increaseCreditBodyId = 22971

@@ -149,6 +149,15 @@
                     شماره وارد شده معتبر نمی باشد.
                 </small>
             </div>
+              <div class="col-md-2 field-label">
+                <label for="introducer"> شماره تماس معرف (اختیاری)</label>
+            </div>
+            <div class="phone-number-field col-md-4">
+                <!-- pattern check phone number is valid or not -->
+                <input type="text" class="phone-number" id="introducer" name="introducer"
+                       value="{{ serializer.data.introducer }}" >
+
+            </div>
         </div>
         <button id="submit" class="btn btn-lg btn-warning btn-block sign-up-button mb-2" type="submit">ثبت نام</button>
         <p class="footer-p mt-2 mb-3">
@@ -166,6 +175,7 @@
             {% endif %}
         {% endfor %}
     </div>
+
 </form>
 {% block JSfile %}
     <script src="https://code.jquery.com/jquery-3.4.1.js"

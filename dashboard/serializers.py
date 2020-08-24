@@ -133,11 +133,12 @@ class ShoppingCourseSerializer(CourseLessonsSerializer):
 class UserProfileSerializer(JSONFormSerializer, serializers.ModelSerializer):
     grade = serializers.SerializerMethodField('get_student_grade')
     cityTitle = serializers.SerializerMethodField('get_city_title')
-
+    phone_number=serializers.CharField(read_only=True)
+    credit = serializers.IntegerField(read_only=True)
     class Meta:
         model = User
         fields = ('first_name',
-                  'last_name', 'username', 'grade', 'cityTitle', 'gender', 'national_code', 'phone_number', 'avatar')
+                  'last_name', 'username','email', 'grade', 'cityTitle', 'gender', 'national_code', 'phone_number','grades', 'city', 'avatar','credit')
 
     def get_student_grade(self, obj):
         return obj.get_student_grade()
@@ -148,21 +149,14 @@ class UserProfileSerializer(JSONFormSerializer, serializers.ModelSerializer):
         except:
             return ""
 
-            # for post method and android
-
-
-class UserSaveProfileSerializer(UserProfileSerializer):
-    class Meta:
-        model = User
-        fields = ('first_name',
-                  'last_name', 'username', 'email', 'gender', 'national_code',
-                  'grades', 'city', 'avatar')
 
     def validate_username(self, value):
-        user = User.objects.filter(Q(username=value.lower())).exclude(id=self.instance.id)
-        if user.exists():
-            raise serializers.ValidationError('کاربر با این نام کاربری از قبل موجود است.')
-        return value.lower()
+            user = User.objects.filter(Q(username=value.lower())).exclude(id=self.instance.id)
+            if user.exists():
+                raise serializers.ValidationError('کاربر با این نام کاربری از قبل موجود است.')
+            return value.lower()
+
+
 
 # for get method
 class UserProfileShowSerializer(serializers.Serializer):

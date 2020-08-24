@@ -43,7 +43,9 @@ class User(AbstractBaseUser, PermissionsMixin):
     courses = models.ManyToManyField('Course', blank=True)
     is_superuser = models.BooleanField(default=False)
     is_staff = models.BooleanField(default=True)
-
+    credit = models.FloatField("اعتبار", default=float(0),
+    validators=[ MinValueValidator(0) ]
+     )
     class Meta:
         verbose_name_plural = "کاربر"
         verbose_name = "کاربر"
@@ -356,4 +358,20 @@ class Discount(models.Model):
         if self.end_date and self.start_date and self.end_date <= self.start_date:
             raise ValidationError("تاریخ پایان باید پس از تاریخ شروع باشد یا خالی باشد")
 
-
+class Event(models.Model):
+     # Introducer = 'INER'
+     #just create model with INING
+     Introducing = 'INING'
+     TYPE_CHOICES = [
+        # (Introducer, 'معرفی کننده'),
+        (Introducing, 'معرفی شونده'),
+     ]
+     user = models.ForeignKey(User, on_delete=models.DO_NOTHING, verbose_name="کاربر",related_name='event')
+     create_date = models.DateTimeField("تاریخ ثبت",auto_now=True)
+     type = models.CharField(max_length=5, choices=TYPE_CHOICES )
+     is_active = models.BooleanField(default=True)
+     related_user = models.ForeignKey(User, on_delete=models.DO_NOTHING, verbose_name="کاربر مرتبط", related_name='event_related',  blank=True, null=True)
+     class Meta:
+         ordering = ['is_active','-create_date']
+         verbose_name_plural = "رویداد"
+         verbose_name = "رویداد"

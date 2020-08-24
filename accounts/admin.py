@@ -98,15 +98,6 @@ class UserChangeForm(UserCreationForm):
     password1 = forms.CharField(label='رمز', required=False, widget=forms.PasswordInput)
     password2 = forms.CharField(label='تکرار رمز', required=False, widget=forms.PasswordInput)
 
-    class Meta:
-        model = User
-        fields = (
-            'username', 'role', 'email', 'city', 'grades', 'avatar', 'first_name', 'last_name', 'national_code',
-            'address',
-            'gender', 'phone_number', 'courses')
-        labels = {
-            'date_joined_decorated': "تاریخ عضویت",
-        }
 
 class UserAdmin(BaseUserAdmin):
     readonly_fields = ('date_joined_decorated',)
@@ -122,17 +113,9 @@ class UserAdmin(BaseUserAdmin):
         ('اطلاعات شخص', {'fields': (
         'first_name', 'last_name', 'avatar', 'grades', 'national_code', 'phone_number', 'address', 'city', 'gender')}),
         ('دسترسی ها', {'fields': ('is_active', "role")}),
-
+        ('اعتبار', {'fields': ('credit',)}),
     )
-
-    add_fieldsets = (
-        (None, {
-            'classes': ('wide',),
-            'fields': ('username', 'email', 'role', 'password1', 'password2')}),
-        ('اطلاعات شخص', {'fields': (
-        'first_name', 'last_name', 'avatar', 'grades', 'national_code', 'phone_number', 'address', 'city', 'gender')}),
-
-    )
+    add_fieldsets = fieldsets
     search_fields = ['last_name','phone_number']
     ordering = ('username',)
     inlines = [
