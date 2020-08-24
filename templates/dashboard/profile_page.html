@@ -33,24 +33,26 @@
                     <br>
                 </div>
         </form>
-
         <!-- edit form column -->
         <div class="col-md-9 personal-info">
+            {% if errors %}
+
             <div class="alert alert-info alert-dismissable">
                 <a class="panel-close close" data-dismiss="alert">×</a>
                 <i class="fa fa-coffee"></i>
                 {# for test how error work send post with postman to this url #}
-                {% if errors %}
+
                     {% for key , value in errors.items %}
                         {% for error_message in value %}
                             <strong> {{ error_message }} </strong>
                         {% endfor %}
                     {% endfor %}
-                {% else %}
-                    <strong>تمامی فیلد ها ضروری است و در صورت تغییر دادن چند مورد فقط آن موارد را تغییر دهید.</strong>
-                {% endif %}
+                {% comment %}{% else %}
+                    <strong>تمامی فیلد ها ضروری است و در صورت تغییر دادن چند مورد فقط آن موارد را تغییر دهید.</strong>{% endcomment %}
+
 
             </div>
+         {% endif %}
             <h3>اطلاعات شخصی</h3>
             <!-- Change Profile form -->
             <form id="changeProfile" action="{% url 'edit_profile' %}" method="POST">

@@ -268,7 +268,7 @@ class Course_Calendar(models.Model):
 
     def is_class_active(self):
         now = datetime.datetime.now()
-        a = now - self.start_date
+        a = now - self.start_date + datetime.timedelta(minutes=5)
         b = now - self.end_date
         if a.total_seconds() >= 0 and b.total_seconds() < 0:
             return True
