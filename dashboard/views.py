@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
-import datetime
+
 from accounts.models import *
 from accounts.enums import RoleCodes
 from django.db.models import Q
@@ -55,6 +55,7 @@ class AppProfile(APIView):
 class EditProfile(APIView):
     renderer_classes = [TemplateHTMLRenderer, JSONRenderer]
     template_name = 'dashboard/profile_page.html'
+
 
     def get(self, request):
         grades = Grade.objects.all()

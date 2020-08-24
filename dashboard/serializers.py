@@ -1,4 +1,5 @@
 from django.contrib.auth.models import User
+
 from accounts.models import *
 from accounts.serializers import *
 
@@ -160,6 +161,7 @@ class UserProfileSerializer(JSONFormSerializer, serializers.ModelSerializer):
 
 # for get method
 class UserProfileShowSerializer(serializers.Serializer):
+
     user = UserProfileSerializer()
     grades = GradeSerializer(many=True)
     cities = CitySerializer(many=True)
