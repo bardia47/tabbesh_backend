@@ -1,9 +1,9 @@
-function dragUpload() {
+function dragUpload(inputName = "") {
 
     let dragUploadTemplate = `
     <div class="d-flex flex-column upload-drop-zone justify-content-center align-items-center p-2" id="dropZone">
         <img class="bounceIn" src="/static/home/images/icons/upload.svg" width="70" height="70">
-        <input type="file" id="dropUploadFiles" name="" hidden>
+        <input type="file" id="dropUploadFiles" name="${inputName}" hidden>
         <p class="text-black-50" id="dropZoneStatus">برای آپلود، فایل ها را اینجا بکشید.</p>
         <p class="text-black-50 mt-n2" id="dropZoneSize" style="display: none">
         <span id="fileSize"></span>
@@ -12,7 +12,7 @@ function dragUpload() {
         <button id="uploadButton" type="button" class="btn btn-primary btn-sm">انتخاب فایل</button>
     </div>
     `;
-    $(".modal-body").append(dragUploadTemplate);
+    $(".drop-zone").append(dragUploadTemplate);
 
     let dropZone = $("#dropZone");
 
@@ -54,5 +54,3 @@ function dragUpload() {
     });
 
 }
-
-dragUpload();

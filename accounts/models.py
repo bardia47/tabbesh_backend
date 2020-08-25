@@ -9,6 +9,7 @@ from django.template.defaultfilters import default
 from accounts.enums import RoleCodes
 import datetime
 import jdatetime
+from tinymce import models as tinymce_models
 from django.core.exceptions import ValidationError
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db.models import Q
@@ -183,8 +184,8 @@ class Course(models.Model):
      )
     url = models.URLField("لینک", blank=True, null=True)
     image = models.ImageField(upload_to='courses_image/', default='defaults/course.jpg')
-    description = models.TextField('توضیحات خرید درس',null=True, blank=True)
-    private_description = models.TextField('توضیحات درس',null=True, blank=True)
+    description = tinymce_models.HTMLField('توضیحات خرید درس', null=True, blank=True)
+    private_description = tinymce_models.HTMLField('توضیحات درس', null=True, blank=True)
     class Meta:
         ordering = ['start_date']
         verbose_name_plural = "دوره"
