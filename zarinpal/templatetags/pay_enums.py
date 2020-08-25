@@ -6,6 +6,6 @@ register = template.Library()
 def event_discount(type):
     return Events[type+'_DISCOUNT'].value
 
-
+@register.simple_tag
 def event_amount(type):
-    return Events[type+"_AMOUNT"].value
+    return Events[type+'_AMOUNT'].value

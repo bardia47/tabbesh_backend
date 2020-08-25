@@ -3,11 +3,11 @@ from melipayamak import Api
 
 
 class SmsWebServices():
-    def send_sms(to,  text ,  bodyId):
+    def send_sms(to,  text ,bodyId=None):
         api = Api(Sms.username.value, Sms.password.value)
         sms = api.sms()
-        _from = Sms._from.value
         if bodyId is None:
+            _from = Sms._from.value
             response = sms.send(to, _from, text)
         else:
             response=sms.send_by_base_number(text ,to , bodyId)

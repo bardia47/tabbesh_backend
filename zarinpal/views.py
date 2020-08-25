@@ -15,6 +15,9 @@ from accounts.utils import TextUtils
 from accounts.enums import Sms
 from accounts.webServices import SmsWebServices
 import datetime
+import logging
+
+logger = logging.getLogger("django")
 
 MERCHANT = '0c5db223-a20f-4789-8c88-56d78e29ff63'
 client = Client('https://www.zarinpal.com/pg/services/WebGate/wsdl')
@@ -121,15 +124,17 @@ class Verify(APIView):
                     event.is_active=False
                     event.save()
                     related_user=event.related_user
-                    related_user.credit += Events[event.type+"_AMOUNT"]
+                    related_user.credit +=  float(Events[event.type+"_AMOUNT"].value)
                     related_user.save()
                     to = "0" + related_user.phone_number
-                    text = [str(Events[event.type+"_AMOUNT"]) , str(int(related_user.credit))]
-                    sendSms = SmsWebServices.send_sms(to, text, Sms.increaseCreditBodyId.value)
-                    SmsWebServices.send_sms()
+
+                    text = TextUtils.replacer(Sms.increaseCreditText.value,  [str(Events[event.type+"_AMOUNT"].value) , str(int(related_user.credit))])
+                    sendSms = SmsWebServices.send_sms(to, text,None)
+                    if sendSms is not None:
+                       logger.error(sendSms)
                     del request.session['event_discount']
-                except:
-                    pass
+                except Exception as e:
+                    logger.error(e)
                 if request.accepted_renderer.format == 'html':
                     return render(request, 'dashboard/success_shopping.html', {'RefID': str(result.RefID)})
                 return Response({'RefID': str(result.RefID)})
