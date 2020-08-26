@@ -56,7 +56,6 @@ class EditProfile(APIView):
     renderer_classes = [TemplateHTMLRenderer, JSONRenderer]
     template_name = 'dashboard/profile_page.html'
 
-
     def get(self, request):
         grades = Grade.objects.all()
         cities = City.objects.all()
@@ -183,8 +182,8 @@ class Shopping(APIView):
     def get(self, request):
         try:
             # for first pay of introducing
-           event = Event.objects.get(user__id=request.user.id,type=Event.Introducing,is_active=True)
-           request.session['event_discount'] = event.type
+            event = Event.objects.get(user__id=request.user.id, type=Event.Introducing, is_active=True)
+            request.session['event_discount'] = event.type
         except:
             pass
         grades = Grade.objects.all()
@@ -280,7 +279,7 @@ class GetShoppingViewSet(viewsets.ModelViewSet):
         else:
             courses = Course.objects.filter(query)
             if self.request.user.grades.count() > 0:
-                query1 =  (Q(grade__id=self.request.user.grades.first().id) | Q(grade__id=None))
+                query1 = (Q(grade__id=self.request.user.grades.first().id) | Q(grade__id=None))
                 query2 = ~(Q(grade__id=self.request.user.grades.first().id) | Q(grade__id=None))
                 courses = (courses
                            .filter(query1 | query2).annotate(
@@ -308,7 +307,7 @@ class GetShoppingViewSet(viewsets.ModelViewSet):
 
 
 class FileManager(viewsets.ModelViewSet):
-    renderer_classes = [TemplateHTMLRenderer, JSONRenderer]
+    renderer_classes = [BrowsableAPIRenderer, JSONRenderer]
     queryset = Course.objects.all()
     serializer_class = DocumentSerializer
     lookup_field = 'code'
@@ -336,8 +335,9 @@ class FileManager(viewsets.ModelViewSet):
                 return redirect('dashboard')
         except:
             return redirect('dashboard')
-        request.data['course'] = course.id
-        request.data['sender'] = request.user.id
+        request.data.update({"sender": request.user.id, "course": course.code})
+        # request.data['course'] = course.code
+        # request.data['sender'] = request.user.id
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)
@@ -364,10 +364,10 @@ class UpdateFile(viewsets.ModelViewSet):
                 return redirect('dashboard')
         except:
             return redirect('dashboard')
+        # request.data['course'] = course.code
+        # request.data['sender'] = request.user.id
         # we can set course and sender here
         instance = self.get_queryset()
-        request.data['course'] = course.id
-        request.data['sender'] = request.user.id
         serializer = self.get_serializer(instance, data=request.data, partial=True)
         serializer.is_valid(raise_exception=True)
         self.perform_update(serializer)
