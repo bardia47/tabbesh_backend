@@ -370,7 +370,6 @@ class UpdateFile(viewsets.ModelViewSet):
         instance = self.get_queryset()
 
         if request.data['upload_document'] == '':
-            print('hello')
             request.data['upload_document'] = instance.upload_document
 
         serializer = self.get_serializer(instance, data=request.data, partial=True)
@@ -395,45 +394,6 @@ class ClassList(generics.RetrieveAPIView):
         listSerializer = ClassListSerializer(instance={'students': students, 'course': instance},
                                              context={'course_id': instance.id})
         return Response(listSerializer.data)
-
-
-class FileManager(viewsets.ModelViewSet):
-    renderer_classes = [TemplateHTMLRenderer, JSONRenderer]
-    queryset = Course.objects.all()
-    serializer_class = DocumentSerializer
-    lookup_field = 'code'
-
-    def retrieve(self, request, *args, **kwargs):
-        instance = self.get_object()
-        try:
-            if not request.user.is_teacher():
-                request.user.courses.get(id=instance.id)
-        except:
-            if request.accepted_renderer.format == 'html':
-                return redirect('/dashboard/shopping/')
-        documents = instance.document_set.all()
-        fileSerializer = FilesSerializer(instance={'documents': documents, 'course': instance})
-        return Response(fileSerializer.data, template_name='dashboard/filemanager.html')
-        # return Response(template_name='dashboard/test.html')
-
-    def create(self, request, *args, **kwargs):
-        # request and the course should be for a same teacher
-        if not request.user.is_teacher():
-            return redirect('dashboard')
-        try:
-            course = Course.objects.get(code=self.kwargs['code'])
-            if course.teacher != request.user:
-                return redirect('dashboard')
-        except:
-            return redirect('dashboard')
-        # for test
-        # request.data['course'] = course.id
-        # request.data['sender'] = 2
-        serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        self.perform_create(serializer)
-        return Response({"success": "yes"}, status=status.HTTP_200_OK)
-
 
 def teacher_course_panel(request, code):
     return render(request, 'dashboard/teacher_course_panel.html', {"code": code})
