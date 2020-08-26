@@ -15,4 +15,4 @@ class Sms(Enum):
     wrongNumber = '11'
     _from = '50004000772777'
 
-    increaseCreditBodyId = 22971
+    increaseCreditText = 'با سلام و احترام اعتبار شما {0}  تومان افزایش یافت و هم اکنون برابر با {1} میباشد.برای دریافت با پشتیبان تماس بگیرید. تابش'

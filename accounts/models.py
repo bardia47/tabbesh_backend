@@ -367,11 +367,11 @@ class Event(models.Model):
         # (Introducer, 'معرفی کننده'),
         (Introducing, 'معرفی شونده'),
      ]
-     user = models.ForeignKey(User, on_delete=models.DO_NOTHING, verbose_name="کاربر",related_name='event')
+     user = models.ForeignKey(User, on_delete=models.CASCADE , verbose_name="کاربر",related_name='event')
      create_date = models.DateTimeField("تاریخ ثبت",auto_now=True)
      type = models.CharField(max_length=5, choices=TYPE_CHOICES )
      is_active = models.BooleanField(default=True)
-     related_user = models.ForeignKey(User, on_delete=models.DO_NOTHING, verbose_name="کاربر مرتبط", related_name='event_related',  blank=True, null=True)
+     related_user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name="کاربر مرتبط", related_name='event_related',  blank=True, null=True)
      class Meta:
          ordering = ['is_active','-create_date']
          verbose_name_plural = "رویداد"
