@@ -336,9 +336,8 @@ class FileManager(viewsets.ModelViewSet):
                 return redirect('dashboard')
         except:
             return redirect('dashboard')
-        # for test
-        # request.data['course'] = course.id
-        # request.data['sender'] = 2
+        request.data['course'] = course.id
+        request.data['sender'] = request.user.id
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)
@@ -367,6 +366,8 @@ class UpdateFile(viewsets.ModelViewSet):
             return redirect('dashboard')
         # we can set course and sender here
         instance = self.get_queryset()
+        request.data['course'] = course.id
+        request.data['sender'] = request.user.id
         serializer = self.get_serializer(instance, data=request.data, partial=True)
         serializer.is_valid(raise_exception=True)
         self.perform_update(serializer)
