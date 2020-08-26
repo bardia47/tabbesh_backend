@@ -368,6 +368,11 @@ class UpdateFile(viewsets.ModelViewSet):
         # request.data['sender'] = request.user.id
         # we can set course and sender here
         instance = self.get_queryset()
+
+        if request.data['upload_document'] == '':
+            print('hello')
+            request.data['upload_document'] = instance.upload_document
+
         serializer = self.get_serializer(instance, data=request.data, partial=True)
         serializer.is_valid(raise_exception=True)
         self.perform_update(serializer)
