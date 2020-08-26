@@ -179,7 +179,8 @@ class DocumentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Document
         read_only_fields = ('upload_date',)
-        fields = ['sender_name', 'title', 'sender', 'course', 'upload_date', 'upload_date_decorated', 'description',
+        fields = ['id', 'sender_name', 'title', 'sender', 'course', 'upload_date', 'upload_date_decorated',
+                  'description',
                   'upload_document']
 
     def get_sender_full_name(self, obj):

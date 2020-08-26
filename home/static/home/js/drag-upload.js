@@ -37,8 +37,8 @@ function dragUpload(inputName = "") {
     $("#dropUploadFiles").on("change", function (e) {
         let file = e.target.files[0];
         dropZone.find("#dropZoneStatus").text(file.name);
-        console.log($(this).find("#fileSize"))
-        dropZone.find("#fileSize").text(Math.round(file.size / (1024 * 1024) * 100) / 100)
+        console.log($(this).find("#fileSize"));
+        dropZone.find("#fileSize").text(Math.round(file.size / (1024 * 1024) * 100) / 100);
         dropZone.find("#dropZoneSize").show();
     });
 
@@ -53,4 +53,10 @@ function dragUpload(inputName = "") {
         document.getElementById('dropUploadFiles').click();
     });
 
+}
+
+
+function restDropZone() {
+    $("#dropZoneSize").hide();
+    $("#dropZoneStatus").text("برای آپلود، فایل ها را اینجا بکشید.")
 }
