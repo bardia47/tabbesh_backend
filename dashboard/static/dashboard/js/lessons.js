@@ -58,7 +58,25 @@ function renderLessenCards(courseCards) {
         let grayImg = "";
         let classActive = endDateCourse >= nowDate;
         let buttonToClassTemplate = ``;
+        let buttonToClassPanel = ``;
         let nextClassTemplate = ``;
+
+        // if user is teacher --> show teacher panel otherwise show file manager
+        if ($("#roleStatus").val() === "True") {
+            buttonToClassPanel = `
+            <button onclick="location.href='teacher_course_panel/${courseCard.code}'" class="btn btn-dark mr-2" type="button">
+                <img src="/static/home/images/icons/teacher-panel.svg" alt="teacher panel" />
+                پنل کلاس
+            </button>
+            `
+        } else {
+            buttonToClassPanel = `
+            <button onclick="location.href='files/${courseCard.code}'" class="btn btn-dark mr-2" type="button">
+                <img src="/static/home/images/icons/document.svg" alt="button link to class" />
+                جزوه ها
+            </button>
+            `
+        }
         if (classActive) {
             nextClassTemplate = `
                 <p>
@@ -140,10 +158,7 @@ function renderLessenCards(courseCards) {
                     <!-- Button link to class -->
                     <div class="card-footer button-to-class p-0 py-3">
                         ${buttonToClassTemplate}
-                        <button onclick="location.href='files/${courseCard.code}'" class="btn btn-dark mr-2" type="button">
-                            <img src="/static/home/images/icons/document.svg" alt="button link to class" />
-                            جزوه ها
-                        </button>
+                        ${buttonToClassPanel}
                     </div>
                 </div>
             </div>

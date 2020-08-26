@@ -1,0 +1,86 @@
+/* Style the tab */
+.tab {
+    overflow: hidden;
+}
+
+/* Style the buttons inside the tab */
+.tab button {
+    background-color: inherit;
+    float: right;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    padding: 14px 16px;
+    transition: 0.3s;
+    font-size: 17px;
+}
+
+/* Change background color of buttons on hover */
+.tab button:hover {
+    background-color: #ddd;
+}
+
+/* Create an active/current tablink class */
+.tab button.active {
+    color: #ffc107;
+    text-decoration: underline;
+}
+
+/* Style the tab content */
+.tab-content {
+    display: none;
+    padding: 6px 12px;
+    margin-top: 10px;
+    -webkit-animation: fadeEffect 1s;
+    animation: fadeEffect 0.5s;
+}
+
+/* Fade in tabs */
+@-webkit-keyframes fadeEffect {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes fadeEffect {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+
+/* Modal button */
+
+.input {
+    border: 1px solid #ffc107;
+    border-radius: 3px;
+}
+
+.button-save {
+    background-color: #ffc107;
+    color: white;
+    border: 1px solid #ffc107;
+    border-radius: 8px;
+    font-size: 20px;
+    padding: 5px 35px;
+}
+
+.a-style {
+    background-color: #ACA9a9;
+    border-radius: 8px;
+    padding: 10px 15px 10px 15px;
+}
+
+/* modal css classes */
+
+@media (min-width: 992px) {
+    .modal-lg {
+        max-width: 600px
+    }
+}

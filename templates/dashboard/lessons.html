@@ -63,6 +63,10 @@
             </div>
         </div>
     </div>
+
+    <!-- input to know user is teacher - True : teacher -->
+    {%  is_teacher request.user as teacher %}
+    <input id="roleStatus" value="{{ teacher }}" hidden>
 {% endblock %}
 
 <!-- JS files -->

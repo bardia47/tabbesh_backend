@@ -112,7 +112,7 @@ class ShoppingCourseSerializer(CourseLessonsSerializer):
     class Meta:
         model = Course
         fields = ('id', 'title', 'start_date', 'end_date', 'code', 'amount', 'description', 'image', 'teacher',
-                  'course_calendars', 'parent','discount')
+                  'course_calendars', 'parent', 'discount')
 
     def get_start_dates(self, obj):
         dates = []
@@ -125,7 +125,7 @@ class ShoppingCourseSerializer(CourseLessonsSerializer):
         return LessonSerializer(instance=obj.get_parent_lesson()).data
 
     def get_discount(self, obj):
-        discount=obj.get_discount()
+        discount = obj.get_discount()
         if discount:
             return DiscountSerializer(instance=discount).data
         return None
@@ -134,12 +134,14 @@ class ShoppingCourseSerializer(CourseLessonsSerializer):
 class UserProfileSerializer(JSONFormSerializer, serializers.ModelSerializer):
     grade = serializers.SerializerMethodField('get_student_grade')
     cityTitle = serializers.SerializerMethodField('get_city_title')
-    phone_number=serializers.CharField(read_only=True)
+    phone_number = serializers.CharField(read_only=True)
     credit = serializers.IntegerField(read_only=True)
+
     class Meta:
         model = User
         fields = ('first_name',
-                  'last_name', 'username','email', 'grade', 'cityTitle', 'gender', 'national_code', 'phone_number','grades', 'city', 'avatar','credit')
+                  'last_name', 'username', 'email', 'grade', 'cityTitle', 'gender', 'national_code', 'phone_number',
+                  'grades', 'city', 'avatar', 'credit')
 
     def get_student_grade(self, obj):
         return obj.get_student_grade()
@@ -150,26 +152,24 @@ class UserProfileSerializer(JSONFormSerializer, serializers.ModelSerializer):
         except:
             return ""
 
-
     def validate_username(self, value):
-            user = User.objects.filter(Q(username=value.lower())).exclude(id=self.instance.id)
-            if user.exists():
-                raise serializers.ValidationError('کاربر با این نام کاربری از قبل موجود است.')
-            return value.lower()
-
+        user = User.objects.filter(Q(username=value.lower())).exclude(id=self.instance.id)
+        if user.exists():
+            raise serializers.ValidationError('کاربر با این نام کاربری از قبل موجود است.')
+        return value.lower()
 
 
 # for get method
 class UserProfileShowSerializer(serializers.Serializer):
-
     user = UserProfileSerializer()
     grades = GradeSerializer(many=True)
     cities = CitySerializer(many=True)
 
+
 class DiscountSerializer(serializers.ModelSerializer):
     class Meta:
         model = Discount
-        fields = ('percent','end_date','title')
+        fields = ('percent', 'end_date', 'title')
 
 
 class DocumentSerializer(serializers.ModelSerializer):
@@ -179,7 +179,9 @@ class DocumentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Document
         read_only_fields = ('upload_date',)
-        fields = ['sender_name', 'title', 'sender', 'course', 'upload_date', 'upload_date_decorated', 'description', 'upload_document']
+        fields = ['id', 'sender_name', 'title', 'sender', 'course', 'upload_date', 'upload_date_decorated',
+                  'description',
+                  'upload_document']
 
     def get_sender_full_name(self, obj):
         return obj.sender.get_full_name()
@@ -196,7 +198,7 @@ class FilesSerializer(serializers.Serializer):
 class StudentBriefSerializer(UserProfileSerializer):
     class Meta:
         model = User
-        fields = ('first_name','last_name', 'grade', 'cityTitle')
+        fields = ('avatar', 'first_name', 'last_name', 'grade', 'cityTitle')
 
 
 class ClassListSerializer(serializers.Serializer):
