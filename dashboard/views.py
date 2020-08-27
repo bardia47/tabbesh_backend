@@ -335,9 +335,8 @@ class FileManager(viewsets.ModelViewSet):
                 return redirect('dashboard')
         except:
             return redirect('dashboard')
+
         request.data.update({"sender": request.user.id, "course": course.code})
-        # request.data['course'] = course.code
-        # request.data['sender'] = request.user.id
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)
@@ -381,6 +380,19 @@ class UpdateFile(viewsets.ModelViewSet):
 
         return Response({"success": "yes"}, status=status.HTTP_200_OK)
 
+    def destroy(self, request, *args, **kwargs):
+        if not request.user.is_teacher():
+            return redirect('dashboard')
+        try:
+            course = Course.objects.get(code=self.kwargs['code'])
+            if course.teacher != request.user:
+                return redirect('dashboard')
+        except:
+            return redirect('dashboard')
+        instance = self.get_queryset()
+        self.perform_destroy(instance)
+        return Response({"success": "yes"}, status=status.HTTP_204_NO_CONTENT)
+
 
 class ClassList(generics.RetrieveAPIView):
     renderer_classes = [BrowsableAPIRenderer, JSONRenderer]
@@ -394,6 +406,7 @@ class ClassList(generics.RetrieveAPIView):
         listSerializer = ClassListSerializer(instance={'students': students, 'course': instance},
                                              context={'course_id': instance.id})
         return Response(listSerializer.data)
+
 
 def teacher_course_panel(request, code):
     return render(request, 'dashboard/teacher_course_panel.html', {"code": code})
