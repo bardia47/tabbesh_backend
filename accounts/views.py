@@ -77,8 +77,6 @@ class SignIn(APIView):
             if  request.session.get('new_login') is not None:
                 nextUrl='/dashboard/edit_profile/#changePassword'
             if nextUrl is None:
-                if (user.is_teacher()):
-                    return redirect('lessons')
                 return redirect('dashboard')
             return redirect(nextUrl)
         else:
