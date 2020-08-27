@@ -16,3 +16,17 @@ class Sms(Enum):
     _from = '50004000772777'
 
     increaseCreditText = 'با سلام و احترام اعتبار شما {0}  تومان افزایش یافت و هم اکنون برابر با {1} میباشد.برای دریافت با پشتیبان تماس بگیرید. تابش'
+
+
+class Email(Enum):
+    tethaEmail = 'tetha.nine@gmail.com'
+    testEmail= 'bardiatethatest@gmail.com'
+    testPassword='tetha12345678'
+    schadulerTestText="""\
+                <html>
+                  <body>
+                       <br> نام درس :
+                     """ + "{0}" + """<br/>
+                  </body>
+                </html>
+                """
