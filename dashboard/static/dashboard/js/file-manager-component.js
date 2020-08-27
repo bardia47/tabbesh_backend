@@ -32,13 +32,13 @@ function renderDocuments(data) {
                 <td>${documentUploadDate.format("LLLL")}</td>
                 <td>${document.description}</td>
                 <td data-toggle="tooltip" data-placement="top" title="تغییر جزوه">
-                    <a class="edit-document" data-id="${document.id}" data-course-id="${document.course}" data-sender-id="${document.sender}"  data-title="${document.title}" data-description="${document.description}"
+                    <a class="edit-document" data-id="${document.id}" data-title="${document.title}" data-description="${document.description}"
                         style="cursor: pointer">
                         <i class="fas fa-edit text-info"></i>
                     </a>
                  </td>
                 <td data-toggle="tooltip" data-placement="top" title="حذف جزوه">
-                    <a class="delete-document" data-course-id="${document.course}"style="cursor: pointer">
+                    <a class="delete-document" data-document-id="${document.id}"style="cursor: pointer">
                         <i class="fas fa-trash-alt text-danger"></i>
                     </a>
                 </td>
@@ -91,7 +91,7 @@ function renderDocuments(data) {
 
     addDocumentConfigure();
     editDocumentsConfigure();
-    deleteDocuments();
+    deleteDocumentsConfigure();
 }
 
 
@@ -146,9 +146,10 @@ function editDocumentsConfigure() {
 }
 
 // delete documents
-function deleteDocuments() {
+function deleteDocumentsConfigure() {
     $(".delete-document").click(function () {
-
+        $("#deleteFileModal").modal();
+        $("#deleteDocumentId").val($(this).data("document-id"))
     })
 }
 
@@ -170,7 +171,6 @@ function addDocumentAjax() {
         },
         success: function (data, textStatus, xhr) {
             uploadModalSubmit.prop('disabled', false);
-            console.log(xhr);
             $("#uploadLoading").hide();
             $("#uploadModal").modal("hide");
             // render file manager with new data
@@ -179,7 +179,6 @@ function addDocumentAjax() {
         },
         error: function (xhr, status, error) {
             uploadModalSubmit.prop('disabled', false);
-            console.log(xhr.textResponse);
             $("#uploadLoading").hide();
             $("#uploadFailedAlert").show();
         }
@@ -191,7 +190,8 @@ function addDocumentAjax() {
 function editDocumentAjax() {
     let editFormData = new FormData($("#documentUploadForm")[0]);
     if ($("#dropUploadFiles")[0].files.length === 0) editFormData.delete("upload_document");
-    for (let p of editFormData) console.log(p[0], p[1])
+    // read form data
+    // for (let p of editFormData) console.log(p[0], p[1])
     $.ajax({
         url: `http://127.0.0.1:8000/dashboard/lessons/files/${courseCode}/${uploadModalDocumentId.val()}/`,
         type: "POST",
@@ -215,7 +215,6 @@ function editDocumentAjax() {
         },
         error: function (xhr, status, error) {
             uploadModalSubmit.prop('disabled', false);
-            console.log(xhr.responseText)
             alert("خطا در تغییر جزوه ، دوباره امتحان کنید.")
             $("#uploadLoading").hide();
             $("#uploadFailedAlert").show();
@@ -232,3 +231,38 @@ function resetModal() {
     $("#uploadFailedAlert").hide();
     $("#validationForFile").hide();
 }
+
+// configure modal for edit & delete
+$("#documentUploadForm").submit(function (e) {
+    e.preventDefault();
+    if (uploadModalAddOrEditStatus.val() === "add") {
+        if ($("#dropUploadFiles")[0].files.length === 0) $("#validationForFile").show();
+        else {
+            addDocumentAjax();
+            $("#validationForFile").hide()
+        }
+    } else {
+        editDocumentAjax();
+    }
+});
+
+
+$("#deleteFileAccept").click(function () {
+    $.ajax({
+        url: `http://127.0.0.1:8000/dashboard/lessons/files/${courseCode}/${$("#deleteDocumentId").val()}/`,
+        type: "GET",
+        dataType: "json",
+        success: function () {
+            $("#deleteFileModal").modal("hide");
+            $("#deleteDocumentId").val("");
+            // render file manager with new data
+            fileManagerRender(courseCode);
+        },
+        error: function (xhr, status, error) {
+            $("#deleteFileModal").modal("hide");
+            $("#deleteDocumentId").val("");
+            alert("خطا در حذف جزوه ، دوباره امتحان کنید.");
+        }
+    });
+});
+
