@@ -336,7 +336,7 @@ class FileManager(viewsets.ModelViewSet):
         except:
             return redirect('dashboard')
 
-        request.data.update({"sender": request.user.id, "course": course.code})
+        request.data.update({"sender": request.user.id, "course": course.id}) # change because we handle course with id
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)
@@ -366,8 +366,9 @@ class UpdateFile(viewsets.ModelViewSet):
         # we can set course and sender here
         instance = self.get_queryset()
 
-        if request.data['upload_document'] == '':
-            request.data['upload_document'] = instance.upload_document
+        # make comment !
+        # if request.data['upload_document'] == '':
+        #     request.data['upload_document'] = instance.upload_document
 
         serializer = self.get_serializer(instance, data=request.data, partial=True)
         serializer.is_valid(raise_exception=True)
