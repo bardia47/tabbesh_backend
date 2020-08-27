@@ -32,7 +32,7 @@ function renderDocuments(data) {
                 <td>${documentUploadDate.format("LLLL")}</td>
                 <td>${document.description}</td>
                 <td data-toggle="tooltip" data-placement="top" title="تغییر جزوه">
-                    <a class="edit-document" data-id="${document.id}" data-title="${document.title}" data-description="${document.description}"
+                    <a class="edit-document" data-id="${document.id}" data-document-title="${document.title}" data-description="${document.description}"
                         style="cursor: pointer">
                         <i class="fas fa-edit text-info"></i>
                     </a>
@@ -42,7 +42,7 @@ function renderDocuments(data) {
                         <i class="fas fa-trash-alt text-danger"></i>
                     </a>
                 </td>
-                <td style="text-align:center"><a href="${document.upload_document}" target="_blank">
+                <td data-toggle="tooltip" data-placement="top" title="دانلود جزوه" style="text-align:center"><a href="${document.upload_document}" target="_blank">
                     <img src="/static/home/images/icons/download.svg" width="20" height="20"></a>
                 </td>
             </tr>
@@ -87,7 +87,7 @@ function renderDocuments(data) {
     </div>
 `;
     $("#fileManager").append(fileManagerTemplate);
-    $("#addFileButton").tooltip();
+    $('[data-toggle="tooltip"]').tooltip()
 
     addDocumentConfigure();
     editDocumentsConfigure();
@@ -130,7 +130,7 @@ function addDocumentConfigure() {
 
 function editDocumentsConfigure() {
     $(".edit-document").click(function () {
-        uploadModalTitle.val($(this).data("title"));
+        uploadModalTitle.val($(this).data("document-title"));
         uploadModalDescription.val($(this).data("description"));
         uploadModalDocumentId.val($(this).data("id"));
         uploadModalAddOrEditStatus.val("edit");
