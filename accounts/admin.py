@@ -223,10 +223,10 @@ class CourseAdmin(ModelAdminJalaliMixin, admin.ModelAdmin):
 
     def student_link(self, obj):
         return mark_safe('<a href="{}">{}</a>'.format(
-            reverse("student_list", args=(obj.code,)),
-            "لیست دانش آموزان"
+            reverse("teacher_course_panel", args=(obj.code,)),
+            "پنل اساتید"
         ))
-    student_link.short_description = ' لیست دانش آموزان'
+    student_link.short_description = "پنل اساتید"
 
 
 class CourseCalendarAdmin(ModelAdminJalaliMixin, admin.ModelAdmin):

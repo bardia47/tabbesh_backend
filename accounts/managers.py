@@ -20,7 +20,7 @@ class UserManager(BaseUserManager):
         except:
             pass
         user = self.model(username=username , **extra_fields)
-        password = make_password(password)
+        password = make_password(str(password))
         user.password = password
         if user.gender is None:
             user.gender = True

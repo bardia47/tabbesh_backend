@@ -28,8 +28,10 @@ class Dashboard(APIView):
 
     def get(self, request):
         now = datetime.datetime.now()
-        user = get_object_or_404(User, pk=request.user.id)
-        courses = user.courses.filter(end_date__gt=now)
+        if self.request.user.is_teacher():
+            courses = Course.objects.filter(teacher__id=self.request.user.id,end_date__gt=now)
+        else:
+            courses = self.request.user.courses.filter(end_date__gt=now)
         classes = Course_Calendar.objects.filter(
             Q(start_date__day=now.day) | Q(start_date__day=now.day + 1), course__in=courses)
         if classes.count() > 0:
@@ -307,7 +309,7 @@ class GetShoppingViewSet(viewsets.ModelViewSet):
 
 
 class FileManager(viewsets.ModelViewSet):
-    renderer_classes = [BrowsableAPIRenderer, JSONRenderer]
+    renderer_classes = [TemplateHTMLRenderer, JSONRenderer]
     queryset = Course.objects.all()
     serializer_class = DocumentSerializer
     lookup_field = 'code'

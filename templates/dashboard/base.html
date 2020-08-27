@@ -57,12 +57,10 @@
                 </div>
                 <!-- Sidebar menus ! block for active menu -->
                 <div id="sidebarMenus" class="container">
-                    {% if not teacher %}
                         <div id="dashboardMenu" class="row sidebar-menu">
                             <img src="{% static 'home/images/icons/home.svg' %}" alt="آیکون">
                             <a href="{% url 'dashboard' %}">داشبورد</a>
                         </div>
-                    {% endif %}
                     <hr>
                     <div id="lessonsMenu" class="row sidebar-menu">
                         <img src="{% static 'home/images/icons/book-open.svg' %}" alt="آیکون">
