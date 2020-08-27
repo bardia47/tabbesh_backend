@@ -327,8 +327,6 @@ class FileManager(viewsets.ModelViewSet):
 
     def create(self, request, *args, **kwargs):
         # request and the course should be for a same teacher
-        if not request.user.is_teacher():
-            return redirect('dashboard')
         try:
             course = Course.objects.get(code=self.kwargs['code'])
             if course.teacher != request.user:
@@ -355,8 +353,6 @@ class UpdateFile(viewsets.ModelViewSet):
 
     def update(self, request, *args, **kwargs):
         # request and the course should be for a same teacher
-        if not request.user.is_teacher():
-            return redirect('dashboard')
         try:
             course = Course.objects.get(code=self.kwargs['code'])
             if course.teacher != request.user:
@@ -381,8 +377,6 @@ class UpdateFile(viewsets.ModelViewSet):
         return Response({"success": "yes"}, status=status.HTTP_200_OK)
 
     def destroy(self, request, *args, **kwargs):
-        if not request.user.is_teacher():
-            return redirect('dashboard')
         try:
             course = Course.objects.get(code=self.kwargs['code'])
             if course.teacher != request.user:
