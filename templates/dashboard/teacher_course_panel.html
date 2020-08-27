@@ -21,7 +21,7 @@
         <div class="tab vazir-bold">
             <button class="tab-link active" data-content="#fileManager">جزوه ها</button>
             <button class="tab-link" data-content="#studentsList">لیست دانش آموزان</button>
-{#            <button class="tab-link">کلاس بعدی</button>#}
+            {#            <button class="tab-link">کلاس بعدی</button>#}
         </div>
         <hr class="border-top border-dark m-0" style="border: 2px solid;">
         <!-- file manager tab -->
@@ -95,7 +95,7 @@
                         <div class="form-group">
                             <label id="titleLabel" class="mr-2 vazir-bold" for="title">عنوان جزوه</label>
                             <input class="form-control w-100" type="text" id="title" name="title"
-                                   placeholder="مثال: فصل اول - ریاضی دهم">
+                                   placeholder="مثال: فصل اول - ریاضی دهم" required>
                         </div>
                         <hr>
                         <div class="form-group">
@@ -118,17 +118,20 @@
                             <button class="btn btn-danger" data-dismiss="modal">لغو</button>
                         </div>
                         <div id="uploadFailedAlert" class="text-center m-0" style="display: none">
-                            <small class="text-danger">
+                            <small class="text-danger mb-2">
                                 <i class="fas fa-exclamation-triangle mr-1"></i>
                                 ارسال جزوه به مشکل خورده است ! دوباره امتحان کنید
                             </small>
                         </div>
+                        <div id="validationForFile" class="text-center m-0" style="display: none">
+                            <small class="text-danger mb-2">
+                                <i class="fas fa-exclamation-triangle mr-1"></i>
+                                ارسال فایل الزامی می باشد. دوباره امتحان کنید.
+                            </small>
+                        </div>
                     </div>
-                    <input type="number" value="" id="courseId" name="course" hidden>
-                    <input type="number" value="{{user.id}}" id="senderId" name="sender" hidden>
                     <input type="number" id="documentId" hidden>
                     <input type="text" id="addOrEditStatus" hidden>
-
                 </form>
             </div>
         </div>
@@ -171,4 +174,6 @@
     <script src="{% static 'home/js/drag-upload.js' %}"></script>
     <!-- add js files here -->
     <script src="{% static "dashboard/js/teacher_course_panel.js" %}"></script>
+    <!-- validation base -->
+    <script src="{% static "dashboard/js/validation-base.js" %}"></script>
 {% endblock %}

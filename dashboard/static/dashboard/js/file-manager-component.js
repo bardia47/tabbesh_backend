@@ -4,7 +4,9 @@ let uploadModalDescription = uploadModal.find("#description");
 let uploadModalSenderId = uploadModal.find("#senderId");
 let uploadModalDocumentId = uploadModal.find("#documentId");
 let uploadModalAddOrEditStatus = uploadModal.find("#addOrEditStatus");
+let uploadModalSubmit = uploadModal.find("#uploadSubmit");
 let courseCode = "";
+
 function renderDocuments(data) {
     let documentRowsTemplate = ``, documentRow = ``, fileManagerTemplate = ``;
     if (data.documents.length === 0) {
@@ -50,7 +52,7 @@ function renderDocuments(data) {
     }
 
     fileManagerTemplate = `
-    <div class="container">
+    <div id="fileManagerContainer" class="container">
         <div id="fileManagerTitle"  class="row mb-2">
             <div class="d-flex col-md-5 file-manager-image">
                 <img src="${data.course.image}" width="50" height="50">
@@ -86,23 +88,10 @@ function renderDocuments(data) {
 `;
     $("#fileManager").append(fileManagerTemplate);
     $("#addFileButton").tooltip();
-    $("#documentUploadForm").submit(function (e) {
-        e.preventDefault();
-        if (uploadModalAddOrEditStatus.val() === "add") {
-            addDocumentAjax();
-        } else {
-            editDocumentAjax();
-        }
-    });
 
     addDocumentConfigure();
     editDocumentsConfigure();
     deleteDocuments();
-
-    // reset modal
-    uploadModal.on("hidden.bs.modal", function () {
-        restDropZone();
-    });
 }
 
 
@@ -113,7 +102,7 @@ function fileManagerRender(code) {
         type: "GET",
         dataType: "json",
         success: function (data) {
-            $("#fileManager").empty();
+            $("#fileManagerContainer").remove();
             renderDocuments(data);
         },
         error: function () {
@@ -126,8 +115,6 @@ function fileManagerRender(code) {
 function addDocumentConfigure() {
     // fire modal with button
     $("#addFileButton").click(function () {
-        uploadModalTitle.val("");
-        uploadModalDescription.val("");
         uploadModalAddOrEditStatus.val("add");
 
         // configure modal for edit document
@@ -145,7 +132,6 @@ function editDocumentsConfigure() {
     $(".edit-document").click(function () {
         uploadModalTitle.val($(this).data("title"));
         uploadModalDescription.val($(this).data("description"));
-        uploadModalSenderId.val($(this).data("sender-id"));
         uploadModalDocumentId.val($(this).data("id"));
         uploadModalAddOrEditStatus.val("edit");
 
@@ -167,25 +153,33 @@ function deleteDocuments() {
 }
 
 function addDocumentAjax() {
+    let editFormData = new FormData($("#documentUploadForm")[0]);
+    if ($("#dropUploadFiles")[0].files.length === 0) editFormData.delete("upload_document");
     $.ajax({
         url: `http://127.0.0.1:8000/dashboard/lessons/files/${courseCode}/`,
         type: "POST",
-        data: new FormData($("#documentUploadForm")[0]),
+        data: editFormData,
         processData: false,
         contentType: false,
         dataType: "json",
         beforeSend: function (xhr, settings) {
+            uploadModalSubmit.prop('disabled', true);
             $("#uploadModal").find("#uploadSubmit").text("در حال آپلود");
             $("#uploadLoading").show();
             $("#uploadFailedAlert").hide();
         },
         success: function (data, textStatus, xhr) {
+            uploadModalSubmit.prop('disabled', false);
+            console.log(xhr);
             $("#uploadLoading").hide();
             $("#uploadModal").modal("hide");
             // render file manager with new data
             fileManagerRender(courseCode);
+            resetModal();
         },
         error: function (xhr, status, error) {
+            uploadModalSubmit.prop('disabled', false);
+            console.log(xhr.textResponse);
             $("#uploadLoading").hide();
             $("#uploadFailedAlert").show();
         }
@@ -197,6 +191,7 @@ function addDocumentAjax() {
 function editDocumentAjax() {
     let editFormData = new FormData($("#documentUploadForm")[0]);
     if ($("#dropUploadFiles")[0].files.length === 0) editFormData.delete("upload_document");
+    for (let p of editFormData) console.log(p[0], p[1])
     $.ajax({
         url: `http://127.0.0.1:8000/dashboard/lessons/files/${courseCode}/${uploadModalDocumentId.val()}/`,
         type: "POST",
@@ -205,21 +200,35 @@ function editDocumentAjax() {
         contentType: false,
         dataType: "json",
         beforeSend: function (xhr, settings) {
+            uploadModalSubmit.prop('disabled', true);
             $("#uploadSubmit").text("در حل ثبت تغییرات");
             $("#uploadLoading").show();
             $("#uploadFailedAlert").hide();
         },
         success: function (data, textStatus, xhr) {
+            uploadModalSubmit.prop('disabled', false);
             $("#uploadLoading").hide();
             $("#uploadModal").modal("hide");
             // render file manager with new data
             fileManagerRender(courseCode);
+            resetModal();
         },
         error: function (xhr, status, error) {
+            uploadModalSubmit.prop('disabled', false);
+            console.log(xhr.responseText)
             alert("خطا در تغییر جزوه ، دوباره امتحان کنید.")
             $("#uploadLoading").hide();
             $("#uploadFailedAlert").show();
         }
     });
 
+}
+
+
+function resetModal() {
+    uploadModalTitle.val("");
+    uploadModalDescription.val("");
+    restDropZone();
+    $("#uploadFailedAlert").hide();
+    $("#validationForFile").hide();
 }
