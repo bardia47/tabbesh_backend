@@ -22,13 +22,19 @@
                 </h1>
             </div>
 
-              {% if 'event_discount' in request.session %}
+{#            {% if 'event_discount' in request.session %}#}
                 <div class="alert alert-info alert-dismissable">
-                <a class="panel-close close" data-dismiss="alert">×</a>
-                <i class="fa fa-coffee"></i>
-                    <strong>تبریک ! برای اولین خرید خود {% event_discount request.session.event_discount %} درصد تخفیف دارید. لطفا پس از انتخاب بر روی دکمه اعمال تخفیف کلیک کنید </strong>
+                    <a class="panel-close close" data-dismiss="alert">×</a>
+                    <i class="fas fa-percentage mr-1"></i>
+                    <strong>
+                        تبریک !
+                        برای اولین خرید خود
+                        10
+                         درصد تخفیف دارید.
+                        پس از انتخاب دروس مورد نظر بر روی دکمه اعمال تخفیف کلیک کنید.
+                    </strong>
                 </div>
-                {% endif %}
+{#            {% endif %}#}
             <!-- Cart Section use cart-list for shopping.js -->
             <div class="cart-list card-section">
                 <!-- Cart title -->
@@ -54,7 +60,9 @@
                         <div class="col-md-8 d-flex text-sm-center align-items-center mb-2 discount">
                             <!-- compute discount -->
                             <label class="mb-0 text-nowrap" for="discountCode">کد تخفیف:</label>
-                            <input type="text" class="form-control mx-2 w-25" id="discountCode" name="code"  {% if 'event_discount' in request.session %}value="{{request.user.phone_number}}"  readonly{% endif %}>
+                            <input type="text" class="form-control mx-2 w-25" id="discountCode" name="code"
+                                   {% if 'event_discount' in request.session %}value="{{ request.user.phone_number }}"
+                                   readonly{% endif %}>
                             <button type="button" class="btn btn-info mr-auto text-white" id="discountButton">
                                 اعمال کد تخفیف
                             </button>

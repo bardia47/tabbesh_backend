@@ -130,4 +130,18 @@ $(function () {
         firstName.val(firstName.val().trim());
         lastName.val(lastName.val().trim());
     });
+
+    let checkoutStatus = false;
+    // checkout hint with ray chat
+    $("#checkout").click(function (e) {
+        e.preventDefault();
+        window.addEventListener('raychat_ready', function (ets) {
+            if (!checkoutStatus) {
+                window.Raychat.sendOfflineMessage('با سلام و از همکاری شما در تابش ممنونیم 🌹');
+                window.Raychat.sendOfflineMessage('در صورت تمایل به نقد کردن اعتبار خود نام و نام خانوادگی و شماره تلفن خود را در این مکان ارسال کنید، تا همکاران ما در اسرع وقت با شما تماس بگیرند.');
+                checkoutStatus = true;
+            }
+        });
+        window.Raychat.toggle();
+    })
 });
