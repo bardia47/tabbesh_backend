@@ -87,3 +87,7 @@ pip install django-tinymce
 
 for swagger
 pip install -U drf-yasg
+
+--> very important
+i send test email for tetha
+please remove it after new version

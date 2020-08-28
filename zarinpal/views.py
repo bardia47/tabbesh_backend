@@ -131,10 +131,10 @@ class Verify(APIView):
                     text = TextUtils.replacer(Sms.increaseCreditText.value,  [str(Events[event.type+"_AMOUNT"].value) , str(int(related_user.credit))])
                     sendSms = SmsWebServices.send_sms(to, text,None)
                     if sendSms is not None:
-                       logger.error(sendSms)
+                       logger.error("danger: "+sendSms)
                     del request.session['event_discount']
                 except Exception as e:
-                    logger.error(e)
+                    logger.error("danger: "+ e)
                 if request.accepted_renderer.format == 'html':
                     return render(request, 'dashboard/success_shopping.html', {'RefID': str(result.RefID)})
                 return Response({'RefID': str(result.RefID)})

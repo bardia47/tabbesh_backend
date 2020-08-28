@@ -4,6 +4,10 @@ from io import BytesIO
 from django.core.files.uploadedfile import InMemoryUploadedFile
 from django.core.cache import cache
 from django.core.cache.utils import make_template_fragment_key
+import smtplib
+import ssl
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
 
 class Utils:
           #compress images
@@ -40,3 +44,34 @@ class TextUtils:
           i=i+1
           counter = '{' + str(i) + '}'
         return old_text
+
+
+
+#SEND emails with this class
+class EmailUtils:
+    def sending_email(text, receiver, sender, sender_password):
+        try:
+            message = MIMEMultipart("alternative")
+            message["Subject"] = 'subject'
+            message["From"] = sender
+            message["To"] = receiver
+
+        # Create the plain-text (it isn't force to use it) and HTML version of your message
+            html = text
+
+             # Turn these into plain/html MIMEText objects
+            part = MIMEText(html, "html")
+
+            # Add HTML/plain-text parts to MIMEMultipart message
+            # The email client will try to render the last part first
+            message.attach(part)
+
+        # Create secure connection with server and send email
+            context = ssl.create_default_context()
+            with smtplib.SMTP_SSL("smtp.gmail.com", 465, context=context) as server:
+                server.login(sender, sender_password)
+                server.sendmail(
+                    sender, receiver, message.as_string()
+                    )
+        except:
+                return {'message': 'try again.'}
