@@ -67,7 +67,8 @@
                             <div class="col-md-6 col-sm-6 custom-radio custom-control-inline">
                                 <span style="color: #fff;"> دختر </span>
                                 <input type="radio" class="custom-control-input" id="genderGirl" name="gender"
-                                       value="False" {% ifnotequal  serializer.data.gender None %} checked{% endifnotequal %}>
+                                       value="False" {% ifnotequal  serializer.data.gender None %}
+                                       checked{% endifnotequal %}>
                                 <label class="custom-control-label yellow" for="genderGirl"></label>
                             </div>
                         </div>
@@ -139,7 +140,7 @@
             <div class="col-md-2 field-label">
                 <label for="phoneNumber">شماره تماس</label>
             </div>
-            <div class="phone-number-field col-md-4">
+            <div class="phone-number-field col-md-4 mb-4">
                 <!-- pattern check phone number is valid or not -->
                 <input type="text" class="phone-number" id="phoneNumber" name="phone_number"
                        value="{{ serializer.data.phone_number }}" required>
@@ -149,14 +150,21 @@
                     شماره وارد شده معتبر نمی باشد.
                 </small>
             </div>
-              <div class="col-md-2 field-label">
-                <label for="introducer"> شماره تماس معرف (اختیاری)</label>
+            <div class="col-md-2 field-label">
+                <label class="text-nowrap ml-md-n3" for="introducer">
+                    شماره تماس معرف
+                    <span class="small">(اختیاری)</span>
+                </label>
             </div>
             <div class="phone-number-field col-md-4">
                 <!-- pattern check phone number is valid or not -->
                 <input type="text" class="phone-number" id="introducer" name="introducer"
-                       value="{{ serializer.data.introducer }}" >
-
+                       value="{{ serializer.data.introducer }}">
+                <small id="introducerAlert" class="form-text text-nowrap mt-2 text-md-left ml-3"
+                       style="display: none;">
+                    <i class="fas fa-info-circle"></i>
+                    شماره وارد شده معتبر نمی باشد.
+                </small>
             </div>
         </div>
         <button id="submit" class="btn btn-lg btn-warning btn-block sign-up-button mb-2" type="submit">ثبت نام</button>

@@ -31,17 +31,16 @@ $("#username").on("keyup", function () {
 });
 
 // phone number validation check
-$("#phoneNumber").on("keyup", function () {
+$("#phoneNumber , #introducer").on("keyup", function () {
     let phoneNumberRegEx = /^0?9\d{9}$/;
-    let phoneNumber = $("#phoneNumber");
-    phoneNumber.val(persianToEnglishNumbers(phoneNumber.val()));
-    if (phoneNumberRegEx.test(phoneNumber.val()) || !phoneNumber.val()) {
-        $("#phoneNumberAlert").hide();
+    $(this).val(persianToEnglishNumbers($(this).val()));
+    if (phoneNumberRegEx.test($(this).val()) || !$(this).val()) {
+        $(this).siblings("small").hide();
         if (check()) {
             $("#submit").prop("disabled", false);
         }
     } else {
-        $("#phoneNumberAlert").show();
+        $(this).siblings("small").show();
         $("#submit").prop("disabled", true);
 
     }
@@ -51,8 +50,8 @@ function check() {
     return !$("#usernameAlert").is(":visible") &&
         !$("#firstNameAlert").is(":visible") &&
         !$("#lastNameAlert").is(":visible") &&
-        !$("#phoneNumberAlert").is(":visible");
-
+        !$("#phoneNumberAlert").is(":visible")&&
+        !$("#introducerAlert").is("visible");
 }
 
 // change +98 & 09 to 9
@@ -63,7 +62,11 @@ $("#formSignup").submit(function (e) {
     firstName.val(firstName.val().trim());
     lastName.val(lastName.val().trim());
     let phoneNumber = $("#phoneNumber");
+    let introducer = $("#introducer");
     if (phoneNumber.val().startsWith("0")) {
         phoneNumber.val(phoneNumber.val().slice(1))
+    }
+    if (introducer.val().startsWith("0")) {
+        introducer.val(introducer.val().slice(1))
     }
 });

@@ -34,11 +34,35 @@
             </div>
             <!-- edit form column -->
             <div class="col-md-9 personal-info">
+                <h4 class="vazir-medium">اطلاعات شخصی</h4>
+                <hr>
+                <div>
+                    <p class="vazir-bold">
+                        <img src="{% static "dashboard/images/icons/name.svg" %}" width="30" height="30">
+                        نام و نام خانوادگی:
+                        <span class="ml-1 vazir-medium">{{ request.user.get_full_name }}</span>
+                    </p>
+                    <p class="vazir-bold">
+                        <img src="{% static "dashboard/images/icons/mobile-phone.svg" %}" width="30" height="30">
+                        شماره تلفن:
+                        <span class="ml-1 vazir-medium">{{ user.phone_number }}</span>
+                    </p>
+                    <p class="vazir-bold">
+                        <img src="{% static "dashboard/images/icons/credit.svg" %}" width="30" height="30">
+                        اعتبار:
+                        <span class="ml-1 vazir-medium">{{ user.credit }} هزار تومان </span>
+                        <span class="ml-2 vazir-medium small text-info text-sm-center text-nowrap">
+                            <a id="checkout" href=""><i class="fas fa-question-circle"></i>
+                            چی جوری نقدش کنیم ؟
+                            </a>
+                        </span>
+                    </p>
+                </div>
                 {% if errors %}
 
-                    <div class="alert alert-info alert-dismissable">
+                    <div class="alert alert-danger alert-dismissable">
                         <a class="panel-close close" data-dismiss="alert">×</a>
-                        <i class="fa fa-coffee"></i>
+                        <i class="fas fa-exclamation-circle mr-2"></i>
                         {# for test how error work send post with postman to this url #}
 
                         {% for key , value in errors.items %}
@@ -52,31 +76,6 @@
 
                     </div>
                 {% endif %}
-                <h4 class="vazir-medium">اطلاعات شخصی</h4>
-                <hr>
-                <div>
-                    <p class="vazir-bold">
-                        <img src="{% static "dashboard/images/icons/name.svg" %}" width="30" height="30">
-                        نام و نام خانوادگی:
-                        <span class="ml-1 vazir-medium">{{ user.first_name }}</span>
-                    </p>
-                    <p class="vazir-bold">
-                        <img src="{% static "dashboard/images/icons/mobile-phone.svg" %}" width="30" height="30">
-                        شماره تلفن:
-                        <span class="ml-1 vazir-medium">{{ user.phone_number }}</span>
-                    </p>
-                    <p class="vazir-bold">
-                        <img src="{% static "dashboard/images/icons/credit.svg" %}" width="30" height="30">
-                        اعتبار:
-                        <span class="ml-1 vazir-medium">{{ user.credit }} هزار تومان </span>
-                        <span class="ml-2 vazir-medium small text-info">
-                            <a id="checkout" href=""><i class="fas fa-question-circle"></i>
-                            چی جوری نقدش کنیم ؟
-                            </a>
-                        </span>
-
-                    </p>
-                </div>
                 <!-- Change Profile form -->
                 <h4 class="vazir-medium"> تغییر پروفایل</h4>
                 <hr>
@@ -172,7 +171,8 @@
                         </div>
                         <div class="form-group">
                             <label class="control-label"></label>
-                            <input type="submit" id="edit_profile" class="btn btn-primary mt-2" value="تغییر پروفایل">
+                            <input type="submit" id="editProfileSubmit" class="btn btn-primary mt-2"
+                                   value="تغییر پروفایل">
                         </div>
                     </div>
                 </form>
@@ -191,11 +191,11 @@
                     <div class="form-group">
                         <div class="col-md-8">
                             <input class="form-control w-75" type="password" id="oldPassword" name="old_password"
-                                   placeholder="رمز عبور خود را وارد کنید" maxlength="12" required>
+                                   placeholder="رمز عبور خود را وارد کنید" maxlength="20" required>
                             <input class="form-control mt-2 w-75" type="password" id="newPassword" name="password"
-                                   placeholder="رمز عبور جدید خود را وارد کنید" maxlength="12" required>
+                                   placeholder="رمز عبور جدید خود را وارد کنید" maxlength="20" required>
                             <input class="form-control mt-2 w-75" type="password" id="conformPassword" name="password2"
-                                   placeholder="رمز عبور جدید را دوباره وارد کنید" maxlength="12" required>
+                                   placeholder="رمز عبور جدید را دوباره وارد کنید" maxlength="20" required>
                             <small id="change-password-alert" class="form-text text-danger" style="display: none;">
                                 <i class="fas fa-exclamation-triangle"></i>
                                 اخطار: تکرار رمز عبور صحیح نمی باشد.
@@ -204,7 +204,7 @@
                     </div>
                     <div class="form-group">
                         <div class="col-md-8">
-                            <input type="submit" name="changePassword" id="changePassword" class="btn btn-primary"
+                            <input type="submit" id="changePasswordSubmit" class="btn btn-primary"
                                    value="تغییر رمز عبور">
                         </div>
                     </div>
