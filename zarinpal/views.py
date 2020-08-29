@@ -11,7 +11,7 @@ from rest_framework import status
 from django.db.models import Q
 from django.db.models import Sum
 from .enums import *
-from accounts.utils import TextUtils
+from accounts.utils import TextUtils,ChoiceUtils
 from accounts.enums import Sms
 from accounts.webServices import SmsWebServices
 import datetime
@@ -205,7 +205,7 @@ def pay_description(courses_id_list, amount, discount, request):
     text = ZarinPal.descriptionText.value
 
     if request.session.get('event_discount'):
-        discount_text = TextUtils.replacer(ZarinPal.eventText.value, [get_event_name(request.session.get('event_discount')),str(discount.percent)])
+        discount_text = TextUtils.replacer(ZarinPal.eventText.value, [ChoiceUtils.get_choice_name(request.session.get('event_discount'),Event.TYPE_CHOICES),str(discount.percent)])
     elif discount:
         discount_text = TextUtils.replacer(ZarinPal.dicountText.value, [discount.code])
     else:
@@ -216,9 +216,6 @@ def pay_description(courses_id_list, amount, discount, request):
     return text
 
 
-def get_event_name(key):
-    for choice, value in Event.TYPE_CHOICES:
-        if choice==key:
-            return value
+
 
 

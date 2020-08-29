@@ -28,6 +28,7 @@ def daily_course_times():
                     if class_course_calender.end_date > course.end_date:
                         break
                     class_course_calender.save()
+                    logger.error(course.title + "  is OK!")
             except Exception as e:
                 logger.error("danger: " + e)
     classes = Course_Calendar.objects.filter(end_date__day=now.day,end_date__gt=now)
@@ -49,6 +50,7 @@ def update_course_calenders(*args):
         course_calendar.end_date += datetime.timedelta(days=7)
         if  course_calendar.end_date<course_calendar.course.end_date :
             course_calendar.save()
+            logger.error(course_calendar.course.title + "  is OK!")
         EmailUtils.sending_email(TextUtils.replacer(Email.schadulerTestText.value,[course_calendar.course.title])
                                  ,Email.tethaEmail.value,Email.testEmail.value,Email.testPassword.value )
     except Exception as e:

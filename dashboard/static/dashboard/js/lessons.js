@@ -88,7 +88,7 @@ function renderLessenCards(courseCards) {
                         ${nextClassDate.format("D")}
                         ام
                         ساعت
-                        ${nextClassDate.format("hh:mm")}
+                        ${nextClassDate.format("H:m")}
                      </span>
                 </p>
                 `;
