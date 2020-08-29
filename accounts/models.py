@@ -26,6 +26,9 @@ LEXERS = [item for item in get_all_lexers() if item[1]]
 
 
 class User(AbstractBaseUser, PermissionsMixin):
+    Grade_CHOICES = (('first', 'ابتدایی'), ('second', 'متوسطه اول'), ('third', 'متوسطه دوم'),
+                     ('other', 'متفرقه'))
+    grade_choice = models.CharField("پایه", max_length=20 , choices=Grade_CHOICES, default='other')
     username = models.CharField("نام کاربری", max_length=30, unique=True)
     password = models.CharField("رمز", max_length=128)
     email = models.EmailField('ایمیل', unique=True, null=True, blank=True)
@@ -47,7 +50,9 @@ class User(AbstractBaseUser, PermissionsMixin):
     credit = models.FloatField("اعتبار", default=float(0),
     validators=[ MinValueValidator(0) ]
      )
+
     class Meta:
+        ordering = ['-id']
         verbose_name_plural = "کاربر"
         verbose_name = "کاربر"
 
@@ -334,7 +339,7 @@ class Pay_History(models.Model):
     submit_date_decorated.short_description='تاریخ ثبت'
 
 class Discount(models.Model):
-    title=models.CharField("نام تخفیف", max_length=30, null=True, blank=True , unique=True)
+    title = models.CharField("نام تخفیف", max_length=30, null=True, blank=True , unique=True)
     code = models.CharField("کد", max_length=15, null=True, blank=True , unique=True)
     percent = models.IntegerField("درصد",
         default=10,
@@ -345,7 +350,7 @@ class Discount(models.Model):
     )
     start_date = models.DateTimeField("تاریخ شروع")
     end_date = models.DateTimeField("تاریخ پایان",null=True, blank=True)
-    courses= models.ManyToManyField('Course', blank=True, verbose_name="درس های تخفیف خورده")
+    courses = models.ManyToManyField('Course', blank=True, verbose_name="درس های تخفیف خورده")
 
     class Meta:
         ordering = ['-start_date']

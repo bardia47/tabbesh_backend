@@ -332,9 +332,15 @@ class FileManager(viewsets.ModelViewSet):
         try:
             course = Course.objects.get(code=self.kwargs['code'])
             if course.teacher != request.user:
-                return redirect('dashboard')
+                if request.accepted_renderer.format == 'html':
+                    return redirect('dashboard')
+                else:
+                    return Response(status=status.HTTP_400_BAD_REQUEST)
         except:
-            return redirect('dashboard')
+            if request.accepted_renderer.format == 'html':
+                return redirect('dashboard')
+            else:
+                return Response(status=status.HTTP_400_BAD_REQUEST)
 
         request.data.update({"sender": request.user.id, "course": course.id}) # change because we handle course with id
         serializer = self.get_serializer(data=request.data)
@@ -358,9 +364,15 @@ class UpdateFile(viewsets.ModelViewSet):
         try:
             course = Course.objects.get(code=self.kwargs['code'])
             if course.teacher != request.user:
-                return redirect('dashboard')
+                if request.accepted_renderer.format == 'html':
+                    return redirect('dashboard')
+                else:
+                    return Response(status=status.HTTP_400_BAD_REQUEST)
         except:
-            return redirect('dashboard')
+            if request.accepted_renderer.format == 'html':
+                return redirect('dashboard')
+            else:
+                return Response(status=status.HTTP_400_BAD_REQUEST)
         # request.data['course'] = course.code
         # request.data['sender'] = request.user.id
         # we can set course and sender here
@@ -383,9 +395,15 @@ class UpdateFile(viewsets.ModelViewSet):
         try:
             course = Course.objects.get(code=self.kwargs['code'])
             if course.teacher != request.user:
-                return redirect('dashboard')
+                if request.accepted_renderer.format == 'html':
+                    return redirect('dashboard')
+                else:
+                    return Response(status=status.HTTP_400_BAD_REQUEST)
         except:
-            return redirect('dashboard')
+            if request.accepted_renderer.format == 'html':
+                return redirect('dashboard')
+            else:
+                return Response(status=status.HTTP_400_BAD_REQUEST)
         instance = self.get_queryset()
         self.perform_destroy(instance)
         return Response({"success": "yes"}, status=status.HTTP_204_NO_CONTENT)

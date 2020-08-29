@@ -6,11 +6,13 @@ def start():
     scheduler = BackgroundScheduler()
     # read about cron in apscheduler document
     # --> https://apscheduler.readthedocs.io/en/stable/modules/triggers/cron.html
-    scheduler.add_job(daily_course_times, 'cron', hour=22, minute=7)
+    scheduler.add_job(daily_course_times, 'cron', hour=6, minute=30)
     scheduler.start()
 
 def daily_course_times():
     from .models import Course_Calendar,Course
+    import logging
+    logger = logging.getLogger("django")
     # we cant import in top because account app not register when this code run ...
 
     now = datetime.datetime.now()
@@ -19,12 +21,16 @@ def daily_course_times():
         classes = Course_Calendar.objects.filter(course__id=course.id)
     # update all classes time
         for class_course_calender in classes:
-            while class_course_calender.end_date < now:
-                class_course_calender.start_date += datetime.timedelta(days=7)
-                class_course_calender.end_date += datetime.timedelta(days=7)
-                if  class_course_calender.end_date>course.end_date :
-                    break
-                class_course_calender.save()
+            try:
+                while class_course_calender.end_date < now:
+                    class_course_calender.start_date += datetime.timedelta(days=7)
+                    class_course_calender.end_date += datetime.timedelta(days=7)
+                    if class_course_calender.end_date > course.end_date:
+                        break
+                    class_course_calender.save()
+                    logger.error(course.title + "  is OK!")
+            except Exception as e:
+                logger.error("danger: " + e)
     classes = Course_Calendar.objects.filter(end_date__day=now.day,end_date__gt=now)
     scheduler = BackgroundScheduler()
     for clas in classes:
@@ -44,10 +50,11 @@ def update_course_calenders(*args):
         course_calendar.end_date += datetime.timedelta(days=7)
         if  course_calendar.end_date<course_calendar.course.end_date :
             course_calendar.save()
+            logger.error(course_calendar.course.title + "  is OK!")
         EmailUtils.sending_email(TextUtils.replacer(Email.schadulerTestText.value,[course_calendar.course.title])
                                  ,Email.tethaEmail.value,Email.testEmail.value,Email.testPassword.value )
     except Exception as e:
             logger.error("danger: "+e)
     # print log when course calender update ...
   #  print("course calenders update at " + str(now))
-# we need log for this 
+# we need log for this
