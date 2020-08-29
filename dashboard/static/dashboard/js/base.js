@@ -45,13 +45,11 @@ function pageReady() {
             dataType: "json",
             type: "GET",
             success: function (data) {
-                console.log(data.phone_number)
                 window.addEventListener('raychat_ready', function (ets) {
-                    console.log(window.Raychat.getUser())
                     window.Raychat.setUser({
                         name: data.first_name + " " + data.last_name,
                         phone: "0" + data.phone_number,
-                        about : "پایه " + data.grade + " - " + "با نام کاربری " + data.username,
+                        about: "پایه " + data.grade + " - " + "با نام کاربری " + data.username,
                         updateOnce: false
                     });
                 });
