@@ -26,9 +26,6 @@ LEXERS = [item for item in get_all_lexers() if item[1]]
 
 
 class User(AbstractBaseUser, PermissionsMixin):
-    Grade_CHOICES = (('first', 'ابتدایی'), ('second', 'متوسطه اول'), ('third', 'متوسطه دوم'),
-                     ('other', 'متفرقه'))
-    grade_choice = models.CharField("پایه", max_length=20 , choices=Grade_CHOICES, default='other')
     username = models.CharField("نام کاربری", max_length=30, unique=True)
     password = models.CharField("رمز", max_length=128)
     email = models.EmailField('ایمیل', unique=True, null=True, blank=True)
@@ -147,6 +144,9 @@ class City(models.Model):
 
 # Grade Models
 class Grade(models.Model):
+    Grade_CHOICES = (('first', 'ابتدایی'), ('second', 'متوسطه اول'), ('third', 'متوسطه دوم'),
+                     ('other', 'متفرقه'))
+    grade_choice = models.CharField("پایه", max_length=20, choices=Grade_CHOICES, default='other')
     code = models.CharField("کد", max_length=10)
     title = models.CharField("عنوان", max_length=30)
 

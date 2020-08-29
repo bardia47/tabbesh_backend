@@ -3,9 +3,17 @@ from rest_framework import serializers
 
 
 class TeacherSerializer(serializers.ModelSerializer):
+    grade_choice = serializers.SerializerMethodField('get_first_choice')
+
     class Meta:
         model = User
         fields = ('avatar', 'get_full_name', 'grade_choice')
+
+    def get_first_choice(self, instance):
+        grades = instance.grades.all()
+        if len(grades) > 0:
+            choice_field = grades.first().get_grade_choice_display()
+            return choice_field
 
 
 class CourseSerializer(serializers.ModelSerializer):
