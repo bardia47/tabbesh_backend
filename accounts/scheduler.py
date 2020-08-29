@@ -6,7 +6,7 @@ def start():
     scheduler = BackgroundScheduler()
     # read about cron in apscheduler document
     # --> https://apscheduler.readthedocs.io/en/stable/modules/triggers/cron.html
-    scheduler.add_job(daily_course_times, 'cron', hour=22, minute=7)
+    scheduler.add_job(daily_course_times, 'cron', hour=6, minute=30)
     scheduler.start()
 
 def daily_course_times():
@@ -55,4 +55,4 @@ def update_course_calenders(*args):
             logger.error("danger: "+e)
     # print log when course calender update ...
   #  print("course calenders update at " + str(now))
-# we need log for this 
+# we need log for this
