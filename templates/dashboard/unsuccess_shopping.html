@@ -48,20 +48,25 @@
         // offline buy course message
         $("#offlineBuyCourse").click(function () {
             if (!sendOfflineBuyMessage) {
-                window.Raychat.sendOfflineMessage('سلام در صورت نداشتن شرایط پرداخت با درگاه می توانید به شماره کارت زیر مبلغ را ارسال کنید.');
-                window.Raychat.sendOfflineMessage('شماره کارت جهت کارت به کارت : 6280231240351642');
-                window.Raychat.sendOfflineMessage('در انتها فیش واریزی را به شماره تلفن 09374789830 در واتس اپ ارسال کنید.');
-                sendOfflineBuyMessage = true;
+                window.addEventListener('raychat_ready', function (ets) {
+                    window.Raychat.sendOfflineMessage('سلام در صورت نداشتن شرایط پرداخت با درگاه می توانید به شماره کارت زیر مبلغ را ارسال کنید.');
+                    window.Raychat.sendOfflineMessage('شماره کارت جهت کارت به کارت : 6280231240351642');
+                    window.Raychat.sendOfflineMessage('در انتها فیش واریزی را به شماره تلفن 09374789830 در واتس اپ ارسال کنید.');
+                    sendOfflineBuyMessage = true;
+                });
             }
             window.Raychat.toggle();
         });
         // support message
         $("#support_button").click(function () {
-            if (!sendSupportMessage) {
-                window.Raychat.sendOfflineMessage('سلام می تونم کمکتون کنم ؟');
-                sendSupportMessage = true;
+                if (!sendSupportMessage) {
+                    window.addEventListener('raychat_ready', function (ets) {
+                        window.Raychat.sendOfflineMessage('سلام می تونم کمکتون کنم ؟');
+                        sendSupportMessage = true;
+                    });
+                    window.Raychat.toggle();
+                }
             }
-            window.Raychat.toggle();
-        })
+        )
     </script>
 {% endblock %}
