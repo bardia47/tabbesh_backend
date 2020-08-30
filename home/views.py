@@ -96,8 +96,8 @@ class SearchHome(generics.GenericAPIView):
 
     def get_queryset(self):
         # get three courses that have most similarity with courses in data base
-        course = Course.objects.filter(Q(title__icontains=self.request.data['title']) or
-                                       Q(teacher__last_name__icontains=self.request.data['title']))[:3]
+        title = self.request.data['title']
+        course = Course.objects.filter(Q(title__icontains=title) | Q(teacher__last_name__icontains=title))[:3]
         return course
 
     def post(self, request):
