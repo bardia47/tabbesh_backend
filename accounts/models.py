@@ -144,9 +144,9 @@ class City(models.Model):
 
 # Grade Models
 class Grade(models.Model):
-    Grade_CHOICES = (('first', 'ابتدایی'), ('second', 'متوسطه اول'), ('third', 'متوسطه دوم'),
-                     ('other', 'متفرقه'))
-    grade_choice = models.CharField("پایه", max_length=20, choices=Grade_CHOICES, default='other')
+    Grade_CHOICES = (('First', 'ابتدایی'), ('Second', 'متوسطه اول'), ('Third', 'متوسطه دوم'),
+                     ('Other', 'متفرقه'))
+    grade_choice = models.CharField("پایه", max_length=10, choices=Grade_CHOICES, default='other')
     code = models.CharField("کد", max_length=10)
     title = models.CharField("عنوان", max_length=30)
 
