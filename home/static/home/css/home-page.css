@@ -270,3 +270,8 @@ hr {
     }
 }
 
+.owl-carousel
+{
+    touch-action: manipulation;
+}
+

@@ -391,30 +391,7 @@
                     <hr>
 
                     <div class="container">
-                        <div id="fullDiscountCourse" class=" owl-carousel owl-theme">
-                            <!-- first course-->
-                            <div class="mx-2">
-                                <div class="card">
-                                    <img class="img-card" src="image/card.jpg" alt="">
-                                    <div class="card-body text-center">
-                                        <h4>استاد مهران رضایی</h4>
-                                        <h5 style="font-family: 'Vazir_medium';">درس حساب دیفرانسیل</h5>
-                                        <p>دوره متوسطه اول</p>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- second course-->
-                            <div class="mx-2">
-                                <div class="card">
-                                    <img class="img-card" src="image/card.jpg" alt="">
-                                    <div class="card-body text-center">
-                                        <h4>استاد مهران رضایی</h4>
-                                        <h5 style="font-family: 'Vazir_medium';">درس حساب دیفرانسیل</h5>
-                                        <p>دوره متوسطه اول</p>
-                                    </div>
-                                </div>
-                            </div>
-
+                        <div id="fullDiscountCourse" class="owl-carousel owl-theme">
                         </div>
                     </div>
 
@@ -466,18 +443,21 @@
                                 اگه پیداش نکردی سرچش کن
                             </h1>
                         </span>
-
-                    <form class="px-3" action="">
-                        <div
-                                class="my-4 input-group d-flex flex-nowrap border border-dark shadow bg-white badge-pill px-3 py-2">
-                            <img src="{% static "home/images/home-page/icons/searchh.svg" %}" width="40">
-                            <div class="w-100 p-2">
-                                <input type="text" class="form-control" placeholder="" name="search">
+                    <div class="px-3 my-4 input-group d-flex flex-nowrap border border-dark shadow bg-white badge-pill px-3 py-2">
+                        <img src="{% static "home/images/home-page/icons/searchh.svg" %}" width="40">
+                        <div class="w-100 p-2">
+                            <input id="searchInput" type="text" class="form-control"
+                                   placeholder="اسم دروه ی مورد نظر را در این مکان بنویسید. به طور مثال : ریاضی نهم"
+                                   name="search">
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="container text-center">
+                        <div id="searchCourse">
+                            <div class="owl-carousel owl-theme">
                             </div>
                         </div>
-                    </form>
-
-                    <hr>
+                    </div>
 
                 </div>
             </div>
