@@ -82,7 +82,7 @@ class MostDiscountedCourses(generics.ListAPIView):
     def get_queryset(self):
         time_now = datetime.datetime.now()
         # get those discounts that the time of them reach
-        discounts = Discount.objects.filter(Q(code=None) and Q(start_date__lt=time_now) and Q(end_date__gt=time_now))
+        discounts = Discount.objects.filter(Q(code=None) & Q(start_date__lt=time_now) & Q(end_date__gt=time_now))
         # get those courses that have discounts now
         course = Course.objects.filter(discount__in=discounts)
         return course
@@ -96,8 +96,8 @@ class SearchHome(generics.GenericAPIView):
 
     def get_queryset(self):
         # get three courses that have most similarity with courses in data base
-        course = Course.objects.filter(Q(title__icontains=self.request.data['title']) or
-                                       Q(teacher__last_name__icontains=self.request.data['title']))[:3]
+        title = self.request.data['title']
+        course = Course.objects.filter(Q(title__icontains=title) | Q(teacher__last_name__icontains=title))[:3]
         return course
 
     def post(self, request):

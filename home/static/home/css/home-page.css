@@ -19,7 +19,7 @@ body {
 .header-description {
     position: absolute;
     left: 20%;
-    top : 30%;
+    top: 30%;
 }
 
 .float {
@@ -116,12 +116,18 @@ p {
 }
 
 .img-circle {
-    background-image: url(../images/home-page/circle.png);
+    background-image: url("../images/home-page/circle.svg");
     z-index: -1;
     height: 100%;
     background-repeat: no-repeat;
     background-position: center;
     background-size: 90rem;
+}
+
+.card-teacher {
+    background-color: white;
+    border-radius: 15px;
+    margin: 0 0 50px 0 !important;
 }
 
 .card {
@@ -162,7 +168,7 @@ hr {
 }
 
 .img-rectangle {
-    background-image: url(../image/Rectangle.png);
+    background-image: url("../images/home-page/Rectangle.svg");
     z-index: -1;
     height: 100%;
     background-repeat: no-repeat;
@@ -230,9 +236,11 @@ hr {
     .desktop-version {
         display: none;
     }
+
     .desktop-counter {
         display: none;
     }
+
     .desktop-why {
         display: none;
     }
@@ -243,9 +251,11 @@ hr {
     .mobile-version {
         display: none;
     }
+
     .mobile-counter {
         display: none;
     }
+
     .mobile-why {
         display: none;
     }
@@ -256,17 +266,25 @@ hr {
     .footer-items {
         margin: 50px 0 0 0;
     }
+
     .footer-logo {
         margin: 50px 0 0 0;
     }
+
     .counter-margin {
         margin-right: 70px !important;
     }
+
     .mobile-font {
         font-size: 25px;
     }
+
     .mobile-img {
         width: 35px;
     }
+}
+
+.owl-carousel {
+    touch-action: manipulation;
 }
 
