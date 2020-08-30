@@ -1,0 +1,272 @@
+html,
+body {
+    height: 100%;
+    width: 100%;
+    background-color: #FAFAFA;
+    font-family: 'Yekan', 'Yekan-Number', 'Vazir_Light', 'Vazir_Bold', 'Vazir_Medium';
+}
+
+.desktop-version {
+    position: relative;
+    background-image: url(../images/home-page/poster.svg);
+    background-color: #fafafa;
+    background-repeat: no-repeat;
+    background-position-y: top;
+    background-position-x: right;
+    height: 768px;
+}
+
+.header-description {
+    position: absolute;
+    left: 20%;
+    top : 30%;
+}
+
+.float {
+    margin-left: -1px !important;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5 {
+    font-family: 'Vazir_bold';
+    color: #00204E;
+}
+
+.h1,
+.h2,
+.h3,
+.h4,
+.h5 {
+    font-family: 'Vazir_Bold';
+    color: #ffc109;
+}
+
+p {
+    font-family: 'Vazir_Medium';
+    color: #00204E;
+}
+
+.p {
+    font-family: 'Vazir_Light';
+    color: #ffc109;
+}
+
+.h-header-desktop {
+    font-size: 55px;
+}
+
+.h-header-mobile {
+    font-size: 35px;
+}
+
+.btn-header {
+    font-family: 'Vazir_Medium';
+    padding: 10px 25px 10px 25px !important;
+    margin: 0 20px 0 0;
+    border-radius: 15px !important;
+}
+
+/* flip card style */
+.flip-card {
+    background-color: transparent;
+    height: 200px;
+    border: 1px solid #f1f1f1;
+    border-radius: 15px;
+    perspective: 1000px;
+}
+
+.flip-card-inner {
+    border-radius: 15px;
+    position: relative;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    transition: transform 0.8s;
+    transform-style: preserve-3d;
+}
+
+.flip-card:hover .flip-card-inner {
+    transform: rotateY(180deg);
+}
+
+.flip-card-front,
+.flip-card-back {
+    position: absolute;
+    border-radius: 15px;
+    width: 100%;
+    height: 100%;
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+}
+
+.flip-card-front {
+    border-radius: 15px;
+    background-color: #bbb;
+    color: black;
+}
+
+.flip-card-back {
+    border-radius: 15px;
+    background-color: #bbb;
+    color: black;
+    transform: rotateY(180deg);
+}
+
+.img-circle {
+    background-image: url(../images/home-page/circle.png);
+    z-index: -1;
+    height: 100%;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 90rem;
+}
+
+.card {
+    border: 1px solid #00204E !important;
+    border-radius: 10px !important;
+}
+
+.img-card {
+    border-radius: 10px 10px 0 0;
+    padding: auto;
+    margin: auto;
+    width: 100%;
+}
+
+hr {
+    border: 1px solid #00204E !important;
+}
+
+.hr {
+    border: 5px solid #00204E !important;
+    z-index: -1 !important;
+}
+
+.hr-footer {
+    border: 6px solid #ffc109 !important;
+}
+
+.counter-margin {
+    margin-right: 100px !important;
+}
+
+.course {
+    margin-top: -55px;
+    text-align: center;
+    background-color: #FAFAFA;
+    color: #ffc109;
+    padding: 10px;
+}
+
+.img-rectangle {
+    background-image: url(../image/Rectangle.png);
+    z-index: -1;
+    height: 100%;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 98rem;
+}
+
+.comment {
+    margin-top: 100px;
+}
+
+.footer-items {
+    margin: 80px 50px 0 0;
+}
+
+.footer-logo {
+    margin: 180px 50px 0 0;
+}
+
+
+/* change css of prev & next in owl carousel */
+.owl-prev {
+    position: absolute;
+    right: -40px;
+    top: 45%;
+}
+
+.owl-next {
+    position: absolute;
+    left: -40px;
+    top: 45%;
+}
+
+.owl-next:focus,
+.owl-prev:focus,
+.owl-dot:focus {
+    outline: none;
+}
+
+.owl-theme .owl-nav [class*=owl-]:hover {
+    background-color: transparent !important;
+}
+
+.owl-dot span {
+    height: 12px !important;
+    width: 12px !important;
+    background: #00204E !important;
+}
+
+.owl-dot.active span {
+    background: #ffc109 !important;
+}
+
+.blockquote {
+    background-color: white;
+    border-radius: 25px;
+    padding: 1.5rem;
+    margin: 3rem;
+    width: 70% !important;
+    height: 100% !important;
+}
+
+
+@media only screen and (max-width: 768px) {
+    .desktop-version {
+        display: none;
+    }
+    .desktop-counter {
+        display: none;
+    }
+    .desktop-why {
+        display: none;
+    }
+
+}
+
+@media only screen and (min-width: 768px) {
+    .mobile-version {
+        display: none;
+    }
+    .mobile-counter {
+        display: none;
+    }
+    .mobile-why {
+        display: none;
+    }
+
+}
+
+@media (max-width: 576px) {
+    .footer-items {
+        margin: 50px 0 0 0;
+    }
+    .footer-logo {
+        margin: 50px 0 0 0;
+    }
+    .counter-margin {
+        margin-right: 70px !important;
+    }
+    .mobile-font {
+        font-size: 25px;
+    }
+    .mobile-img {
+        width: 35px;
+    }
+}
+
