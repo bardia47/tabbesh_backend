@@ -82,7 +82,7 @@ class MostDiscountedCourses(generics.ListAPIView):
     def get_queryset(self):
         time_now = datetime.datetime.now()
         # get those discounts that the time of them reach
-        discounts = Discount.objects.filter(Q(code=None) and Q(start_date__lt=time_now) and Q(end_date__gt=time_now))
+        discounts = Discount.objects.filter(Q(code=None) & Q(start_date__lt=time_now) & Q(end_date__gt=time_now))
         # get those courses that have discounts now
         course = Course.objects.filter(discount__in=discounts)
         return course
