@@ -2,7 +2,9 @@ from django.shortcuts import render, redirect
 from django.db.models import Count
 from rest_framework import status, generics
 from rest_framework.permissions import AllowAny
-from rest_framework.renderers import BrowsableAPIRenderer, JSONRenderer
+from rest_framework.renderers import BrowsableAPIRenderer, JSONRenderer, TemplateHTMLRenderer
+from rest_framework.response import Response
+from rest_framework.views import APIView
 
 from home.serializers import *
 
@@ -22,6 +24,14 @@ def page_not_found(request, exception=None):
 
 # def sign_up_required(request, exception=None):
 #     return render(request, 'accounts/signup.html' ,status=status.HTTP_403_FORBIDDEN)
+
+# TODO:should fix url and template_name after adding correct file
+class Home(APIView):
+    renderer_classes = [TemplateHTMLRenderer, JSONRenderer]
+    permission_classes = (AllowAny,)
+
+    def get(self, request):
+        return Response(template_name='home/home.html')
 
 
 class AllTeacher(generics.ListAPIView):
@@ -78,3 +88,21 @@ class MostDiscountedCourses(generics.ListAPIView):
         # get those courses that have discounts now
         course = Course.objects.filter(discount__in=discounts)
         return course
+
+
+class SearchHome(generics.GenericAPIView):
+    renderer_classes = [TemplateHTMLRenderer, JSONRenderer]
+    permission_classes = (AllowAny,)
+    serializer_class = CourseSerializerTitle
+    pagination_class = None
+
+    def get_queryset(self):
+        # get three courses that have most similarity with courses in data base
+        course = Course.objects.filter(Q(title__icontains=self.request.data['title']) and
+                                       Q(teacher__last_name__icontains=self.request.data['title']))[:3]
+        return course
+
+    def post(self, request):
+        course = self.get_queryset()
+        serialize = CourseSerializer(course, many=True)
+        return Response(serialize.data, status=status.HTTP_200_OK)
