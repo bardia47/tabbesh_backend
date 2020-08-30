@@ -64,8 +64,6 @@ class BestSellingCourses(generics.ListAPIView):
         count = Course.objects.all().count()
         # if courses are few return all of them
         course_order = course.order_by('-number')
-        if count < 5:
-            return course_order
         # sorted courses by number of students
         if count > 100:
             # the highest size of query for sending is 14
