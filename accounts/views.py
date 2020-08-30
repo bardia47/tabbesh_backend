@@ -73,12 +73,12 @@ class SignIn(APIView):
                 username=username, password=request.data['password'])
         if user is not None:
             auth.login(request, user)
-            nextUrl = request.GET.get('next')
-            if  request.session.get('new_login') is not None:
-                nextUrl='/dashboard/edit_profile/#changePassword'
-            if nextUrl is None:
+            if request.session.get('new_login') is not None:
+                return redirect('/dashboard/edit_profile/#changePassword')
+            elif request.GET.get('next') is None:
                 return redirect('dashboard')
-            return redirect(nextUrl)
+            else :
+                return redirect(request.META['QUERY_STRING'].replace('next=',''))
         else:
             return render(request, 'accounts/signin.html', {'error': 'نام کاربری یا رمز عبور اشتباه است'})
 
