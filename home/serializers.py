@@ -10,12 +10,11 @@ class TeacherSerializer(serializers.ModelSerializer):
         fields = ('avatar', 'get_full_name', 'grade_choice')
 
     def get_first_choice(self, instance):
-        # grades = instance.grades.values('grade_choice')
-        grades = instance.grades.all()
-        if len(grades) > 0:
-            choice_field = grades.first().get_grade_choice_display()
-            return choice_field
-        # return grades
+        all_grades = instance.grades.all()
+        grades = set()
+        for grade in all_grades:
+            grades.add(grade.get_grade_choice_display())
+        return grades
 
 
 class CourseSerializer(serializers.ModelSerializer):
