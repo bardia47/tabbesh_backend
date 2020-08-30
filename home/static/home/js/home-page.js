@@ -1,11 +1,68 @@
 $(function () {
+
+    teacherListAjax();
+    homeCounter();
     bestSellerAjax();
     fullDiscountAjax();
-
     $("#searchInput").on("keyup", function () {
         searchAjax($(this).val());
     });
 });
+
+
+function teacherListAjax() {
+    $.ajax({
+        url: "/all-teacher/",
+        type: "GET",
+        dataType: "json",
+        success: function (teachersList) {
+            teacherListRender(teachersList)
+        },
+        error: function () {
+            alert("بارگذاری دبیران به مشکل خورده است! دوباره امتحان کنید.")
+        },
+    });
+}
+
+function homeCounter() {
+    let firstTimeReach = false;
+    $(window).scroll(function () {
+        let hT = $('.desktop-counter').offset().top,
+            hH = $('.desktop-counter').outerHeight(),
+            wH = $(window).height(),
+            wS = $(this).scrollTop();
+        if (wS > (hT + hH - wH) && !firstTimeReach) {
+            $(".counter").animationCounter({
+                start: 0,
+                end: 1000,
+                step: 1,
+                delay: 200,
+            })
+            firstTimeReach = true;
+        }
+    });
+}
+
+function teacherListRender(teachersList) {
+    let teachersTemplate = ``;
+    $.each(teachersList, function (index, teacher) {
+        let teacherTemplate = `
+        <div class="mx-2">
+            <div class="card">
+                <img class="img-card mt-2" src="${teacher.avatar}" style="width: 150px !important; ; height: 150px !important;" alt="course image">
+                <div class="card-body text-center">
+                    <h4 class="text-nowrap">${teacher.get_full_name}</h4>
+                    <h5 class="vazir-medium">${teacher.grade_choice}</h5>
+                   <!-- <a href="/dashboard/shopping/?teacher=${teacher.id}" class="btn btn-secondary vazir-bold mt-2"></a> -->
+                </div>
+            </div>
+        </div>
+        `;
+        teachersTemplate += teacherTemplate;
+    });
+    $("#teacherList").empty().append(teachersTemplate);
+    owlCarouselInitial("#teacherList");
+}
 
 
 function bestSellerAjax() {
@@ -30,9 +87,9 @@ function bestSellerRender(bestSellerCourses) {
             <div class="card">
                 <img class="img-card" src="${course.image}" alt="course image">
                 <div class="card-body text-center">
-                    <h4>${course.teacher_full_name}</h4>
-                    <h5 class="vazir-medium">${course.lesson_title}</h5>
-                    <p>${course.grade_title}</p>
+                    <h4 class="text-nowrap">${course.course_title}</h4>
+                    <h5 class="vazir-medium">${course.teacher_full_name}</h5>
+                    <a href="/dashboard/shopping/?grade=${course.id}" class="btn btn-secondary vazir-bold mt-2">خرید دوره</a>
                 </div>
             </div>
         </div>
@@ -66,9 +123,9 @@ function fullDiscountRender(fullDiscountCourses) {
             <div class="card">
                 <img class="img-card" src="${course.image}" alt="course image">
                 <div class="card-body text-center">
-                    <h4>${course.teacher_full_name}</h4>
-                    <h5 class="vazir-medium">${course.lesson_title}</h5>
-                    <p>${course.grade_title}</p>
+                    <h4 class="text-nowrap">${course.course_title}</h4>
+                    <h5 class="vazir-medium">${course.teacher_full_name}</h5>
+                    <a href="/dashboard/shopping/?grade=${course.id}" class="btn btn-secondary vazir-bold mt-2">خرید دوره</a>
                 </div>
             </div>
         </div>
@@ -108,9 +165,9 @@ function searchRender(searchCourses) {
             <div class="card">
                 <img class="img-card" src="${course.image}" alt="course image">
                 <div class="card-body text-center">
-                    <h4>${course.teacher_full_name}</h4>
-                    <h5 class="vazir-medium">${course.lesson_title}</h5>
-                    <p>${course.grade_title}</p>
+                    <h4 class="text-nowrap">${course.course_title}</h4>
+                    <h5 class="vazir-medium">${course.teacher_full_name}</h5>
+                    <a href="/dashboard/shopping/?grade=${course.id}" class="btn btn-secondary vazir-bold mt-2">خرید دوره</a>
                 </div>
             </div>
         </div>

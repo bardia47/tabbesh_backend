@@ -86,8 +86,8 @@
                 <span>بودن</span>
             </h2>
             <div class="row justify-content-center">
-                <a class="btn btn-secondary btn-header mt-4 ml-2" href="">ورود</a>
-                <a class="btn btn-primary btn-header mt-4" href="">ثبت نام</a>
+                <a class="btn btn-secondary btn-header mt-4 ml-2" href="{% url 'signin' %}">ورود</a>
+                <a class="btn btn-primary btn-header mt-4" href="{% url 'signup' %}">ثبت نام</a>
             </div>
         </div>
     </div>
@@ -275,22 +275,12 @@
         </div>
 
         <div class="container w-75">
-
-
-            <div class="col-md-4">
-                <div class="card">
-                    <img class="img-card" src="{% static "home/images/home-page/card.jpg" %}" alt="">
-                    <div class="card-body text-center">
-                        <h4>استاد مهران رضایی</h4>
-                        <h5 style="font-family: 'Vazir_medium';">درس حساب دیفرانسیل</h5>
-                        <p>دوره متوسطه اول</p>
-                    </div>
+            <div class="row">
+                <div id="teacherList" class="owl-carousel owl-theme">
                 </div>
             </div>
 
-
         </div>
-
     </div>
 </div>
 
@@ -311,17 +301,17 @@
 
                 <div class="col-md-4 mt-2 mb-2 text-center">
                     <img src="{% static "home/images/home-page/icons/exam.svg" %}" width="200">
-                    <h2 class="h2 mt-3">1.234</h2>
+                    <h2 class="h2 mt-3 counter"></h2>
                 </div>
 
                 <div class="col-md-4 mt-2 mb-2 text-center">
                     <img src="{% static "home/images/home-page/icons/student1.svg" %}" width="200">
-                    <h2 class="h2 mt-3">1.234</h2>
+                    <h2 class="h2 mt-3 counter"></h2>
                 </div>
 
                 <div class="col-md-4 mt-2 mb-2 text-center">
                     <img src="{% static "home/images/home-page/icons/book.svg" %}" width="200">
-                    <h2 class="h2 mt-3">1.234</h2>
+                    <h2 class="h2 mt-3 counter"></h2>
                 </div>
 
             </div>
@@ -342,25 +332,23 @@
 
         <div class="container mt-5 mb-5 ">
             <div class="row justify-content-center">
-
                 <div class="col-md-4 mt-5 mb-5 text-center">
                     <img src="{% static "home/images/home-page/icons/exam.svg" %}" width="180">
-                    <h2 class="h2 mt-3">1.234</h2>
+                    <h2 class="h2 mt-3 counter"></h2>
                 </div>
 
                 <div class="col-md-4 mt-5 mb-5 text-center">
                     <img src="{% static "home/images/home-page/icons/student1.svg" %}" width="180">
-                    <h2 class="h2 mt-3">1.234</h2>
+                    <h2 class="h2 mt-3 counter"></h2>
                 </div>
 
                 <div class="col-md-4 mt-5 mb-2 text-center">
                     <img src="{% static "home/images/home-page/icons/book.svg" %}" width="180">
-                    <h2 class="h2 mt-3">1.234</h2>
+                    <h2 class="h2 mt-3 counter"></h2>
                 </div>
 
             </div>
         </div>
-
     </div>
 </div>
 
@@ -440,7 +428,7 @@
                             <h1 class="mt-3 ml-4 mobile-font">
                                 <img class="mobile-img" src="{% static "home/images/home-page/icons/search.svg" %}"
                                      width="50">
-                                اگه پیداش نکردی سرچش کن
+                                اگه پیداش نکردی جتسجوش کن
                             </h1>
                         </span>
                     <div class="px-3 my-4 input-group d-flex flex-nowrap border border-dark shadow bg-white badge-pill px-3 py-2">
@@ -601,6 +589,9 @@
         integrity="sha512-bPs7Ae6pVvhOSiIcyUClR7/q2OAsRiovw4vAkX+zJbw3ShAeeqezq50RIIcIURq7Oa20rW2n2q+fyXBNcU9lrw=="
         crossorigin="anonymous"></script>
 <script src="{% static "home/js/home-page.js" %}"></script>
+
+<!-- animation-counter.min -->
+<script src="{% static "home/js/animation-counter.min.js" %}"></script>
 </body>
 
 </html>
