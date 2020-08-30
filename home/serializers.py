@@ -3,13 +3,13 @@ from rest_framework import serializers
 
 
 class TeacherSerializer(serializers.ModelSerializer):
-    grade_choice = serializers.SerializerMethodField('get_first_choice')
+    grade_choice = serializers.SerializerMethodField('get_choices')
 
     class Meta:
         model = User
         fields = ('avatar', 'get_full_name', 'grade_choice')
 
-    def get_first_choice(self, instance):
+    def get_choices(self, instance):
         all_grades = instance.grades.all()
         grades = set()
         for grade in all_grades:

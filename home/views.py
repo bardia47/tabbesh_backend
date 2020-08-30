@@ -58,8 +58,11 @@ class BestSellingCourses(generics.ListAPIView):
     pagination_class = None
 
     def get_queryset(self):
-        # get courses those have most students
-        course = Course.objects.annotate(number=Count('user'))
+        time_now = datetime.datetime.now()
+        # get courses those end date is more than now
+        all_course = Course.objects.filter(end_date__gt=time_now)
+        # set the number of students for courses
+        course = all_course.annotate(number=Count('user'))
         # get the number of courses
         count = Course.objects.all().count()
         # if courses are few return all of them
