@@ -390,7 +390,7 @@ class Support(models.Model):
     type_choice = models.CharField("نوع", max_length=7, choices=TYPE_CHOICES, default='PUBLIC')
     code = models.CharField("کد", max_length=10,unique=True)
     title = models.CharField("عنوان", max_length=30)
-    description = tinymce_models.HTMLField('توضیحات', null=True, blank=True)
+    description = models.TextField('توضیحات', null=True, blank=True)
     update_date = models.DateTimeField("تاریخ آخرین تغییر", auto_now=True)
 
     class Meta:
