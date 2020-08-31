@@ -47,14 +47,11 @@ class CourseDiscountedSerializer(serializers.ModelSerializer):
         return discount.percent
 
 
-class CourseSerializerTitle(serializers.ModelSerializer):
-    class Meta:
-        model = Course
-        fields = ('title',)
+class CourseSerializerTitle(serializers.Serializer):
+    title = serializers.CharField(max_length=50)
 
 
 class SupportSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = Support
         fields = ('description',)
