@@ -6,6 +6,7 @@ from rest_framework.renderers import BrowsableAPIRenderer, JSONRenderer, Templat
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
+from accounts.enums import *
 from home.serializers import *
 
 
@@ -40,8 +41,8 @@ class Counter(APIView):
 
     def get(self, request):
         course_counter = Course.objects.all().count()
-        student_counter = User.objects.filter(role__code='1').count()
-        teacher_counter = User.objects.filter(role__code='3').count()
+        student_counter = User.objects.filter(role__code=RoleCodes.STUDENT.value).count()
+        teacher_counter = User.objects.filter(role__code=RoleCodes.TEACHER.value).count()
         data = {"course_counter": course_counter, "student_counter": student_counter,
                 "teacher_counter": teacher_counter}
         return Response(data)
@@ -59,7 +60,7 @@ class AllTeacher(generics.ListAPIView):
         # if cache_get:
         #     return cache_get
         # else:
-        queryset = User.objects.filter(role__code='3')
+        queryset = User.objects.filter(role__code=RoleCodes.TEACHER.value)
         # cache.set('my_key', queryset, 1000)
         return queryset
 
