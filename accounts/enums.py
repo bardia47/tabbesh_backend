@@ -10,8 +10,8 @@ class RoleCodes(Enum):
 class Sms(Enum):
     username = '09357727769'
     password = '8794'
-   # signupText = 'با سلام و احترام خدمت شما تابشی عزیز رمز عبور شما برابر با {} می باشد لطفا پس از ورود به سایت در قسمت پروفایل آن را تعویض نمایید'
-    signupBodyId=20677
+    # signupText = 'با سلام و احترام خدمت شما تابشی عزیز رمز عبور شما برابر با {} می باشد لطفا پس از ورود به سایت در قسمت پروفایل آن را تعویض نمایید'
+    signupBodyId = 20677
     wrongNumber = '11'
     _from = '50004000772777'
 
@@ -20,9 +20,9 @@ class Sms(Enum):
 
 class Email(Enum):
     tethaEmail = 'tetha.nine@gmail.com'
-    testEmail= 'bardiatethatest@gmail.com'
-    testPassword='tetha12345678'
-    schadulerTestText="""\
+    testEmail = 'bardiatethatest@gmail.com'
+    testPassword = 'tetha12345678'
+    schadulerTestText = """\
                 <html>
                   <body>
                        <br> نام درس :

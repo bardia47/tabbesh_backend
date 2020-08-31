@@ -11,7 +11,7 @@ from rest_framework import status
 from django.db.models import Q
 from django.db.models import Sum
 from .enums import *
-from accounts.utils import TextUtils,ChoiceUtils
+from accounts.utils import TextUtils, ChoiceUtils
 from accounts.enums import Sms
 from accounts.webServices import SmsWebServices
 import datetime
@@ -47,10 +47,10 @@ class SendRequest(APIView):
             code = request.data['code']
             if request.session.get('event_discount'):
                 discount = Discount()
-                discount.percent =  Events[request.session.get('event_discount')+"_DISCOUNT"].value
+                discount.percent = Events[request.session.get('event_discount') + "_DISCOUNT"].value
             else:
                 if code and code != '':
-                    query=discount_query(code)
+                    query = discount_query(code)
                     # query &= (Q(courses__id__in=courses_id_list) | Q(courses=None))
                     discount = Discount.objects.get(query)
                 else:
@@ -121,20 +121,21 @@ class Verify(APIView):
 
                 try:
                     event = Event.objects.get(user__id=request.user.id, is_active=True)
-                    event.is_active=False
+                    event.is_active = False
                     event.save()
-                    related_user=event.related_user
-                    related_user.credit +=  float(Events[event.type+"_AMOUNT"].value)
+                    related_user = event.related_user
+                    related_user.credit += float(Events[event.type + "_AMOUNT"].value)
                     related_user.save()
                     to = "0" + related_user.phone_number
 
-                    text = TextUtils.replacer(Sms.increaseCreditText.value,  [str(Events[event.type+"_AMOUNT"].value) , str(int(related_user.credit))])
-                    sendSms = SmsWebServices.send_sms(to, text,None)
+                    text = TextUtils.replacer(Sms.increaseCreditText.value, [str(Events[event.type + "_AMOUNT"].value),
+                                                                             str(int(related_user.credit))])
+                    sendSms = SmsWebServices.send_sms(to, text, None)
                     if sendSms is not None:
-                       logger.error("danger: "+sendSms)
+                        logger.error("danger: " + sendSms)
                     del request.session['event_discount']
                 except Exception as e:
-                    logger.error("danger: "+ e)
+                    logger.error("danger: " + e)
                 if request.accepted_renderer.format == 'html':
                     return render(request, 'dashboard/success_shopping.html', {'RefID': str(result.RefID)})
                 return Response({'RefID': str(result.RefID)})
@@ -166,7 +167,7 @@ class ComputeDiscount(APIView):
     def post(self, request):
         courses_id_list = request.data["total_id"].split()
         code = request.data['code']
-        query=discount_query(code)
+        query = discount_query(code)
         # query &= (Q(courses__id__in=courses_id_list) | Q(courses=None))
         try:
             if request.session.get('event_discount'):
@@ -183,12 +184,14 @@ class ComputeDiscount(APIView):
         amount = amount - discount_amount
         return Response({'amount': amount})
 
+
 def discount_query(code):
     now = datetime.datetime.now()
     query = Q(start_date__lte=now)
     query &= Q(code=code)
     query &= (Q(end_date__gte=now) | Q(end_date=None))
     return query
+
 
 def compute_discount(courses_id_list, amount, discount):
     if discount.id is None or discount.courses.count() == 0:
@@ -200,22 +203,20 @@ def compute_discount(courses_id_list, amount, discount):
             sum_amount += course.get_amount_payable()
         return sum_amount * discount.percent / 100
 
+
 # in this method use replacer for create dynamic text
 def pay_description(courses_id_list, amount, discount, request):
     text = ZarinPal.descriptionText.value
 
     if request.session.get('event_discount'):
-        discount_text = TextUtils.replacer(ZarinPal.eventText.value, [ChoiceUtils.get_choice_name(request.session.get('event_discount'),Event.TYPE_CHOICES),str(discount.percent)])
+        discount_text = TextUtils.replacer(ZarinPal.eventText.value, [
+            ChoiceUtils.get_choice_name(request.session.get('event_discount'), Event.TYPE_CHOICES),
+            str(discount.percent)])
     elif discount:
         discount_text = TextUtils.replacer(ZarinPal.dicountText.value, [discount.code])
     else:
         discount_text = None
     text = TextUtils.replacer(text, [TextUtils.convert_list_to_string(
         list(Course.objects.filter(id__in=courses_id_list).values_list('title', flat=True))), discount_text,
-                                     request.user.get_full_name()])
+        request.user.get_full_name()])
     return text
-
-
-
-
-

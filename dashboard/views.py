@@ -29,7 +29,7 @@ class Dashboard(APIView):
     def get(self, request):
         now = datetime.datetime.now()
         if self.request.user.is_teacher():
-            courses = Course.objects.filter(teacher__id=self.request.user.id,end_date__gt=now)
+            courses = Course.objects.filter(teacher__id=self.request.user.id, end_date__gt=now)
         else:
             courses = self.request.user.courses.filter(end_date__gt=now)
         classes = Course_Calendar.objects.filter(
@@ -342,7 +342,7 @@ class FileManager(viewsets.ModelViewSet):
             else:
                 return Response(status=status.HTTP_400_BAD_REQUEST)
 
-        request.data.update({"sender": request.user.id, "course": course.id}) # change because we handle course with id
+        request.data.update({"sender": request.user.id, "course": course.id})  # change because we handle course with id
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)

@@ -15,6 +15,8 @@ from django.utils.safestring import mark_safe
 from django import forms
 from django.forms.models import BaseInlineFormSet
 from .utils import Utils
+
+
 class CourseInline(admin.StackedInline):
     model = User.courses.through
     verbose_name_plural = "دوره ها"
@@ -87,12 +89,13 @@ class UserCreationForm(forms.ModelForm):
         data = self.cleaned_data['avatar']
         try:
             if (self.files['avatar']):
-                data=Utils.compressImage(data)
+                data = Utils.compressImage(data)
                 if not self.instance.avatar.url.startswith("/media/defaults"):
                     self.instance.avatar.delete()
         except:
             pass
         return data
+
 
 class UserChangeForm(UserCreationForm):
     password1 = forms.CharField(label='رمز', required=False, widget=forms.PasswordInput)
@@ -111,19 +114,20 @@ class UserAdmin(BaseUserAdmin):
         (None, {'fields': ('username', 'email', 'date_joined_decorated')}),
         ('در صورت نیاز رمز جدید را وارد کنید', {'fields': ('password1', 'password2',)}),
         ('اطلاعات شخص', {'fields': (
-        'first_name', 'last_name', 'avatar', 'grades', 'national_code', 'phone_number', 'address', 'city', 'gender')}),
+            'first_name', 'last_name', 'avatar', 'grades', 'national_code', 'phone_number', 'address', 'city',
+            'gender')}),
         ('دسترسی ها', {'fields': ('is_active', "role")}),
         ('اعتبار', {'fields': ('credit',)}),
     )
     add_fieldsets = fieldsets
-    search_fields = ['last_name','phone_number','grades__title']
+    search_fields = ['last_name', 'phone_number', 'grades__title']
     ordering = ('username',)
     inlines = [
         CourseInline, PayHistoryInline
     ]
 
     def get_queryset(self, request):
-        return  User.objects.exclude(role__code=RoleCodes.TEACHER.value)
+        return User.objects.exclude(role__code=RoleCodes.TEACHER.value)
 
 
 class TeacherUser(User):
@@ -132,8 +136,10 @@ class TeacherUser(User):
         verbose_name = 'اساتید'
         verbose_name_plural = 'اساتید'
 
+
 class TeacherAdmin(UserAdmin):
     list_display = ('username', 'get_full_name', 'phone_number', 'is_active')
+
     def get_queryset(self, request):
         return User.objects.filter(role__code=RoleCodes.TEACHER.value)
 
@@ -157,12 +163,13 @@ class CourseCalendarInline(TabularInlineJalaliMixin, admin.TabularInline):
     model = Course_Calendar
     max_num = 3
 
+
 class DiscountWithoutCodeInline(admin.TabularInline):
     model = Course.discount_set.through
     max_num = 1
 
     verbose_name_plural = "تخفیف بدون کد"
-    verbose_name =  "تخفیف بدون کد"
+    verbose_name = "تخفیف بدون کد"
 
     def get_queryset(self, request):
         qs = super(DiscountWithoutCodeInline, self).get_queryset(request)
@@ -174,7 +181,6 @@ class DiscountWithoutCodeInline(admin.TabularInline):
         if db_field.name == 'discount':
             field.limit_choices_to = {'code__isnull': "True"}
         return field
-
 
 
 class CourseForm(forms.ModelForm):
@@ -190,14 +196,13 @@ class CourseForm(forms.ModelForm):
         return data
 
 
-
 class CourseAdmin(ModelAdminJalaliMixin, admin.ModelAdmin):
-    form=CourseForm
+    form = CourseForm
     inlines = [
         CourseCalendarInline,
         DiscountWithoutCodeInline
     ]
-    list_display = ['code', 'title', 'get_start_jalali', 'get_end_jalali', 'teacher_full_name','student_link']
+    list_display = ['code', 'title', 'get_start_jalali', 'get_end_jalali', 'teacher_full_name', 'student_link']
     search_fields = ['code', 'title']
 
     def teacher_full_name(self, obj):
@@ -226,6 +231,7 @@ class CourseAdmin(ModelAdminJalaliMixin, admin.ModelAdmin):
             reverse("teacher_course_panel", args=(obj.code,)),
             "پنل اساتید"
         ))
+
     student_link.short_description = "پنل اساتید"
 
 
@@ -296,7 +302,8 @@ class DocumentAdmin(admin.ModelAdmin):
 
 
 class PayHistoryAdmin(admin.ModelAdmin):
-    list_display = ['purchaser_link', 'amount', 'is_successful', 'get_submit_date_decorated', 'payment_code', 'get_courses']
+    list_display = ['purchaser_link', 'amount', 'is_successful', 'get_submit_date_decorated', 'payment_code',
+                    'get_courses']
     fields = (
         'purchaser', 'amount', 'is_successful', 'get_submit_date_decorated', 'payment_code', 'get_courses')
     exclude = ['courses', ]
@@ -326,22 +333,18 @@ class PayHistoryAdmin(admin.ModelAdmin):
         ))
 
 
-
-
-
-class CourseDiscountInline(TabularInlineJalaliMixin,admin.TabularInline):
+class CourseDiscountInline(TabularInlineJalaliMixin, admin.TabularInline):
     model = Discount.courses.through
     verbose_name_plural = "دروس مشمول تخفیف(در صورت خالی بودن تمام دروس شامل تخفیف میشوند)"
     verbose_name = "دروس مشمول تخفیف"
 
     def get_formset(self, request, obj=None, **kwargs):
-            formset = super(CourseDiscountInline, self).get_formset(request, obj, **kwargs)
-            form = formset.form
-            form.base_fields['course'].label = "دوره"
-            widget = form.base_fields['course'].widget
-            widget.label = 'دوره'
-            return formset
-
+        formset = super(CourseDiscountInline, self).get_formset(request, obj, **kwargs)
+        form = formset.form
+        form.base_fields['course'].label = "دوره"
+        widget = form.base_fields['course'].widget
+        widget.label = 'دوره'
+        return formset
 
 
 class DiscountForm(forms.ModelForm):
@@ -350,11 +353,12 @@ class DiscountForm(forms.ModelForm):
         fields = ('title', 'code', 'percent', 'start_date', 'end_date')
 
     def __init__(self, *args, **kwargs):
-            super(DiscountForm, self).__init__(*args, **kwargs)
-            self.fields['code'].required = True
+        super(DiscountForm, self).__init__(*args, **kwargs)
+        self.fields['code'].required = True
+
 
 class DiscountAdmin(ModelAdminJalaliMixin, admin.ModelAdmin):
-    list_display = ['code', 'title','percent', 'get_start_jalali', 'get_end_jalali']
+    list_display = ['code', 'title', 'percent', 'get_start_jalali', 'get_end_jalali']
     search_fields = ['code', 'title']
     form = DiscountForm
     inlines = [
@@ -377,46 +381,49 @@ class DiscountAdmin(ModelAdminJalaliMixin, admin.ModelAdmin):
     get_end_jalali.short_description = 'تاریخ پایان'
     get_end_jalali.admin_order_field = 'end_date'
 
+
 class DiscountWithoutCode(Discount):
     class Meta:
         proxy = True
         verbose_name = 'تخفیف بدون کد'
         verbose_name_plural = 'تخفیف بدون کد'
 
+
 class DiscountWithoutCodeForm(forms.ModelForm):
-    title = forms.CharField(required=True,label="نام تخفیف")
+    title = forms.CharField(required=True, label="نام تخفیف")
+
     class Meta:
         model = DiscountWithoutCode
         fields = ('title', 'percent', 'start_date', 'end_date')
-
-
 
 
 class CourseDiscountWithoutCodeFormSet(forms.models.BaseInlineFormSet):
     def clean(self):
         count = 0
         for form in self.forms:
-               if not form.errors and form.is_valid and  form.cleaned_data and not form.cleaned_data.get('DELETE') :
-                    discount_id=form.cleaned_data['discount'].id
-                    discount = Discount.objects.filter(courses__id=form.cleaned_data['course'].id,code__isnull=True ).exclude(id=discount_id)
-                    count = count + 1
-                    if discount:
-                        raise forms.ValidationError("درس " + form.cleaned_data['course'].title + " دارای تخفیف میباشند")
-        if count>0:
-            discount = Discount.objects.filter(courses=None , code__isnull=True).exclude(id=discount_id)
+            if not form.errors and form.is_valid and form.cleaned_data and not form.cleaned_data.get('DELETE'):
+                discount_id = form.cleaned_data['discount'].id
+                discount = Discount.objects.filter(courses__id=form.cleaned_data['course'].id,
+                                                   code__isnull=True).exclude(id=discount_id)
+                count = count + 1
+                if discount:
+                    raise forms.ValidationError("درس " + form.cleaned_data['course'].title + " دارای تخفیف میباشند")
+        if count > 0:
+            discount = Discount.objects.filter(courses=None, code__isnull=True).exclude(id=discount_id)
             if discount:
                 raise forms.ValidationError("تمامی دروس دارای تخفیف میباشند")
-
 
 
 class CourseDiscountWithoutCodeInline(CourseDiscountInline):
     formset = CourseDiscountWithoutCodeFormSet
 
+
 class DiscountWithoutCodeAdmin(DiscountAdmin):
-    form= DiscountWithoutCodeForm
+    form = DiscountWithoutCodeForm
     inlines = [
         CourseDiscountWithoutCodeInline
     ]
+
     def get_queryset(self, request):
         return Discount.objects.filter(code__isnull=True)
 
@@ -425,9 +432,11 @@ class SupportAdmin(admin.ModelAdmin):
     class Meta:
         readonly_fields = ('update_date_decorated',)
         fields = (
-        'title', 'code','update_date_decorated', 'description','type_choice')
-    list_display = ['title',  'update_date_decorated']
-    search_fields = ['title','code']
+            'title', 'code', 'update_date_decorated', 'description', 'type_choice')
+
+    list_display = ['title', 'update_date_decorated']
+    search_fields = ['title', 'code']
+
 
 admin.site.register(User, UserAdmin)
 admin.site.register(TeacherUser, TeacherAdmin)
@@ -442,4 +451,3 @@ admin.site.register(Pay_History, PayHistoryAdmin)
 admin.site.register(Discount, DiscountAdmin)
 admin.site.register(DiscountWithoutCode, DiscountWithoutCodeAdmin)
 admin.site.register(Support, SupportAdmin)
-

@@ -13,11 +13,13 @@ from rest_framework import viewsets
 from dashboard.serializers import *
 from rest_framework import status
 from django.http import response
-from rest_framework.decorators import api_view,renderer_classes
+from rest_framework.decorators import api_view, renderer_classes
 from rest_framework import generics
 import base64
 from django.core.files.base import ContentFile
-from accounts.utils import  Utils
+from accounts.utils import Utils
+
+
 # for load or dump jsons
 
 
@@ -30,5 +32,6 @@ class ClassList(generics.RetrieveAPIView):
     def retrieve(self, request, *args, **kwargs):
         instance = self.get_object()
         students = instance.user_set.all()
-        listSerializer = ClassListSerializer(instance={'students': students, 'course': instance},context={'course_id': instance.id})
+        listSerializer = ClassListSerializer(instance={'students': students, 'course': instance},
+                                             context={'course_id': instance.id})
         return Response(listSerializer.data)

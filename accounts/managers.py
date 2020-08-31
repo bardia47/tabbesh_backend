@@ -2,24 +2,24 @@ from django.contrib.auth.base_user import BaseUserManager
 from django.apps import apps
 from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth.hashers import make_password
-from .enums import  RoleCodes
+from .enums import RoleCodes
 from django.db.transaction import commit
 
 
 class UserManager(BaseUserManager):
     use_in_migrations = True
-    
+
     def _create_user(self, username, password, **extra_fields):
-#         if not email:
-#             raise ValueError('The given email must be set')
-#         email = self.normalize_email(email)
-#         user = self.model(email=email, **extra_fields)
+        #         if not email:
+        #             raise ValueError('The given email must be set')
+        #         email = self.normalize_email(email)
+        #         user = self.model(email=email, **extra_fields)
         try:
-            grades=extra_fields['grades']
+            grades = extra_fields['grades']
             del extra_fields['grades']
         except:
             pass
-        user = self.model(username=username , **extra_fields)
+        user = self.model(username=username, **extra_fields)
         password = make_password(str(password))
         user.password = password
         if user.gender is None:
@@ -32,7 +32,7 @@ class UserManager(BaseUserManager):
                 user.role = role.objects.get(code=RoleCodes.ADMIN.value)
             else:
                 user.role = role.objects.get(code=RoleCodes.STUDENT.value)
-        user.set_default_avatar()    
+        user.set_default_avatar()
 
         # try:
         #     user.city
@@ -41,7 +41,6 @@ class UserManager(BaseUserManager):
         #     user.city = city.objects.get(code='1')    
 
         user.save(using=self._db)
-
 
         try:
             if grades:

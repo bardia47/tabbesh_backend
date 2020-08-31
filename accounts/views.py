@@ -8,7 +8,7 @@ from rest_framework.views import APIView
 from rest_framework.renderers import TemplateHTMLRenderer, JSONRenderer
 from rest_framework.response import Response
 from rest_framework.permissions import AllowAny, IsAuthenticated
-from rest_framework.decorators import  permission_classes
+from rest_framework.decorators import permission_classes
 from zeep.xsd.elements import element
 from django.core.serializers import serialize
 from rest_framework import status
@@ -17,6 +17,8 @@ from rest_framework.authtoken.serializers import AuthTokenSerializer
 from django.core.exceptions import ObjectDoesNotExist
 from accounts.enums import RoleCodes
 from rest_framework import exceptions
+
+
 # Create your views here.
 
 
@@ -46,9 +48,10 @@ class SignUp(APIView):
             return Response(serializer.errors, status=status.HTTP_406_NOT_ACCEPTABLE)
         serializer.save()
         if request.accepted_renderer.format == 'html':
-            request.session['new_login']=True
+            request.session['new_login'] = True
             return render(request, 'accounts/signin.html', {'success': 'ثبت نام با موفقیت انجام شد.'})
         return Response({'success': 'ثبت نام با موفقیت انجام شد.'})
+
 
 @permission_classes((AllowAny,))
 class SignIn(APIView):
@@ -67,17 +70,17 @@ class SignIn(APIView):
             except User.DoesNotExist:
                 return Response({'error': 'نام کاربری یا رمز عبور اشتباه است'})
         else:
-            username=request.data['username'].lower()
+            username = request.data['username'].lower()
         user = auth.authenticate(
-                username=username, password=request.data['password'])
+            username=username, password=request.data['password'])
         if user is not None:
             auth.login(request, user)
             if request.session.get('new_login') is not None:
                 return redirect('/dashboard/edit_profile/#changePassword')
             elif request.GET.get('next') is None:
                 return redirect('dashboard')
-            else :
-                return redirect(request.META['QUERY_STRING'].replace('next=',''))
+            else:
+                return redirect(request.META['QUERY_STRING'].replace('next=', ''))
         else:
             return Response({'error': 'نام کاربری یا رمز عبور اشتباه است'})
 
@@ -112,7 +115,6 @@ class SignOut(APIView):
         return redirect('home')
 
 
-
 @permission_classes((AllowAny,))
 class ForgetPassword(APIView):
     renderer_classes = [TemplateHTMLRenderer, JSONRenderer]
@@ -136,4 +138,3 @@ class ForgetPassword(APIView):
             user1.password = make_password(randPass)
             user1.save()
             return Response({'success': 'ارسال با موفقیت انجام شد'}, template_name='accounts/signin.html')
-

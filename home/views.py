@@ -125,8 +125,7 @@ class SearchHome(generics.GenericAPIView):
 
 class Support(generics.ListAPIView):
     queryset = Support.objects.filter(type_choice=Support.public)
-    renderer_classes = [ JSONRenderer]
+    renderer_classes = [JSONRenderer]
     permission_classes = (AllowAny,)
     serializer_class = SupportSerializer
     pagination_class = None
-

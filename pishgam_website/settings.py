@@ -1,4 +1,3 @@
-
 """
 Django settings for pishgam_website project.
 
@@ -26,7 +25,7 @@ SECRET_KEY = 'nan_@dp+&g%75ke-ac%yn(8@2su8r9fn0!-hlzdmz1ia0!-f$x'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-#ALLOWED_HOSTS = ["127.0.0.1","tabbesh.ir","185.4.31.70"]
+# ALLOWED_HOSTS = ["127.0.0.1","tabbesh.ir","185.4.31.70"]
 ALLOWED_HOSTS = ['*']
 
 LOGGING = {
@@ -64,7 +63,6 @@ LOGGING = {
 
 STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.ManifestStaticFilesStorage'
 SESSION_COOKIE_SECURE = False
-
 
 # Application definition
 
@@ -153,7 +151,6 @@ PASSWORD_HASHERS = (
     'django.contrib.auth.hashers.PBKDF2PasswordHasher',
 )
 
-
 JALALI_DATE_DEFAULTS = {
     'Strftime': {
         'date': '%y/%m/%d',
@@ -173,14 +170,14 @@ JALALI_DATE_DEFAULTS = {
 }
 
 REST_FRAMEWORK = {
-        'DEFAULT_RENDERER_CLASSES': [
-          'rest_framework.renderers.JSONRenderer',
-    'rest_framework.renderers.BrowsableAPIRenderer',
+    'DEFAULT_RENDERER_CLASSES': [
+        'rest_framework.renderers.JSONRenderer',
+        'rest_framework.renderers.BrowsableAPIRenderer',
     ],
     'DEFAULT_PARSER_CLASSES': [
         'rest_framework.parsers.JSONParser',
         'rest_framework.parsers.FormParser',
-    'rest_framework.parsers.MultiPartParser'
+        'rest_framework.parsers.MultiPartParser'
     ],
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework.authentication.SessionAuthentication',
@@ -201,11 +198,10 @@ REST_FRAMEWORK = {
 TINYMCE_DEFAULT_CONFIG = {
     'plugins': "paste,searchreplace,code,link,emoticons,image,imagetools,media",
     "font_formats": "B Nazanin;" +
-    "Arial;" +
-    "Tahoma;" +
-    "Times New Roman;" ,
+                    "Arial;" +
+                    "Tahoma;" +
+                    "Times New Roman;",
 }
-
 
 # Internationalization
 # https://docs.djangoproject.com/en/2.2/topics/i18n/
@@ -213,6 +209,7 @@ TINYMCE_DEFAULT_CONFIG = {
 LANGUAGE_CODE = 'fa'
 
 import locale
+
 locale.setlocale(locale.LC_ALL, "fa_IR.UTF-8")
 
 TIME_ZONE = 'Asia/Tehran'
@@ -220,7 +217,6 @@ TIME_ZONE = 'Asia/Tehran'
 USE_L10N = True
 
 USE_TZ = False
-
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
