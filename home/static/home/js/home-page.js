@@ -210,8 +210,8 @@ function supportRender(supports) {
         `;
         supportsTemplate += supportTemplate;
     });
-    $("#support").empty().append(supportsTemplate);
-    owlCarouselInitial("#support");
+    $("#supportList").empty().append(supportsTemplate);
+    owlCarouselInitial("#supportList");
 }
 
 
