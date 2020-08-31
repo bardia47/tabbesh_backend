@@ -5,11 +5,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>آموزش آنلاین تابش</title>
+    <title>صفحه ی اصلی تابش</title>
 
     <!-- Bootstrap -->
     <link rel="stylesheet" href="https://cdn.rtlcss.com/bootstrap/v4.2.1/css/bootstrap.min.css"
           integrity="sha384-vus3nQHTD+5mpDiZ4rkEPlnkcyTP+49BhJ4wJeJunw06ZAp+wzzeBPUXr42fi8If" crossorigin="anonymous">
+
+    <!-- favicon !-->
+    <link rel="shortcut icon" type="image/png" href="{% static 'home/images/favicon.ico' %}"/>
 
     <!-- css files -->
     <link rel="stylesheet" href="{% static "home/css/fonts.css" %}">
@@ -32,8 +35,9 @@
 
 <!-- Navbar -->
 <nav class="navbar sticky-top navbar-expand-lg navbar-light bg-white">
-    <a class="navbar-brand d-flex" href="#">
-        <img src="{% static "home/images/home-page/tabesh_logo.svg" %}" width="120" height="70" class="d-inline-block align-top" alt="">
+    <a class="navbar-brand d-flex" href="">
+        <img src="{% static "home/images/home-page/tabesh_logo.svg" %}" width="120" height="70"
+             class="d-inline-block align-top" alt="">
         <h1 class="h-tabbesh">تابش</h1>
     </a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
@@ -44,30 +48,41 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto float">
             <li class="nav-item">
-                <a class="nav-link text-dark vazir-bold" href="#why">چرا ما؟</a>
+                <a data-scroll="#why-choose-us" class="nav-link text-dark vazir-bold nav-scroll" href="#why-choose-us">چرا
+                    ما؟</a>
             </li>
-            <li class="nav-item">
-                <a class="nav-link text-dark vazir-bold" href="#teachers">اساتید</a>
+            <li id="teachersItem" class="nav-item">
+                <a data-scroll="#teachers" class="nav-link text-dark vazir-bold nav-scroll" href="#teachers">اساتید</a>
             </li>
             <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle text-dark vazir-bold" href="#"
+                <a class="nav-link dropdown-toggle text-dark vazir-bold"
                    id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true"
                    aria-expanded="false">
                     دوره ها
                 </a>
                 <div class="dropdown-menu vazir-medium" aria-labelledby="navbarDropdown">
-                    <a class="dropdown-item" href="#sale">پر تخفیف ترین ها</a>
-                    <a class="dropdown-item" href="#price">پر فروش ترین ها</a>
+                    <a data-scroll="#full-discount-courses" class="dropdown-item nav-scroll"
+                       href="#full-discount-courses">پر تخفیف
+                        ترین ها</a>
+                    <a data-scroll="#best-selling-courses" class="dropdown-item nav-scroll"
+                       href="#best-selling-courses">پر فروش
+                        ترین ها</a>
                     <div class="dropdown-divider"></div>
-                    <a class="dropdown-item" href="#search">جستوجو دوره</a>
+                    <a data-scroll="#search-course" class="dropdown-item nav-scroll" href="#search-course">جستوجو
+                        دوره</a>
                 </div>
             </li>
             <li class="nav-item">
-                <a class="nav-link text-dark vazir-bold" href="#support">پشتیبانی</a>
+                <a data-scroll="#supports" class="nav-link text-dark vazir-bold nav-scroll"
+                   href="#supports">پشتیبانی</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link text-dark vazir-bold" href="#comments">نظرات
+                <a data-scroll="#comments" class="nav-link text-dark vazir-bold nav-scroll" href="#comments">نظرات
                     کاربران</a>
+            </li>
+            <li class="nav-item">
+                <a data-scroll="#contact-us" class="nav-link text-dark vazir-bold nav-scroll" href="#contact-us">ارتباط
+                    با ما</a>
             </li>
         </ul>
     </div>
@@ -108,7 +123,7 @@
 </div>
 
 <!-- چرا تابش -->
-<div class="container mt-5 desktop-why" id="why">
+<div class="container mt-5 desktop-why" id="why-choose-us">
     <div class="row justify-content-center">
             <span>
                 <h1 class="mobile-font"><img class="mr-3 why-img"
@@ -224,19 +239,19 @@
                 <div class="col-md-4 mt-2 mb-2 text-center">
                     <img class="counters-img" src="{% static "home/images/home-page/icons/book.svg" %}" width="200">
                     <h3 class="h-counters">دوره ها</h3>
-                    <h2 class="h2 mt-3">1.234</h2>
+                    <h2 id="coursesCounter" class="h2 mt-3"></h2>
                 </div>
 
                 <div class="col-md-4 mt-2 mb-2 text-center">
                     <img class="counters-img" src="{% static "home/images/home-page/icons/students.svg" %}" width="200">
                     <h3 class="h-counters">دانش آموزان</h3>
-                    <h2 class="h2 mt-3">1.234</h2>
+                    <h2 id="studentsCounter" class="h2 mt-3"></h2>
                 </div>
 
                 <div class="col-md-4 mt-2 mb-2 text-center">
                     <img class="counters-img" src="{% static "home/images/home-page/icons/teachers.svg" %}" width="200">
                     <h3 class="h-counters">اساتید</h3>
-                    <h2 class="h2 mt-2">1.234</h2>
+                    <h2 id="teachersCounter" class="h2 mt-2"></h2>
                 </div>
 
             </div>
@@ -256,7 +271,7 @@
 </div>
 
 <!-- پرتخفیف ترین ها -->
-<div class="container mt-5 mb-5" id="sale">
+<div class="container mt-5 mb-5" id="full-discount-courses">
     <div class="row">
         <div class="col-12">
 
@@ -284,7 +299,7 @@
 </div>
 
 <!-- پر فروش ترین ها -->
-<div class="container mt-5 mb-5" id="price">
+<div class="container mt-5 mb-5" id="best-selling-courses">
     <div class="row">
         <div class="col-12">
 
@@ -311,7 +326,7 @@
     </div>
 </div>
 <!-- سرچ دوره ها -->
-<div class="container mt-5 mb-5" id="search">
+<div class="container mt-5 mb-5" id="search-course">
     <div class="row">
         <div class="col-12">
 
@@ -330,15 +345,18 @@
                                    placeholder="اسم دوره ی مورد نظر را در این مکان بنویسید. به طور مثال : ریاضی نهم"
                                    name="search">
                         </div>
-                        <button class="btn btn-primary btn-submit" type="submit"><img
-                                src="{% static "home/images/home-page/icons/black-search.svg" %}" width="30"></button>
+                        <button id="searchButton" data-toggle="tooltip" data-placement="top" title="بزن بریم"
+                                class="btn btn-primary btn-submit">
+                            <img src="{% static "home/images/home-page/icons/black-search.svg" %}" width="30">
+                        </button>
                     </div>
                     <hr>
                     <div class="container text-center">
                         <div id="searchCourse">
                             <!-- پیدا نشدن سرچ -->
-                            <h5 class="text-center"><img src="{% static "home/images/home-page/icons/error.svg" %}"
-                                                         width="38"> نتیجه ای یافت نشد!</h5>
+                            <h5 id="searchNotFound" class="text-center" style="display: none"><img
+                                    src="{% static "home/images/home-page/icons/error.svg" %}"
+                                    width="38"> نتیجه ای یافت نشد!</h5>
 
                             <div class="owl-carousel owl-theme">
                             </div>
@@ -352,22 +370,22 @@
     </div>
 </div>
 
-<hr class="hr" id="support">
+<hr class="hr" id="supports">
 
 <!-- پشتیبانی -->
 <div class="container mt-5 mb-5 justify-content-center">
     <div class="row align-items-center">
         <div class="col-12 text-center">
-                    <h1>
-                        پشتیبانی
-                        <img src="{% static "home/images/home-page/icons/smile.svg" %}" width="40">
-                    </h1>
+            <h1>
+                پشتیبانی
+                <img src="{% static "home/images/home-page/icons/smile.svg" %}" width="40">
+            </h1>
 
-                    <h3 class="mt-4">
-                        آپلود شده با
-                        <img src="{% static "home/images/home-page/icons/heart.svg" %}" width="30">
-                        برای شما
-                    </h3>
+            <h3 class="mt-4">
+                آپلود شده با
+                <img src="{% static "home/images/home-page/icons/heart.svg" %}" width="30">
+                برای شما
+            </h3>
 
             <!-- لینک های آپارات -->
 
@@ -404,10 +422,10 @@
                 <p class="mt-2">پایه تحصیلی</p>
             </div>
             <div class="row d-flex justify-content-center">
-                        <p class="mx-5">
-                            <img src="{% static "home/images/home-page/icons/quotation-heart.svg" %}" width="50">
-                            متن نظر کاربر متن نظر کاربر متن نظر کاربر متن نظر کاربر متن نظر کاربر متن نظر کاربر متن نظر
-                            کاربر متن نظر کاربر متن نظر کاربر</p>
+                <p class="mx-5">
+                    <img src="{% static "home/images/home-page/icons/quotation-heart.svg" %}" width="50">
+                    متن نظر کاربر متن نظر کاربر متن نظر کاربر متن نظر کاربر متن نظر کاربر متن نظر کاربر متن نظر
+                    کاربر متن نظر کاربر متن نظر کاربر</p>
             </div>
         </div>
 
@@ -415,7 +433,7 @@
 </div>
 
 <!-- footer -->
-<footer class="footer bg-secondary">
+<footer class="footer bg-secondary" id="contact-us">
     <hr class="hr-footer">
     <div class="container-fluid">
         <div class="row">
@@ -430,9 +448,9 @@
                 <div class="ul d-flex list-unstyled mx-2">
                     <a href=""><img src="{% static "home/images/home-page/icons/Eitaa.svg" %}" width="30"></a>
                     <a href=""><img class="ml-3" src="{% static "home/images/home-page/icons/telegram.svg" %}"
-                                        width="30"></a>
+                                    width="30"></a>
                     <a href=""><img class="ml-2" src="{% static "home/images/home-page/icons/instagram.svg" %}"
-                                        width="30"></a>
+                                    width="30"></a>
                 </div>
 
             </div>
@@ -466,10 +484,10 @@
         integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg=="
         crossorigin="anonymous">
 </script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"
+        integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN"
+        crossorigin="anonymous"></script>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js"
-        integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous">
-</script>
 <script src="https://cdn.rtlcss.com/bootstrap/v4.2.1/js/bootstrap.min.js"
         integrity="sha384-a9xOd0rz8w0J8zqj1qJic7GPFfyMfoiuDjC9rqXlVOcGO/dmRqzMn34gZYDTel8k" crossorigin="anonymous">
 </script>

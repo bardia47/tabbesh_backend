@@ -57,10 +57,10 @@
                 </div>
                 <!-- Sidebar menus ! block for active menu -->
                 <div id="sidebarMenus" class="container">
-                        <div id="dashboardMenu" class="row sidebar-menu">
-                            <img src="{% static 'home/images/icons/home.svg' %}" alt="آیکون">
-                            <a href="{% url 'dashboard' %}">داشبورد</a>
-                        </div>
+                    <div id="dashboardMenu" class="row sidebar-menu">
+                        <img src="{% static 'home/images/icons/home.svg' %}" alt="آیکون">
+                        <a href="{% url 'dashboard' %}">داشبورد</a>
+                    </div>
                     <hr>
                     <div id="lessonsMenu" class="row sidebar-menu">
                         <img src="{% static 'home/images/icons/book-open.svg' %}" alt="آیکون">
@@ -73,6 +73,11 @@
                             <a href="{% url 'shopping' %}">خرید درس</a>
                         </div>
                     {% endif %}
+{#                    <hr>#}
+{#                    <div id="shoppingMenu" class="row sidebar-menu">#}
+{#                        <img src="{% static 'home/images/icons/shopping-cart.svg' %}" alt="آیکون">#}
+{#                        <a href="{% url 'home' %}">صفحه ی اصلی</a>#}
+{#                    </div>#}
                     {% is_admin request.user as admin %}
                     {% if admin %}
                         <hr>

@@ -1,15 +1,65 @@
 $(function () {
-
+    scrollAnimations();
     teacherListAjax();
     homeCounter();
     bestSellerAjax();
     fullDiscountAjax();
     supportAjax();
-    $("#searchInput").on("keyup", function () {
-        searchAjax($(this).val());
+    $("#searchButton").on("click", function () {
+        searchAjax($("#searchInput").val());
     });
+
+    // search when press enter
+    $("#searchInput").on('keyup', function (e) {
+        if (e.key === 'Enter' || e.keyCode === 13) {
+            searchAjax($("#searchInput").val());
+        }
+    });
+    $('[data-toggle="tooltip"]').tooltip();
 });
 
+
+function homeCounter() {
+    let firstTimeReach = false;
+    $(window).scroll(function () {
+        let hT = $('.desktop-counter').offset().top,
+            hH = $('.desktop-counter').outerHeight(),
+            wH = $(window).height(),
+            wS = $(this).scrollTop();
+        if (wS > (hT + hH - wH) && !firstTimeReach) {
+            $.ajax({
+                url: "/counter/",
+                type: "GET",
+                dataType: "json",
+                success: function (counters) {
+                    $("#coursesCounter").animationCounter({
+                        start: 0,
+                        end: counters.course_counter,
+                        step: 1,
+                        delay: 200,
+                    });
+                    $("#studentsCounter").animationCounter({
+                        start: 0,
+                        end: counters.student_counter,
+                        step: 1,
+                        delay: 200,
+                    });
+                    $("#teachersCounter").animationCounter({
+                        start: 0,
+                        end: counters.teacher_counter,
+                        step: 1,
+                        delay: 200,
+                    });
+                },
+                error: function () {
+                    console.log("شمارنده با مشکل مواجه شد، دوباره امتحان کنید.")
+                },
+            });
+
+            firstTimeReach = true;
+        }
+    });
+}
 
 function teacherListAjax() {
     $.ajax({
@@ -20,27 +70,8 @@ function teacherListAjax() {
             teacherListRender(teachersList)
         },
         error: function () {
-            alert("بارگذاری دبیران به مشکل خورده است! دوباره امتحان کنید.")
+            console.log("بارگذاری دبیران به مشکل خورده است! دوباره امتحان کنید.")
         },
-    });
-}
-
-function homeCounter() {
-    let firstTimeReach = false;
-    $(window).scroll(function () {
-        let hT = $('.desktop-counter').offset().top,
-            hH = $('.desktop-counter').outerHeight(),
-            wH = $(window).height(),
-            wS = $(this).scrollTop();
-        if (wS > (hT + hH - wH) && !firstTimeReach) {
-            $(".counter").animationCounter({
-                start: 0,
-                end: 1000,
-                step: 1,
-                delay: 200,
-            })
-            firstTimeReach = true;
-        }
     });
 }
 
@@ -54,7 +85,7 @@ function teacherListRender(teachersList) {
                 <div class="card-body text-center">
                     <h4 class="text-nowrap">${teacher.get_full_name}</h4>
                     <h5 class="vazir-medium">${teacher.grade_choice}</h5>
-                   <!-- <a href="/dashboard/shopping/?teacher=${teacher.id}" class="btn btn-secondary vazir-bold mt-2"></a> -->
+                    <a href="/dashboard/shopping/?teacher=${teacher.id}" class="btn btn-secondary vazir-bold mt-2">مشاهده دروس</a>
                 </div>
             </div>
         </div>
@@ -75,7 +106,7 @@ function bestSellerAjax() {
             bestSellerRender(bestSellerCourses)
         },
         error: function () {
-            alert("بارگذاری پرفروش ترین دروس به مشکل خورده است! دوباره امتحان کنید.")
+            console.log("بارگذاری پرفروش ترین دروس به مشکل خورده است! دوباره امتحان کنید.")
         },
     });
 }
@@ -111,7 +142,7 @@ function fullDiscountAjax() {
             fullDiscountRender(fullDiscountCourses)
         },
         error: function () {
-            alert("بارگذاری پرتخفیف ترین دروس به مشکل خورده است! دوباره امتحان کنید.")
+            conslole.log("بارگذاری پرتخفیف ترین دروس به مشکل خورده است! دوباره امتحان کنید.")
         },
     });
 }
@@ -122,13 +153,17 @@ function fullDiscountRender(fullDiscountCourses) {
         let courseTemplate = `
         <div class="mx-2 my-5">
             <div class="card">
-                <img class=" red-circle-img" src="image/red-circle.svg">
-                <img class="img-card" src="image/card.jpg" alt="">
+                <div class="discount-red-circle">
+                    <div class="discount-percent">
+                       <p class="p-0 m-0 text-white">${course.percent} %</p>
+                    </div>
+                </div>
+                <img class="img-card" src="${course.image}" alt="course discount">
                 <div class="card-body text-center">
-                    <h4>ریاضی دوازدهم</h4>
-                    <h5 style="font-family: 'Vazir_medium';">مهران رضایی</h5>
-                    <h5 class="h5"> اسم تخفیف</h5>
-                    <a class="btn btn-secondary" href="">خرید دوره</a>
+                    <h4>${course.course_title}</h4>
+                    <h5 style="font-family: 'Vazir_medium';">${course.teacher_full_name}</h5>
+                    <h5 class="h5">${course.discount_name}</h5>
+                    <a href="/dashboard/shopping/?grade=${course.id}" class="btn btn-secondary vazir-bold mt-2">خرید دوره</a>
                 </div>
             </div>
         </div>
@@ -140,24 +175,26 @@ function fullDiscountRender(fullDiscountCourses) {
 }
 
 function searchAjax(searchText) {
-    let searchLimitSize = 3;
-    let request = null;
-    if (searchText === $("#searchInput").val() && searchText.length >= searchLimitSize) {
-        request = $.ajax({
-            url: "/search-home/",
-            type: "POST",
-            data: {
-                "title": searchText
-            },
-            dataType: "json",
-            success: function (searchCourses) {
+    $.ajax({
+        url: "/search-home/",
+        type: "POST",
+        data: {
+            "title": searchText
+        },
+        dataType: "json",
+        success: function (searchCourses) {
+            if (searchCourses.length === 0) {
+                $("#searchNotFound").show();
+                $("#searchCourse").find(".owl-carousel").remove();
+            } else {
+                $("#searchNotFound").hide();
                 searchRender(searchCourses)
-            },
-            error: function () {
-                alert("جستجوی درس با خطا رو به رو شد! دوباره امتحان کنید.")
-            },
-        });
-    }
+            }
+        },
+        error: function () {
+            console.log("جستجوی درس با خطا رو به رو شد! دوباره امتحان کنید.")
+        },
+    });
 }
 
 function searchRender(searchCourses) {
@@ -194,7 +231,7 @@ function supportAjax() {
             supportRender(supports)
         },
         error: function () {
-            alert("بارگذاری پشتیبانی به مشکل خورده است! دوباره امتحان کنید.")
+            console.log("بارگذاری پشتیبانی به مشکل خورده است! دوباره امتحان کنید.")
         },
     });
 }
@@ -244,3 +281,13 @@ jQuery.event.special.touchstart = {
         }
     }
 };
+
+
+function scrollAnimations() {
+    $(".nav-scroll").click(function (e) {
+        let targetId = $(this).data("scroll");
+        $([document.documentElement, document.body]).animate({
+            scrollTop: $(targetId).offset().top
+        }, 1500);
+    });
+}

@@ -3,20 +3,20 @@ body {
     height: 100%;
     width: 100%;
     background-color: #FAFAFA;
-    font-family: 'Yekan', 'Yekan-Number', 'Vazir_Light', 'Vazir_Bold', 'Vazir_Medium' , sans-serif;
+    font-family: 'Yekan', 'Yekan-Number', 'Vazir_Light', 'Vazir_Bold', 'Vazir_Medium', sans-serif;
 }
 
 
-.vazir-bold{
-    font-family: "Vazir_Bold" , sans-serif;
+.vazir-bold {
+    font-family: "Vazir_Bold", sans-serif;
 }
 
-.vazir-medium{
-    font-family: "Vazir_Medium" , sans-serif;
+.vazir-medium {
+    font-family: "Vazir_Medium", sans-serif;
 }
 
-.vazir-light{
-    font-family: "Vazir_Light" , sans-serif;
+.vazir-light {
+    font-family: "Vazir_Light", sans-serif;
 }
 
 .desktop-version {
@@ -198,15 +198,21 @@ hr {
     background-size: 98rem;
 }
 
-.red-circle-img {
+.discount-red-circle {
+    display: flex;
+    justify-content: center;
+    align-items: center;
     position: absolute;
-    left: -100px;
-    top: -40px;
-    margin-left: auto;
-    margin-right: auto;
-    width: 100px;
-    height: 100px;
+    background-color: #dc3545;
+    border: 1px #707070;
+    border-radius: 50% 50%;
+    left: 20px;
+    top: -35px;
+    width: 75px;
+    height: 75px;
+    font-size: 25px;
 }
+
 
 .comment {
     margin-top: 100px;
@@ -318,15 +324,7 @@ hr {
         width: 150px;
     }
 
-    .red-circle-img {
-        position: absolute;
-        left: -60px;
-        top: -40px;
-        margin-left: auto;
-        margin-right: auto;
-        width: 90px;
-        height: 90px;
-    }
+
 }
 
 .owl-carousel {
