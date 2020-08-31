@@ -183,7 +183,6 @@ function searchRender(searchCourses) {
 }
 
 
-
 function supportAjax() {
     $.ajax({
         url: "/support/",
@@ -197,16 +196,15 @@ function supportAjax() {
         },
     });
 }
+
 //for support
 function supportRender(supports) {
     let supportsTemplate = ``;
     $.each(supports, function (index, support) {
         let supportTemplate = `
         <div class="mx-2">
-            <div class="card">
-                ${support.description}
-            </div>
-        </div>
+            ${support.description}
+        </div>       
         `;
         supportsTemplate += supportTemplate;
     });

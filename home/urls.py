@@ -11,6 +11,6 @@ urlpatterns = [
          name='most-discounted-courses'),
     path('best-selling-courses/', cache_page(60 * 60 * 2)(BestSellingCourses.as_view()), name='best-selling-courses'),
     path('search-home/', SearchHome.as_view(), name='search-home'),
-    path('support/',cache_page(60 * 60 * 2) (Support.as_view()), name = 'support')
+    path('support/',(Support.as_view()), name = 'support')
 
 ]

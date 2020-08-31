@@ -182,3 +182,8 @@ $('#discountButton').click(function () {
 $("#modalDiscountButton").click(function () {
     $("form#shopping-cart-form").submit()
 });
+
+// reset discount
+$("#discountRefreshButton").click(function () {
+    location.reload();
+});
