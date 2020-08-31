@@ -107,3 +107,12 @@ class SearchHome(generics.GenericAPIView):
         course = self.get_queryset()
         serialize = CourseSerializer(course, many=True)
         return Response(serialize.data, status=status.HTTP_200_OK)
+
+
+class Support(generics.ListAPIView):
+    queryset = Support.objects.filter(type_choice=Support.public)
+    renderer_classes = [ JSONRenderer]
+    permission_classes = (AllowAny,)
+    serializer_class = SupportSerializer
+    pagination_class = None
+

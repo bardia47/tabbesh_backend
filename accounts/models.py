@@ -295,7 +295,7 @@ class Document(models.Model):
     course = models.ForeignKey('Course', on_delete=models.DO_NOTHING, verbose_name="دوره")
     upload_document= models.FileField('فایل', upload_to=document_directory_path, null=True, blank=True)
     upload_date = models.DateTimeField("تاریخ بارگذاری", auto_now_add=True)
-    title = models.CharField("عنوان", max_length=30)
+    title = models.CharField("عنوان", max_length=60)
     description = models.TextField("توضیحات", null=True, blank=True)
     sender = models.ForeignKey(User, on_delete=models.DO_NOTHING, verbose_name="فرد بارگذار")
 
@@ -381,3 +381,28 @@ class Event(models.Model):
          ordering = ['is_active','-create_date']
          verbose_name_plural = "رویداد"
          verbose_name = "رویداد"
+
+# Course Model
+class Support(models.Model):
+    public = 'PUBLIC'
+    teacher='TEACHER'
+    TYPE_CHOICES = ((public, 'عمومی'), (teacher, 'استاد'), )
+    type_choice = models.CharField("نوع", max_length=7, choices=TYPE_CHOICES, default='PUBLIC')
+    code = models.CharField("کد", max_length=10,unique=True)
+    title = models.CharField("عنوان", max_length=30)
+    description = tinymce_models.HTMLField('توضیحات', null=True, blank=True)
+    update_date = models.DateTimeField("تاریخ آخرین تغییر", auto_now=True)
+
+    class Meta:
+        ordering = ['title']
+        verbose_name_plural = "پشتیبانی"
+        verbose_name = "پشتیبانی"
+
+    def __str__(self):
+        return self.title
+
+    def update_date_decorated(self):
+        return jdatetime.datetime.fromgregorian(datetime=self.update_date).strftime("%a, %d %b %Y %H:%M:%S")
+
+    update_date_decorated.short_description = 'تاریخ آخرین تغییر'
+

@@ -4,6 +4,7 @@ $(function () {
     homeCounter();
     bestSellerAjax();
     fullDiscountAjax();
+    supportAjax();
     $("#searchInput").on("keyup", function () {
         searchAjax($(this).val());
     });
@@ -179,6 +180,38 @@ function searchRender(searchCourses) {
     bestSellerCourse.append(`<div class="owl-carousel owl-theme"></div>`);
     bestSellerCourse.find(".owl-carousel").append(coursesTemplate);
     owlCarouselInitial(bestSellerCourse.find(".owl-carousel"));
+}
+
+
+
+function supportAjax() {
+    $.ajax({
+        url: "/support/",
+        type: "GET",
+        dataType: "json",
+        success: function (supports) {
+            supportRender(supports)
+        },
+        error: function () {
+            alert("بارگذاری پشتیبانی به مشکل خورده است! دوباره امتحان کنید.")
+        },
+    });
+}
+//for support
+function supportRender(supports) {
+    let supportsTemplate = ``;
+    $.each(supports, function (index, support) {
+        let supportTemplate = `
+        <div class="mx-2">
+            <div class="card">
+                ${support.description}
+            </div>
+        </div>
+        `;
+        supportsTemplate += supportTemplate;
+    });
+    $("#support").empty().append(supportsTemplate);
+    owlCarouselInitial("#support");
 }
 
 

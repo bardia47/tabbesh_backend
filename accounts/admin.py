@@ -116,7 +116,7 @@ class UserAdmin(BaseUserAdmin):
         ('اعتبار', {'fields': ('credit',)}),
     )
     add_fieldsets = fieldsets
-    search_fields = ['last_name','phone_number']
+    search_fields = ['last_name','phone_number','grades__title']
     ordering = ('username',)
     inlines = [
         CourseInline, PayHistoryInline
@@ -420,6 +420,15 @@ class DiscountWithoutCodeAdmin(DiscountAdmin):
     def get_queryset(self, request):
         return Discount.objects.filter(code__isnull=True)
 
+
+class SupportAdmin(admin.ModelAdmin):
+    class Meta:
+        readonly_fields = ('update_date_decorated',)
+        fields = (
+        'title', 'code','update_date_decorated', 'description','type_choice')
+    list_display = ['title',  'update_date_decorated']
+    search_fields = ['title','code']
+
 admin.site.register(User, UserAdmin)
 admin.site.register(TeacherUser, TeacherAdmin)
 admin.site.register(City, CityAdmin)
@@ -432,4 +441,5 @@ admin.site.register(Document, DocumentAdmin)
 admin.site.register(Pay_History, PayHistoryAdmin)
 admin.site.register(Discount, DiscountAdmin)
 admin.site.register(DiscountWithoutCode, DiscountWithoutCodeAdmin)
+admin.site.register(Support, SupportAdmin)
 

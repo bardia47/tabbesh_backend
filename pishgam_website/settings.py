@@ -198,6 +198,10 @@ REST_FRAMEWORK = {
 
 }
 
+TINYMCE_DEFAULT_CONFIG = {
+    'plugins': "paste,searchreplace,code,link,emoticons,image,imagetools,media",
+}
+
 
 # Internationalization
 # https://docs.djangoproject.com/en/2.2/topics/i18n/

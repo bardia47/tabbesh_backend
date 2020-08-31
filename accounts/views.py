@@ -53,23 +53,22 @@ class SignUp(APIView):
 @permission_classes((AllowAny,))
 class SignIn(APIView):
     renderer_classes = [TemplateHTMLRenderer, JSONRenderer]
+    template_name = 'accounts/signin.html'
 
     def get(self, request):
-        if request.accepted_renderer.format == 'html':
-            return render(request, 'accounts/signin.html')
-        return Response({}, status.HTTP_405_METHOD_NOT_ALLOWED)
+        if request.user.is_authenticated:
+            return redirect('dashboard')
+        return Response();
 
     def post(self, request):
         if request.data['username'].isdigit():
             try:
-                user1 = User.objects.get(phone_number=request.data['username'])
+                username = User.objects.get(phone_number=request.data['username']).username.lower()
             except User.DoesNotExist:
-                return render(request, 'accounts/signin.html', {'error': 'نام کاربری یا رمز عبور اشتباه است'})
-            user = auth.authenticate(
-                username=user1.username, password=request.data['password'])
+                return Response({'error': 'نام کاربری یا رمز عبور اشتباه است'})
         else:
             username=request.data['username'].lower()
-            user = auth.authenticate(
+        user = auth.authenticate(
                 username=username, password=request.data['password'])
         if user is not None:
             auth.login(request, user)
@@ -80,7 +79,7 @@ class SignIn(APIView):
             else :
                 return redirect(request.META['QUERY_STRING'].replace('next=',''))
         else:
-            return render(request, 'accounts/signin.html', {'error': 'نام کاربری یا رمز عبور اشتباه است'})
+            return Response({'error': 'نام کاربری یا رمز عبور اشتباه است'})
 
 
 @permission_classes((AllowAny,))

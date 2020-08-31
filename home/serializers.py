@@ -31,3 +31,10 @@ class CourseSerializerTitle(serializers.ModelSerializer):
     class Meta:
         model = Course
         fields = ('title',)
+
+
+class SupportSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Support
+        fields = ('description',)
