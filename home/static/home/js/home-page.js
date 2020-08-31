@@ -120,13 +120,15 @@ function fullDiscountRender(fullDiscountCourses) {
     let coursesTemplate = ``;
     $.each(fullDiscountCourses, function (index, course) {
         let courseTemplate = `
-        <div class="mx-2">
+        <div class="mx-2 my-5">
             <div class="card">
-                <img class="img-card" src="${course.image}" alt="course image">
+                <img class=" red-circle-img" src="image/red-circle.svg">
+                <img class="img-card" src="image/card.jpg" alt="">
                 <div class="card-body text-center">
-                    <h4 class="text-nowrap">${course.course_title}</h4>
-                    <h5 class="vazir-medium">${course.teacher_full_name}</h5>
-                    <a href="/dashboard/shopping/?grade=${course.id}" class="btn btn-secondary vazir-bold mt-2">خرید دوره</a>
+                    <h4>ریاضی دوازدهم</h4>
+                    <h5 style="font-family: 'Vazir_medium';">مهران رضایی</h5>
+                    <h5 class="h5"> اسم تخفیف</h5>
+                    <a class="btn btn-secondary" href="">خرید دوره</a>
                 </div>
             </div>
         </div>

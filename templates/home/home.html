@@ -32,9 +32,9 @@
 
 <!-- Navbar -->
 <nav class="navbar sticky-top navbar-expand-lg navbar-light bg-white">
-    <a class="navbar-brand" href="#">
-        <img class="ml-4" src="{% static "home/images/home-page/icons/tabbesh_logo.svg" %}" width="120" height="70"
-             class="d-inline-block align-top" alt="">
+    <a class="navbar-brand d-flex" href="#">
+        <img src="{% static "home/images/home-page/tabesh_logo.svg" %}" width="120" height="70" class="d-inline-block align-top" alt="">
+        <h1 class="h-tabbesh">تابش</h1>
     </a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
             aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -44,18 +44,18 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto float">
             <li class="nav-item">
-                <a class="nav-link text-dark" href="#why" style="font-family: 'Vazir_Bold';">چرا ما؟</a>
+                <a class="nav-link text-dark vazir-bold" href="#why">چرا ما؟</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link text-dark" href="#teachers" style="font-family: 'Vazir_Bold';">اساتید</a>
+                <a class="nav-link text-dark vazir-bold" href="#teachers">اساتید</a>
             </li>
             <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle text-dark" style="font-family: 'Vazir_Bold';" href="#"
+                <a class="nav-link dropdown-toggle text-dark vazir-bold" href="#"
                    id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true"
                    aria-expanded="false">
                     دوره ها
                 </a>
-                <div class="dropdown-menu" style="font-family: 'Vazir_Medium';" aria-labelledby="navbarDropdown">
+                <div class="dropdown-menu vazir-medium" aria-labelledby="navbarDropdown">
                     <a class="dropdown-item" href="#sale">پر تخفیف ترین ها</a>
                     <a class="dropdown-item" href="#price">پر فروش ترین ها</a>
                     <div class="dropdown-divider"></div>
@@ -63,10 +63,10 @@
                 </div>
             </li>
             <li class="nav-item">
-                <a class="nav-link text-dark" href="#support" style="font-family: 'Vazir_Bold';">پشتیبانی</a>
+                <a class="nav-link text-dark vazir-bold" href="#support">پشتیبانی</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link text-dark" href="#comments" style="font-family: 'Vazir_Bold';">نظرات
+                <a class="nav-link text-dark vazir-bold" href="#comments">نظرات
                     کاربران</a>
             </li>
         </ul>
@@ -111,13 +111,15 @@
 <div class="container mt-5 desktop-why" id="why">
     <div class="row justify-content-center">
             <span>
-                <h1><img class="mr-3" src="{% static "home/images/home-page/icons/student.svg" %}" width="90">چرا تابش؟</h1>
+                <h1 class="mobile-font"><img class="mr-3 why-img"
+                                             src="{% static "home/images/home-page/icons/student.svg" %}" width="90">چرا تابش؟
+                </h1>
             </span>
     </div>
     <div class="row justify-content-center">
         <div class="col-md-3 mt-5 mb-5">
             <!-- first flip card -->
-            <div class="flip-card">
+            <div class="flip-card why-margin">
                 <div class="flip-card-inner">
                     <div class="flip-card-front">
                         <img class="mt-3" src="{% static "home/images/home-page/icons/teacher.svg" %}" width="90px">
@@ -133,7 +135,7 @@
 
         <div class="col-md-3 mt-5 mb-5">
             <!-- second flip card -->
-            <div class="flip-card">
+            <div class="flip-card why-margin">
                 <div class="flip-card-inner">
                     <div class="flip-card-front">
                         <img class="mt-3" src="{% static "home/images/home-page/icons/branding.svg" %}" width="90px">
@@ -149,7 +151,7 @@
 
         <div class="col-md-3 mt-5 mb-5">
             <!-- third flip cart -->
-            <div class="flip-card">
+            <div class="flip-card why-margin">
                 <div class="flip-card-inner">
                     <div class="flip-card-front">
                         <img class="mt-3" src="{% static "home/images/home-page/icons/teacher.svg" %}" width="90px">
@@ -165,91 +167,11 @@
 
         <div class="col-md-3 mt-5 mb-5">
             <!-- fourth flip card -->
-            <div class="flip-card">
+            <div class="flip-card why-margin">
                 <div class="flip-card-inner">
                     <div class="flip-card-front">
                         <img class="mt-3" src="{% static "home/images/home-page/icons/branding.svg" %}" width="90px">
                         <h5 class="mt-3">قیمت های به صرفه</h5>
-                    </div>
-                    <div class="flip-card-back">
-
-                    </div>
-
-                </div>
-            </div>
-
-        </div>
-    </div>
-
-
-</div>
-
-
-<!-- چرا تابش -->
-<div class="container mt-5 mobile-why" id="why">
-    <div class="row justify-content-center">
-            <span>
-                <h1 style="font-size: 30px;"><img class="mr-3"
-                                                  src="{% static "home/images/home-page/icons/student.svg" %}"
-                                                  width="60">چرا تابش؟</h1>
-            </span>
-    </div>
-    <div class="row justify-content-center">
-        <div class="col-md-3 mt-5 mb-5 mx-5">
-            <!-- first flip card -->
-            <div class="flip-card">
-                <div class="flip-card-inner">
-                    <div class="flip-card-front">
-                        <img class="mt-3" src="{% static "home/images/home-page/icons/teacher.svg" %}" width="90px">
-                        <h1 class="mt-3" style="font-size: 25px;">اساتید مجرب</h1>
-                    </div>
-                    <div class="flip-card-back">
-
-                    </div>
-                </div>
-            </div>
-
-        </div>
-
-        <div class="col-md-3 mt-5 mb-5 mx-5">
-            <!-- second flip card -->
-            <div class="flip-card">
-                <div class="flip-card-inner">
-                    <div class="flip-card-front">
-                        <img class="mt-3" src="{% static "home/images/home-page/icons/branding.svg" %}" width="90px">
-                        <h1 class="mt-3" style="font-size: 25px;">قیمت های به صرفه</h1>
-                    </div>
-                    <div class="flip-card-back">
-
-                    </div>
-                </div>
-            </div>
-
-        </div>
-
-        <div class="col-md-3 mt-5 mb-5 mx-5">
-            <!-- third flip cart -->
-            <div class="flip-card">
-                <div class="flip-card-inner">
-                    <div class="flip-card-front">
-                        <img class="mt-3" src="{% static "home/images/home-page/icons/teacher.svg" %}" width="90px">
-                        <h1 class="mt-3" style="font-size: 25px;">اساتید مجرب</h1>
-                    </div>
-                    <div class="flip-card-back">
-
-                    </div>
-                </div>
-            </div>
-
-        </div>
-
-        <div class="col-md-3 mt-5 mb-5 mx-5">
-            <!-- fourth flip card -->
-            <div class="flip-card">
-                <div class="flip-card-inner">
-                    <div class="flip-card-front">
-                        <img class="mt-3" src="{% static "home/images/home-page/icons/branding.svg" %}" width="90px">
-                        <h1 class="mt-3" style="font-size: 25px;">قیمت های به صرفه</h1>
                     </div>
                     <div class="flip-card-back">
 
@@ -289,10 +211,10 @@
 <div class="container mt-5 mb-5 desktop-counter">
     <div class="row justify-content-center ">
 
-        <h1 class="text-center">
-            <img class="mr-3" src="{% static "home/images/home-page/icons/counter.svg" %}" width="60">
+        <h1 class="text-center mobile-font">
+            <img class="mr-3 counter-img" src="{% static "home/images/home-page/icons/counter.svg" %}" width="60">
             شمارشگر تابش
-            <img class="ml-3" src="{% static "home/images/home-page/icons/counter.svg" %}" width="60">
+            <img class="ml-3 counter-img" src="{% static "home/images/home-page/icons/counter.svg" %}" width="60">
         </h1>
 
 
@@ -300,55 +222,26 @@
             <div class="row align-items-center">
 
                 <div class="col-md-4 mt-2 mb-2 text-center">
-                    <img src="{% static "home/images/home-page/icons/exam.svg" %}" width="200">
-                    <h2 class="h2 mt-3 counter"></h2>
+                    <img class="counters-img" src="{% static "home/images/home-page/icons/book.svg" %}" width="200">
+                    <h3 class="h-counters">دوره ها</h3>
+                    <h2 class="h2 mt-3">1.234</h2>
                 </div>
 
                 <div class="col-md-4 mt-2 mb-2 text-center">
-                    <img src="{% static "home/images/home-page/icons/student1.svg" %}" width="200">
-                    <h2 class="h2 mt-3 counter"></h2>
+                    <img class="counters-img" src="{% static "home/images/home-page/icons/students.svg" %}" width="200">
+                    <h3 class="h-counters">دانش آموزان</h3>
+                    <h2 class="h2 mt-3">1.234</h2>
                 </div>
 
                 <div class="col-md-4 mt-2 mb-2 text-center">
-                    <img src="{% static "home/images/home-page/icons/book.svg" %}" width="200">
-                    <h2 class="h2 mt-3 counter"></h2>
+                    <img class="counters-img" src="{% static "home/images/home-page/icons/teachers.svg" %}" width="200">
+                    <h3 class="h-counters">اساتید</h3>
+                    <h2 class="h2 mt-2">1.234</h2>
                 </div>
 
             </div>
         </div>
 
-    </div>
-</div>
-
-<!-- شمارشگر تابش -->
-<div class="container mt-5 mb-5 mobile-counter">
-    <div class="row justify-content-center ">
-
-        <h1 class="text-center mobile-counter" style="font-size: 30px;">
-            <img class="mr-2" src="{% static "home/images/home-page/icons/counter.svg" %}" width="45">
-            شمارشگر تابش
-            <img class="ml-2" src="{% static "home/images/home-page/icons/counter.svg" %}" width="45">
-        </h1>
-
-        <div class="container mt-5 mb-5 ">
-            <div class="row justify-content-center">
-                <div class="col-md-4 mt-5 mb-5 text-center">
-                    <img src="{% static "home/images/home-page/icons/exam.svg" %}" width="180">
-                    <h2 class="h2 mt-3 counter"></h2>
-                </div>
-
-                <div class="col-md-4 mt-5 mb-5 text-center">
-                    <img src="{% static "home/images/home-page/icons/student1.svg" %}" width="180">
-                    <h2 class="h2 mt-3 counter"></h2>
-                </div>
-
-                <div class="col-md-4 mt-5 mb-2 text-center">
-                    <img src="{% static "home/images/home-page/icons/book.svg" %}" width="180">
-                    <h2 class="h2 mt-3 counter"></h2>
-                </div>
-
-            </div>
-        </div>
     </div>
 </div>
 
@@ -432,16 +325,21 @@
                             </h1>
                         </span>
                     <div class="px-3 my-4 input-group d-flex flex-nowrap border border-dark shadow bg-white badge-pill px-3 py-2">
-                        <img src="{% static "home/images/home-page/icons/searchh.svg" %}" width="40">
                         <div class="w-100 p-2">
                             <input id="searchInput" type="text" class="form-control"
                                    placeholder="اسم دوره ی مورد نظر را در این مکان بنویسید. به طور مثال : ریاضی نهم"
                                    name="search">
                         </div>
+                        <button class="btn btn-primary btn-submit" type="submit"><img
+                                src="{% static "home/images/home-page/icons/black-search.svg" %}" width="30"></button>
                     </div>
                     <hr>
                     <div class="container text-center">
                         <div id="searchCourse">
+                            <!-- پیدا نشدن سرچ -->
+                            <h5 class="text-center"><img src="{% static "home/images/home-page/icons/error.svg" %}"
+                                                         width="38"> نتیجه ای یافت نشد!</h5>
+
                             <div class="owl-carousel owl-theme">
                             </div>
                         </div>
@@ -460,24 +358,20 @@
 <div class="container mt-5 mb-5 justify-content-center">
     <div class="row align-items-center">
         <div class="col-12 text-center">
-                <span>
                     <h1>
                         پشتیبانی
                         <img src="{% static "home/images/home-page/icons/smile.svg" %}" width="40">
                     </h1>
-                </span>
 
-            <span>
                     <h3 class="mt-4">
                         آپلود شده با
                         <img src="{% static "home/images/home-page/icons/heart.svg" %}" width="30">
                         برای شما
                     </h3>
-                </span>
 
             <!-- لینک های آپارات -->
 
-            <div class="container mb-2">
+            <div class="container pt-3">
                 <div id="supportList" class="owl-carousel owl-theme">
                 </div>
             </div>
@@ -493,20 +387,27 @@
 
         <div class="col-12 text-center">
             <h2 class="mt-4">
-                <span><img src="{% static "home/images/home-page/icons/comment.svg" %}" width="60"></span>
-                <span>نظرات همراهان تابشی ما</span>
+                <span><img class="mobile-img" src="{% static "home/images/home-page/icons/comment.svg" %}"
+                           width="60"></span>
+                <span class="mobile-font">نظرات همراهان تابشی ما</span>
             </h2>
         </div>
 
-        <div class="container">
+        <div class="container blockquote">
             <div class="row justify-content-center">
-
-                <div class="blockquote">
-                    <img src="image/icons/user.svg" width="30">
-                    <span class="ml-2" style="font-family: 'Vazir_Medium';">احسان رضایی</span>
-                    <p class="mt-4">متن نظر کاربر</p>
-                </div>
-
+                <img src="{% static "home/images/home-page/icons/default_profile.svg" %}" width="80">
+            </div>
+            <div class="row justify-content-center">
+                <h5 class="mt-3">نام و نام خانوادگی</h5>
+            </div>
+            <div class="row justify-content-center">
+                <p class="mt-2">پایه تحصیلی</p>
+            </div>
+            <div class="row d-flex justify-content-center">
+                        <p class="mx-5">
+                            <img src="{% static "home/images/home-page/icons/quotation-heart.svg" %}" width="50">
+                            متن نظر کاربر متن نظر کاربر متن نظر کاربر متن نظر کاربر متن نظر کاربر متن نظر کاربر متن نظر
+                            کاربر متن نظر کاربر متن نظر کاربر</p>
             </div>
         </div>
 
@@ -522,19 +423,16 @@
                 <h3 class="h3">راه های ارتباطی با ما</h3>
                 <p class="p mt-3">شماره تلفن پشتیبان فنی : 0912345678</p>
                 <p class="p">شماره تلفن پشتیبان آموزشی : 0912345678</p>
-                <span>
-                        <p class="p mt-3">
-                            <img src="{% static "home/images/home-page/icons/mail.svg" %}" width="30">
-                            something@email.com
-                        </p>
-                    </span>
-
+                <p class="p mt-3">
+                    <img src="{% static "home/images/home-page/icons/mail.svg" %}" width="30">
+                    something@email.com
+                </p>
                 <div class="ul d-flex list-unstyled mx-2">
-                    <li><a href=""><img src="{% static "home/images/home-page/icons/Eitaa.svg" %}" width="30"></a></li>
-                    <li><a href=""><img class="ml-3" src="{% static "home/images/home-page/icons/telegram.svg" %}"
-                                        width="30"></a></li>
-                    <li><a href=""><img class="ml-2" src="{% static "home/images/home-page/icons/instagram.svg" %}"
-                                        width="30"></a></li>
+                    <a href=""><img src="{% static "home/images/home-page/icons/Eitaa.svg" %}" width="30"></a>
+                    <a href=""><img class="ml-3" src="{% static "home/images/home-page/icons/telegram.svg" %}"
+                                        width="30"></a>
+                    <a href=""><img class="ml-2" src="{% static "home/images/home-page/icons/instagram.svg" %}"
+                                        width="30"></a>
                 </div>
 
             </div>
@@ -554,7 +452,10 @@
                     <span><img src="{% static "home/images/home-page/icons/license.svg" %}" width="18"></span>
                     <span>تمامی حقوق متعلق به آموزشگاه آنلاین تابش می باشد</span>
                 </p>
-                <p class="p">طراحی و توسعه توسط تیم تتا</p>
+                <p class="p">
+                    <span><img src="{% static "home/images/home-page/icons/theta.svg" %}" width="16"></span>
+                    <span>طراحی و توسعه توسط تیم تتا</span>
+                </p>
             </div>
         </div>
     </div>

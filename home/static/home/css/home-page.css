@@ -3,12 +3,25 @@ body {
     height: 100%;
     width: 100%;
     background-color: #FAFAFA;
-    font-family: 'Yekan', 'Yekan-Number', 'Vazir_Light', 'Vazir_Bold', 'Vazir_Medium';
+    font-family: 'Yekan', 'Yekan-Number', 'Vazir_Light', 'Vazir_Bold', 'Vazir_Medium' , sans-serif;
+}
+
+
+.vazir-bold{
+    font-family: "Vazir_Bold" , sans-serif;
+}
+
+.vazir-medium{
+    font-family: "Vazir_Medium" , sans-serif;
+}
+
+.vazir-light{
+    font-family: "Vazir_Light" , sans-serif;
 }
 
 .desktop-version {
     position: relative;
-    background-image: url(../images/home-page/poster.svg);
+    background-image: url("../images/home-page/poster.svg");
     background-color: #fafafa;
     background-repeat: no-repeat;
     background-position-y: top;
@@ -60,6 +73,11 @@ p {
 
 .h-header-mobile {
     font-size: 35px;
+}
+
+.h-tabbesh {
+    margin-right: -20px !important;
+    margin-top: 15px !important;
 }
 
 .btn-header {
@@ -155,8 +173,12 @@ hr {
     border: 6px solid #ffc109 !important;
 }
 
-.counter-margin {
-    margin-right: 100px !important;
+.counters-img {
+    z-index: -1;
+}
+
+.h-counters {
+    margin-top: -21px;
 }
 
 .course {
@@ -176,6 +198,16 @@ hr {
     background-size: 98rem;
 }
 
+.red-circle-img {
+    position: absolute;
+    left: -100px;
+    top: -40px;
+    margin-left: auto;
+    margin-right: auto;
+    width: 100px;
+    height: 100px;
+}
+
 .comment {
     margin-top: 100px;
 }
@@ -187,7 +219,6 @@ hr {
 .footer-logo {
     margin: 180px 50px 0 0;
 }
-
 
 /* change css of prev & next in owl carousel */
 .owl-prev {
@@ -224,42 +255,30 @@ hr {
 
 .blockquote {
     background-color: white;
-    border-radius: 25px;
+    border: 2px solid #00204E;
+    border-radius: 0 25px 0 25px;
     padding: 1.5rem;
-    margin: 3rem;
+    margin-top: 2rem;
+    margin-bottom: 3rem !important;
     width: 70% !important;
     height: 100% !important;
+    box-shadow: 10px 10px 0px #ffc109;
 }
 
+.btn-submit {
+    border-radius: 15px !important;
+}
 
 @media only screen and (max-width: 768px) {
     .desktop-version {
         display: none;
     }
-
-    .desktop-counter {
-        display: none;
-    }
-
-    .desktop-why {
-        display: none;
-    }
-
 }
 
 @media only screen and (min-width: 768px) {
     .mobile-version {
         display: none;
     }
-
-    .mobile-counter {
-        display: none;
-    }
-
-    .mobile-why {
-        display: none;
-    }
-
 }
 
 @media (max-width: 576px) {
@@ -281,6 +300,32 @@ hr {
 
     .mobile-img {
         width: 35px;
+    }
+
+    .why-img {
+        width: 50px;
+    }
+
+    .why-margin {
+        margin: 0 40px 0 40px;
+    }
+
+    .counter-img {
+        width: 45px;
+    }
+
+    .counters-img {
+        width: 150px;
+    }
+
+    .red-circle-img {
+        position: absolute;
+        left: -60px;
+        top: -40px;
+        margin-left: auto;
+        margin-right: auto;
+        width: 90px;
+        height: 90px;
     }
 }
 
