@@ -40,8 +40,8 @@ class TextUtils:
     def replacer(old_text, string_list):
         i = 0
         counter = '{' + str(i) + '}'
-        while (old_text.find(counter) != -1):
-            if (string_list[i] is not None):
+        while old_text.find(counter) != -1:
+            if string_list[i] is not None:
                 old_text = old_text.replace(counter, str(string_list[i]))
             else:
                 old_text = old_text.replace(counter, "")

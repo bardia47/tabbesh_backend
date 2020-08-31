@@ -1,8 +1,6 @@
 from django.contrib.auth.models import User
-
 from accounts.models import *
 from accounts.serializers import *
-
 from rest_framework import serializers
 from html_json_forms.serializers import JSONFormSerializer
 from pip._vendor.pkg_resources import require
@@ -40,7 +38,6 @@ class CourseBriefSerializer(JSONFormSerializer, serializers.ModelSerializer):
         fields = ('teacher', 'title', 'image')
 
 
-
 class CourseLessonsSerializer(CourseBriefSerializer):
     first_class = serializers.SerializerMethodField('get_first_class')
     is_active = serializers.SerializerMethodField('is_class_active')
@@ -60,7 +57,7 @@ class CourseLessonsSerializer(CourseBriefSerializer):
 
     def get_parent_lesson(self, obj):
         lesson = obj.lesson
-        while (True):
+        while True:
             if lesson.parent is None:
                 return LessonSerializer(instance=lesson).data
             else:

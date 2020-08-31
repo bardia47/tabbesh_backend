@@ -225,12 +225,13 @@ class Course(models.Model):
 
     def get_parent_lesson(self, exclude=None):
         lesson = self.lesson
-        while (True):
+        while True:
             if lesson.parent is None:
                 return lesson
             else:
                 lesson = lesson.parent
-#get discount without code
+
+    # get discount without code
     def get_discount(self, exclude=None):
         now = datetime.datetime.now()
         query = Q(start_date__lte=now)
@@ -251,7 +252,7 @@ class Course(models.Model):
     def get_discount_amount(self, exclude=None):
         discount = self.get_discount()
         if discount:
-            return self.amount * (discount.percent) / 100
+            return self.amount * discount.percent / 100
         return 0
 
 

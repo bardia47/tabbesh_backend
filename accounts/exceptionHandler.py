@@ -1,7 +1,6 @@
 from rest_framework.views import exception_handler
 from rest_framework.exceptions import NotAuthenticated
-from django.shortcuts import render, redirect
-from rest_framework.response import Response
+from django.shortcuts import redirect
 
 
 def api_exception_handler(exc, context):

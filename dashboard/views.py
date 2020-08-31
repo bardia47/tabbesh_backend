@@ -101,7 +101,7 @@ class EditProfile(APIView):
                         del request.session['new_login']
                     return redirect('signin')
                 return Response()
-        #if request sent from app, use base64
+        # if request sent from app, use base64
         if method == 'changeAvatar':
             try:
                 file = request.data['file']
@@ -194,6 +194,7 @@ class Shopping(APIView):
         ser = ShoppingSerializer(instance={'grades': grades, 'lessons': lessons, 'teachers': teachers})
         return Response(ser.data, template_name='dashboard/shopping.html')
 
+
 # get child lessons of parent (using tree)
 def getAllLessons(lesson_id):
     lessons = Lesson.objects.filter(id=lesson_id)
@@ -261,7 +262,8 @@ class GetShoppingViewSet(viewsets.ModelViewSet):
 
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
-#default show all active courses
+
+    # default show all active courses
     def get_queryset(self):
         now = datetime.datetime.now()
         query = Q(end_date__gt=now)

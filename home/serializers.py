@@ -39,11 +39,13 @@ class CourseDiscountedSerializer(serializers.ModelSerializer):
         fields = ('id', 'image', 'teacher_full_name', 'course_title', 'grade_id', 'percent', 'discount_name')
 
     def discount_name_method(self, instance):
-        discount = instance.discount_set.first()
+        discounts = instance.discount_set
+        discount = discounts.filter(code=None).first()
         return discount.title
 
     def percent_method(self, instance):
-        discount = instance.discount_set.first()
+        discounts = instance.discount_set
+        discount = discounts.filter(code=None).first()
         return discount.percent
 
 

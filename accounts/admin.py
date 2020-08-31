@@ -88,7 +88,7 @@ class UserCreationForm(forms.ModelForm):
     def clean_avatar(self):
         data = self.cleaned_data['avatar']
         try:
-            if (self.files['avatar']):
+            if self.files['avatar']:
                 data = Utils.compressImage(data)
                 if not self.instance.avatar.url.startswith("/media/defaults"):
                     self.instance.avatar.delete()
@@ -187,7 +187,7 @@ class CourseForm(forms.ModelForm):
     def clean_image(self):
         data = self.cleaned_data['image']
         try:
-            if (self.files['image']):
+            if self.files['image']:
                 data = Utils.compressImage(data)
                 if not self.instance.image.url.startswith("/media/defaults"):
                     self.instance.image.delete()
