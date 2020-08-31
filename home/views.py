@@ -34,6 +34,19 @@ class Home(APIView):
         return Response(template_name='home/home.html')
 
 
+class Counter(APIView):
+    renderer_classes = [BrowsableAPIRenderer, JSONRenderer]
+    permission_classes = (AllowAny,)
+
+    def get(self, request):
+        course_counter = Course.objects.all().count()
+        student_counter = User.objects.filter(role__code='1').count()
+        teacher_counter = User.objects.filter(role__code='3').count()
+        data = {"course_counter": course_counter, "student_counter": student_counter,
+                "teacher_counter": teacher_counter}
+        return Response(data)
+
+
 class AllTeacher(generics.ListAPIView):
     renderer_classes = [BrowsableAPIRenderer, JSONRenderer]
     permission_classes = (AllowAny,)
@@ -79,7 +92,7 @@ class BestSellingCourses(generics.ListAPIView):
 class MostDiscountedCourses(generics.ListAPIView):
     renderer_classes = [BrowsableAPIRenderer, JSONRenderer]
     permission_classes = (AllowAny,)
-    serializer_class = CourseSerializer
+    serializer_class = CourseDiscountedSerializer
     pagination_class = None
 
     def get_queryset(self):
@@ -92,7 +105,7 @@ class MostDiscountedCourses(generics.ListAPIView):
 
 
 class SearchHome(generics.GenericAPIView):
-    renderer_classes = [TemplateHTMLRenderer, JSONRenderer]
+    renderer_classes = [BrowsableAPIRenderer, JSONRenderer]
     permission_classes = (AllowAny,)
     serializer_class = CourseSerializerTitle
     pagination_class = None
