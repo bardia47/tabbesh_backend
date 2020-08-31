@@ -230,7 +230,7 @@ class Course(models.Model):
                 return lesson
             else:
                 lesson = lesson.parent
-
+#get discount without code
     def get_discount(self, exclude=None):
         now = datetime.datetime.now()
         query = Q(start_date__lte=now)

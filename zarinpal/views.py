@@ -26,6 +26,7 @@ mobile = ''  # Optional
 CallbackURL = '/payment/verify/'
 
 
+# compare amount of request with courses
 def is_valid(courses_id_list, amount, discount):
     courses = Course.objects.filter(id__in=courses_id_list)
     total_price = 0
@@ -161,6 +162,7 @@ class Verify(APIView):
             return Response({'error': "پرداخت ناموفق"}, status.HTTP_406_NOT_ACCEPTABLE)
 
 
+# compute discount code
 class ComputeDiscount(APIView):
     renderer_classes = [TemplateHTMLRenderer, JSONRenderer]
 
@@ -185,6 +187,7 @@ class ComputeDiscount(APIView):
         return Response({'amount': amount})
 
 
+# query to find discount
 def discount_query(code):
     now = datetime.datetime.now()
     query = Q(start_date__lte=now)
@@ -204,6 +207,7 @@ def compute_discount(courses_id_list, amount, discount):
         return sum_amount * discount.percent / 100
 
 
+# pay desc for zarin pal
 # in this method use replacer for create dynamic text
 def pay_description(courses_id_list, amount, discount, request):
     text = ZarinPal.descriptionText.value

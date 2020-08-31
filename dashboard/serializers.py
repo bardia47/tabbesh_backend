@@ -33,14 +33,12 @@ class GradeSerializer(JSONFormSerializer, serializers.ModelSerializer):
 
 
 class CourseBriefSerializer(JSONFormSerializer, serializers.ModelSerializer):
-    teacher = serializers.SerializerMethodField('get_user_full_name')
+    teacher = serializers.ReadOnlyField(source='teacher.get_full_name')
 
     class Meta:
         model = Course
         fields = ('teacher', 'title', 'image')
 
-    def get_user_full_name(self, obj):
-        return obj.teacher.get_full_name()
 
 
 class CourseLessonsSerializer(CourseBriefSerializer):
@@ -173,8 +171,8 @@ class DiscountSerializer(serializers.ModelSerializer):
 
 
 class DocumentSerializer(serializers.ModelSerializer):
-    sender_name = serializers.SerializerMethodField('get_sender_full_name')
-    upload_date_decorated = serializers.SerializerMethodField('get_upload_date_decorated')
+    sender_name = serializers.ReadOnlyField(source='sender.get_full_name')
+    upload_date_decorated = serializers.ReadOnlyField()
 
     class Meta:
         model = Document
@@ -182,12 +180,6 @@ class DocumentSerializer(serializers.ModelSerializer):
         fields = ['id', 'sender_name', 'title', 'sender', 'course', 'upload_date', 'upload_date_decorated',
                   'description',
                   'upload_document']
-
-    def get_sender_full_name(self, obj):
-        return obj.sender.get_full_name()
-
-    def get_upload_date_decorated(self, obj):
-        return obj.upload_date_decorated()
 
 
 class FilesSerializer(serializers.Serializer):

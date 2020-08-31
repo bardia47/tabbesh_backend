@@ -23,6 +23,7 @@ class Utils:
                                              'image/jpeg', sys.getsizeof(outputIoStream), None)
         return uploadedImage
 
+    # clean cache used for menu
     def cleanMenuCache(request):
         if request.accepted_renderer.format == 'html':
             # cache key for {% cache 10000 sidebar username %} templatetag

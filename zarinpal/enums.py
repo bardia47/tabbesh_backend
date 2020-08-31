@@ -2,6 +2,7 @@ from enum import Enum
 from accounts.models import Event
 
 
+# for pay desc
 class ZarinPal(Enum):
     descriptionText = 'دوره(های) {0} {1} توسط {2} خریداری شد'
     dicountText = 'با کد تخفیف {0}'

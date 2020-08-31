@@ -115,6 +115,7 @@ class SignOut(APIView):
         return redirect('home')
 
 
+# this is not being used
 @permission_classes((AllowAny,))
 class ForgetPassword(APIView):
     renderer_classes = [TemplateHTMLRenderer, JSONRenderer]

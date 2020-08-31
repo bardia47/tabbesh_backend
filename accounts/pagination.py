@@ -3,6 +3,7 @@ from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
 
 
+# set last page number in header of response
 class Pagination(PageNumberPagination):
     def get_paginated_response(self, data):
         # add pages count to response header

@@ -27,7 +27,7 @@ DEBUG = True
 
 # ALLOWED_HOSTS = ["127.0.0.1","tabbesh.ir","185.4.31.70"]
 ALLOWED_HOSTS = ['*']
-
+# log errors in file
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
@@ -189,8 +189,8 @@ REST_FRAMEWORK = {
     'DEFAULT_FILTER_BACKENDS': ('django_filters.rest_framework.DjangoFilterBackend',
                                 'rest_framework.filters.SearchFilter',
                                 'rest_framework.filters.OrderingFilter'),
-    'EXCEPTION_HANDLER': 'accounts.exceptionHandler.api_exception_handler',
-    'DEFAULT_PAGINATION_CLASS': 'accounts.pagination.Pagination',
+    'EXCEPTION_HANDLER': 'accounts.exceptionHandler.api_exception_handler',  # custom exception handler
+    'DEFAULT_PAGINATION_CLASS': 'accounts.pagination.Pagination',  # custom pagination
     'PAGE_SIZE': 6
 
 }
@@ -227,6 +227,8 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'dashboard/static/'),
 
 ]
+
+# this is deprecated
 LOGIN_URL = '/signin/'
 LOGIN_REDIRECT_URL = '/signin/'
 
