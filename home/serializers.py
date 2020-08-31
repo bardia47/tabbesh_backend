@@ -7,7 +7,7 @@ class TeacherSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ('avatar', 'get_full_name', 'grade_choice')
+        fields = ('id', 'avatar', 'get_full_name', 'grade_choice')
 
     def get_choices(self, instance):
         all_grades = instance.grades.all()
@@ -25,6 +25,26 @@ class CourseSerializer(serializers.ModelSerializer):
     class Meta:
         model = Course
         fields = ('id', 'image', 'teacher_full_name', 'course_title', 'grade_id')
+
+
+class CourseDiscountedSerializer(serializers.ModelSerializer):
+    teacher_full_name = serializers.ReadOnlyField(source='teacher.get_full_name')
+    course_title = serializers.ReadOnlyField(source='title')
+    grade_id = serializers.ReadOnlyField(source='grade.id')
+    percent = serializers.SerializerMethodField('percent_method')
+    discount_name = serializers.SerializerMethodField('discount_name_method')
+
+    class Meta:
+        model = Course
+        fields = ('id', 'image', 'teacher_full_name', 'course_title', 'grade_id', 'percent', 'discount_name')
+
+    def discount_name_method(self, instance):
+        discount = instance.discount_set.first()
+        return discount.title
+
+    def percent_method(self, instance):
+        discount = instance.discount_set.first()
+        return discount.percent
 
 
 class CourseSerializerTitle(serializers.ModelSerializer):
