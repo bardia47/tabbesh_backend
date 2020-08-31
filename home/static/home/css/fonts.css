@@ -63,3 +63,16 @@
          url('../fonts/Iransans/BRoya.eot') format('eot'),
          url('../fonts/Iransans/BRoya.ttf') format('ttf');
 }
+
+
+.vazir-bold {
+    font-family: "Vazir_Bold" , sans-serif !important;
+}
+
+.vazir-medium {
+    font-family: "Vazir_Medium" , sans-serif !important;
+}
+
+.vazir-light {
+    font-family: "Vazir_light" , sans-serif !important;
+}

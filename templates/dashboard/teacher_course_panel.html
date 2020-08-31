@@ -1,0 +1,180 @@
+{% extends 'dashboard/base.html' %}
+{% load static %}
+{% load jformat %}
+<!-- title of teacher course panel -->
+{% block title %}مدیریت کلاس{% endblock %}
+
+<!-- cSS files -->
+{% block CSSfiles %}
+    <!-- DropZone JS files -->
+    <link rel="stylesheet" href="{% static 'home/css/drag-upload.css' %}">
+    <!-- add css files here -->
+    <link rel="stylesheet" href="{% static 'dashboard/css/teacher_course_panel.css' %}">
+    <!-- file manager css -->
+    <link rel="stylesheet" href="{% static 'dashboard/css/filemanager.css' %}">
+{% endblock %}
+
+<!-- content of page -->
+{% block content %}
+    <div class="container w-100">
+        <!-- tabs button -->
+        <div class="tab vazir-bold">
+            <button class="tab-link active" data-content="#fileManager">جزوه ها</button>
+            <button class="tab-link" data-content="#studentsList">لیست دانش آموزان</button>
+            {#            <button class="tab-link">کلاس بعدی</button>#}
+        </div>
+        <hr class="mt-0" style="border: 2px solid;">
+        <!-- file manager tab -->
+        <div id="fileManager" class="tab-content active">
+        </div>
+
+
+        <!-- student tab -->
+        <div id="studentsList" class="tab-content">
+        </div>
+
+
+    </div>
+
+    {#        <!-- NextClass Tab -->#}
+    {#        <div id="NextClass" class="tab-content">#}
+    {##}
+    {#            <div class="container">#}
+    {##}
+    {#                <div class="row mb-2">#}
+    {#                    <div class="file-manager-image">#}
+    {#                        <img src="{% static 'home/images/مهدی_شهبازی.jpg' %}" width="50" height="50">#}
+    {#                    </div>#}
+    {#                    <div class="ml-3 file-manager title">#}
+    {#                        <p class="m-0"><strong>شیمی دهم</strong></p>#}
+    {#                        <h6 class="p-0"><small>مهدی شهبازی</small></h6>#}
+    {#                    </div>#}
+    {#                </div>#}
+    {##}
+    {#                <hr>#}
+    {#                <div class="row d-flex">#}
+    {#                    <div class="col-md-2 ml-4">#}
+    {#                        <img src="{% static 'home/images/icons/online-class.svg' %}" width="50" height="50">#}
+    {#                    </div>#}
+    {##}
+    {#                    <div class="col-md-4 mt-3">#}
+    {#                        <h5>کلاس بعدی :</h5>#}
+    {#                    </div>#}
+    {##}
+    {#                    <div class="col-md-5 mt-2">#}
+    {#                    <span><a class="a-style" href="" style="font-size: 20px;"><img class="mr-1"#}
+    {#                                                                                   src="{% static 'home/images/icons/entry.svg' %}"#}
+    {#                                                                                   width="42" height="42">#}
+    {#                            ورود به کلاس#}
+    {#                        </a></span>#}
+    {#                    </div>#}
+    {##}
+    {#                </div>#}
+    {#                <hr>#}
+    {##}
+    {##}
+    {#            </div>#}
+    {##}
+    {#        </div>#}
+
+
+    <!-- add/edit file modal -->
+    <div class="modal fade" id="uploadModal" tabindex="-1" role="dialog"
+         aria-labelledby="uploadModalTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title vazir-medium" id="uploadModalTitle">اضافه کردن جزوه</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form id="documentUploadForm" action="#" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label id="titleLabel" class="mr-2 vazir-bold" for="title">عنوان جزوه</label>
+                            <input class="form-control w-100" type="text" id="title" name="title"
+                                   placeholder="مثال: فصل اول - ریاضی دهم" required>
+                        </div>
+                        <hr>
+                        <div class="form-group">
+                            <label id="descriptionLabel" class="mr-2 vazir-bold" for="description">توضیحات</label>
+                            <textarea class="form-control" name="description" id="description"
+                                      rows="4" placeholder="توضیحات مربوط به جزوه را در این قسمت بنویسید."></textarea>
+                        </div>
+                        <hr>
+
+                        <!-- drag upload append to this div -->
+                        <div class="drop-zone">
+                            <label id="fileLabel" class="mr-2 vazir-bold" for="description">فایل جزوه از این قسمت آپلود
+                                کنید.</label>
+                        </div>
+
+                        <div class="modal-footer justify-content-center">
+                            <!-- upload file -->
+                            <span id="uploadLoading" class="spinner-grow spinner-grow-sm" style="display: none"></span>
+                            <button id="uploadSubmit" class="btn btn-success" type="submit">ارسال جزوه</button>
+                            <button class="btn btn-danger" data-dismiss="modal">لغو</button>
+                        </div>
+                        <div id="uploadFailedAlert" class="text-center m-0" style="display: none">
+                            <small class="text-danger mb-2">
+                                <i class="fas fa-exclamation-triangle mr-1"></i>
+                                ارسال جزوه به مشکل خورده است ! دوباره امتحان کنید
+                            </small>
+                        </div>
+                        <div id="validationForFile" class="text-center m-0" style="display: none">
+                            <small class="text-danger mb-2">
+                                <i class="fas fa-exclamation-triangle mr-1"></i>
+                                ارسال فایل الزامی می باشد. دوباره امتحان کنید.
+                            </small>
+                        </div>
+                    </div>
+                    <input type="number" id="documentId" hidden>
+                    <input type="text" id="addOrEditStatus" hidden>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- delete file modal -->
+    <div class="modal fade" id="deleteFileModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title vazir-medium">حذف جزوه</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <h6>آیا از حذف جزوه مطمئن هستید ؟ ( جزوه قابل بازیابی نیست! )</h6>
+                </div>
+                <div class="modal-footer justify-content-center">
+                    <button id="deleteFileAccept" type="button" class="btn btn-danger">بله</button>
+                    <button type="button" class="btn btn-success" data-dismiss="modal">لغو</button>
+                </div>
+            </div>
+        </div>
+        <input id="deleteDocumentId" hidden>
+    </div>
+
+    <input id="courseCode" value="{{ code }}" hidden>
+
+{% endblock %}
+
+<!-- JS files -->
+{% block JSfile %}
+    <!-- persian date formatter -- hint: read doc: https://github.com/babakhani/PersianDate -->
+    <script src="{% static "home/js/persian-date.min.js" %}"></script>
+    <!-- course students component -->
+    <script src="{% static 'dashboard/js/course-students-componenet.js' %}"></script>
+    <!-- student list component -->
+    <script src="{% static 'dashboard/js/file-manager-component.js' %}"></script>
+    <!-- DropZone JS file -->
+    <script src="{% static 'home/js/drag-upload.js' %}"></script>
+    <!-- add js files here -->
+    <script src="{% static "dashboard/js/teacher_course_panel.js" %}"></script>
+    <!-- validation base -->
+    <script src="{% static "dashboard/js/validation-base.js" %}"></script>
+{% endblock %}

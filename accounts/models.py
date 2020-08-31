@@ -9,6 +9,7 @@ from django.template.defaultfilters import default
 from accounts.enums import RoleCodes
 import datetime
 import jdatetime
+from tinymce import models as tinymce_models
 from django.core.exceptions import ValidationError
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db.models import Q
@@ -43,8 +44,12 @@ class User(AbstractBaseUser, PermissionsMixin):
     courses = models.ManyToManyField('Course', blank=True)
     is_superuser = models.BooleanField(default=False)
     is_staff = models.BooleanField(default=True)
+    credit = models.FloatField("اعتبار", default=float(0),
+    validators=[ MinValueValidator(0) ]
+     )
 
     class Meta:
+        ordering = ['-id']
         verbose_name_plural = "کاربر"
         verbose_name = "کاربر"
 
@@ -52,7 +57,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     objects = UserManager()
 
     USERNAME_FIELD = 'username'
-    REQUIRED_FIELDS = [ 'first_name', 'last_name']
+    REQUIRED_FIELDS = [ 'first_name', 'last_name','phone_number']
 
     def __str__(self):
         return self.get_full_name()
@@ -87,7 +92,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     
     def set_default_avatar(self):
         if not self.avatar :
-            if self.role.code == RoleCodes.TEACHER.value:     
+            if self.is_teacher():
                 self.avatar = "defaults/teacher.png"
             else :
                 self.avatar = "defaults/student.png"
@@ -103,6 +108,12 @@ class User(AbstractBaseUser, PermissionsMixin):
                 return ""
 
     get_student_grade.short_description = 'پایه'
+
+    def is_teacher(self):
+       return self.role.code == RoleCodes.TEACHER.value
+
+    def is_admin(self):
+        return self.role.code == RoleCodes.ADMIN.value
 
 
 # Roles Model
@@ -133,6 +144,9 @@ class City(models.Model):
 
 # Grade Models
 class Grade(models.Model):
+    Grade_CHOICES = (('First', 'ابتدایی'), ('Second', 'متوسطه اول'), ('Third', 'متوسطه دوم'),
+                     ('Other', 'متفرقه'))
+    grade_choice = models.CharField("پایه", max_length=10, choices=Grade_CHOICES, default='other')
     code = models.CharField("کد", max_length=10)
     title = models.CharField("عنوان", max_length=30)
 
@@ -170,11 +184,13 @@ class Course(models.Model):
     teacher = models.ForeignKey(User, on_delete=models.DO_NOTHING, verbose_name="مدرس")
     start_date = models.DateTimeField("تاریخ شروع")
     end_date = models.DateTimeField("تاریخ پایان")
-    amount = models.FloatField("مبلغ", default=float(0))
+    amount = models.FloatField("مبلغ", default=float(0),
+    validators=[ MinValueValidator(0) ]
+     )
     url = models.URLField("لینک", blank=True, null=True)
     image = models.ImageField(upload_to='courses_image/', default='defaults/course.jpg')
-    description = models.TextField('توضیحات خرید درس',null=True, blank=True)
-    private_description = models.TextField('توضیحات درس',null=True, blank=True)
+    description = tinymce_models.HTMLField('توضیحات خرید درس', null=True, blank=True)
+    private_description = tinymce_models.HTMLField('توضیحات درس', null=True, blank=True)
     class Meta:
         ordering = ['start_date']
         verbose_name_plural = "دوره"
@@ -258,7 +274,7 @@ class Course_Calendar(models.Model):
 
     def is_class_active(self):
         now = datetime.datetime.now()
-        a = now - self.start_date
+        a = now - self.start_date + datetime.timedelta(minutes=5)
         b = now - self.end_date
         if a.total_seconds() >= 0 and b.total_seconds() < 0:
             return True
@@ -277,10 +293,10 @@ def document_directory_path(instance, filename):
 # Documents_model
 class Document(models.Model):
     course = models.ForeignKey('Course', on_delete=models.DO_NOTHING, verbose_name="دوره")
-    upload_document= models.FileField('فایل',upload_to=document_directory_path, null=True, blank=True)
-    upload_date = models.DateTimeField("تاریخ بارگذاری")
-    title = models.CharField("عنوان", max_length=30)
-    description = models.TextField("توضیحات",null=True, blank=True)
+    upload_document= models.FileField('فایل', upload_to=document_directory_path, null=True, blank=True)
+    upload_date = models.DateTimeField("تاریخ بارگذاری", auto_now_add=True)
+    title = models.CharField("عنوان", max_length=60)
+    description = models.TextField("توضیحات", null=True, blank=True)
     sender = models.ForeignKey(User, on_delete=models.DO_NOTHING, verbose_name="فرد بارگذار")
 
     class Meta:
@@ -323,7 +339,7 @@ class Pay_History(models.Model):
     submit_date_decorated.short_description='تاریخ ثبت'
 
 class Discount(models.Model):
-    title=models.CharField("نام تخفیف", max_length=30, null=True, blank=True , unique=True)
+    title = models.CharField("نام تخفیف", max_length=30, null=True, blank=True , unique=True)
     code = models.CharField("کد", max_length=15, null=True, blank=True , unique=True)
     percent = models.IntegerField("درصد",
         default=10,
@@ -334,7 +350,7 @@ class Discount(models.Model):
     )
     start_date = models.DateTimeField("تاریخ شروع")
     end_date = models.DateTimeField("تاریخ پایان",null=True, blank=True)
-    courses= models.ManyToManyField('Course', blank=True, verbose_name="درس های تخفیف خورده")
+    courses = models.ManyToManyField('Course', blank=True, verbose_name="درس های تخفیف خورده")
 
     class Meta:
         ordering = ['-start_date']
@@ -348,4 +364,45 @@ class Discount(models.Model):
         if self.end_date and self.start_date and self.end_date <= self.start_date:
             raise ValidationError("تاریخ پایان باید پس از تاریخ شروع باشد یا خالی باشد")
 
+class Event(models.Model):
+     # Introducer = 'INER'
+     #just create model with INING
+     Introducing = 'INING'
+     TYPE_CHOICES = [
+        # (Introducer, 'معرفی کننده'),
+        (Introducing, 'معرفی شونده'),
+     ]
+     user = models.ForeignKey(User, on_delete=models.CASCADE , verbose_name="کاربر",related_name='event')
+     create_date = models.DateTimeField("تاریخ ثبت",auto_now=True)
+     type = models.CharField(max_length=5, choices=TYPE_CHOICES )
+     is_active = models.BooleanField(default=True)
+     related_user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name="کاربر مرتبط", related_name='event_related',  blank=True, null=True)
+     class Meta:
+         ordering = ['is_active','-create_date']
+         verbose_name_plural = "رویداد"
+         verbose_name = "رویداد"
+
+# Course Model
+class Support(models.Model):
+    public = 'PUBLIC'
+    teacher='TEACHER'
+    TYPE_CHOICES = ((public, 'عمومی'), (teacher, 'استاد'), )
+    type_choice = models.CharField("نوع", max_length=7, choices=TYPE_CHOICES, default='PUBLIC')
+    code = models.CharField("کد", max_length=10,unique=True)
+    title = models.CharField("عنوان", max_length=30)
+    description = models.TextField('توضیحات', null=True, blank=True)
+    update_date = models.DateTimeField("تاریخ آخرین تغییر", auto_now=True)
+
+    class Meta:
+        ordering = ['title']
+        verbose_name_plural = "پشتیبانی"
+        verbose_name = "پشتیبانی"
+
+    def __str__(self):
+        return self.title
+
+    def update_date_decorated(self):
+        return jdatetime.datetime.fromgregorian(datetime=self.update_date).strftime("%a, %d %b %Y %H:%M:%S")
+
+    update_date_decorated.short_description = 'تاریخ آخرین تغییر'
 

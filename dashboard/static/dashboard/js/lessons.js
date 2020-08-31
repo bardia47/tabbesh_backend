@@ -6,12 +6,12 @@ function getUrlParameter(url, param) {
     return urlParams.get(param)
 }
 
-// hostname of project -- example : https://127.0.0.1:8000
-// let arrayHref = window.location.href.split("/")
-//let hostName = arrayHref[0] + "//" + arrayHref[2]
-
-// first pagination when user request https://127.0.0.1:8000/dashboard/lessons/
+// initial page javascript
 $(function () {
+
+    // set menu active
+    $("#lessonsMenu").addClass("active-menu");
+
     url = "/dashboard/get-lessons/?page=" + (getUrlParameter(window.location.href, "page") ? +getUrlParameter(window.location.href, "page") : "1")
     pagination(url)
 });
@@ -58,7 +58,25 @@ function renderLessenCards(courseCards) {
         let grayImg = "";
         let classActive = endDateCourse >= nowDate;
         let buttonToClassTemplate = ``;
+        let buttonToClassPanel = ``;
         let nextClassTemplate = ``;
+
+        // if user is teacher --> show teacher panel otherwise show file manager
+        if ($("#roleStatus").val() === "True") {
+            buttonToClassPanel = `
+            <button onclick="location.href='teacher_course_panel/${courseCard.code}'" class="btn btn-dark mr-2" type="button">
+                <img src="/static/home/images/icons/teacher-panel.svg" alt="teacher panel" />
+                پنل کلاس
+            </button>
+            `
+        } else {
+            buttonToClassPanel = `
+            <button onclick="location.href='files/${courseCard.code}'" class="btn btn-dark mr-2" type="button">
+                <img src="/static/home/images/icons/document.svg" alt="button link to class" />
+                جزوه ها
+            </button>
+            `
+        }
         if (classActive) {
             nextClassTemplate = `
                 <p>
@@ -70,7 +88,7 @@ function renderLessenCards(courseCards) {
                         ${nextClassDate.format("D")}
                         ام
                         ساعت
-                        ${nextClassDate.format("hh:mm")}
+                        ${nextClassDate.format("H:m")}
                      </span>
                 </p>
                 `;
@@ -93,7 +111,7 @@ function renderLessenCards(courseCards) {
             grayImg = "gray-img";
         }
         // check first class is null
-        if (courseCard.first_class == null){
+        if (courseCard.first_class == null) {
             nextClassTemplate = ``;
         }
         let lessonCardTemplate = `
@@ -140,10 +158,7 @@ function renderLessenCards(courseCards) {
                     <!-- Button link to class -->
                     <div class="card-footer button-to-class p-0 py-3">
                         ${buttonToClassTemplate}
-                        <button onclick="location.href='files/${courseCard.code}'" class="btn btn-dark mr-2" type="button">
-                            <img src="/static/home/images/icons/document.svg" alt="button link to class" />
-                            جزوه ها
-                        </button>
+                        ${buttonToClassPanel}
                     </div>
                 </div>
             </div>

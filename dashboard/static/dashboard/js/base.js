@@ -38,4 +38,24 @@ function pageReady() {
         }
     });
 
+    // set user of ray chat
+    $(function () {
+        $.ajax({
+            url: "/dashboard/app_profile",
+            dataType: "json",
+            type: "GET",
+            success: function (data) {
+                window.addEventListener('raychat_ready', function (ets) {
+                    window.Raychat.setUser({
+                        name: data.first_name + " " + data.last_name,
+                        phone: "0" + data.phone_number,
+                        about: "پایه " + data.grade + " - " + "با نام کاربری " + data.username,
+                        updateOnce: false
+                    });
+                });
+            }
+        });
+    });
+
+
 }

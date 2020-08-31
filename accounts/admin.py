@@ -98,15 +98,6 @@ class UserChangeForm(UserCreationForm):
     password1 = forms.CharField(label='رمز', required=False, widget=forms.PasswordInput)
     password2 = forms.CharField(label='تکرار رمز', required=False, widget=forms.PasswordInput)
 
-    class Meta:
-        model = User
-        fields = (
-            'username', 'role', 'email', 'city', 'grades', 'avatar', 'first_name', 'last_name', 'national_code',
-            'address',
-            'gender', 'phone_number', 'courses')
-        labels = {
-            'date_joined_decorated': "تاریخ عضویت",
-        }
 
 class UserAdmin(BaseUserAdmin):
     readonly_fields = ('date_joined_decorated',)
@@ -122,18 +113,10 @@ class UserAdmin(BaseUserAdmin):
         ('اطلاعات شخص', {'fields': (
         'first_name', 'last_name', 'avatar', 'grades', 'national_code', 'phone_number', 'address', 'city', 'gender')}),
         ('دسترسی ها', {'fields': ('is_active', "role")}),
-
+        ('اعتبار', {'fields': ('credit',)}),
     )
-
-    add_fieldsets = (
-        (None, {
-            'classes': ('wide',),
-            'fields': ('username', 'email', 'role', 'password1', 'password2')}),
-        ('اطلاعات شخص', {'fields': (
-        'first_name', 'last_name', 'avatar', 'grades', 'national_code', 'phone_number', 'address', 'city', 'gender')}),
-
-    )
-    search_fields = ['last_name','phone_number']
+    add_fieldsets = fieldsets
+    search_fields = ['last_name','phone_number','grades__title']
     ordering = ('username',)
     inlines = [
         CourseInline, PayHistoryInline
@@ -240,10 +223,10 @@ class CourseAdmin(ModelAdminJalaliMixin, admin.ModelAdmin):
 
     def student_link(self, obj):
         return mark_safe('<a href="{}">{}</a>'.format(
-            reverse("student_list", args=(obj.code,)),
-            "لیست دانش آموزان"
+            reverse("teacher_course_panel", args=(obj.code,)),
+            "پنل اساتید"
         ))
-    student_link.short_description = ' لیست دانش آموزان'
+    student_link.short_description = "پنل اساتید"
 
 
 class CourseCalendarAdmin(ModelAdminJalaliMixin, admin.ModelAdmin):
@@ -308,7 +291,7 @@ class DocumentAdmin(admin.ModelAdmin):
 
     def save_model(self, request, obj, form, change):
         obj.sender = request.user
-        obj.upload_date = datetime.datetime.now()
+        # obj.upload_date = datetime.datetime.now()
         super().save_model(request, obj, form, change)
 
 
@@ -437,6 +420,15 @@ class DiscountWithoutCodeAdmin(DiscountAdmin):
     def get_queryset(self, request):
         return Discount.objects.filter(code__isnull=True)
 
+
+class SupportAdmin(admin.ModelAdmin):
+    class Meta:
+        readonly_fields = ('update_date_decorated',)
+        fields = (
+        'title', 'code','update_date_decorated', 'description','type_choice')
+    list_display = ['title',  'update_date_decorated']
+    search_fields = ['title','code']
+
 admin.site.register(User, UserAdmin)
 admin.site.register(TeacherUser, TeacherAdmin)
 admin.site.register(City, CityAdmin)
@@ -449,4 +441,5 @@ admin.site.register(Document, DocumentAdmin)
 admin.site.register(Pay_History, PayHistoryAdmin)
 admin.site.register(Discount, DiscountAdmin)
 admin.site.register(DiscountWithoutCode, DiscountWithoutCodeAdmin)
+admin.site.register(Support, SupportAdmin)
 

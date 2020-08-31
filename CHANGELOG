@@ -78,3 +78,16 @@ pip install apscheduler
 
 --> hint: for start scheduler run server with python manage.py runserver --noreload
     because it run app config twice!
+
+
+    pip install python-memcached
+
+for htmlfield
+pip install django-tinymce
+
+for swagger
+pip install -U drf-yasg
+
+--> very important
+i send test email for tetha
+please remove it after new version

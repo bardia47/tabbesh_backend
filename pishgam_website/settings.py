@@ -32,11 +32,25 @@ ALLOWED_HOSTS = ['*']
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
+    'formatters': {
+        'verbose': {
+            'format': '{asctime} {message}',
+            'style': '{',
+        },
+        'simple': {
+            'format': '{message}',
+            'style': '{',
+        },
+    },
     'handlers': {
         'file': {
             'level': 'DEBUG',
-            'class': 'logging.FileHandler',
+            'class': 'logging.handlers.TimedRotatingFileHandler',
             'filename': os.path.join(BASE_DIR, 'bug.log'),
+            'when': 'D',  # this specifies the interval
+            'interval': 1,  # defaults to 1, only necessary for other values
+            'backupCount': 10,  # how many backup file to keep, 10 days
+            'formatter': 'verbose',
         },
     },
     'loggers': {
@@ -49,15 +63,16 @@ LOGGING = {
 }
 
 STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.ManifestStaticFilesStorage'
+SESSION_COOKIE_SECURE = False
 
 
 # Application definition
 
 INSTALLED_APPS = [
+    'accounts',
     'rest_framework',
     'rest_framework.authtoken',
     'jalali_date',
-    'accounts',
     'zarinpal',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -66,6 +81,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django_jalali',
+    'tinymce',
+    'drf_yasg',
 ]
 
 MIDDLEWARE = [
@@ -179,6 +196,14 @@ REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'accounts.pagination.Pagination',
     'PAGE_SIZE': 6
 
+}
+# add fonts and plugins to tiny mce
+TINYMCE_DEFAULT_CONFIG = {
+    'plugins': "paste,searchreplace,code,link,emoticons,image,imagetools,media",
+    "font_formats": "B Nazanin;" +
+    "Arial;" +
+    "Tahoma;" +
+    "Times New Roman;" ,
 }
 
 

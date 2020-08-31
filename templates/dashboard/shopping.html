@@ -1,7 +1,7 @@
 {% extends 'dashboard/base.html' %}
 {% load static %}
 {% load jformat %}
-
+{% load pay_enums %}
 <!-- Title block of base.html -->
 {% block title %}سبد خرید{% endblock %}
 
@@ -9,9 +9,6 @@
 {% block CSSfiles %}
     <link rel="stylesheet" href="{% static 'dashboard/css/shopping.css' %}">
 {% endblock %}
-
-<!-- Active menu of sidebar -->
-{% block shopping_active %}active-menu{% endblock %}
 
 <!-- Content of page -->
 {% block content %}
@@ -24,6 +21,20 @@
                     دوره های تابش
                 </h1>
             </div>
+
+            {% if 'event_discount' in request.session %}
+                <div class="alert alert-info alert-dismissable">
+                    <a class="panel-close close" data-dismiss="alert">×</a>
+                    <i class="fas fa-percentage mr-1"></i>
+                    <strong>
+                        تبریک !
+                        برای اولین خرید خود
+                        10
+                        درصد تخفیف دارید.
+                        پس از انتخاب دروس مورد نظر بر روی دکمه اعمال تخفیف کلیک کنید.
+                    </strong>
+                </div>
+            {% endif %}
             <!-- Cart Section use cart-list for shopping.js -->
             <div class="cart-list card-section">
                 <!-- Cart title -->
@@ -49,7 +60,9 @@
                         <div class="col-md-8 d-flex text-sm-center align-items-center mb-2 discount">
                             <!-- compute discount -->
                             <label class="mb-0 text-nowrap" for="discountCode">کد تخفیف:</label>
-                            <input type="text" class="form-control mx-2 w-25" id="discountCode" name="code">
+                            <input type="text" class="form-control mx-2 w-25" id="discountCode" name="code"
+                                   {% if 'event_discount' in request.session %}value="{{ request.user.phone_number }}"
+                                   readonly{% endif %}>
                             <button type="button" class="btn btn-info mr-auto text-white" id="discountButton">
                                 اعمال کد تخفیف
                             </button>
@@ -170,9 +183,13 @@
                             تومان
                         </p>
                     </div>
-                    <div class="modal-footer">
-                        <button id="modalDiscountButton" type="button" class="btn button-purchase w-100"
+                    <div class="modal-footer flex-column justify-content-center">
+                        <button id="modalDiscountButton" type="button" class="btn button-purchase w-50 mb-2"
                                 data-dismiss="modal">بریم پرداختش کنیم
+                        </button>
+                        <button id="discountRefreshButton" type="button" class="btn btn-remove w-25"
+                                data-dismiss="modal">
+                            پشیمون شدم !
                         </button>
                     </div>
                 </div>

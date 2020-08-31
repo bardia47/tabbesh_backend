@@ -20,7 +20,7 @@ class UserManager(BaseUserManager):
         except:
             pass
         user = self.model(username=username , **extra_fields)
-        password = make_password(password)
+        password = make_password(str(password))
         user.password = password
         if user.gender is None:
             user.gender = True
@@ -28,7 +28,10 @@ class UserManager(BaseUserManager):
             user.role
         except ObjectDoesNotExist:
             role = apps.get_model(app_label='accounts', model_name='Role')
-            user.role = role.objects.get(code=RoleCodes.STUDENT.value)
+            if user.is_superuser:
+                user.role = role.objects.get(code=RoleCodes.ADMIN.value)
+            else:
+                user.role = role.objects.get(code=RoleCodes.STUDENT.value)
         user.set_default_avatar()    
 
         # try:

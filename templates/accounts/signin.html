@@ -20,7 +20,7 @@
 
 <body class="text-center">
 <form id="signInForm" class="sign-in-form" method="POST"
-      action="{% url 'signin' %}{% if request.GET.next %}?next={{ request.GET.next }}{% endif %}"
+      action="{% url 'signin' %}{% if request.GET.next %}?{{ request.META.QUERY_STRING }}{% endif %}"
       enctype='application/json'>
     {% csrf_token %}
     <h1 class="title">ورود</h1>

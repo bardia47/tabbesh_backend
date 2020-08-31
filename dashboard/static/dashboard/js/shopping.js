@@ -37,7 +37,12 @@ if (firstParameter) {
 }
 let getShoppingURL = "/dashboard/get-shopping/?";
 // first pagination when user request https://127.0.0.1:8000/dashboard/shopping/
+// initial shopping page
 $(function () {
+
+    // set menu active
+    $("#shoppingMenu").addClass("active-menu");
+
     pagination(urlMaker())
 });
 

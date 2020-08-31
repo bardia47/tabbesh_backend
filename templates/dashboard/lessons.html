@@ -1,6 +1,8 @@
 {% extends 'dashboard/base.html' %}
 {% load static %}
 {% load jformat %}
+{% load have_role %}
+
 <!-- Title block of base.html -->
 {% block title %}دروس من{% endblock %}
 
@@ -9,13 +11,14 @@
     <link rel="stylesheet" href="{% static 'dashboard/css/lessons.css' %}">
 {% endblock %}
 
-<!-- Active menu of sidebar -->
-{% block lesson_active %}active-menu{% endblock %}
 <!-- Content of page -->
 {% block content %}
+
     <!-- Course Rows -->
-    <input id="have-class" type="hidden" value="{{ have_class }}">
-    {% if not have_class %}
+        {% is_teacher request.user as teacher %}
+
+    <input id="have-class" type="hidden" value="{{ have_class }}" >
+    {% if not have_class and not teacher %}
         <div class="container w-100 p-1 text-center margin-set" style="font-family: 'Vazir_Bold';">
             <div class="col-md-12">
                 <img class="m-auto" src="{% static 'home/images/icons/sad-emoji.svg' %}" width="90" height="90">
@@ -60,6 +63,10 @@
             </div>
         </div>
     </div>
+
+    <!-- input to know user is teacher - True : teacher -->
+    {%  is_teacher request.user as teacher %}
+    <input id="roleStatus" value="{{ teacher }}" hidden>
 {% endblock %}
 
 <!-- JS files -->
