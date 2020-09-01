@@ -5,7 +5,7 @@ from rest_framework.permissions import AllowAny
 from rest_framework.renderers import BrowsableAPIRenderer, JSONRenderer, TemplateHTMLRenderer
 from rest_framework.response import Response
 from rest_framework.views import APIView
-
+from django.db.models import F
 from accounts.enums import *
 from home.serializers import *
 
@@ -101,7 +101,7 @@ class MostDiscountedCourses(generics.ListAPIView):
         query &= ~(Q(courses=None))
         discounts = Discount.objects.filter(query)
         # get those courses that have discounts now
-        course = Course.objects.filter(discount__in=discounts).order_by('-discount__percent', 'discount__start_date')
+        course = Course.objects.filter(discount__in=discounts).order_by('-discount__percent', F('discount__end_date').asc(nulls_last=True))
         if not course.exists():
             try:
                 query = Q(start_date__lte=time_now)
