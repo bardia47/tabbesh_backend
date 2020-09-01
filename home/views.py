@@ -73,14 +73,10 @@ class BestSellingCourses(generics.ListAPIView):
 
     def get_queryset(self):
         time_now = datetime.datetime.now()
-        # get courses those end date is more than now
-        all_course = Course.objects.filter(end_date__gt=time_now)
-        # set the number of students for courses
-        course = all_course.annotate(number=Count('user'))
         # get the number of courses
         count = Course.objects.all().count()
         # if courses are few return all of them
-        course_order = course.order_by('-number')
+        course_order = Course.objects.filter(end_date__gt=time_now).annotate(number=Count('user')).order_by('-number')
         # sorted courses by number of students
         if count > 100:
             # the highest size of query for sending is 14
@@ -99,22 +95,40 @@ class MostDiscountedCourses(generics.ListAPIView):
     def get_queryset(self):
         time_now = datetime.datetime.now()
         # get those discounts that the time of them reach
-        discounts = Discount.objects.filter(Q(code=None) & Q(start_date__lt=time_now) & Q(end_date__gt=time_now))
+        query = Q(start_date__lte=time_now)
+        query &= Q(code__isnull=True)
+        query &= (Q(end_date__gte=time_now) | Q(end_date=None))
+        query &= ~(Q(courses=None))
+        discounts = Discount.objects.filter(query)
         # get those courses that have discounts now
-        course = Course.objects.filter(discount__in=discounts)
+        course = Course.objects.filter(discount__in=discounts).order_by('-discount__percent', 'discount__start_date')
+        if not course.exists():
+            try:
+                query = Q(start_date__lte=time_now)
+                query &= Q(code__isnull=True)
+                query &= (Q(end_date__gte=time_now) | Q(end_date=None))
+                query &= (Q(courses=None))
+                Discount.objects.get(query)
+                return Course.objects.filter(end_date__gt=time_now).order_by('-end_date', '-amount')[:10]
+            except:
+                return None
         return course
 
 
-class SearchHome(generics.GenericAPIView):
+class SearchHome(APIView):
     renderer_classes = [BrowsableAPIRenderer, JSONRenderer]
     permission_classes = (AllowAny,)
-    serializer_class = CourseSerializerTitle
+    serializer_class = CourseSerializer
     pagination_class = None
 
     def get_queryset(self):
         # get three courses that have most similarity with courses in data base
         title = self.request.data['title']
-        course = Course.objects.filter(Q(title__icontains=title) | Q(teacher__last_name__icontains=title))[:3]
+        time_now = datetime.datetime.now()
+        # get those discounts that the time of them reach
+        query = Q(end_date__gte=time_now)
+        query &= (Q(title__icontains=title) | Q(teacher__last_name__icontains=title))
+        course = Course.objects.filter(query).order_by('-end_date')[:3]
         return course
 
     def post(self, request):

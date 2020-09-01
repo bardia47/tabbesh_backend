@@ -39,31 +39,10 @@ class CourseDiscountedSerializer(serializers.ModelSerializer):
         fields = ('id', 'image', 'teacher_full_name', 'course_title', 'grade_id', 'percent', 'discount_name')
 
     def get_discount_name(self, obj):
-        now = datetime.datetime.now()
-        query = Q(start_date__lte=now)
-        query &= Q(code__isnull=True)
-        query &= (Q(end_date__gte=now) | Q(end_date=None))
-        query &= (Q(courses__id=obj.id) | Q(courses=None))
-        discount = Discount.objects.filter(query)
-        if discount.exists():
-            return discount.first().title
-        return None
+        return obj.get_discount().title
 
     def get_discount_percent(self, obj):
-        now = datetime.datetime.now()
-        query = Q(start_date__lte=now)
-        query &= Q(code__isnull=True)
-        query &= (Q(end_date__gte=now) | Q(end_date=None))
-        query &= (Q(courses__id=obj.id) | Q(courses=None))
-        discount = Discount.objects.filter(query)
-        if discount.exists():
-            return discount.first().percent
-        return None
-
-    # def percent_method(self, instance):
-    #     discounts = instance.discount_set
-    #     discount = discounts.filter(code=None).first()
-    #     return discount.percent
+        return obj.get_discount().percent
 
 
 class CourseSerializerTitle(serializers.Serializer):
