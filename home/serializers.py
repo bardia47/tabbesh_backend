@@ -31,22 +31,39 @@ class CourseDiscountedSerializer(serializers.ModelSerializer):
     teacher_full_name = serializers.ReadOnlyField(source='teacher.get_full_name')
     course_title = serializers.ReadOnlyField(source='title')
     grade_id = serializers.ReadOnlyField(source='grade.id')
-    percent = serializers.SerializerMethodField('percent_method')
-    discount_name = serializers.SerializerMethodField('discount_name_method')
+    percent = serializers.SerializerMethodField('get_discount_percent')
+    discount_name = serializers.SerializerMethodField('get_discount_name')
 
     class Meta:
         model = Course
         fields = ('id', 'image', 'teacher_full_name', 'course_title', 'grade_id', 'percent', 'discount_name')
 
-    def discount_name_method(self, instance):
-        discounts = instance.discount_set
-        discount = discounts.filter(code=None).first()
-        return discount.title
+    def get_discount_name(self, obj):
+        now = datetime.datetime.now()
+        query = Q(start_date__lte=now)
+        query &= Q(code__isnull=True)
+        query &= (Q(end_date__gte=now) | Q(end_date=None))
+        query &= (Q(courses__id=obj.id) | Q(courses=None))
+        discount = Discount.objects.filter(query)
+        if discount.exists():
+            return discount.first().title
+        return None
 
-    def percent_method(self, instance):
-        discounts = instance.discount_set
-        discount = discounts.filter(code=None).first()
-        return discount.percent
+    def get_discount_percent(self, obj):
+        now = datetime.datetime.now()
+        query = Q(start_date__lte=now)
+        query &= Q(code__isnull=True)
+        query &= (Q(end_date__gte=now) | Q(end_date=None))
+        query &= (Q(courses__id=obj.id) | Q(courses=None))
+        discount = Discount.objects.filter(query)
+        if discount.exists():
+            return discount.first().percent
+        return None
+
+    # def percent_method(self, instance):
+    #     discounts = instance.discount_set
+    #     discount = discounts.filter(code=None).first()
+    #     return discount.percent
 
 
 class CourseSerializerTitle(serializers.Serializer):
