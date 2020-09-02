@@ -412,6 +412,11 @@ class CourseDiscountWithoutCodeFormSet(forms.models.BaseInlineFormSet):
             discount = Discount.objects.filter(courses=None, code__isnull=True).exclude(id=discount_id)
             if discount:
                 raise forms.ValidationError("تمامی دروس دارای تخفیف میباشند")
+        else:
+            discount = Discount.objects.filter(~Q(courses=None), code__isnull=True)
+            if discount:
+                raise forms.ValidationError("برخی دروس دارای تخفیف میباشند")
+
 
 
 class CourseDiscountWithoutCodeInline(CourseDiscountInline):
