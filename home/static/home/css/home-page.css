@@ -87,7 +87,16 @@ p {
     border-radius: 15px !important;
 }
 
-/* flip card style */
+.box-card {
+    border-radius: 8px;
+    background-color: white;
+    border-style: solid;
+    border-color: #00204E #ffc109 #00204E #ffc109;
+    padding: 1.5rem;
+    margin: 0px 0px 0px 0px !important;
+}
+
+/* flip card style
 .flip-card {
     background-color: transparent;
     height: 200px;
@@ -131,7 +140,7 @@ p {
     background-color: #bbb;
     color: black;
     transform: rotateY(180deg);
-}
+} */
 
 .img-circle {
     background-image: url("../images/home-page/circle.svg");
@@ -313,7 +322,7 @@ hr {
     }
 
     .why-margin {
-        margin: 0 40px 0 40px;
+        margin: 0 45px 0 45px !important;
     }
 
     .counter-img {
