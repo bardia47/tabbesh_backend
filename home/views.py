@@ -80,10 +80,10 @@ class BestSellingCourses(generics.ListAPIView):
         # sorted courses by number of students
         if count > 100:
             # the highest size of query for sending is 14
-            return course_order[:14]
+            return course_order[:12]
         else:
             # return a query that size of it suitable with count
-            return course_order[:4 + (count / 10)]
+            return course_order[:2 + (count / 10)]
 
 
 class MostDiscountedCourses(generics.ListAPIView):
@@ -109,7 +109,7 @@ class MostDiscountedCourses(generics.ListAPIView):
                 query &= (Q(end_date__gte=time_now) | Q(end_date=None))
                 query &= (Q(courses=None))
                 Discount.objects.get(query)
-                return Course.objects.filter(end_date__gt=time_now).order_by('-end_date', '-amount')[:10]
+                return Course.objects.filter(end_date__gt=time_now).order_by('-end_date', '-amount')[:12]
             except:
                 return None
         return course
