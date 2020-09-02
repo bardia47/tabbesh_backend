@@ -147,7 +147,7 @@ class Grade(models.Model):
     Third = 'THIRD'
     Other = 'OTHER'
     Grade_CHOICES = ((First, 'ابتدایی'), (Second, 'متوسطه اول'), (Third, 'متوسطه دوم'),
-                     (Other, 'متفرقه'))
+                     (Other, 'مهارتی'))
     grade_choice = models.CharField("پایه", max_length=10, choices=Grade_CHOICES, default='other')
     code = models.CharField("کد", max_length=10)
     title = models.CharField("عنوان", max_length=30)

@@ -13,4 +13,4 @@ class Events(Enum):
     # this is percent
     INING_DISCOUNT = 10
     # this is amount
-    INING_AMOUNT = 10000
+    INING_AMOUNT = 30000

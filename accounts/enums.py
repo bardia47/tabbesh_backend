@@ -1,6 +1,10 @@
 from enum import Enum
 
 
+class PrivateCourse(Enum):
+    MEMBERSHIP = '07'
+
+
 class RoleCodes(Enum):
     STUDENT = '1'
     ADMIN = '2'

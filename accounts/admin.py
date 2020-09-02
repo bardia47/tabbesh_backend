@@ -400,6 +400,7 @@ class DiscountWithoutCodeForm(forms.ModelForm):
 class CourseDiscountWithoutCodeFormSet(forms.models.BaseInlineFormSet):
     def clean(self):
         count = 0
+        discount_id=None
         for form in self.forms:
             if not form.errors and form.is_valid and form.cleaned_data and not form.cleaned_data.get('DELETE'):
                 discount_id = form.cleaned_data['discount'].id
@@ -408,12 +409,16 @@ class CourseDiscountWithoutCodeFormSet(forms.models.BaseInlineFormSet):
                 count = count + 1
                 if discount:
                     raise forms.ValidationError("درس " + form.cleaned_data['course'].title + " دارای تخفیف میباشند")
+            elif form.cleaned_data.get('DELETE'):
+                discount_id = form.cleaned_data['discount'].id
         if count > 0:
             discount = Discount.objects.filter(courses=None, code__isnull=True).exclude(id=discount_id)
             if discount:
                 raise forms.ValidationError("تمامی دروس دارای تخفیف میباشند")
         else:
             discount = Discount.objects.filter(~Q(courses=None), code__isnull=True)
+            if discount_id is not None:
+                discount=discount.exclude(id=discount_id)
             if discount:
                 raise forms.ValidationError("برخی دروس دارای تخفیف میباشند")
 
