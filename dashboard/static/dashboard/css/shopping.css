@@ -252,7 +252,7 @@
 .course-description-p {
     font-family: 'Vazir_Light', sans-serif;
     margin-right: 20px;
-    max-height: 150px;
+    height: 200px;
     overflow-y: auto;
 }
 

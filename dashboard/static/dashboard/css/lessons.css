@@ -124,7 +124,7 @@
 .course-description-p {
     font-family: 'Vazir_Light';
     margin-right: 20px;
-    max-height: 150px;
+    height: 200px;
     overflow-y: auto;
 }
 
