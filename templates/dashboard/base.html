@@ -73,11 +73,11 @@
                             <a href="{% url 'shopping' %}">خرید درس</a>
                         </div>
                     {% endif %}
-{#                    <hr>#}
-{#                    <div id="shoppingMenu" class="row sidebar-menu">#}
-{#                        <img src="{% static 'home/images/icons/shopping-cart.svg' %}" alt="آیکون">#}
-{#                        <a href="{% url 'home' %}">صفحه ی اصلی</a>#}
-{#                    </div>#}
+                    <hr>
+                    <div id="shoppingMenu" class="row sidebar-menu">
+                       <img src="{% static 'home/images/icons/shopping-cart.svg' %}" alt="آیکون">
+                        <a href="{% url 'home' %}">صفحه ی اصلی</a>
+                    </div>
                     {% is_admin request.user as admin %}
                     {% if admin %}
                         <hr>
