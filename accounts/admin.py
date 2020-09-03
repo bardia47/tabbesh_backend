@@ -53,6 +53,24 @@ class PayHistoryInline(admin.TabularInline):
         return False
 
 
+class EventInline(admin.TabularInline):
+    model = Event
+    readonly_fields = ('change_date_decorated',)
+    fields = ('related_user', 'is_active', 'type', 'change_date_decorated',)
+    verbose_name_plural = "رویداد ها"
+    verbose_name = "رویداد ها"
+    fk_name = 'user'
+
+    def has_change_permission(self, request, obj=None):
+        return False
+
+    def has_add_permission(self, request, obj=None):
+        return False
+
+    def has_delete_permission(self, request, obj=None):
+        return False
+
+
 class UserCreationForm(forms.ModelForm):
     GENDERS = [(True, "پسر"), (False, "دختر")]
     password1 = forms.CharField(label='رمز', widget=forms.PasswordInput)
@@ -123,7 +141,7 @@ class UserAdmin(BaseUserAdmin):
     search_fields = ['last_name', 'phone_number', 'grades__title']
     ordering = ('username',)
     inlines = [
-        CourseInline, PayHistoryInline
+        CourseInline, PayHistoryInline, EventInline
     ]
 
     def get_queryset(self, request):
@@ -400,7 +418,7 @@ class DiscountWithoutCodeForm(forms.ModelForm):
 class CourseDiscountWithoutCodeFormSet(forms.models.BaseInlineFormSet):
     def clean(self):
         count = 0
-        discount_id=None
+        discount_id = None
         for form in self.forms:
             if not form.errors and form.is_valid and form.cleaned_data and not form.cleaned_data.get('DELETE'):
                 discount_id = form.cleaned_data['discount'].id
@@ -418,10 +436,9 @@ class CourseDiscountWithoutCodeFormSet(forms.models.BaseInlineFormSet):
         else:
             discount = Discount.objects.filter(~Q(courses=None), code__isnull=True)
             if discount_id is not None:
-                discount=discount.exclude(id=discount_id)
+                discount = discount.exclude(id=discount_id)
             if discount:
                 raise forms.ValidationError("برخی دروس دارای تخفیف میباشند")
-
 
 
 class CourseDiscountWithoutCodeInline(CourseDiscountInline):
@@ -477,4 +494,3 @@ admin.site.register(Discount, DiscountAdmin)
 admin.site.register(DiscountWithoutCode, DiscountWithoutCodeAdmin)
 admin.site.register(Support, SupportAdmin)
 admin.site.register(Event, EventAdmin)
-
