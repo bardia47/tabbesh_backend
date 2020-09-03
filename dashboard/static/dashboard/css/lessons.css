@@ -124,6 +124,8 @@
 .course-description-p {
     font-family: 'Vazir_Light';
     margin-right: 20px;
+    max-height: 150px;
+    overflow-y: auto;
 }
 
 /* Footer of course card */
@@ -186,6 +188,20 @@
 
 /* New Style */
 
-.margin-set{
+.margin-set {
     margin-top: -2rem;
+}
+
+@media only screen and (max-width: 768px) {
+    ::-webkit-scrollbar {
+        all: unset;
+    }
+
+    ::-webkit-scrollbar-track {
+        all: unset;
+    }
+
+    ::-webkit-scrollbar-thumb {
+        all: unset;
+    }
 }
