@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.db.models import Count
 from rest_framework import status, generics
-from rest_framework.permissions import AllowAny
+from rest_framework.permissions import AllowAny,IsAuthenticated
 from rest_framework.renderers import BrowsableAPIRenderer, JSONRenderer, TemplateHTMLRenderer
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -10,11 +10,14 @@ from accounts.enums import *
 from home.serializers import *
 
 
-def home(request):
+def main_page(request):
     if request.user.is_authenticated:
         return redirect('dashboard')
     else:
-        return render(request, 'home/home.html')
+        return redirect('home')
+
+# def home(request):
+#     return render(request, 'home/home.html')
 
 
 # 404 page not found
@@ -117,16 +120,15 @@ class MostDiscountedCourses(generics.ListAPIView):
                 return None
         return course
 
-
 class SearchHome(APIView):
-    renderer_classes = [BrowsableAPIRenderer, JSONRenderer]
+    renderer_classes = [ JSONRenderer]
     permission_classes = (AllowAny,)
     serializer_class = CourseSerializer
     pagination_class = None
 
     def get_queryset(self):
         # get three courses that have most similarity with courses in data base
-        title = self.request.data['title']
+        title = self.request.GET.get('title')
         time_now = datetime.datetime.now()
         # get those discounts that the time of them reach
         query = Q(end_date__gte=time_now)
@@ -136,7 +138,7 @@ class SearchHome(APIView):
         course = Course.objects.filter(query).order_by('-end_date')[:3]
         return course
 
-    def post(self, request):
+    def get(self, request):
         course = self.get_queryset()
         serialize = CourseSerializer(course, many=True)
         return Response(serialize.data, status=status.HTTP_200_OK)

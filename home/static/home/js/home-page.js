@@ -183,7 +183,7 @@ function fullDiscountRender(fullDiscountCourses) {
 function searchAjax(searchText) {
     $.ajax({
         url: "/search-home/",
-        type: "POST",
+        type: "GET",
         data: {
             "title": searchText
         },

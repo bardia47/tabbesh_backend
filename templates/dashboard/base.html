@@ -27,7 +27,7 @@
 <body>
 <div class="wrapper">
     <!-- Sidebar  -->
-{#    {% cache 1000 sidebar request.user.username %}#}
+    {% cache 1000 sidebar request.user.username %}
         {% block sidebar %}
             <nav id="sidebar">
                 <!-- Brand name title -->
@@ -58,7 +58,7 @@
                 <!-- Sidebar menus ! block for active menu -->
                 <div id="sidebarMenus" class="container">
                     <div id="dashboardMenu" class="row sidebar-menu">
-                        <img src="{% static 'home/images/icons/dashboard.svg' %}" alt="آیکون" style="height: 22px;">
+                        <img src="{% static 'home/images/icons/home.svg' %}" alt="آیکون">
                         <a href="{% url 'dashboard' %}">داشبورد</a>
                     </div>
                     <hr>
@@ -101,7 +101,7 @@
                 </div>
             </nav>
         {% endblock %}
-{#    {% endcache %}#}
+    {% endcache %}
 
     <!-- Page content  -->
     <div id="content">
