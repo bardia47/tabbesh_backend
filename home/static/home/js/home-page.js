@@ -6,13 +6,13 @@ $(function () {
     fullDiscountAjax();
     supportAjax();
     $("#searchButton").on("click", function () {
-        searchAjax($("#searchInput").val());
+        if ($("#searchInput").val().length != 0) searchAjax($("#searchInput").val());
     });
 
     // search when press enter
     $("#searchInput").on('keyup', function (e) {
         if (e.key === 'Enter' || e.keyCode === 13) {
-            searchAjax($("#searchInput").val());
+            if ($("#searchInput").val().length != 0) searchAjax($("#searchInput").val());
         }
     });
     $('[data-toggle="tooltip"]').tooltip();
@@ -282,14 +282,14 @@ function owlCarouselInitial(carouselId) {
 function commentsCarousel() {
     //initial changes for carousels
     $("#commentsList").owlCarousel({
-        loop:true,
+        loop: true,
         rtl: true,
         nav: true,
         items: 1,
     });
 
-    $("#commentsList").find(".owl-prev").css("right" , "30px").empty().append(`<img src="/static/home/images/home-page/icons/owl-prev.svg" width="40" height="40">`);
-    $("#commentsList").find(".owl-next").css("left" , "30px").empty().append(`<img src="/static/home/images/home-page/icons/owl-next.svg" width="40" height="40">`);
+    $("#commentsList").find(".owl-prev").css("right", "30px").empty().append(`<img src="/static/home/images/home-page/icons/owl-prev.svg" width="40" height="40">`);
+    $("#commentsList").find(".owl-next").css("left", "30px").empty().append(`<img src="/static/home/images/home-page/icons/owl-next.svg" width="40" height="40">`);
 }
 
 jQuery.event.special.touchstart = {
