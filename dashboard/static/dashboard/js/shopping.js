@@ -176,7 +176,7 @@ function renderShoppingCards(courseCards) {
                            <img src="/static/home/images/icons/paragraph.svg" alt="description">
                            توضیحات:
                         </p>
-                        <p class="course-description-p">${courseCard.description}</p>
+                        <div class="course-description-p pr-2">${courseCard.description}</div>
                      </div>
                      <!-- Course price -->
                      <div class="course-price">
