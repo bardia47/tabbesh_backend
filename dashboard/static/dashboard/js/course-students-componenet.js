@@ -63,7 +63,7 @@ function renderStudentsList(data) {
 function studentListRender(code) {
     courseCode = code;
     $.ajax({
-        url: `http://127.0.0.1:8000/dashboard/lessons/list/${courseCode}/`,
+        url: `/dashboard/lessons/list/${courseCode}/`,
         type: "GET",
         dataType: "json",
         success: function (data) {
