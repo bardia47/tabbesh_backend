@@ -266,3 +266,6 @@ $("#deleteFileAccept").click(function () {
     });
 });
 
+
+// set default tooltip to hover
+$.fn.tooltip.Constructor.Default.trigger = 'hover';
