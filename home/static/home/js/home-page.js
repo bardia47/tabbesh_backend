@@ -16,6 +16,8 @@ $(function () {
         }
     });
     $('[data-toggle="tooltip"]').tooltip();
+
+    commentsCarousel()
 });
 
 
@@ -162,7 +164,11 @@ function fullDiscountRender(fullDiscountCourses) {
                 <div class="card-body text-center">
                     <h4>${course.course_title}</h4>
                     <h5 style="font-family: 'Vazir_medium';">${course.teacher_full_name}</h5>
-                    <h5 class="h5">${course.discount_name}</h5>
+                    <h5 class="h5">
+                        <img class="d-inline" src="/static/home/images/home-page/icons/offer.svg" style="width: 30px !important; height: 30px">
+                        با تخفیف 
+                         ${course.discount_name}
+                    </h5>
                     <a href="/dashboard/shopping/?grade=${course.id}" class="btn btn-secondary vazir-bold mt-2">خرید دوره</a>
                 </div>
             </div>
@@ -272,6 +278,20 @@ function owlCarouselInitial(carouselId) {
     $(carouselId).find(".owl-next").empty().append(`<img src="/static/home/images/home-page/icons/owl-next.svg" width="40" height="40">`);
 }
 
+
+function commentsCarousel() {
+    //initial changes for carousels
+    $("#commentsList").owlCarousel({
+        loop:true,
+        rtl: true,
+        nav: true,
+        items: 1,
+    });
+
+    $("#commentsList").find(".owl-prev").css("right" , "30px").empty().append(`<img src="/static/home/images/home-page/icons/owl-prev.svg" width="40" height="40">`);
+    $("#commentsList").find(".owl-next").css("left" , "30px").empty().append(`<img src="/static/home/images/home-page/icons/owl-next.svg" width="40" height="40">`);
+}
+
 jQuery.event.special.touchstart = {
     setup: function (_, ns, handle) {
         if (ns.includes("noPreventDefault")) {
@@ -291,3 +311,6 @@ function scrollAnimations() {
         }, 1500);
     });
 }
+
+// set default tooltip to hover
+$.fn.tooltip.Constructor.Default.trigger = 'hover';
