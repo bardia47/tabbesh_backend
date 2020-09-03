@@ -377,9 +377,9 @@ class Event(models.Model):
         (Introducing, 'معرفی شونده'),
     ]
     user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name="کاربر", related_name='event')
-    change_date = models.DateTimeField("تاریخ ثبت", auto_now=True)
-    type = models.CharField(max_length=5, choices=TYPE_CHOICES)
-    is_active = models.BooleanField(default=True)
+    change_date = models.DateTimeField("تاریخ آخرین تغییر", auto_now=True)
+    type = models.CharField('نوع', max_length=5, choices=TYPE_CHOICES)
+    is_active = models.BooleanField('فعال', default=True)
     related_user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name="کاربر مرتبط",
                                      related_name='event_related', blank=True, null=True)
 
