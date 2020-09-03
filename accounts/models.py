@@ -377,16 +377,21 @@ class Event(models.Model):
         (Introducing, 'معرفی شونده'),
     ]
     user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name="کاربر", related_name='event')
-    create_date = models.DateTimeField("تاریخ ثبت", auto_now=True)
+    change_date = models.DateTimeField("تاریخ ثبت", auto_now=True)
     type = models.CharField(max_length=5, choices=TYPE_CHOICES)
     is_active = models.BooleanField(default=True)
     related_user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name="کاربر مرتبط",
                                      related_name='event_related', blank=True, null=True)
 
     class Meta:
-        ordering = ['is_active', '-create_date']
+        ordering = ['is_active', '-change_date']
         verbose_name_plural = "رویداد"
         verbose_name = "رویداد"
+
+    def change_date_decorated(self):
+        return jdatetime.datetime.fromgregorian(datetime=self.change_date).strftime("%a, %d %b %Y %H:%M:%S")
+
+    change_date_decorated.short_description = 'تاریخ آخرین تغییر'
 
 
 # Course Model

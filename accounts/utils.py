@@ -79,10 +79,10 @@ class EmailUtils:
         except:
             return {'message': 'try again.'}
 
-
+# use get_field_display for this !
 # get choice name from choice list
-class ChoiceUtils:
-    def get_choice_name(key, choice_types):
-        for choice, value in choice_types:
-            if choice == key:
-                return value
+# class ChoiceUtils:
+#     def get_choice_name(key, choice_types):
+#         for choice, value in choice_types:
+#             if choice == key:
+#                 return value

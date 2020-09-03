@@ -6,7 +6,8 @@ from accounts.models import Event
 class ZarinPal(Enum):
     descriptionText = 'دوره(های) {0} {1} توسط {2} خریداری شد'
     dicountText = 'با کد تخفیف {0}'
-    eventText = 'به مناسبت {0} با {1} درصد تخفیف'
+    eventText = 'به مناسبت {0} {1} با {2} درصد تخفیف'
+    relatedPersonText = '(کاربر مرتبط : {0})'
 
 
 class Events(Enum):

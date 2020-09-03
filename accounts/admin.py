@@ -448,6 +448,21 @@ class SupportAdmin(admin.ModelAdmin):
     search_fields = ['title', 'code']
 
 
+class EventAdmin(admin.ModelAdmin):
+    list_display = ['user', 'type', 'is_active', 'related_user',
+                    'change_date_decorated']
+    list_display_links = None
+
+    def has_change_permission(self, request, obj=None):
+        return False
+
+    def has_add_permission(self, request, obj=None):
+        return False
+
+    def has_delete_permission(self, request, obj=None):
+        return False
+
+
 admin.site.register(User, UserAdmin)
 admin.site.register(TeacherUser, TeacherAdmin)
 admin.site.register(City, CityAdmin)
@@ -461,3 +476,5 @@ admin.site.register(Pay_History, PayHistoryAdmin)
 admin.site.register(Discount, DiscountAdmin)
 admin.site.register(DiscountWithoutCode, DiscountWithoutCodeAdmin)
 admin.site.register(Support, SupportAdmin)
+admin.site.register(Event, EventAdmin)
+
