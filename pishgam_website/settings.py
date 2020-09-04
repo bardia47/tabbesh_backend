@@ -72,6 +72,7 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'jalali_date',
     'zarinpal',
+    'clearcache',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',

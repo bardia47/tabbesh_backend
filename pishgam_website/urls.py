@@ -20,6 +20,7 @@ schema_view = get_schema_view(
 )
 
 urlpatterns = [
+                  path('admin/clearcache/', include('clearcache.urls')),
                   path('admin/', admin.site.urls),
                   path('', include('home.urls')),
                   path('signup/', SignUp.as_view(), name="signup"),

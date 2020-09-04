@@ -33,6 +33,8 @@ function homeCounter() {
                 url: "/counter/",
                 type: "GET",
                 dataType: "json",
+                cache: false,
+
                 success: function (counters) {
                     $("#coursesCounter").animationCounter({
                         start: 0,
@@ -68,6 +70,7 @@ function teacherListAjax() {
         url: "/all-teacher/",
         type: "GET",
         dataType: "json",
+        cache: false,
         success: function (teachersList) {
             teacherListRender(teachersList)
         },
@@ -104,6 +107,8 @@ function bestSellerAjax() {
         url: "/best-selling-courses/",
         type: "GET",
         dataType: "json",
+        cache: false,
+
         success: function (bestSellerCourses) {
             bestSellerRender(bestSellerCourses)
         },
@@ -140,6 +145,8 @@ function fullDiscountAjax() {
         url: "/most-discounted-courses/",
         type: "GET",
         dataType: "json",
+        cache: false,
+
         success: function (fullDiscountCourses) {
             fullDiscountRender(fullDiscountCourses)
         },
@@ -188,6 +195,8 @@ function searchAjax(searchText) {
             "title": searchText
         },
         dataType: "json",
+        cache: false,
+
         success: function (searchCourses) {
             if (searchCourses.length === 0) {
                 $("#searchNotFound").show();
@@ -233,6 +242,8 @@ function supportAjax() {
         url: "/support/",
         type: "GET",
         dataType: "json",
+        cache: false,
+
         success: function (supports) {
             supportRender(supports)
         },

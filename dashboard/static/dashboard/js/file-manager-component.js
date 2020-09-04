@@ -98,7 +98,7 @@ function renderDocuments(data) {
 function fileManagerRender(code) {
     courseCode = code;
     $.ajax({
-        url: `http://127.0.0.1:8000/dashboard/lessons/files/${courseCode}/`,
+        url: `/dashboard/lessons/files/${courseCode}/`,
         type: "GET",
         dataType: "json",
         success: function (data) {
@@ -157,7 +157,7 @@ function addDocumentAjax() {
     let editFormData = new FormData($("#documentUploadForm")[0]);
     if ($("#dropUploadFiles")[0].files.length === 0) editFormData.delete("upload_document");
     $.ajax({
-        url: `http://127.0.0.1:8000/dashboard/lessons/files/${courseCode}/`,
+        url: `/dashboard/lessons/files/${courseCode}/`,
         type: "POST",
         data: editFormData,
         processData: false,
@@ -193,7 +193,7 @@ function editDocumentAjax() {
     // read form data
     // for (let p of editFormData) console.log(p[0], p[1])
     $.ajax({
-        url: `http://127.0.0.1:8000/dashboard/lessons/files/${courseCode}/${uploadModalDocumentId.val()}/`,
+        url: `/dashboard/lessons/files/${courseCode}/${uploadModalDocumentId.val()}/`,
         type: "POST",
         data: editFormData,
         processData: false,
@@ -249,7 +249,7 @@ $("#documentUploadForm").submit(function (e) {
 
 $("#deleteFileAccept").click(function () {
     $.ajax({
-        url: `http://127.0.0.1:8000/dashboard/lessons/files/${courseCode}/${$("#deleteDocumentId").val()}/`,
+        url: `/dashboard/lessons/files/${courseCode}/${$("#deleteDocumentId").val()}/`,
         type: "GET",
         dataType: "json",
         success: function () {
