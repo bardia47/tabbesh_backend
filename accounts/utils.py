@@ -103,4 +103,6 @@ class DateUtils:
             month_different -=1
         elif (day_different<-15):
             month_different += 1
+        if (month_different==0):
+            month_different += 1
         return month_different
