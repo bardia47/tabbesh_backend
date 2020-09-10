@@ -91,17 +91,15 @@ class EmailUtils:
 
 #
 class DateUtils:
-    def month_difference(start_date , end_date ):
+    def month_difference( start_date , end_date ):
         start_date_jalali=jdatetime.datetime.fromgregorian(datetime=start_date).strftime("%Y-%m-%d")
         end_date_jalali = jdatetime.datetime.fromgregorian(datetime=end_date).strftime("%Y-%m-%d")
-        print(start_date_jalali)
-        print(end_date_jalali)
         year_different=int(end_date_jalali[:4]) - int(start_date_jalali[:4])
         month_different= int(end_date_jalali[5:7])-int(start_date_jalali[5:7]) + (12 * (year_different))
         day_different=int(end_date_jalali[7:])-int(start_date_jalali[7:])
-        if (day_different>15):
+        if (day_different>16):
             month_different -=1
-        elif (day_different<-15):
+        elif (day_different<-16):
             month_different += 1
         if (month_different==0):
             month_different += 1

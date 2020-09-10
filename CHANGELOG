@@ -95,3 +95,7 @@ please remove it after new version
 --> for clearCache
 pip install django-clearcache
 
+migrate on mysql for some features
+
+pip install django_mysql
+mysql database is now Available on drive
