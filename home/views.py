@@ -120,8 +120,20 @@ class MostDiscountedCourses(generics.ListAPIView):
                 return None
         return course
 
+
+class NewCourseHome(generics.ListAPIView):
+    renderer_classes = [BrowsableAPIRenderer, JSONRenderer]
+    permission_classes = (AllowAny,)
+    serializer_class = CourseSerializer
+    pagination_class = None
+
+    def get_queryset(self):
+        time_now = datetime.datetime.now()
+        return Course.objects.filter(end_date__gte=time_now).order_by('-id')[:12]
+
+
 class SearchHome(APIView):
-    renderer_classes = [ JSONRenderer]
+    renderer_classes = [JSONRenderer]
     permission_classes = (AllowAny,)
     serializer_class = CourseSerializer
     pagination_class = None

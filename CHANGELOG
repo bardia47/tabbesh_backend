@@ -82,10 +82,10 @@ pip install apscheduler
 
     pip install python-memcached
 
-for htmlfield
+--> for htmlfield
 pip install django-tinymce
 
-for swagger
+--> for swagger
 pip install -U drf-yasg
 
 --> very important
