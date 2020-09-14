@@ -329,7 +329,7 @@ class FileManager(viewsets.ModelViewSet):
     lookup_field = 'code'
 
     def get_permissions(self):
-        if self.action != 'retrieve':
+        if self.action != 'retrieve':  # this not is not for student
             self.permission_classes = [EditDocumentPermission, ]
         return super(FileManager, self).get_permissions()
 
@@ -356,6 +356,7 @@ class FileManager(viewsets.ModelViewSet):
         return Response({"success": "yes"}, status=status.HTTP_200_OK)
 
 
+# this permission is not for student
 @permission_classes((EditDocumentPermission,))
 class UpdateFile(viewsets.ModelViewSet):
     renderer_classes = [BrowsableAPIRenderer, JSONRenderer]
