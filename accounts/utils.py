@@ -11,6 +11,7 @@ from email.mime.text import MIMEText
 import jdatetime
 import jdatetime
 
+
 class Utils:
     # compress images
     def compressImage(uploadedImage):
@@ -39,16 +40,16 @@ class TextUtils:
         return seperator.join(list)
 
     def replacer(old_text, string_list):
-        i = 0
-        counter = '{' + str(i) + '}'
-        while old_text.find(counter) != -1:
-            if string_list[i] is not None:
-                old_text = old_text.replace(counter, str(string_list[i]))
-            else:
-                old_text = old_text.replace(counter, "")
-            i = i + 1
-            counter = '{' + str(i) + '}'
-        return old_text
+        # i = 0
+        # counter = '{' + str(i) + '}'
+        # while old_text.find(counter) != -1:
+        #     if string_list[i] is not None:
+        #         old_text = old_text.replace(counter, str(string_list[i]))
+        #     else:
+        #         old_text = old_text.replace(counter, "")
+        #     i = i + 1
+        #     counter = '{' + str(i) + '}'
+        return old_text.format(*string_list)
 
 
 # SEND emails with this class
@@ -80,6 +81,7 @@ class EmailUtils:
         except:
             return {'message': 'try again.'}
 
+
 # use get_field_display for this !
 # get choice name from choice list
 # class ChoiceUtils:
@@ -91,16 +93,16 @@ class EmailUtils:
 
 #
 class DateUtils:
-    def month_difference( start_date , end_date ):
-        start_date_jalali=jdatetime.datetime.fromgregorian(datetime=start_date).strftime("%Y-%m-%d")
+    def month_difference(start_date, end_date):
+        start_date_jalali = jdatetime.datetime.fromgregorian(datetime=start_date).strftime("%Y-%m-%d")
         end_date_jalali = jdatetime.datetime.fromgregorian(datetime=end_date).strftime("%Y-%m-%d")
-        year_different=int(end_date_jalali[:4]) - int(start_date_jalali[:4])
-        month_different= int(end_date_jalali[5:7])-int(start_date_jalali[5:7]) + (12 * (year_different))
-        day_different=int(end_date_jalali[7:])-int(start_date_jalali[7:])
-        if (day_different>16):
-            month_different -=1
-        elif (day_different<-16):
+        year_different = int(end_date_jalali[:4]) - int(start_date_jalali[:4])
+        month_different = int(end_date_jalali[5:7]) - int(start_date_jalali[5:7]) + (12 * (year_different))
+        day_different = int(end_date_jalali[7:]) - int(start_date_jalali[7:])
+        if (day_different > 16):
+            month_different -= 1
+        elif (day_different < -16):
             month_different += 1
-        if (month_different==0):
+        if (month_different == 0):
             month_different += 1
         return month_different

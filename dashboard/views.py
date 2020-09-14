@@ -18,9 +18,12 @@ from rest_framework import generics
 import base64
 from django.core.files.base import ContentFile
 from accounts.utils import Utils
+from rest_framework.decorators import permission_classes
+
 # for load or dump jsons
 import json
 from django.db.models import Case, Value, When, IntegerField
+from .permission import EditDocumentPermission
 
 
 class Dashboard(APIView):
@@ -28,10 +31,13 @@ class Dashboard(APIView):
 
     def get(self, request):
         now = datetime.datetime.now()
-        if self.request.user.is_teacher():
+        if self.request.user.is_student():
+            courses = self.request.user.courses.filter(end_date__gt=now)
+
+        elif self.request.user.is_teacher():
             courses = Course.objects.filter(teacher__id=self.request.user.id, end_date__gt=now)
         else:
-            courses = self.request.user.courses.filter(end_date__gt=now)
+            courses = Course.objects.filter(end_date__gt=now)
         classes = Course_Calendar.objects.filter(
             Q(start_date__day=now.day) | Q(start_date__day=now.day + 1), course__in=courses)
         if classes.count() > 0:
@@ -238,11 +244,17 @@ class GetLessonsViewSet(viewsets.ModelViewSet):
         query = Q()
         if self.request.GET.get("lesson"):
             query &= getAllLessons(self.request.GET.get("lesson"))
-        if self.request.user.is_teacher():
+
+        if self.request.user.is_student():
+            courses = self.request.user.courses.filter(query)
+        elif self.request.user.is_teacher():
             query &= Q(teacher__id=self.request.user.id)
             courses = Course.objects.filter(query)
         else:
-            courses = self.request.user.courses.filter(query)
+            now = datetime.datetime.now()
+            query &= Q(end_date__gt=now)
+            courses = Course.objects.filter(query)
+
         courses = courses.order_by('-end_date')
         return courses
 
@@ -316,10 +328,15 @@ class FileManager(viewsets.ModelViewSet):
     serializer_class = DocumentSerializer
     lookup_field = 'code'
 
+    def get_permissions(self):
+        if self.action != 'retrieve':
+            self.permission_classes = [EditDocumentPermission, ]
+        return super(FileManager, self).get_permissions()
+
     def retrieve(self, request, *args, **kwargs):
         instance = self.get_object()
         try:
-            if not request.user.is_teacher():
+            if request.user.is_student():
                 request.user.courses.get(id=instance.id)
         except:
             if request.accepted_renderer.format == 'html':
@@ -331,19 +348,7 @@ class FileManager(viewsets.ModelViewSet):
 
     def create(self, request, *args, **kwargs):
         # request and the course should be for a same teacher
-        try:
-            course = Course.objects.get(code=self.kwargs['code'])
-            if course.teacher != request.user:
-                if request.accepted_renderer.format == 'html':
-                    return redirect('dashboard')
-                else:
-                    return Response(status=status.HTTP_400_BAD_REQUEST)
-        except:
-            if request.accepted_renderer.format == 'html':
-                return redirect('dashboard')
-            else:
-                return Response(status=status.HTTP_400_BAD_REQUEST)
-
+        course = Course.objects.get(code=self.kwargs['code'])
         request.data.update({"sender": request.user.id, "course": course.id})  # change because we handle course with id
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -351,6 +356,7 @@ class FileManager(viewsets.ModelViewSet):
         return Response({"success": "yes"}, status=status.HTTP_200_OK)
 
 
+@permission_classes((EditDocumentPermission,))
 class UpdateFile(viewsets.ModelViewSet):
     renderer_classes = [BrowsableAPIRenderer, JSONRenderer]
     serializer_class = DocumentSerializer
@@ -362,50 +368,19 @@ class UpdateFile(viewsets.ModelViewSet):
         return queryset
 
     def update(self, request, *args, **kwargs):
-        # request and the course should be for a same teacher
-        try:
-            course = Course.objects.get(code=self.kwargs['code'])
-            if course.teacher != request.user:
-                if request.accepted_renderer.format == 'html':
-                    return redirect('dashboard')
-                else:
-                    return Response(status=status.HTTP_400_BAD_REQUEST)
-        except:
-            if request.accepted_renderer.format == 'html':
-                return redirect('dashboard')
-            else:
-                return Response(status=status.HTTP_400_BAD_REQUEST)
-        # request.data['course'] = course.code
-        # request.data['sender'] = request.user.id
         # we can set course and sender here
         instance = self.get_queryset()
-
         # make comment !
         # if request.data['upload_document'] == '':
         #     request.data['upload_document'] = instance.upload_document
-
         serializer = self.get_serializer(instance, data=request.data, partial=True)
         serializer.is_valid(raise_exception=True)
         self.perform_update(serializer)
-
         if getattr(instance, '_prefetched_objects_cache', None):
             instance._prefetched_objects_cache = {}
-
         return Response({"success": "yes"}, status=status.HTTP_200_OK)
 
     def destroy(self, request, *args, **kwargs):
-        try:
-            course = Course.objects.get(code=self.kwargs['code'])
-            if course.teacher != request.user:
-                if request.accepted_renderer.format == 'html':
-                    return redirect('dashboard')
-                else:
-                    return Response(status=status.HTTP_400_BAD_REQUEST)
-        except:
-            if request.accepted_renderer.format == 'html':
-                return redirect('dashboard')
-            else:
-                return Response(status=status.HTTP_400_BAD_REQUEST)
         instance = self.get_queryset()
         self.perform_destroy(instance)
         return Response({"success": "yes"}, status=status.HTTP_204_NO_CONTENT)
