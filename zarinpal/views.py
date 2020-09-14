@@ -223,7 +223,7 @@ def pay_description(courses_id_list, amount, discount, request):
     elif discount:
         discount_text = TextUtils.replacer(ZarinPal.dicountText.value, [discount.code])
     else:
-        discount_text = None
+        discount_text = ''
     text = TextUtils.replacer(text, [TextUtils.convert_list_to_string(
         list(Course.objects.filter(id__in=courses_id_list).values_list('title', flat=True))), discount_text,
         request.user.get_full_name()])

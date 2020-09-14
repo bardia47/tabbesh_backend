@@ -135,7 +135,7 @@
             </div>
         </div>
         <hr>
-        {% is_teacher request.user as teacher %}
+        {% is_student request.user as student %}
         <!-- Course cards -->
         <div class="row">
             <div class="col-md-12 card-section">
@@ -152,15 +152,15 @@
                         <div class="col-md-12">
                             <p class="text-center" style="font-size: 20px;">امروز و فردا کلاسی نداری :(</p>
                         </div>
-                        {% if not teacher %}
-                        <div class="col-md-12 my-n2">
-                            <p class="text-center" style="font-family: 'Vazir_Light'; font-size: 15px;">
-                                می خوای کلاس جدید ثبت نام کنی ؟
-                            </p>
-                            <a class="btn btn-dark text-white mb-2" href="{% url 'shopping' %}">آره بزن بریم </a>
-                        </div>
-                        </div>
-                       {% endif %}
+                        {% if student %}
+                            <div class="col-md-12 my-n2">
+                                <p class="text-center" style="font-family: 'Vazir_Light'; font-size: 15px;">
+                                    می خوای کلاس جدید ثبت نام کنی ؟
+                                </p>
+                                <a class="btn btn-dark text-white mb-2" href="{% url 'shopping' %}">آره بزن بریم </a>
+                            </div>
+                            </div>
+                        {% endif %}
                 {% endif %}
                 <!-- Loop for Courses  -->
                 {% for klass in classes %}
@@ -218,19 +218,20 @@
                                             بریم سر کلاس
                                         </a>
                                     {% else %}
-                                        {% if not teacher %}
-                                        <a class="btn pt-2 btn-dark" href="lessons/files/{{ klass.course.code }}">
-                                            <img src="{% static 'home/images/icons/document.svg' %}"
-                                                 alt="button link to class">
-                                            برو جزوتو ببین
-                                        </a>
+                                        {% if student %}
+                                            <a class="btn pt-2 btn-dark" href="lessons/files/{{ klass.course.code }}">
+                                                <img src="{% static 'home/images/icons/document.svg' %}"
+                                                     alt="button link to class">
+                                                برو جزوتو ببین
+                                            </a>
                                         {% else %}
 
-                                        <a class="btn pt-2 btn-dark" href="lessons/teacher_course_panel/{{ klass.course.code }}">
-                                            <img src="{% static 'home/images/icons/document.svg' %}"
-                                                 alt="button link to class">
-                                           پنل اساتید
-                                        </a>
+                                            <a class="btn pt-2 btn-dark"
+                                               href="lessons/teacher_course_panel/{{ klass.course.code }}">
+                                                <img src="{% static 'home/images/icons/document.svg' %}"
+                                                     alt="button link to class">
+                                                پنل اساتید
+                                            </a>
                                         {% endif %}
                                     {% endif %}
                                 </div>
