@@ -6,7 +6,7 @@ from .models import *
 from jalali_date.admin import ModelAdminJalaliMixin, StackedInlineJalaliMixin, TabularInlineJalaliMixin
 from jalali_date import datetime2jalali, date2jalali
 from django.contrib.auth.models import Group
-from accounts.enums import RoleCodes
+from accounts.enums import RoleCodes, AdminEnums
 from django.contrib import messages
 from django.contrib.admin.options import InlineModelAdmin
 import datetime
@@ -15,6 +15,7 @@ from django.utils.safestring import mark_safe
 from django import forms
 from django.forms.models import BaseInlineFormSet
 from .utils import Utils
+from django.db.models import Max
 
 
 class CourseInline(admin.StackedInline):
@@ -71,6 +72,13 @@ class EventInline(admin.TabularInline):
         return False
 
 
+class EventRelatedInline(EventInline):
+    fields = ('user', 'is_active', 'type', 'change_date_decorated',)
+    verbose_name_plural = "رویداد های مرتبط"
+    verbose_name = "رویداد های مرتبط"
+    fk_name = 'related_user'
+
+
 class UserCreationForm(forms.ModelForm):
     GENDERS = [(True, "پسر"), (False, "دختر")]
     password1 = forms.CharField(label='رمز', widget=forms.PasswordInput)
@@ -121,31 +129,59 @@ class UserChangeForm(UserCreationForm):
 
 
 class UserAdmin(BaseUserAdmin):
-    readonly_fields = ('date_joined_decorated',)
+    class Media:
+        js = (
+            '//ajax.googleapis.com/ajax/libs/jquery/1.8.1/jquery.min.js',  # jquery
+            'custom_admin/js/user-admin.js'
+        )
 
+    readonly_fields = ('date_joined_decorated', 'send_password_sms')
     form = UserChangeForm
     add_form = UserCreationForm
-    list_display = ('username', 'get_student_grade', 'get_full_name', 'phone_number', 'is_active')
+    list_display = ('username', 'student_grade', 'get_full_name', 'phone_number', 'is_active')
     list_filter = ('is_active',)
-
+    search_fields = ['last_name', 'phone_number', 'grades__title']
     fieldsets = (
         (None, {'fields': ('username', 'email', 'date_joined_decorated')}),
-        ('در صورت نیاز رمز جدید را وارد کنید', {'fields': ('password1', 'password2',)}),
+        ('ارسال رمز به کاربر', {'fields': ('send_password_sms',)}),
         ('اطلاعات شخص', {'fields': (
             'first_name', 'last_name', 'avatar', 'grades', 'national_code', 'phone_number', 'address', 'city',
             'gender')}),
         ('دسترسی ها', {'fields': ('is_active', "role")}),
         ('اعتبار', {'fields': ('credit',)}),
     )
-    add_fieldsets = fieldsets
-    search_fields = ['last_name', 'phone_number', 'grades__title']
-    ordering = ('username',)
+    add_fieldsets = (
+        (None, {'fields': ('username', 'email', 'date_joined_decorated')}),
+        ('رمز عبور', {'fields': ('password1', 'password2',)}),
+        ('اطلاعات شخص', {'fields': (
+            'first_name', 'last_name', 'avatar', 'grades', 'national_code', 'phone_number', 'address', 'city',
+            'gender')}),
+        ('دسترسی ها', {'fields': ('is_active', "role")}),
+        ('اعتبار', {'fields': ('credit',)}),
+    )
     inlines = [
-        CourseInline, PayHistoryInline, EventInline
+        CourseInline, PayHistoryInline, EventInline, EventRelatedInline
     ]
 
     def get_queryset(self, request):
-        return User.objects.exclude(role__code=RoleCodes.TEACHER.value)
+        return User.objects.exclude(role__code=RoleCodes.TEACHER.value).annotate(
+            _student_grade=Max('grades__code')
+        )
+
+    def get_ordering(self, request):
+        return ['_student_grade']
+
+    def student_grade(self, obj):
+        return obj.student_grade()
+
+    student_grade.admin_order_field = '_student_grade'
+
+    def send_password_sms(self, obj):
+        html = AdminEnums.forgetPasswordHtml.value
+        html = html.replace('{0}', obj.phone_number)
+        return mark_safe(html)
+
+    send_password_sms.short_description = "ارسال فراموشی رمز"
 
 
 class TeacherUser(User):
@@ -160,6 +196,9 @@ class TeacherAdmin(UserAdmin):
 
     def get_queryset(self, request):
         return User.objects.filter(role__code=RoleCodes.TEACHER.value)
+
+    def get_ordering(self, request):
+        return ['username']
 
 
 class CourseCalendarFormSetInline(forms.models.BaseInlineFormSet):
@@ -245,7 +284,7 @@ class CourseAdmin(ModelAdminJalaliMixin, admin.ModelAdmin):
         return super(CourseAdmin, self).render_change_form(request, context, *args, **kwargs)
 
     def student_link(self, obj):
-        return mark_safe('<a href="{}">{}</a>'.format(
+        return mark_safe('<a href="{0}">{1}</a>'.format(
             reverse("teacher_course_panel", args=(obj.code,)),
             "پنل اساتید"
         ))
@@ -320,20 +359,12 @@ class DocumentAdmin(admin.ModelAdmin):
 
 
 class PayHistoryAdmin(admin.ModelAdmin):
-    list_display = ['purchaser_link', 'amount', 'is_successful', 'get_submit_date_decorated', 'payment_code',
+    list_display = ['purchaser_link', 'amount', 'is_successful', 'submit_date_decorated', 'payment_code',
                     'get_courses']
     fields = (
-        'purchaser', 'amount', 'is_successful', 'get_submit_date_decorated', 'payment_code', 'get_courses')
+        'purchaser', 'amount', 'is_successful', 'submit_date_decorated', 'payment_code', 'get_courses')
     exclude = ['courses', ]
     readonly_fields = ('purchaser_link',)
-
-    def get_submit_date_decorated(self, obj):
-        if obj.submit_date:
-            return datetime2jalali(obj.submit_date).strftime('%y/%m/%d , %H:%M:%S')
-        else:
-            "-"
-
-    get_submit_date_decorated.short_description = 'تاریخ ثبت'
 
     def has_change_permission(self, request, obj=None):
         return False
@@ -345,7 +376,7 @@ class PayHistoryAdmin(admin.ModelAdmin):
         return False
 
     def purchaser_link(self, obj):
-        return mark_safe('<a href="{}">{}</a>'.format(
+        return mark_safe('<a href="{0}">{1}</a>'.format(
             reverse("admin:accounts_user_change", args=(obj.purchaser.pk,)),
             obj.purchaser
         ))
