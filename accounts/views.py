@@ -134,7 +134,7 @@ class ForgetPassword(APIView):
             error = 'شماره تلفن وارد شده در سامانه موجود نمیباشد'
 
         if error is not None:
-            return Response({'error': error}, template_name='accounts/signin.html')
+            return Response({'error': error}, status=status.HTTP_400_BAD_REQUEST, template_name='accounts/signin.html')
         else:
             user1.password = make_password(randPass)
             user1.save()

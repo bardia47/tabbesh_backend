@@ -16,6 +16,7 @@ from tinymce import models as tinymce_models
 from django.core.exceptions import ValidationError
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db.models import Q
+from django.db.models import Max
 
 # import for compress images
 import sys
@@ -102,19 +103,22 @@ class User(AbstractBaseUser, PermissionsMixin):
     def __str__(self):
         return self.get_full_name()
 
-    def get_student_grade(self):
+    def student_grade(self):
         try:
             return self.grades.all().first().title
         except:
             return ""
 
-    get_student_grade.short_description = 'پایه'
+    student_grade.short_description = 'پایه'
 
     def is_teacher(self):
         return self.role.code == RoleCodes.TEACHER.value
 
     def is_admin(self):
         return self.role.code == RoleCodes.ADMIN.value
+
+    def is_student(self):
+        return self.role.code == RoleCodes.STUDENT.value
 
 
 # Roles Model
@@ -333,7 +337,10 @@ class Pay_History(models.Model):
         verbose_name = "سوابق خرید"
 
     def submit_date_decorated(self):
-        return jdatetime.datetime.fromgregorian(datetime=self.submit_date).strftime("%a, %d %b %Y %H:%M:%S")
+        if self.submit_date:
+            return jdatetime.datetime.fromgregorian(datetime=self.submit_date).strftime("%a, %d %b %Y %H:%M:%S")
+        else:
+            "-"
 
     def get_courses(self):
         courses_id_list = self.courses.split()

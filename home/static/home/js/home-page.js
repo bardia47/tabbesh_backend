@@ -46,7 +46,7 @@ function homeCounter() {
                         start: 0,
                         end: counters.student_counter,
                         step: 1,
-                        delay: 200,
+                        delay: 80,
                     });
                     $("#teachersCounter").animationCounter({
                         start: 0,

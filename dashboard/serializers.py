@@ -127,7 +127,7 @@ class ShoppingCourseSerializer(CourseLessonsSerializer):
 
 
 class UserProfileSerializer(JSONFormSerializer, serializers.ModelSerializer):
-    grade = serializers.SerializerMethodField('get_student_grade')
+    grade = serializers.SerializerMethodField('student_grade')
     cityTitle = serializers.SerializerMethodField('get_city_title')
     phone_number = serializers.CharField(read_only=True)
     credit = serializers.IntegerField(read_only=True)
@@ -138,8 +138,8 @@ class UserProfileSerializer(JSONFormSerializer, serializers.ModelSerializer):
                   'last_name', 'username', 'email', 'grade', 'cityTitle', 'gender', 'national_code', 'phone_number',
                   'grades', 'city', 'avatar', 'credit')
 
-    def get_student_grade(self, obj):
-        return obj.get_student_grade()
+    def student_grade(self, obj):
+        return obj.student_grade()
 
     def get_city_title(self, obj):
         try:

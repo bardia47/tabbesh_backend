@@ -61,8 +61,8 @@ function renderLessenCards(courseCards) {
         let buttonToClassPanel = ``;
         let nextClassTemplate = ``;
 
-        // if user is teacher --> show teacher panel otherwise show file manager
-        if ($("#roleStatus").val() === "True") {
+        // if user is student --> show file manager otherwise show teacher panel
+        if ($("#roleStatus").val() === "False") {
             buttonToClassPanel = `
             <button onclick="location.href='teacher_course_panel/${courseCard.code}'" class="btn btn-dark mr-2" type="button">
                 <img src="/static/home/images/icons/teacher-panel.svg" alt="teacher panel" />
