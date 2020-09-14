@@ -145,10 +145,10 @@ function fullDiscountAjax() {
         url: "/most-discounted-courses/",
         type: "GET",
         dataType: "json",
-        cache: false,
 
-        success: function (fullDiscountCourses) {
+        success: function (fullDiscountCourses, hel, xhr) {
             fullDiscountRender(fullDiscountCourses)
+            console.log(xhr.getAllResponseHeaders());
         },
         error: function () {
             conslole.log("بارگذاری پرتخفیف ترین دروس به مشکل خورده است! دوباره امتحان کنید.")

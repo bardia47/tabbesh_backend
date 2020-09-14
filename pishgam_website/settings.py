@@ -64,6 +64,7 @@ LOGGING = {
 STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.ManifestStaticFilesStorage'
 SESSION_COOKIE_SECURE = False
 
+
 # Application definition
 
 INSTALLED_APPS = [
@@ -84,7 +85,19 @@ INSTALLED_APPS = [
     'drf_yasg',
 ]
 
+# MEMCACHE_HOSTS = ['192.168.101.1:11211']
+
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
+        'LOCATION': [
+            '127.0.0.1:11211',
+            '0.0.0.0:11211',
+        ]
+    }
+}
 MIDDLEWARE = [
+    'django.middleware.cache.UpdateCacheMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -92,7 +105,10 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    # 'django.middleware.common.CommonMiddleware',
+    # 'django.middleware.cache.FetchFromCacheMiddleware',
 ]
+
 
 ROOT_URLCONF = 'pishgam_website.urls'
 
@@ -119,25 +135,28 @@ WSGI_APPLICATION = 'pishgam_website.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-#         'NAME': 'tbsh981221',
-#
-#         'PORT': '5432',
-#     }
-# }
-
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'tbsh990426',
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'tbsh981221',
         'USER': 'tbsh',
-        'PASSWORD': 'Tabesh1399Pishgam',
+        'PASSWORD': 'Tabesh1378Pishgam',
         'HOST': 'localhost',
-        'PORT': '3306',
+        'PORT': '5432',
     }
+
 }
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.mysql',
+#         'NAME': 'tbsh990426',
+#         'USER': 'tbsh',
+#         'PASSWORD': 'Tabesh1399Pishgam',
+#         'HOST': 'localhost',
+#         'PORT': '3306',
+#     }
+# }
 
 # Password validation
 # https://docs.djangoproject.com/en/2.2/ref/settings/#auth-password-validators

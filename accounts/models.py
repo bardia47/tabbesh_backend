@@ -1,8 +1,11 @@
+from django.core.cache import cache
 import pytz
 from django.db import models
 from django.core.mail import send_mail
 from django.contrib.auth.base_user import AbstractBaseUser
 from django.contrib.auth.models import PermissionsMixin
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 from pygments.lexers import get_all_lexers
 from pygments.styles import get_all_styles
 from django.template.defaultfilters import default
@@ -417,3 +420,10 @@ class Support(models.Model):
         return jdatetime.datetime.fromgregorian(datetime=self.update_date).strftime("%a, %d %b %Y %H:%M:%S")
 
     update_date_decorated.short_description = 'تاریخ آخرین تغییر'
+
+
+@receiver(post_save, sender=Support)
+def clear_cache(sender, instance, **kwargs):
+    print('bye')
+    print(cache.keys('*'))
+    # cache.delete('list')

@@ -1,7 +1,11 @@
 from django.shortcuts import render, redirect
 from django.db.models import Count
+from django.utils.decorators import method_decorator
+from django.views.decorators.cache import cache_page, cache_control
+from django.views.decorators.csrf import csrf_exempt, csrf_protect
+from django.views.decorators.vary import vary_on_cookie, vary_on_headers
 from rest_framework import status, generics
-from rest_framework.permissions import AllowAny,IsAuthenticated
+from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.renderers import BrowsableAPIRenderer, JSONRenderer, TemplateHTMLRenderer
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -15,6 +19,7 @@ def main_page(request):
         return redirect('dashboard')
     else:
         return redirect('home')
+
 
 # def home(request):
 #     return render(request, 'home/home.html')
@@ -48,6 +53,7 @@ class Counter(APIView):
         teacher_counter = User.objects.filter(role__code=RoleCodes.TEACHER.value).count()
         data = {"course_counter": course_counter, "student_counter": student_counter,
                 "teacher_counter": teacher_counter}
+        print('helllllll')
         return Response(data)
 
 
@@ -80,7 +86,8 @@ class BestSellingCourses(generics.ListAPIView):
         count = Course.objects.all().count()
         # if courses are few return all of them
         # this is forbiden code
-        course_order = Course.objects.filter(end_date__gt=time_now).exclude(code=PrivateCourse.MEMBERSHIP.value).annotate(number=Count('user')).order_by('-number')
+        course_order = Course.objects.filter(end_date__gt=time_now).exclude(
+            code=PrivateCourse.MEMBERSHIP.value).annotate(number=Count('user')).order_by('-number')
         # sorted courses by number of students
         if count > 100:
             # the highest size of query for sending is 14
@@ -90,6 +97,11 @@ class BestSellingCourses(generics.ListAPIView):
             return course_order[:2 + int(count / 10)]
 
 
+@method_decorator(cache_page(60 * 15), name='list')
+@method_decorator(csrf_exempt, name='list')
+# @method_decorator(cache_control(private=False), name='list')
+# @method_decorator(vary_on_headers('User-Agent'), name='list')
+# @vary_on_headers('User-Agent' )
 class MostDiscountedCourses(generics.ListAPIView):
     renderer_classes = [BrowsableAPIRenderer, JSONRenderer]
     permission_classes = (AllowAny,)
@@ -97,17 +109,20 @@ class MostDiscountedCourses(generics.ListAPIView):
     pagination_class = None
 
     def get_queryset(self):
+        print(self.request.headers)
         time_now = datetime.datetime.now()
-        # get those discounts that the time of them reach
+        print('hello')
+        # gete those discounts that the time of them reach
         query = Q(start_date__lte=time_now)
         query &= Q(code__isnull=True)
         query &= (Q(end_date__gte=time_now) | Q(end_date=None))
         query &= ~(Q(courses=None))
-        #this is forbiden code
+        # this is forbiden code
         query &= (~Q(code=PrivateCourse.MEMBERSHIP.value))
         discounts = Discount.objects.filter(query)
         # get those courses that have discounts now
-        course = Course.objects.filter(discount__in=discounts).order_by('-discount__percent', F('discount__end_date').asc(nulls_last=True))
+        course = Course.objects.filter(discount__in=discounts).order_by('-discount__percent',
+                                                                        F('discount__end_date').asc(nulls_last=True))
         if not course.exists():
             try:
                 query = Q(start_date__lte=time_now)
@@ -119,6 +134,12 @@ class MostDiscountedCourses(generics.ListAPIView):
             except:
                 return None
         return course
+
+    # @vary_on_headers
+    # @cache_control(private=True)
+    # @csrf_exempt
+    # @cache_page(60 * 15)
+    # @csrf_protect
 
 
 class NewCourseHome(generics.ListAPIView):
@@ -145,7 +166,7 @@ class SearchHome(APIView):
         # get those discounts that the time of them reach
         query = Q(end_date__gte=time_now)
         query &= (Q(title__icontains=title) | Q(teacher__last_name__icontains=title))
-        #this is forbiden code
+        # this is forbiden code
         query &= (~Q(code=PrivateCourse.MEMBERSHIP.value))
         course = Course.objects.filter(query).order_by('-end_date')[:3]
         return course
