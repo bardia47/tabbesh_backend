@@ -115,7 +115,10 @@ function fileManagerRender(code) {
 function addDocumentConfigure() {
     // fire modal with button
     $("#addFileButton").click(function () {
+        // reset inputs data
         uploadModalAddOrEditStatus.val("add");
+        uploadModalTitle.val("");
+        uploadModalDescription.val("");
 
         // configure modal for edit document
         uploadModal.find(".modal-title").text("اضافه کردن جزوه ی جدید");
@@ -130,6 +133,7 @@ function addDocumentConfigure() {
 
 function editDocumentsConfigure() {
     $(".edit-document").click(function () {
+        // fill inputs data
         uploadModalTitle.val($(this).data("document-title"));
         uploadModalDescription.val($(this).data("description"));
         uploadModalDocumentId.val($(this).data("id"));
