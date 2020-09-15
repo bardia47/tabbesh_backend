@@ -83,6 +83,7 @@ INSTALLED_APPS = [
     'django_jalali',
     'tinymce',
     'drf_yasg',
+    # 'django_clear_memcache',
 ]
 
 # MEMCACHE_HOSTS = ['192.168.101.1:11211']
@@ -97,7 +98,7 @@ CACHES = {
     }
 }
 MIDDLEWARE = [
-    'django.middleware.cache.UpdateCacheMiddleware',
+    # 'django.middleware.cache.UpdateCacheMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',

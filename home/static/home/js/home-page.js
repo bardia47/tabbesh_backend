@@ -103,12 +103,13 @@ function teacherListRender(teachersList) {
 
 
 function bestSellerAjax() {
+    // response.setHeader("Cache-Control", "public");
+    // response.setHeader("Pragma", "no-cache");
+    // response.setDateHeader("Expires", 9000);
     $.ajax({
         url: "/best-selling-courses/",
         type: "GET",
         dataType: "json",
-        cache: false,
-
         success: function (bestSellerCourses) {
             bestSellerRender(bestSellerCourses)
         },
@@ -141,10 +142,17 @@ function bestSellerRender(bestSellerCourses) {
 
 
 function fullDiscountAjax() {
+    // response.setHeader("Cache-Control", "public");
+    // response.setHeader("Pragma", "no-cache");
+    // response.setDateHeader("Expires", 9000);
     $.ajax({
         url: "/most-discounted-courses/",
         type: "GET",
         dataType: "json",
+        headers :{
+            "Cache-Control": "max-age=0"
+        },
+        // clearCache : true ,
 
         success: function (fullDiscountCourses, hel, xhr) {
             fullDiscountRender(fullDiscountCourses)

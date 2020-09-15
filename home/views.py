@@ -13,7 +13,6 @@ from django.db.models import F
 from accounts.enums import *
 from home.serializers import *
 
-
 def main_page(request):
     if request.user.is_authenticated:
         return redirect('dashboard')
@@ -96,11 +95,10 @@ class BestSellingCourses(generics.ListAPIView):
             # return a query that size of it suitable with count
             return course_order[:2 + int(count / 10)]
 
-
-@method_decorator(cache_page(60 * 15), name='list')
-@method_decorator(csrf_exempt, name='list')
+# @method_decorator(csrf_exempt, name='list')
+# @method_decorator(cache_page(60 * 15, key_prefix='hello000'), name='list')
 # @method_decorator(cache_control(private=False), name='list')
-# @method_decorator(vary_on_headers('User-Agent'), name='list')
+# @method_decorator(cache_control(private=False), name='list')
 # @vary_on_headers('User-Agent' )
 class MostDiscountedCourses(generics.ListAPIView):
     renderer_classes = [BrowsableAPIRenderer, JSONRenderer]
