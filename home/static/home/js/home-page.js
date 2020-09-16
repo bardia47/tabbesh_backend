@@ -33,7 +33,9 @@ function homeCounter() {
                 url: "/counter/",
                 type: "GET",
                 dataType: "json",
-                cache: false,
+                headers: {
+                    "Cache-Control": "max-age=0"
+                },
 
                 success: function (counters) {
                     $("#coursesCounter").animationCounter({
@@ -70,7 +72,9 @@ function teacherListAjax() {
         url: "/all-teacher/",
         type: "GET",
         dataType: "json",
-        cache: false,
+        headers: {
+            "Cache-Control": "max-age=0"
+        },
         success: function (teachersList) {
             teacherListRender(teachersList)
         },
@@ -110,6 +114,9 @@ function bestSellerAjax() {
         url: "/best-selling-courses/",
         type: "GET",
         dataType: "json",
+        headers: {
+            "Cache-Control": "max-age=0"
+        },
         success: function (bestSellerCourses) {
             bestSellerRender(bestSellerCourses)
         },
@@ -149,10 +156,9 @@ function fullDiscountAjax() {
         url: "/most-discounted-courses/",
         type: "GET",
         dataType: "json",
-        headers :{
+        headers: {
             "Cache-Control": "max-age=0"
         },
-        // clearCache : true ,
 
         success: function (fullDiscountCourses, hel, xhr) {
             fullDiscountRender(fullDiscountCourses)
@@ -250,8 +256,9 @@ function supportAjax() {
         url: "/support/",
         type: "GET",
         dataType: "json",
-        cache: false,
-
+        headers :{
+            "Cache-Control": "max-age=0"
+        },
         success: function (supports) {
             supportRender(supports)
         },
