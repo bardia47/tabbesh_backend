@@ -99,3 +99,5 @@ migrate on mysql for some features
 
 pip install django_mysql
 mysql database is now Available on drive
+
+pip install Unidecode

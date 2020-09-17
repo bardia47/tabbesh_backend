@@ -109,14 +109,15 @@ class EditProfile(APIView):
                 return Response()
         # if request sent from app, use base64
         if method == 'changeAvatar':
-            try:
-                file = request.data['file']
-                file_name = request.data['file_name']
-                format, imgstr = file.split(';base64,')
-                ext = format.split('/')[-1]
-                avatar = ContentFile(base64.b64decode(imgstr), name=file_name + "." + ext)
-            except:
-                avatar = Utils.compressImage(request.FILES.get("file"))
+            #this is for  flutter
+            # try:
+            #     file = request.data['file']
+            #     file_name = request.data['file_name']
+            #     format, imgstr = file.split(';base64,')
+            #     ext = format.split('/')[-1]
+            #     avatar = ContentFile(base64.b64decode(imgstr), name=file_name + "." + ext)
+            # except:
+            avatar = Utils.compressImage(request.FILES.get("file"))
 
             if avatar:
                 if not request.user.avatar.url.startswith("/media/defaults"):

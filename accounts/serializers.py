@@ -4,14 +4,53 @@ from rest_framework import serializers
 from html_json_forms.serializers import JSONFormSerializer
 from .enums import Sms
 from .webServices import SmsWebServices
-
+import re
 from pip._vendor.pkg_resources import require
-
+from unidecode import unidecode
 from django.contrib.auth.hashers import make_password
 import random
 
+class UserBaseSerializer(JSONFormSerializer, serializers.ModelSerializer):
 
-class UserSerializer(JSONFormSerializer, serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ('username', 'first_name',
+                 'last_name', 'national_code',)
+
+    def validate_username(self, value):
+        if not re.match('^[a-zA-Z0-9]+$', value):
+            raise serializers.ValidationError(' نام کاربری تنها باید شامل حروف و اعداد انگلیسی باشد.')
+        user = User.objects.filter(Q(username=value.lower()))
+        if self.instance is not None:
+            user = user.exclude(id=self.instance.id)
+        if user.exists():
+            raise serializers.ValidationError('کاربر با این نام کاربری از قبل موجود است.')
+        return value.lower()
+
+    def validate_first_name(self, value):
+        if not re.match('^[\u0600-\u06FF\s]+$', value):
+            raise serializers.ValidationError(' تنها حروف فارسی مجاز است.')
+        return value
+
+    def validate_last_name(self, value):
+        if not re.match('^[\u0600-\u06FF\s]+$', value):
+            raise serializers.ValidationError(' تنها حروف فارسی مجاز است.')
+        return value
+
+    def validate_national_code(self, value):
+        value = unidecode(value)
+        if not re.match('^\d{10}$', value):
+            raise serializers.ValidationError('کد ملی وارد شده معتبر نمی باشد.')
+        check = int(value[9])
+        sum = 0
+        for i in range(9):
+            sum += int(value[i]) * (10 - i)
+        sum %= 11
+        if not ( (sum < 2 and check == sum) or (sum >= 2 and check + sum == 11)):
+            raise serializers.ValidationError('کد ملی وارد شده معتبر نمی باشد.')
+        return value
+
+class UserSerializer(UserBaseSerializer):
     # introducer is extra field
     introducer = serializers.CharField(max_length=12, write_only=True, required=False, allow_blank=True,
                                        allow_null=True)
@@ -24,11 +63,7 @@ class UserSerializer(JSONFormSerializer, serializers.ModelSerializer):
         fields = ('username', 'first_name',
                   'last_name', 'grades', 'gender', 'phone_number', 'password', 'role', 'city', 'introducer')
 
-    def validate_username(self, value):
-        user = User.objects.filter(Q(username=value.lower()))
-        if user.exists():
-            raise serializers.ValidationError('کاربر با این نام کاربری از قبل موجود است.')
-        return value.lower()
+
 
     def validate_introducer(self, value):
         if value and value != '':

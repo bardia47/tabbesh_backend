@@ -126,7 +126,7 @@ class ShoppingCourseSerializer(CourseLessonsSerializer):
         return None
 
 
-class UserProfileSerializer(JSONFormSerializer, serializers.ModelSerializer):
+class UserProfileSerializer(UserBaseSerializer):
     grade = serializers.SerializerMethodField('student_grade')
     cityTitle = serializers.SerializerMethodField('get_city_title')
     phone_number = serializers.CharField(read_only=True)
@@ -146,12 +146,6 @@ class UserProfileSerializer(JSONFormSerializer, serializers.ModelSerializer):
             return obj.city.title
         except:
             return ""
-
-    def validate_username(self, value):
-        user = User.objects.filter(Q(username=value.lower())).exclude(id=self.instance.id)
-        if user.exists():
-            raise serializers.ValidationError('کاربر با این نام کاربری از قبل موجود است.')
-        return value.lower()
 
 
 # for get method
