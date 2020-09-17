@@ -145,6 +145,7 @@ class UserAdmin(BaseUserAdmin):
     fieldsets = (
         (None, {'fields': ('username', 'email', 'date_joined_decorated')}),
         ('ارسال رمز به کاربر', {'fields': ('send_password_sms',)}),
+        ('رمز عبور (در صورت ارسال نشدن رمز از این گزینه استفاده کنید)', {'fields': ('password1', 'password2',)}),
         ('اطلاعات شخص', {'fields': (
             'first_name', 'last_name', 'avatar', 'grades', 'national_code', 'phone_number', 'address', 'city',
             'gender')}),
