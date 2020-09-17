@@ -25,10 +25,10 @@
                     {% csrf_token %}
                     <img src="{{ user.avatar }}" id="avatar" class="avatar img-circle img-thumbnail" alt="avatar">
                     <div class="custom-file w-100 mt-2" lang="fa">
-                        <input type="file" id="file" name="file" class="custom-file-input" accept="image/*">
+                        <input type="file" id="file" name="file" class="custom-file-input" accept="image/*" required/>
                         <label class="custom-file-label text-left" for="file">روی آپلود کلیک کنید...</label>
                     </div>
-                    <input type="submit" name="upload" class="btn btn-primary my-2" value="تغییر عکس پروفایل">
+                    <input type="submit" name="upload" class="btn btn-primary my-2" value="تغییر عکس پروفایل" >
                     <hr>
                 </form>
             </div>

@@ -39,6 +39,8 @@ class UserBaseSerializer(JSONFormSerializer, serializers.ModelSerializer):
 
     def validate_national_code(self, value):
         # convert persian number to english
+        if value is None:
+            return value
         value = unidecode(value)
         if not re.match('^\d{10}$', value):
             raise serializers.ValidationError('کد ملی وارد شده معتبر نمی باشد.')

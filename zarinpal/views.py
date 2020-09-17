@@ -101,6 +101,8 @@ class Verify(APIView):
     def get(self, request):
         try:
             new_pay = Pay_History.objects.filter(purchaser=request.user, submit_date__isnull=True).first()
+            if new_pay is None:
+                raise Exception('تراکنش انجام شده')
         except:
             if request.accepted_renderer.format == 'html':
                 return render(request, 'dashboard/success_shopping.html', {'RefID': "تراکنش انجام شده"})
@@ -136,7 +138,7 @@ class Verify(APIView):
                         logger.error("danger: " + sendSms)
                     del request.session['event_discount']
                 except Exception as e:
-                    logger.error("danger: " + e)
+                    logger.error("this pay don't have event")
                 if request.accepted_renderer.format == 'html':
                     return render(request, 'dashboard/success_shopping.html', {'RefID': str(result.RefID)})
                 return Response({'RefID': str(result.RefID)})
