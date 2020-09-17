@@ -112,7 +112,8 @@
 
 <!-- ورود و ثبت نام نسخه ی گوشی -->
 <div class="container text-center mobile-version ">
-    <img class="text-center" src="{% static "home/images/home-page/mobile-poster.svg" %}" width="250" height="250">
+    <img class="text-center" src="{% static "home/images/home-page/mobile-poster.svg" %}" width="250" height="250"
+         alt="home poster mobile version">
     <h1 class="h-header-mobile">حس خوب</h1>
     <h2 class="h-header-mobile">
         <span style="color: #ffc109;">آنلاین</span>
@@ -127,18 +128,18 @@
 <!-- چرا تابش -->
 <div class="container mt-5 desktop-why" id="why-choose-us">
     <div class="row justify-content-center">
-            <span>
-                <h1 class="mobile-font"><img class="mr-3 why-img"
-                                             src="{% static "home/images/home-page/icons/student.svg" %}" width="90">چرا تابش؟
-                </h1>
-            </span>
+        <h1 class="mobile-font">
+            <img class="mr-3 why-img"
+                 src="{% static "home/images/home-page/icons/student.svg" %}" width="90" alt="student icon">
+            چرا تابش؟
+        </h1>
     </div>
     <div class="row justify-content-center">
 
         <div class="col-md-3 mb-2 w-75">
             <div class="box-card why-margin">
                 <div class="row justify-content-center">
-                    <img src="{% static "home/images/home-page/icons/teaching.svg" %}" width="80">
+                    <img src="{% static "home/images/home-page/icons/teaching.svg" %}" width="80" alt="teacher-icon">
                 </div>
                 <div class="row justify-content-center">
                     <h5 class="mt-3 px-4 text-center">
@@ -153,7 +154,7 @@
         <div class="col-md-3 mb-2 w-75">
             <div class="box-card why-margin">
                 <div class="row justify-content-center">
-                    <img src="{% static "home/images/home-page/icons/advisor.svg" %}" width="90">
+                    <img src="{% static "home/images/home-page/icons/advisor.svg" %}" width="90" alt="advisor icon">
                 </div>
                 <div class="row justify-content-center">
                     <h5 class="mt-4 px-4 text-center">
@@ -166,7 +167,7 @@
         <div class="col-md-3 mb-2 w-75">
             <div class="box-card why-margin">
                 <div class="row justify-content-center">
-                    <img src="{% static "home/images/home-page/icons/discount.svg" %}" width="100">
+                    <img src="{% static "home/images/home-page/icons/discount.svg" %}" width="100" alt="discount icon">
                 </div>
                 <div class="row justify-content-center">
                     <h5 class="mt-3 px-4 text-center">
@@ -179,7 +180,8 @@
         <div class="col-md-3 mb-2 w-75">
             <div class="box-card why-margin">
                 <div class="row justify-content-center">
-                    <img src="{% static "home/images/home-page/icons/subscription.svg" %}" width="90">
+                    <img src="{% static "home/images/home-page/icons/subscription.svg" %}" width="90"
+                         alt="content icon">
                 </div>
                 <div class="row justify-content-center text-center">
                     <h5 class="mt-3 px-4">
@@ -221,9 +223,11 @@
     <div class="row justify-content-center ">
 
         <h1 class="text-center mobile-font">
-            <img class="mr-3 counter-img" src="{% static "home/images/home-page/icons/counter.svg" %}" width="60">
+            <img class="mr-3 counter-img" src="{% static "home/images/home-page/icons/counter.svg" %}" width="60"
+                 alt="counter icon">
             شمارشگر تابش
-            <img class="ml-3 counter-img" src="{% static "home/images/home-page/icons/counter.svg" %}" width="60">
+            <img class="ml-3 counter-img" src="{% static "home/images/home-page/icons/counter.svg" %}" width="60"
+                 alt="counter icon">
         </h1>
 
 
@@ -231,21 +235,22 @@
             <div class="row align-items-center">
 
                 <div class="col-md-4 mt-2 mb-2 text-center">
-                    <img class="counters-img" src="{% static "home/images/home-page/icons/book.svg" %}" width="200">
+                    <img class="counters-img" src="{% static "home/images/home-page/icons/book.svg" %}" width="200"
+                         alt="books icon">
                     <h3 class="h-counters">دوره ها</h3>
                     <h2 id="coursesCounter" class="h2 mt-3"></h2>
                 </div>
 
                 <div class="col-md-4 mt-2 mb-2 text-center">
                     <img class="counters-img" src="{% static "home/images/home-page/icons/students.svg" %}"
-                         width="200">
+                         width="200" alt="students icon">
                     <h3 class="h-counters">دانش آموزان</h3>
                     <h2 id="studentsCounter" class="h2 mt-3"></h2>
                 </div>
 
                 <div class="col-md-4 mt-2 mb-2 text-center">
                     <img class="counters-img" src="{% static "home/images/home-page/icons/teachers.svg" %}"
-                         width="200">
+                         width="200" alt="">
                     <h3 class="h-counters">اساتید</h3>
                     <h2 id="teachersCounter" class="h2 mt-2"></h2>
                 </div>
@@ -273,8 +278,8 @@
             <div class="card shadow">
                 <div class="card-body">
                     <h1 class="mt-3 ml-4 mobile-font">
-                        <img class=" mobile-img" src="{% static "home/images/home-page/icons/sale.svg" %}"
-                             width="50">
+                        <img class="mobile-img" src="{% static "home/images/home-page/icons/sale.svg" %}"
+                             width="50" alt="new course icon">
                         جدید ترین دوره ها
                     </h1>
                     <hr>
@@ -296,11 +301,9 @@
             <div class="card shadow">
                 <div class="card-body">
                         <span>
-                            <h1 class="mt-3 ml-4 mobile-font">
                                 <img class=" mobile-img" src="{% static "home/images/home-page/icons/sale.svg" %}"
-                                     width="50">
+                                     width="50" alt="discount course icon">
                                با تخفیف بخر ✌
-                            </h1>
                         </span>
                     <hr>
 
@@ -323,13 +326,11 @@
 
             <div class="card shadow">
                 <div class="card-body">
-                        <span>
-                            <h1 class="mt-3 ml-4 mobile-font">
-                                <img class="mobile-img" src="{% static "home/images/home-page/icons/price.svg" %}"
-                                     width="50">
-                                پر فروش ترین دوره ها
-                            </h1>
-                        </span>
+                    <h1 class="mt-3 ml-4 mobile-font">
+                        <img class="mobile-img" src="{% static "home/images/home-page/icons/price.svg" %}"
+                             width="50" alt="full discount course">
+                        پر فروش ترین دوره ها
+                    </h1>
                     <hr>
 
                     <div class="container">
@@ -350,13 +351,11 @@
 
             <div class="card shadow">
                 <div class="card-body">
-                        <span>
-                            <h1 class="mt-3 ml-4 mobile-font">
-                                <img class="mobile-img" src="{% static "home/images/home-page/icons/search.svg" %}"
-                                     width="50">
-                                اگه پیداش نکردی جستجوش کن
-                            </h1>
-                        </span>
+                    <label class="h1 text-secondary mt-3 ml-4 mobile-font" for="searchInput">
+                        <img class="mobile-img" src="{% static "home/images/home-page/icons/search.svg" %}"
+                             width="50" alt="search icon">
+                        اگه پیداش نکردی جستجوش کن
+                    </label>
                     <div
                             class="px-3 my-4 input-group d-flex flex-nowrap border border-dark shadow bg-white badge-pill px-3 py-2">
                         <div class="w-100 p-2">
@@ -366,17 +365,19 @@
                         </div>
                         <button id="searchButton" data-toggle="tooltip" data-placement="top" title="بزن بریم"
                                 class="btn btn-primary btn-submit">
-                            <img src="{% static "home/images/home-page/icons/black-search.svg" %}" width="30">
+                            <img src="{% static "home/images/home-page/icons/black-search.svg" %}" width="30"
+                                 alt="search button">
                         </button>
                     </div>
                     <hr>
                     <div class="container text-center">
                         <div id="searchCourse">
                             <!-- پیدا نشدن سرچ -->
-                            <h5 id="searchNotFound" class="text-center" style="display: none"><img
-                                    src="{% static "home/images/home-page/icons/error.svg" %}" width="38"> نتیجه ای
-                                یافت نشد!</h5>
-
+                            <h5 id="searchNotFound" class="text-center" style="display: none">
+                                <img src="{% static "home/images/home-page/icons/error.svg" %}" width="38"
+                                     alt="error icon">
+                                نتیجه ای یافت نشد!
+                            </h5>
                             <div class="owl-carousel owl-theme">
                             </div>
                         </div>
@@ -397,12 +398,12 @@
         <div class="col-12 text-center">
             <h1>
                 پشتیبانی
-                <img src="{% static "home/images/home-page/icons/smile.svg" %}" width="40">
+                <img src="{% static "home/images/home-page/icons/smile.svg" %}" width="40" alt="smile icon">
             </h1>
 
             <h3 class="mt-4">
                 آپلود شده با
-                <img src="{% static "home/images/home-page/icons/heart.svg" %}" width="30">
+                <img src="{% static "home/images/home-page/icons/heart.svg" %}" width="30" alt="heart icon">
                 برای شما
             </h3>
 
@@ -427,7 +428,7 @@
         <div class="col-12 text-center">
             <h2 class="mt-4">
                     <span><img class="mobile-img" src="{% static "home/images/home-page/icons/comment.svg" %}"
-                               width="60"></span>
+                               width="60" alt="comment icon"></span>
                 <span class="mobile-font">نظرات همراهان تابشی ما</span>
             </h2>
         </div>
@@ -438,7 +439,7 @@
             <div class="container blockquote">
                 <div class="row justify-content-center">
                     <img src="{% static "home/images/home-page/icons/default_profile.svg" %}"
-                         style="width: 80px!important;display: inline">
+                         style="width: 80px!important;display: inline" alt="commenter profile">
                 </div>
                 <div class="row justify-content-center">
                     <h5 class="mt-3">مهدی قاسمی</h5>
@@ -450,7 +451,7 @@
                     <p class="mx-md-5 position-relative comment-sm-size">
                         <img class="comment-icon"
                              src="{% static "home/images/home-page/icons/quotation-heart.svg" %}"
-                             style="width: 50px!important;display: inline">
+                             style="width: 50px!important;display: inline" alt="heart icon">
                         با سلام خدمت استاد صابر دلاوری
                         خواستم بابت کلاسهای آنلاین تون تقدیر و تشکر کنم وبابت انگیزه ایی که به پسرم میدادین و روش
                         تدریس
@@ -466,7 +467,7 @@
             <div class="container blockquote">
                 <div class="row justify-content-center">
                     <img src="{% static "home/images/home-page/icons/default_profile.svg" %}"
-                         style="width: 80px!important;display: inline">
+                         style="width: 80px!important;display: inline" alt="commenter profile">
                 </div>
                 <div class="row justify-content-center">
                     <h5 class="mt-3">سید طاها ابیضی</h5>
@@ -478,7 +479,7 @@
                     <p class="mx-md-5 position-relative comment-sm-size">
                         <img class="comment-icon"
                              src="{% static "home/images/home-page/icons/quotation-heart.svg" %}"
-                             style="width: 50px!important;display: inline">
+                             style="width: 50px!important;display: inline" alt="heart icon">
                         سلام و عرض ادب
                         محاسبات سریع مقطع نمیشناسه در همه مقاطع میتونه به آدم کمک کنه من از کلاس های محاسبات سریع
                         مجموعه
@@ -506,35 +507,34 @@
                 {#                    something@email.com#}
                 {#                </p>#}
                 <div class="ul d-flex list-unstyled mx-2">
-                    <a href="https://eitaa.com/taabbesh"><img
-                            src="{% static "home/images/home-page/icons/Eitaa.svg" %}" width="30"></a>
-                    <a href="https://t.me/taabbesh"><img class="ml-3"
-                                                         src="{% static "home/images/home-page/icons/telegram.svg" %}"
-                                                         width="30"></a>
-                    <a href="https://www.instagram.com/tabbeshclass/"><img class="ml-2"
-                                                                           src="{% static "home/images/home-page/icons/instagram.svg" %}"
-                                                                           width="30"></a>
+                    <a href="https://eitaa.com/taabbesh">
+                        <img src="{% static "home/images/home-page/icons/Eitaa.svg" %}" width="30" alt="eitaa logo">
+                    </a>
+                    <a href="https://t.me/taabbesh">
+                        <img class="ml-3" src="{% static "home/images/home-page/icons/telegram.svg" %}" width="30"
+                             alt="telegram logo">
+                    </a>
+                    <a href="https://www.instagram.com/tabbeshclass/">
+                        <img class="ml-2" src="{% static "home/images/home-page/icons/instagram.svg" %}" width="30"
+                             alt="instagram logo">
+                    </a>
                 </div>
 
             </div>
 
             <div class="col-md-4 footer-logo text-center text-wrap ">
-                <img src="{% static "home/images/favicon.ico" %}" width="100">
-
-                <span>
-                        <p class="p mt-4">
-                            ساخته شده با
-                            <img src="{% static "home/images/home-page/icons/heart2.svg" %}" width="20">
-                            در تابش
-                        </p>
-                    </span>
-
+                <img src="{% static "home/images/favicon.ico" %}" width="100" alt="tabbesh logo">
+                <p class="p mt-4">
+                    ساخته شده با
+                    <img src="{% static "home/images/home-page/icons/heart2.svg" %}" width="20" alt="footer heart">
+                    در تابش
+                </p>
                 <p class="p mt-2">
-                    <span><img src="{% static "home/images/home-page/icons/license.svg" %}" width="18"></span>
+                    <span><img src="{% static "home/images/home-page/icons/license.svg" %}" width="18" alt="licence icon"></span>
                     <span>تمامی حقوق متعلق به آموزشگاه آنلاین تابش می باشد</span>
                 </p>
                 <p class="p">
-                    <span><img src="{% static "home/images/home-page/icons/theta.svg" %}" width="16"></span>
+                    <span><img src="{% static "home/images/home-page/icons/theta.svg" %}" width="16" alt="theta logo"></span>
                     <span>طراحی و توسعه توسط تیم تتا</span>
                 </p>
             </div>
