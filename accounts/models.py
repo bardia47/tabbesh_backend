@@ -89,6 +89,8 @@ class User(AbstractBaseUser, PermissionsMixin):
     def date_joined_decorated(self):
         return jdatetime.datetime.fromgregorian(datetime=self.date_joined).strftime("%a, %d %b %Y %H:%M:%S")
 
+    date_joined_decorated.short_description = 'تاریخ عضویت'
+
     def set_default_avatar(self):
         if not self.avatar:
             if self.is_teacher():

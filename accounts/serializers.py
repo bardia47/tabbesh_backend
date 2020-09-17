@@ -15,7 +15,7 @@ class UserBaseSerializer(JSONFormSerializer, serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ('username', 'first_name',
-                  'last_name', 'national_code',)
+                  'last_name', 'phone_number', 'national_code',)
 
     def validate_username(self, value):
         if not re.match('^[a-zA-Z0-9]+$', value):
@@ -50,6 +50,16 @@ class UserBaseSerializer(JSONFormSerializer, serializers.ModelSerializer):
         sum %= 11
         if not ((sum < 2 and check == sum) or (sum >= 2 and check + sum == 11)):
             raise serializers.ValidationError('کد ملی وارد شده معتبر نمی باشد.')
+        return value
+
+    def validate_phone_number(self, value):
+        if value.startswith('0'):
+            value = value[1:]
+            user = User.objects.filter(Q(phone_number=value))
+            if self.instance is not None:
+                user = user.exclude(id=self.instance.id)
+            if user.exists():
+                raise serializers.ValidationError('کاربر با این تلفن همراه از قبل موجود است.')
         return value
 
 
