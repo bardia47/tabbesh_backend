@@ -1,10 +1,11 @@
+from django.core.cache import cache
 import pytz
 from django.db import models
 from django.core.mail import send_mail
 from django.contrib.auth.base_user import AbstractBaseUser
 from django.contrib.auth.models import PermissionsMixin
-from pygments.lexers import get_all_lexers
-from pygments.styles import get_all_styles
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 from django.template.defaultfilters import default
 from accounts.enums import RoleCodes
 import datetime
@@ -13,6 +14,7 @@ from tinymce import models as tinymce_models
 from django.core.exceptions import ValidationError
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db.models import Q
+from django.db.models import Max
 
 # import for compress images
 import sys
@@ -20,7 +22,6 @@ from PIL import Image
 from io import BytesIO
 from django.core.files.uploadedfile import InMemoryUploadedFile
 
-LEXERS = [item for item in get_all_lexers() if item[1]]
 
 
 # Create your models here.
@@ -99,19 +100,22 @@ class User(AbstractBaseUser, PermissionsMixin):
     def __str__(self):
         return self.get_full_name()
 
-    def get_student_grade(self):
+    def student_grade(self):
         try:
             return self.grades.all().first().title
         except:
             return ""
 
-    get_student_grade.short_description = 'پایه'
+    student_grade.short_description = 'پایه'
 
     def is_teacher(self):
         return self.role.code == RoleCodes.TEACHER.value
 
     def is_admin(self):
         return self.role.code == RoleCodes.ADMIN.value
+
+    def is_student(self):
+        return self.role.code == RoleCodes.STUDENT.value
 
 
 # Roles Model
@@ -330,7 +334,10 @@ class Pay_History(models.Model):
         verbose_name = "سوابق خرید"
 
     def submit_date_decorated(self):
-        return jdatetime.datetime.fromgregorian(datetime=self.submit_date).strftime("%a, %d %b %Y %H:%M:%S")
+        if self.submit_date:
+            return jdatetime.datetime.fromgregorian(datetime=self.submit_date).strftime("%a, %d %b %Y %H:%M:%S")
+        else:
+            "-"
 
     def get_courses(self):
         courses_id_list = self.courses.split()
@@ -417,3 +424,12 @@ class Support(models.Model):
         return jdatetime.datetime.fromgregorian(datetime=self.update_date).strftime("%a, %d %b %Y %H:%M:%S")
 
     update_date_decorated.short_description = 'تاریخ آخرین تغییر'
+
+#comment it because it can be heavy on server
+
+# this signal clear the cache after adding a new course or support we can add it for other table like user
+# because of counter but i think this happens a lot and make caching useless
+# @receiver(post_save, sender=Course)
+# @receiver(post_save, sender=Support)
+# def clear_cache(sender, instance, **kwargs):
+#     cache.clear()

@@ -15,9 +15,9 @@
 {% block content %}
 
     <!-- Course Rows -->
-        {% is_teacher request.user as teacher %}
+    {% is_teacher request.user as teacher %}
 
-    <input id="have-class" type="hidden" value="{{ have_class }}" >
+    <input id="have-class" type="hidden" value="{{ have_class }}">
     {% if not have_class and not teacher %}
         <div class="container w-100 p-1 text-center margin-set" style="font-family: 'Vazir_Bold';">
             <div class="col-md-12">
@@ -40,7 +40,7 @@
                 <img class="mr-2" src="{% static 'dashboard/images/icons/active-course.svg' %}" width="48" height="48">
                 دوره های در حال برگزاری
             </h1>
-            <div  id="activeCourses" class="row">
+            <div id="activeCourses" class="row">
 
             </div>
         </div>
@@ -65,8 +65,8 @@
     </div>
 
     <!-- input to know user is teacher - True : teacher -->
-    {%  is_teacher request.user as teacher %}
-    <input id="roleStatus" value="{{ teacher }}" hidden>
+    {% is_student request.user as student %}
+    <input id="roleStatus" value="{{ student }}" hidden>
 {% endblock %}
 
 <!-- JS files -->
