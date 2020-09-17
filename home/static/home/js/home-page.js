@@ -2,6 +2,7 @@ $(function () {
     scrollAnimations();
     teacherListAjax();
     homeCounter();
+    newCourseAjax();
     bestSellerAjax();
     fullDiscountAjax();
     supportAjax();
@@ -101,6 +102,43 @@ function teacherListRender(teachersList) {
     owlCarouselInitial("#teacherList");
 }
 
+function newCourseAjax() {
+    $.ajax({
+        url: "/new-course-home/",
+        type: "GET",
+        dataType: "json",
+        headers:{
+            "Cache-Control" : "max-age=0"
+        },
+        success: function (newCourses) {
+            newCourseRender(newCourses)
+        },
+        error: function () {
+            console.log("بارگذاری جدیدترین دروس به مشکل خورده است! دوباره امتحان کنید.")
+        },
+    });
+}
+
+function newCourseRender(newCourses) {
+    let coursesTemplate = ``;
+    $.each(newCourses, function (index, course) {
+        let courseTemplate = `
+        <div class="mx-2">
+            <div class="card">
+                <img class="img-card" src="${course.image}" alt="course image">
+                <div class="card-body text-center">
+                    <h4 class="text-nowrap">${course.course_title}</h4>
+                    <h5 class="vazir-medium">${course.teacher_full_name}</h5>
+                    <a href="/dashboard/shopping/?grade=${course.id}" class="btn btn-secondary vazir-bold mt-2">خرید دوره</a>
+                </div>
+            </div>
+        </div>
+        `;
+        coursesTemplate += courseTemplate;
+    });
+    $("#newCourse").empty().append(coursesTemplate);
+    owlCarouselInitial("#newCourse");
+}
 
 function bestSellerAjax() {
     $.ajax({
