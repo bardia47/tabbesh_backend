@@ -64,7 +64,6 @@ LOGGING = {
 STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.ManifestStaticFilesStorage'
 SESSION_COOKIE_SECURE = False
 
-
 # Application definition
 
 INSTALLED_APPS = [
@@ -105,7 +104,6 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
-
 
 ROOT_URLCONF = 'pishgam_website.urls'
 

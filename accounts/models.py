@@ -23,7 +23,6 @@ from io import BytesIO
 from django.core.files.uploadedfile import InMemoryUploadedFile
 
 
-
 # Create your models here.
 
 
@@ -105,7 +104,6 @@ class User(AbstractBaseUser, PermissionsMixin):
             return self.grades.all().first().title
         except:
             return ""
-
 
     def is_teacher(self):
         return self.role.code == RoleCodes.TEACHER.value
@@ -424,7 +422,7 @@ class Support(models.Model):
 
     update_date_decorated.short_description = 'تاریخ آخرین تغییر'
 
-#comment it because it can be heavy on server
+# comment it because it can be heavy on server
 
 # this signal clear the cache after adding a new course or support we can add it for other table like user
 # because of counter but i think this happens a lot and make caching useless

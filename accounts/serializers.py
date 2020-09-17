@@ -10,12 +10,12 @@ from unidecode import unidecode
 from django.contrib.auth.hashers import make_password
 import random
 
-class UserBaseSerializer(JSONFormSerializer, serializers.ModelSerializer):
 
+class UserBaseSerializer(JSONFormSerializer, serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ('username', 'first_name',
-                 'last_name', 'national_code',)
+                  'last_name', 'national_code',)
 
     def validate_username(self, value):
         if not re.match('^[a-zA-Z0-9]+$', value):
@@ -38,17 +38,20 @@ class UserBaseSerializer(JSONFormSerializer, serializers.ModelSerializer):
         return value
 
     def validate_national_code(self, value):
+        # convert persian number to english
         value = unidecode(value)
         if not re.match('^\d{10}$', value):
             raise serializers.ValidationError('کد ملی وارد شده معتبر نمی باشد.')
+        # this part is national code validator
         check = int(value[9])
         sum = 0
         for i in range(9):
             sum += int(value[i]) * (10 - i)
         sum %= 11
-        if not ( (sum < 2 and check == sum) or (sum >= 2 and check + sum == 11)):
+        if not ((sum < 2 and check == sum) or (sum >= 2 and check + sum == 11)):
             raise serializers.ValidationError('کد ملی وارد شده معتبر نمی باشد.')
         return value
+
 
 class UserSerializer(UserBaseSerializer):
     # introducer is extra field
@@ -62,8 +65,6 @@ class UserSerializer(UserBaseSerializer):
         model = User
         fields = ('username', 'first_name',
                   'last_name', 'grades', 'gender', 'phone_number', 'password', 'role', 'city', 'introducer')
-
-
 
     def validate_introducer(self, value):
         if value and value != '':

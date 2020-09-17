@@ -103,7 +103,7 @@ class UserCreationForm(forms.ModelForm):
         else:
             user.is_superuser = False
 
-        if self.data.get("password1") != '':
+        if self.data.get("password1") is not None and self.data.get("password1") != '':
             password = make_password(self.cleaned_data["password1"])
             user.password = password
         user.set_default_avatar()
@@ -139,7 +139,7 @@ class UserAdmin(BaseUserAdmin):
     readonly_fields = ('date_joined_decorated', 'send_password_sms')
     form = UserChangeForm
     add_form = UserCreationForm
-    list_display = ('username', 'student_grade', 'get_full_name', 'phone_number', 'is_active','date_joined_decorated')
+    list_display = ('username', 'student_grade', 'get_full_name', 'phone_number', 'is_active', 'date_joined_decorated')
     list_filter = ('is_active',)
     search_fields = ['last_name', 'phone_number', 'grades__title']
     fieldsets = (
@@ -169,7 +169,6 @@ class UserAdmin(BaseUserAdmin):
             _student_grade=Max('grades__code')
         )
 
-
     def student_grade(self, obj):
         return obj.student_grade()
 
@@ -177,11 +176,10 @@ class UserAdmin(BaseUserAdmin):
         return obj.date_joined_decorated()
 
     student_grade.admin_order_field = '_student_grade'
-    date_joined_decorated.admin_order_field='date_joined'
+    date_joined_decorated.admin_order_field = 'date_joined'
 
     student_grade.short_description = 'پایه'
-    date_joined_decorated.short_description='تاریخ عضویت'
-
+    date_joined_decorated.short_description = 'تاریخ عضویت'
 
     def send_password_sms(self, obj):
         html = AdminEnums.forgetPasswordHtml.value
@@ -199,7 +197,7 @@ class TeacherUser(User):
 
 
 class TeacherAdmin(UserAdmin):
-    list_display = ('username', 'get_full_name', 'phone_number', 'is_active','date_joined_decorated')
+    list_display = ('username', 'get_full_name', 'phone_number', 'is_active', 'date_joined_decorated')
 
     def get_queryset(self, request):
         return User.objects.filter(role__code=RoleCodes.TEACHER.value)
