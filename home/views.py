@@ -101,10 +101,12 @@ class MostDiscountedCourses(generics.ListAPIView):
         query &= (Q(end_date__gte=time_now) | Q(end_date=None))
         query &= ~(Q(courses=None))
         # this is forbidden code
-        query &= (~Q(lesson__code=PrivateCourse.MEMBERSHIP.value))
+       # query &= (~Q(courses__lesson__code=PrivateCourse.MEMBERSHIP.value))
         discounts = Discount.objects.filter(query)
         # get those courses that have discounts now
-        course = Course.objects.filter(discount__in=discounts).order_by('-discount__percent',
+        # this is forbidden code
+        course = Course.objects.filter(discount__in=discounts).exclude(
+            lesson__code=PrivateCourse.MEMBERSHIP.value).order_by('-discount__percent',
                                                                         F('discount__end_date').asc(nulls_last=True))
         if not course.exists():
             try:
@@ -113,7 +115,9 @@ class MostDiscountedCourses(generics.ListAPIView):
                 query &= (Q(end_date__gte=time_now) | Q(end_date=None))
                 query &= (Q(courses=None))
                 Discount.objects.get(query)
-                return Course.objects.filter(end_date__gt=time_now).order_by('-end_date', '-amount')[:12]
+                # this is forbidden code
+                return Course.objects.filter(end_date__gt=time_now).exclude(
+            lesson__code=PrivateCourse.MEMBERSHIP.value).order_by('-end_date', '-amount')[:12]
             except:
                 return None
         return course

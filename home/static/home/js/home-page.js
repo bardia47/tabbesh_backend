@@ -203,7 +203,7 @@ function fullDiscountAjax() {
             console.log(xhr.getAllResponseHeaders());
         },
         error: function () {
-            conslole.log("بارگذاری پرتخفیف ترین دروس به مشکل خورده است! دوباره امتحان کنید.")
+            console.log("بارگذاری پرتخفیف ترین دروس به مشکل خورده است! دوباره امتحان کنید.")
         },
     });
 }
