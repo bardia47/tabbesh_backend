@@ -67,7 +67,7 @@
                             <div class="col-md-6 col-sm-6 custom-radio custom-control-inline">
                                 <span style="color: #fff;"> دختر </span>
                                 <input type="radio" class="custom-control-input" id="genderGirl" name="gender"
-                                       value="False" {% ifnotequal  serializer.data.gender None %}
+                                       value="False" {% ifnotequal  serializer.data.gender 'True' %}
                                        checked{% endifnotequal %}>
                                 <label class="custom-control-label yellow" for="genderGirl"></label>
                             </div>
