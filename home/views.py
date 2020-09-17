@@ -127,7 +127,9 @@ class NewCourseHome(generics.ListAPIView):
 
     def get_queryset(self):
         time_now = datetime.datetime.now()
-        return Course.objects.filter(end_date__gte=time_now).order_by('-id')[:12]
+        # this is forbidden code
+        return Course.objects.filter(end_date__gte=time_now).exclude(
+            code=PrivateCourse.MEMBERSHIP.value).order_by('-id')[:12]
 
 
 class SearchHome(APIView):

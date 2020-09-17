@@ -428,10 +428,11 @@ class Support(models.Model):
 
     update_date_decorated.short_description = 'تاریخ آخرین تغییر'
 
+#comment it because it can be heavy on server
 
 # this signal clear the cache after adding a new course or support we can add it for other table like user
 # because of counter but i think this happens a lot and make caching useless
-@receiver(post_save, sender=Course)
-@receiver(post_save, sender=Support)
-def clear_cache(sender, instance, **kwargs):
-    cache.clear()
+# @receiver(post_save, sender=Course)
+# @receiver(post_save, sender=Support)
+# def clear_cache(sender, instance, **kwargs):
+#     cache.clear()
