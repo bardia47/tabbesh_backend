@@ -95,9 +95,12 @@ class UserSerializer(UserBaseSerializer):
         return data
 
     def create(self, validated_data):
-        if validated_data['introducer'] and validated_data['introducer'] != '':
-            introducer = validated_data['introducer']
-        else:
+        try:
+            if validated_data['introducer'] and validated_data['introducer'] != '':
+                introducer = validated_data['introducer']
+            else:
+                introducer = None
+        except:
             introducer = None
 
         validated_data.pop('introducer', None)

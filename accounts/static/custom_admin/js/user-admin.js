@@ -10,7 +10,7 @@ $(document).ready(function () {
                 csrfmiddlewaretoken: $("input[name='csrfmiddlewaretoken']").val()
             },
             beforeSend: function (xhr, settings) {
-                $(this).prop("disabled", true);
+                $("#sendPass").prop("disabled", true);
             },
             success: function (data) {
                 alert(data.success);
@@ -19,9 +19,6 @@ $(document).ready(function () {
                 var data = $xhr.responseJSON;
                 alert(data.error);
             },
-            complete: function () {
-                $(this).prop("disabled", false);
-            }
         });
     });
 });

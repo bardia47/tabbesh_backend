@@ -106,7 +106,6 @@ class User(AbstractBaseUser, PermissionsMixin):
         except:
             return ""
 
-    student_grade.short_description = 'پایه'
 
     def is_teacher(self):
         return self.role.code == RoleCodes.TEACHER.value

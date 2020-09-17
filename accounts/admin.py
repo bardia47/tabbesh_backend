@@ -135,10 +135,11 @@ class UserAdmin(BaseUserAdmin):
             'custom_admin/js/user-admin.js'
         )
 
+    ordering = ('-date_joined',)
     readonly_fields = ('date_joined_decorated', 'send_password_sms')
     form = UserChangeForm
     add_form = UserCreationForm
-    list_display = ('username', 'student_grade', 'get_full_name', 'phone_number', 'is_active')
+    list_display = ('username', 'student_grade', 'get_full_name', 'phone_number', 'is_active','date_joined_decorated')
     list_filter = ('is_active',)
     search_fields = ['last_name', 'phone_number', 'grades__title']
     fieldsets = (
@@ -168,13 +169,19 @@ class UserAdmin(BaseUserAdmin):
             _student_grade=Max('grades__code')
         )
 
-    def get_ordering(self, request):
-        return ['_student_grade']
 
     def student_grade(self, obj):
         return obj.student_grade()
 
+    def date_joined_decorated(self, obj):
+        return obj.date_joined_decorated()
+
     student_grade.admin_order_field = '_student_grade'
+    date_joined_decorated.admin_order_field='date_joined'
+
+    student_grade.short_description = 'پایه'
+    date_joined_decorated.short_description='تاریخ عضویت'
+
 
     def send_password_sms(self, obj):
         html = AdminEnums.forgetPasswordHtml.value
@@ -192,13 +199,10 @@ class TeacherUser(User):
 
 
 class TeacherAdmin(UserAdmin):
-    list_display = ('username', 'get_full_name', 'phone_number', 'is_active')
+    list_display = ('username', 'get_full_name', 'phone_number', 'is_active','date_joined_decorated')
 
     def get_queryset(self, request):
         return User.objects.filter(role__code=RoleCodes.TEACHER.value)
-
-    def get_ordering(self, request):
-        return ['username']
 
 
 class CourseCalendarFormSetInline(forms.models.BaseInlineFormSet):

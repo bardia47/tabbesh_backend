@@ -76,7 +76,7 @@ class BestSellingCourses(generics.ListAPIView):
         # if courses are few return all of them
         # this is forbidden code
         course_order = Course.objects.filter(end_date__gt=time_now).exclude(
-            code=PrivateCourse.MEMBERSHIP.value).annotate(number=Count('user')).order_by('-number')
+            lesson__code=PrivateCourse.MEMBERSHIP.value).annotate(number=Count('user')).order_by('-number')
         # sorted courses by number of students
         if count > 100:
             # the highest size of query for sending is 14
@@ -101,7 +101,7 @@ class MostDiscountedCourses(generics.ListAPIView):
         query &= (Q(end_date__gte=time_now) | Q(end_date=None))
         query &= ~(Q(courses=None))
         # this is forbidden code
-        query &= (~Q(code=PrivateCourse.MEMBERSHIP.value))
+        query &= (~Q(lesson__code=PrivateCourse.MEMBERSHIP.value))
         discounts = Discount.objects.filter(query)
         # get those courses that have discounts now
         course = Course.objects.filter(discount__in=discounts).order_by('-discount__percent',
@@ -129,7 +129,7 @@ class NewCourseHome(generics.ListAPIView):
         time_now = datetime.datetime.now()
         # this is forbidden code
         return Course.objects.filter(end_date__gte=time_now).exclude(
-            code=PrivateCourse.MEMBERSHIP.value).order_by('-id')[:12]
+            lesson__code=PrivateCourse.MEMBERSHIP.value).order_by('-id')[:12]
 
 
 class SearchHome(APIView):
@@ -146,7 +146,7 @@ class SearchHome(APIView):
         query = Q(end_date__gte=time_now)
         query &= (Q(title__icontains=title) | Q(teacher__last_name__icontains=title))
         # this is forbidden code
-        query &= (~Q(code=PrivateCourse.MEMBERSHIP.value))
+        query &= (~Q(lesson__code=PrivateCourse.MEMBERSHIP.value))
         course = Course.objects.filter(query).order_by('-end_date')[:3]
         return course
 
