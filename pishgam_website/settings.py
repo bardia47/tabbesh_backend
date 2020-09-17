@@ -206,11 +206,13 @@ REST_FRAMEWORK = {
 }
 # add fonts and plugins to tiny mce
 TINYMCE_DEFAULT_CONFIG = {
-    'plugins': "paste,searchreplace,code,link,emoticons,image,imagetools,media",
-    "font_formats": "B Nazanin;" +
+    'plugins': "paste,searchreplace,code,link,emoticons",
+    "font_formats": "B Nazanin" +
+                    "Vazir;" +
                     "Arial;" +
                     "Tahoma;" +
                     "Times New Roman;",
+    'toolbar': "undo redo | styleselect | fontsizeselect | bold italic underline forecolor backcolor | alignleft aligncenter alignright alignjustify | link",
 }
 
 # Internationalization
