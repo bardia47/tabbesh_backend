@@ -34,7 +34,9 @@ function homeCounter() {
                 url: "/counter/",
                 type: "GET",
                 dataType: "json",
-                cache: false,
+                headers: {
+                    "Cache-Control": "max-age=0"
+                },
 
                 success: function (counters) {
                     $("#coursesCounter").animationCounter({
@@ -71,7 +73,9 @@ function teacherListAjax() {
         url: "/all-teacher/",
         type: "GET",
         dataType: "json",
-        cache: false,
+        headers: {
+            "Cache-Control": "max-age=0"
+        },
         success: function (teachersList) {
             teacherListRender(teachersList)
         },
@@ -141,12 +145,16 @@ function newCourseRender(newCourses) {
 }
 
 function bestSellerAjax() {
+    // response.setHeader("Cache-Control", "public");
+    // response.setHeader("Pragma", "no-cache");
+    // response.setDateHeader("Expires", 9000);
     $.ajax({
         url: "/best-selling-courses/",
         type: "GET",
         dataType: "json",
-        cache: false,
-
+        headers: {
+            "Cache-Control": "max-age=0"
+        },
         success: function (bestSellerCourses) {
             bestSellerRender(bestSellerCourses)
         },
@@ -179,14 +187,20 @@ function bestSellerRender(bestSellerCourses) {
 
 
 function fullDiscountAjax() {
+    // response.setHeader("Cache-Control", "public");
+    // response.setHeader("Pragma", "no-cache");
+    // response.setDateHeader("Expires", 9000);
     $.ajax({
         url: "/most-discounted-courses/",
         type: "GET",
         dataType: "json",
-        cache: false,
+        headers: {
+            "Cache-Control": "max-age=0"
+        },
 
-        success: function (fullDiscountCourses) {
+        success: function (fullDiscountCourses, hel, xhr) {
             fullDiscountRender(fullDiscountCourses)
+            console.log(xhr.getAllResponseHeaders());
         },
         error: function () {
             conslole.log("بارگذاری پرتخفیف ترین دروس به مشکل خورده است! دوباره امتحان کنید.")
@@ -280,8 +294,9 @@ function supportAjax() {
         url: "/support/",
         type: "GET",
         dataType: "json",
-        cache: false,
-
+        headers :{
+            "Cache-Control": "max-age=0"
+        },
         success: function (supports) {
             supportRender(supports)
         },

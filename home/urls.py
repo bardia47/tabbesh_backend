@@ -1,7 +1,6 @@
 from django.urls import path
 from django.views.decorators.cache import cache_page
 from .views import *
-from django.views.decorators.csrf import csrf_exempt
 
 urlpatterns = [
     path('', main_page, name='main-page'),
@@ -13,7 +12,7 @@ urlpatterns = [
          name='most-discounted-courses'),
     path('best-selling-courses/', cache_page(60 * 60 * 2)(BestSellingCourses.as_view()), name='best-selling-courses'),
     path('search-home/', SearchHome.as_view(), name='search-home'),
-    path('new-course-home/', NewCourseHome.as_view(), name='new-course-home'),
+    path('new-course-home/', cache_page(60 * 60 * 2)(NewCourseHome.as_view()), name='new-course-home'),
     path('support/', cache_page(60 * 60 * 2)(Support.as_view()), name='support')
 
 ]

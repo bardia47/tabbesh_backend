@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.db.models import Count
 from rest_framework import status, generics
-from rest_framework.permissions import AllowAny,IsAuthenticated
+from rest_framework.permissions import AllowAny
 from rest_framework.renderers import BrowsableAPIRenderer, JSONRenderer, TemplateHTMLRenderer
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -16,6 +16,7 @@ def main_page(request):
     else:
         return redirect('home')
 
+
 # def home(request):
 #     return render(request, 'home/home.html')
 
@@ -29,7 +30,6 @@ def page_not_found(request, exception=None):
 # def sign_up_required(request, exception=None):
 #     return render(request, 'accounts/signup.html' ,status=status.HTTP_403_FORBIDDEN)
 
-# TODO:should fix url and template_name after adding correct file
 class Home(APIView):
     renderer_classes = [TemplateHTMLRenderer, JSONRenderer]
     permission_classes = (AllowAny,)
@@ -59,12 +59,7 @@ class AllTeacher(generics.ListAPIView):
 
     # return those users that are teacher
     def get_queryset(self):
-        # cache_get = cache.get('my_key')
-        # if cache_get:
-        #     return cache_get
-        # else:
         queryset = User.objects.filter(role__code=RoleCodes.TEACHER.value)
-        # cache.set('my_key', queryset, 1000)
         return queryset
 
 
@@ -79,8 +74,9 @@ class BestSellingCourses(generics.ListAPIView):
         # get the number of courses
         count = Course.objects.all().count()
         # if courses are few return all of them
-        # this is forbiden code
-        course_order = Course.objects.filter(end_date__gt=time_now).exclude(code=PrivateCourse.MEMBERSHIP.value).annotate(number=Count('user')).order_by('-number')
+        # this is forbidden code
+        course_order = Course.objects.filter(end_date__gt=time_now).exclude(
+            code=PrivateCourse.MEMBERSHIP.value).annotate(number=Count('user')).order_by('-number')
         # sorted courses by number of students
         if count > 100:
             # the highest size of query for sending is 14
@@ -97,17 +93,19 @@ class MostDiscountedCourses(generics.ListAPIView):
     pagination_class = None
 
     def get_queryset(self):
+        # print(self.request.headers)
         time_now = datetime.datetime.now()
         # get those discounts that the time of them reach
         query = Q(start_date__lte=time_now)
         query &= Q(code__isnull=True)
         query &= (Q(end_date__gte=time_now) | Q(end_date=None))
         query &= ~(Q(courses=None))
-        #this is forbiden code
+        # this is forbidden code
         query &= (~Q(code=PrivateCourse.MEMBERSHIP.value))
         discounts = Discount.objects.filter(query)
         # get those courses that have discounts now
-        course = Course.objects.filter(discount__in=discounts).order_by('-discount__percent', F('discount__end_date').asc(nulls_last=True))
+        course = Course.objects.filter(discount__in=discounts).order_by('-discount__percent',
+                                                                        F('discount__end_date').asc(nulls_last=True))
         if not course.exists():
             try:
                 query = Q(start_date__lte=time_now)
@@ -129,7 +127,9 @@ class NewCourseHome(generics.ListAPIView):
 
     def get_queryset(self):
         time_now = datetime.datetime.now()
-        return Course.objects.filter(end_date__gte=time_now).order_by('-id')[:12]
+        # this is forbidden code
+        return Course.objects.filter(end_date__gte=time_now).exclude(
+            code=PrivateCourse.MEMBERSHIP.value).order_by('-id')[:12]
 
 
 class SearchHome(APIView):
@@ -145,7 +145,7 @@ class SearchHome(APIView):
         # get those discounts that the time of them reach
         query = Q(end_date__gte=time_now)
         query &= (Q(title__icontains=title) | Q(teacher__last_name__icontains=title))
-        #this is forbiden code
+        # this is forbidden code
         query &= (~Q(code=PrivateCourse.MEMBERSHIP.value))
         course = Course.objects.filter(query).order_by('-end_date')[:3]
         return course
