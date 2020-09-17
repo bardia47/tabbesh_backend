@@ -8,7 +8,8 @@ class AccountsConfig(AppConfig):
     verbose_name = "حساب های کاربری "
 
     # run scheduler when app is ready
-    def ready(self):
-        logger = logging.getLogger("django")
-        scheduler.start()
-        logger.error("this is not error: scheduler is running")
+    # comment because is heavy for server
+    # def ready(self):
+    #     logger = logging.getLogger("django")
+    #     scheduler.start()
+    #     logger.error("this is not error: scheduler is running")
