@@ -103,10 +103,10 @@ class ShoppingSerializer(serializers.Serializer):
 class ShoppingCourseSerializer(CourseLessonsSerializer):
     course_calendars = serializers.SerializerMethodField('get_start_dates')
     discount = serializers.SerializerMethodField('get_discount')
-
+    installment = serializers.SerializerMethodField('get_installment')
     class Meta:
         model = Course
-        fields = ('id', 'title', 'start_date', 'end_date', 'code', 'amount', 'description', 'image', 'teacher',
+        fields = ("installment",'title', 'start_date', 'end_date', 'code', 'description', 'image', 'teacher',
                   'course_calendars', 'parent', 'discount')
 
     def get_start_dates(self, obj):
@@ -125,10 +125,25 @@ class ShoppingCourseSerializer(CourseLessonsSerializer):
             return DiscountSerializer(instance=discount).data
         return None
 
+    def get_installment(self,obj):
+      installment = obj.get_next_installment()
+      if installment:
+          return InstallmentSerializer(instance=installment).data
+      return None
+
+class DiscountSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Discount
+        fields = ('percent', 'end_date', 'title')
+
+class InstallmentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Installment
+        fields = ('id','title','amount','start_date','end_date')
 
 class UserProfileSerializer(UserBaseSerializer):
-    grade = serializers.SerializerMethodField('student_grade')
-    cityTitle = serializers.SerializerMethodField('get_city_title')
+    grade = serializers.ReadOnlyField(source='student_grade')
+    cityTitle = serializers.ReadOnlyField(source='city.title')
     phone_number = serializers.CharField(read_only=True)
     credit = serializers.IntegerField(read_only=True)
 
@@ -138,28 +153,11 @@ class UserProfileSerializer(UserBaseSerializer):
                   'last_name', 'username', 'email', 'grade', 'cityTitle', 'gender', 'national_code', 'phone_number',
                   'grades', 'city', 'avatar', 'credit')
 
-    def student_grade(self, obj):
-        return obj.student_grade()
-
-    def get_city_title(self, obj):
-        try:
-            return obj.city.title
-        except:
-            return ""
-
-
 # for get method
 class UserProfileShowSerializer(serializers.Serializer):
     user = UserProfileSerializer()
     grades = GradeSerializer(many=True)
     cities = CitySerializer(many=True)
-
-
-class DiscountSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Discount
-        fields = ('percent', 'end_date', 'title')
-
 
 class DocumentSerializer(serializers.ModelSerializer):
     sender_name = serializers.ReadOnlyField(source='sender.get_full_name')

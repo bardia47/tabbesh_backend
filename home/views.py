@@ -76,7 +76,7 @@ class BestSellingCourses(generics.ListAPIView):
         # if courses are few return all of them
         # this is forbidden code
         course_order = Course.objects.filter(end_date__gt=time_now).exclude(
-            lesson__code=PrivateCourse.MEMBERSHIP.value).annotate(number=Count('user')).order_by('-number')
+            lesson__code=PrivateCourse.MEMBERSHIP.value).annotate(number=Count('installment__user')).order_by('-number')
         # sorted courses by number of students
         if count > 100:
             # the highest size of query for sending is 14
@@ -117,7 +117,7 @@ class MostDiscountedCourses(generics.ListAPIView):
                 Discount.objects.get(query)
                 # this is forbidden code
                 return Course.objects.filter(end_date__gt=time_now).exclude(
-            lesson__code=PrivateCourse.MEMBERSHIP.value).order_by('-end_date', '-amount')[:12]
+            lesson__code=PrivateCourse.MEMBERSHIP.value).order_by('-end_date')[:12]
             except:
                 return None
         return course

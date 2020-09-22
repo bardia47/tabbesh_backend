@@ -28,12 +28,12 @@ from .permission import EditDocumentPermission
 
 class Dashboard(APIView):
     renderer_classes = [TemplateHTMLRenderer, JSONRenderer]
+    template_name = 'dashboard/dashboard.html'
 
     def get(self, request):
         now = datetime.datetime.now()
         if self.request.user.is_student():
-            courses = self.request.user.courses.filter(end_date__gt=now)
-
+            courses = request.user.courses().filter(end_date__gt=now)
         elif self.request.user.is_teacher():
             courses = Course.objects.filter(teacher__id=self.request.user.id, end_date__gt=now)
         else:
@@ -45,8 +45,7 @@ class Dashboard(APIView):
         else:
             calendar_time = None
         if request.accepted_renderer.format == 'html':
-            return Response({'now': now, 'classes': classes, 'calendar_time': calendar_time},
-                            template_name='dashboard/dashboard.html')
+            return Response({'now': now, 'classes': classes, 'calendar_time': calendar_time})
         ser = DashboardSerializer(instance={'course_calendars': classes, 'now': now, 'calendar_time': calendar_time})
         return Response(ser.data)
 
@@ -109,7 +108,7 @@ class EditProfile(APIView):
                 return Response()
         # if request sent from app, use base64
         if method == 'changeAvatar':
-            #this is for  flutter
+            # this is for  flutter
             # try:
             #     file = request.data['file']
             #     file_name = request.data['file_name']
@@ -180,45 +179,8 @@ class Lessons(APIView):
     def get(self, request):
         now = datetime.datetime.now()
         if request.accepted_renderer.format == 'html':
-            return Response({"have_class": request.user.courses.filter(end_date__gt=now).count() != 0},
+            return Response({"have_class": self.request.user.courses().count() != 0},
                             template_name='dashboard/lessons.html')
-
-
-# Shopping Page
-class Shopping(APIView):
-    renderer_classes = [TemplateHTMLRenderer, JSONRenderer]
-
-    def get(self, request):
-        try:
-            # for first pay of introducing
-            event = Event.objects.get(user__id=request.user.id, type=Event.Introducing, is_active=True)
-            request.session['event_discount'] = event.type
-        except:
-            pass
-        grades = Grade.objects.all()
-        lessons = Lesson.objects.filter(parent__id=None)
-        teachers = User.objects.filter(role__code=RoleCodes.TEACHER.value)
-        ser = ShoppingSerializer(instance={'grades': grades, 'lessons': lessons, 'teachers': teachers})
-        return Response(ser.data, template_name='dashboard/shopping.html')
-
-
-# get child lessons of parent (using tree)
-def getAllLessons(lesson_id):
-    lessons = Lesson.objects.filter(id=lesson_id)
-    whilelessons = lessons
-    while True:
-        extend_lesson = []
-        query = reduce(or_, (Q(parent__id=lesson.id)
-                             for lesson in whilelessons))
-        extend_lesson = Lesson.objects.filter(query)
-        if len(extend_lesson) == 0:
-            break
-        else:
-            whilelessons = extend_lesson
-            lessons = lessons | whilelessons
-    query = reduce(or_, (Q(lesson__id=lesson.id) for lesson in lessons))
-    return query
-
 
 class GetLessonsViewSet(viewsets.ModelViewSet):
     queryset = Course.objects.all()
@@ -247,7 +209,7 @@ class GetLessonsViewSet(viewsets.ModelViewSet):
             query &= getAllLessons(self.request.GET.get("lesson"))
 
         if self.request.user.is_student():
-            courses = self.request.user.courses.filter(query)
+            courses = self.request.user.courses().filter(query)
         elif self.request.user.is_teacher():
             query &= Q(teacher__id=self.request.user.id)
             courses = Course.objects.filter(query)
@@ -259,30 +221,53 @@ class GetLessonsViewSet(viewsets.ModelViewSet):
         courses = courses.order_by('-end_date')
         return courses
 
+# get child lessons of parent (using tree)
+def getAllLessons(lesson_id):
+    lessons = Lesson.objects.filter(id=lesson_id)
+    whilelessons = lessons
+    while True:
+        extend_lesson = []
+        query = reduce(or_, (Q(parent__id=lesson.id)
+                             for lesson in whilelessons))
+        extend_lesson = Lesson.objects.filter(query)
+        if len(extend_lesson) == 0:
+            break
+        else:
+            whilelessons = extend_lesson
+            lessons = lessons | whilelessons
+    query = reduce(or_, (Q(lesson__id=lesson.id) for lesson in lessons))
+    return query
+
+# Shopping Page
+class Shopping(APIView):
+    renderer_classes = [TemplateHTMLRenderer, JSONRenderer]
+
+    def get(self, request):
+        try:
+            # for first pay of introducing
+            event = Event.objects.get(user__id=request.user.id, type=Event.Introducing, is_active=True)
+            request.session['event_discount'] = event.type
+        except:
+            pass
+        grades = Grade.objects.all()
+        lessons = Lesson.objects.filter(parent__id=None)
+        teachers = User.objects.filter(role__code=RoleCodes.TEACHER.value)
+        ser = ShoppingSerializer(instance={'grades': grades, 'lessons': lessons, 'teachers': teachers})
+        return Response(ser.data, template_name='dashboard/shopping.html')
 
 class GetShoppingViewSet(viewsets.ModelViewSet):
+    #thats fake :/ because its Mandatory
     queryset = Course.objects.all()
     serializer_class = ShoppingCourseSerializer
     http_method_names = ['get', ]
 
-    def list(self, request, *args, **kwargs):
-        queryset = self.filter_queryset(self.get_queryset())
-        if 'text/javascript' in request.headers['Accept']:
-            page = self.paginate_queryset(queryset)
-            if page is not None:
-                serializer = self.get_serializer(page, many=True)
-                return self.get_paginated_response(serializer.data)
-
-        serializer = self.get_serializer(queryset, many=True)
-        return Response(serializer.data)
-
     # default show all active courses
     def get_queryset(self):
         now = datetime.datetime.now()
-        query = Q(end_date__gt=now)
-        if self.request.user.courses.all():
+        query = Q(end_date__gt=now + datetime.timedelta(days=10))
+        if self.request.user.courses().all():
             queryNot = reduce(or_, (Q(id=course.id)
-                                    for course in self.request.user.courses.all()))
+                                    for course in self.request.user.courses().all()))
             query = query & ~queryNot
 
         if self.request.GET.get("teacher") or self.request.GET.get("lesson") or self.request.GET.get("grade"):
@@ -338,7 +323,7 @@ class FileManager(viewsets.ModelViewSet):
         instance = self.get_object()
         try:
             if request.user.is_student():
-                request.user.courses.get(id=instance.id)
+                request.user.courses().get(id=instance.id)
         except:
             if request.accepted_renderer.format == 'html':
                 return redirect('/dashboard/shopping/')
@@ -396,7 +381,7 @@ class ClassList(generics.RetrieveAPIView):
 
     def retrieve(self, request, *args, **kwargs):
         instance = self.get_object()
-        students = instance.user_set.all()
+        students = instance.students().all()
         listSerializer = ClassListSerializer(instance={'students': students, 'course': instance},
                                              context={'course_id': instance.id})
         return Response(listSerializer.data)

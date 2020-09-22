@@ -13,15 +13,14 @@ import jdatetime
 from tinymce import models as tinymce_models
 from django.core.exceptions import ValidationError
 from django.core.validators import MaxValueValidator, MinValueValidator
-from django.db.models import Q
-from django.db.models import Max
-
+from django.db.models import Q, Max, IntegerField
 # import for compress images
 import sys
 from PIL import Image
 from io import BytesIO
 from django.core.files.uploadedfile import InMemoryUploadedFile
-
+from django.db.models import Value as V
+from django.db.models.functions import Concat
 
 # Create your models here.
 
@@ -42,7 +41,8 @@ class User(AbstractBaseUser, PermissionsMixin):
     address = models.CharField("آدرس", max_length=255, null=True, blank=True)
     phone_number = models.CharField("تلفن همراه", max_length=12, unique=True)
     grades = models.ManyToManyField('Grade', blank=True, verbose_name="پایه")
-    courses = models.ManyToManyField('Course', blank=True)
+   # courses = models.ManyToManyField('Course', blank=True )
+    installments = models.ManyToManyField('Installment', blank=True )
     is_superuser = models.BooleanField(default=False)
     is_staff = models.BooleanField(default=True)
     credit = models.FloatField("اعتبار", default=float(0),
@@ -62,6 +62,9 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     def __str__(self):
         return self.get_full_name()
+    #get courses from user installments
+    def courses(self):
+        return Course.objects.filter(installment__in=self.installments.all())
 
     def get_full_name(self):
         full_name = '%s %s' % (self.first_name, self.last_name)
@@ -189,9 +192,9 @@ class Course(models.Model):
     teacher = models.ForeignKey(User, on_delete=models.DO_NOTHING, verbose_name="مدرس")
     start_date = models.DateTimeField("تاریخ شروع")
     end_date = models.DateTimeField("تاریخ پایان")
-    amount = models.FloatField("مبلغ", default=float(0),
-                               validators=[MinValueValidator(0)]
-                               )
+    # amount = models.FloatField("مبلغ", default=float(0),
+    #                             validators=[MinValueValidator(0)]
+    #                             )
     url = models.URLField("لینک", blank=True, null=True)
     image = models.ImageField(upload_to='courses_image/', default='defaults/course.jpg')
     description = tinymce_models.HTMLField('توضیحات خرید درس', null=True, blank=True)
@@ -250,18 +253,13 @@ class Course(models.Model):
             return discount.first()
         return None
 
-    def get_amount_payable(self, exclude=None):
-        discount = self.get_discount()
-        if discount:
-            return self.amount * (100 - discount.percent) / 100
-        return self.amount
+    def get_next_installment(self, exclude=None):
+        now = datetime.datetime.now()
+        installment = Installment.objects.filter(Q(start_date__gt=now) | Q(end_date__gt=now + datetime.timedelta(days=10))).first()
+        return installment
 
-    def get_discount_amount(self, exclude=None):
-        discount = self.get_discount()
-        if discount:
-            return self.amount * discount.percent / 100
-        return 0
-
+    def students(self):
+        return User.objects.filter(installments__in=self.installment_set.all())
 
 # Course_Calendar Model
 class Course_Calendar(models.Model):
@@ -324,7 +322,7 @@ class Pay_History(models.Model):
     amount = models.FloatField("هزینه", default=float(0))
     is_successful = models.BooleanField('موفق', default=False)
     submit_date = models.DateTimeField("تاریخ ثبت", null=True)
-    courses = models.TextField()
+    installments = models.TextField()
     payment_code = models.CharField("شناسه پرداخت", max_length=20)
 
     class Meta:
@@ -338,11 +336,11 @@ class Pay_History(models.Model):
         else:
             "-"
 
-    def get_courses(self):
-        courses_id_list = self.courses.split()
-        return list(Course.objects.filter(id__in=courses_id_list).values_list('title', flat=True))
+    def get_installments(self):
+        installments_id_list = self.installments.split()
+        return list(Installment.objects.filter(id__in=installments_id_list).annotate(full_title=Concat('title', V(' '), 'course__title')).values_list('full_title', flat=True))
 
-    get_courses.short_description = 'دروس خریداری شده'
+    get_installments.short_description = 'قسط های خریداری شده'
     submit_date_decorated.short_description = 'تاریخ ثبت'
 
 
@@ -432,3 +430,59 @@ class Support(models.Model):
 # @receiver(post_save, sender=Support)
 # def clear_cache(sender, instance, **kwargs):
 #     cache.clear()
+
+
+# Installment model Model
+class Installment(models.Model):
+    course = models.ForeignKey('Course', on_delete=models.CASCADE, verbose_name="دوره")
+    start_date = models.DateField("تاریخ شروع")
+    end_date = models.DateField("تاریخ پایان")
+    title = models.CharField("عنوان", max_length=30)
+    amount = models.FloatField("مبلغ", default=float(0),
+                               validators=[MinValueValidator(0)]
+                               )
+
+    class Meta:
+        ordering = ['start_date']
+        verbose_name_plural = "قسط"
+        verbose_name = "قسط"
+
+    def __str__(self):
+        return self.title+ " " + self.course.title
+
+
+    def clean_fields(self, exclude=None):
+        super().clean_fields(exclude=exclude)
+        if not self.start_date or not self.end_date or self.end_date < self.start_date:
+            raise ValidationError("تاریخ پایان باید پس از تاریخ شروع باشد")
+        query = Q(course__id=self.course.id)
+        if self.id is not None:
+            query &= ~Q(id=self.id)
+        query &= ((Q(start_date__gte=self.start_date) & (Q(end_date__lte=self.end_date))) |
+                  (Q(start_date__lte=self.start_date) & (Q(end_date__gte=self.end_date))) |
+                  (Q(start_date__lte=self.start_date) & (Q(end_date__lte=self.end_date)) & (
+                      Q(end_date__gte=self.start_date))) |
+                  (Q(start_date__gte=self.start_date) & (Q(start_date__lte=self.end_date)) & (
+                      Q(end_date__gte=self.end_date)))
+                  )
+        if Installment.objects.filter(query).exists():
+            raise ValidationError("تاریخ قسط تداخل دارد")
+
+
+    def get_amount_payable(self, exclude=None):
+        discount = self.course.get_discount()
+        if discount:
+            return self.amount * (100 - discount.percent) / 100
+        return self.amount
+
+    def get_discount_amount(self, exclude=None):
+        discount = self.course.get_discount()
+        if discount:
+            return self.amount * discount.percent / 100
+        return 0
+
+#
+# class User_Course(models.Model):
+#       user = models.ForeignKey(User, on_delete=models.CASCADE)
+#       course = models.ForeignKey(Course, on_delete=models.CASCADE)
+#       installments = models.ManyToManyField(Installment, blank=True,)

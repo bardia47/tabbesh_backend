@@ -4,7 +4,6 @@ from django import forms
 from django.contrib.auth.hashers import make_password
 from .models import *
 from jalali_date.admin import ModelAdminJalaliMixin, StackedInlineJalaliMixin, TabularInlineJalaliMixin
-from jalali_date import datetime2jalali, date2jalali
 from django.contrib.auth.models import Group
 from accounts.enums import RoleCodes, AdminEnums
 from django.contrib import messages
@@ -18,22 +17,22 @@ from .utils import Utils
 from django.db.models import Max
 
 
-class CourseInline(admin.StackedInline):
-    model = User.courses.through
-    verbose_name_plural = "دوره ها"
-    verbose_name = "دوره ها"
+class installmentInline(admin.StackedInline):
+    model = User.installments.through
+    verbose_name_plural = "قسط ها"
+    verbose_name = "قسط ها"
     extra = 0
 
     def get_formset(self, request, obj=None, **kwargs):
-        formset = super(CourseInline, self).get_formset(request, obj, **kwargs)
+        formset = super(installmentInline, self).get_formset(request, obj, **kwargs)
         form = formset.form
-        form.base_fields['course'].label = "دوره"
-        widget = form.base_fields['course'].widget
+        form.base_fields['installment'].label = "قسط"
+        widget = form.base_fields['installment'].widget
         widget.can_add_related = False
         widget.can_change_related = False
         widget.can_add_related = False
         widget.can_change_related = False
-        widget.label = 'دوره'
+        widget.label = "قسط"
         return formset
 
 
@@ -162,7 +161,7 @@ class UserAdmin(BaseUserAdmin):
         ('اعتبار', {'fields': ('credit',)}),
     )
     inlines = [
-        CourseInline, PayHistoryInline, EventInline, EventRelatedInline
+        installmentInline , PayHistoryInline, EventInline, EventRelatedInline
     ]
 
     def get_queryset(self, request):
@@ -219,6 +218,12 @@ class CourseCalendarInline(TabularInlineJalaliMixin, admin.TabularInline):
     max_num = 3
 
 
+class InstallmentInline(TabularInlineJalaliMixin, admin.TabularInline):
+    model = Installment
+    max_num = 3
+
+
+
 class DiscountWithoutCodeInline(admin.TabularInline):
     model = Course.discount_set.through
     max_num = 1
@@ -255,9 +260,10 @@ class CourseAdmin(ModelAdminJalaliMixin, admin.ModelAdmin):
     form = CourseForm
     inlines = [
         CourseCalendarInline,
-        DiscountWithoutCodeInline
+        DiscountWithoutCodeInline,
+        InstallmentInline
     ]
-    list_display = ['code', 'title', 'get_start_jalali', 'get_end_jalali', 'teacher_full_name', 'student_link']
+    list_display = ['code', 'title', 'get_start_date_decorated', 'get_end_date_decorated', 'teacher_full_name', 'student_link']
     search_fields = ['code', 'title']
 
     def teacher_full_name(self, obj):
@@ -266,16 +272,16 @@ class CourseAdmin(ModelAdminJalaliMixin, admin.ModelAdmin):
     teacher_full_name.short_description = 'نام مدرس'
     teacher_full_name.admin_order_field = 'teacher__get_full_name'
 
-    def get_start_jalali(self, obj):
-        return datetime2jalali(obj.start_date).strftime('%y/%m/%d , %H:%M:%S')
+    def get_start_date_decorated(self, obj):
+        return jdatetime.datetime.fromgregorian(datetime=obj.start_date).strftime('%y/%m/%d')
 
-    def get_end_jalali(self, obj):
-        return datetime2jalali(obj.end_date).strftime('%y/%m/%d , %H:%M:%S')
+    def get_end_date_decorated(self, obj):
+        return jdatetime.datetime.fromgregorian(datetime=obj.end_date).strftime('%y/%m/%d')
 
-    get_start_jalali.short_description = 'تاریخ شروع'
-    get_start_jalali.admin_order_field = 'start_date'
-    get_end_jalali.short_description = 'تاریخ پایان'
-    get_end_jalali.admin_order_field = 'end_date'
+    get_start_date_decorated.short_description = 'تاریخ شروع'
+    get_start_date_decorated.admin_order_field = 'start_date'
+    get_end_date_decorated.short_description = 'تاریخ پایان'
+    get_end_date_decorated.admin_order_field = 'end_date'
 
     def render_change_form(self, request, context, *args, **kwargs):
         context['adminform'].form.fields['teacher'].queryset = User.objects.filter(role__code=RoleCodes.TEACHER.value)
@@ -291,19 +297,19 @@ class CourseAdmin(ModelAdminJalaliMixin, admin.ModelAdmin):
 
 
 class CourseCalendarAdmin(ModelAdminJalaliMixin, admin.ModelAdmin):
-    list_display = ['course', 'get_start_jalali', 'get_end_jalali', ]
+    list_display = ['course', 'get_start_date_decorated', 'get_end_date_decorated', ]
     search_fields = ['course']
 
-    def get_start_jalali(self, obj):
-        return datetime2jalali(obj.start_date).strftime('%y/%m/%d , %H:%M:%S')
+    def get_start_date_decorated(self, obj):
+        return jdatetime.datetime.fromgregorian(datetime=obj.start_date).strftime('%y/%m/%d , %H:%M:%S')
 
-    def get_end_jalali(self, obj):
-        return datetime2jalali(obj.end_date).strftime('%y/%m/%d , %H:%M:%S')
+    def get_end_date_decorated(self, obj):
+        return jdatetime.datetime.fromgregorian(datetime=obj.end_date).strftime('%y/%m/%d , %H:%M:%S')
 
-    get_start_jalali.short_description = 'تاریخ شروع'
-    get_start_jalali.admin_order_field = 'start_date'
-    get_end_jalali.short_description = 'تاریخ پایان'
-    get_end_jalali.admin_order_field = 'end_date'
+    get_start_date_decorated.short_description = 'تاریخ شروع'
+    get_start_date_decorated.admin_order_field = 'start_date'
+    get_end_date_decorated.short_description = 'تاریخ پایان'
+    get_end_date_decorated.admin_order_field = 'end_date'
 
     def delete_model(self, request, obj):
         if len(obj.course.course_calendar_set.all()) == 1:
@@ -324,6 +330,23 @@ class CourseCalendarAdmin(ModelAdminJalaliMixin, admin.ModelAdmin):
         response = super().response_delete(request, obj_display, obj_id)
         self.remove_default_message(request)
         return response
+
+
+class InstallmentAdmin(ModelAdminJalaliMixin, admin.ModelAdmin):
+    list_display = ['course', 'get_start_date_decorated', 'get_end_date_decorated','title' , 'amount' ]
+    search_fields = ['course','title']
+
+
+    def get_start_date_decorated(self, obj):
+        return jdatetime.datetime.fromgregorian(datetime=obj.start_date).strftime('%y/%m/%d ')
+
+    def get_end_date_decorated(self, obj):
+        return jdatetime.datetime.fromgregorian(datetime=obj.end_date).strftime('%y/%m/%d ')
+
+    get_start_date_decorated.short_description = 'تاریخ شروع'
+    get_start_date_decorated.admin_order_field = 'start_date'
+    get_end_date_decorated.short_description = 'تاریخ پایان'
+    get_end_date_decorated.admin_order_field = 'end_date'
 
 
 class CityAdmin(admin.ModelAdmin):
@@ -358,9 +381,9 @@ class DocumentAdmin(admin.ModelAdmin):
 
 class PayHistoryAdmin(admin.ModelAdmin):
     list_display = ['purchaser_link', 'amount', 'is_successful', 'submit_date_decorated', 'payment_code',
-                    'get_courses']
+                    'get_installments']
     fields = (
-        'purchaser', 'amount', 'is_successful', 'submit_date_decorated', 'payment_code', 'get_courses')
+        'purchaser', 'amount', 'is_successful', 'submit_date_decorated', 'payment_code', 'get_installments')
     exclude = ['courses', ]
     readonly_fields = ('purchaser_link',)
 
@@ -405,7 +428,7 @@ class DiscountForm(forms.ModelForm):
 
 
 class DiscountAdmin(ModelAdminJalaliMixin, admin.ModelAdmin):
-    list_display = ['code', 'title', 'percent', 'get_start_jalali', 'get_end_jalali']
+    list_display = ['code', 'title', 'percent', 'get_start_date_decorated', 'get_end_date_decorated']
     search_fields = ['code', 'title']
     form = DiscountForm
     inlines = [
@@ -415,18 +438,18 @@ class DiscountAdmin(ModelAdminJalaliMixin, admin.ModelAdmin):
     def get_queryset(self, request):
         return Discount.objects.filter(code__isnull=False)
 
-    def get_start_jalali(self, obj):
-        return datetime2jalali(obj.start_date).strftime('%y/%m/%d ')
+    def get_start_date_decorated(self, obj):
+        return jdatetime.datetime.fromgregorian(datetime=obj.start_date).strftime('%y/%m/%d , %H:%M:%S')
 
-    def get_end_jalali(self, obj):
+    def get_end_date_decorated(self, obj):
         if obj.end_date:
-            return datetime2jalali(obj.end_date).strftime('%y/%m/%d')
+            return jdatetime.datetime.fromgregorian(datetime=obj.end_date).strftime('%y/%m/%d , %H:%M:%S')
         return ""
 
-    get_start_jalali.short_description = 'تاریخ شروع'
-    get_start_jalali.admin_order_field = 'start_date'
-    get_end_jalali.short_description = 'تاریخ پایان'
-    get_end_jalali.admin_order_field = 'end_date'
+    get_start_date_decorated.short_description = 'تاریخ شروع'
+    get_start_date_decorated.admin_order_field = 'start_date'
+    get_end_date_decorated.short_description = 'تاریخ پایان'
+    get_end_date_decorated.admin_order_field = 'end_date'
 
 
 class DiscountWithoutCode(Discount):
@@ -523,3 +546,5 @@ admin.site.register(Discount, DiscountAdmin)
 admin.site.register(DiscountWithoutCode, DiscountWithoutCodeAdmin)
 admin.site.register(Support, SupportAdmin)
 admin.site.register(Event, EventAdmin)
+admin.site.register(Installment, InstallmentAdmin)
+
