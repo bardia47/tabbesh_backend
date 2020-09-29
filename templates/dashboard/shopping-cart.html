@@ -3,29 +3,23 @@
 {% load jformat %}
 {% load pay_enums %}
 <!-- Title block of base.html -->
-{% block title %}خرید درس{% endblock %}
+{% block title %}سبد خرید{% endblock %}
 
 <!-- CSS files -->
 {% block CSSfiles %}
-    <link rel="stylesheet" href="{% static 'dashboard/css/shopping.css' %}">
+    <link rel="stylesheet" href="{% static 'dashboard/css/shopping_cart.css' %}">
 {% endblock %}
 
 <!-- Content of page -->
 {% block content %}
-    <section class="shopping">
-        <!-- Shopping content-->
-        <div class="shopping-content">
-            <!-- Shopping title -->
-            <div class="shopping-title">
-                <h1>
-                    دوره های تابش
-                </h1>
-            </div>
-
+    <section class="shopping-cart">
+        <!-- Cart Section use cart-list for shopping.js -->
+        <div class="cart-list card-section">
+            <!-- first buy event -->
             {% if 'event_discount' in request.session %}
                 <div class="alert alert-info alert-dismissable">
                     <a class="panel-close close" data-dismiss="alert">×</a>
-                    <i class="fas fa-percentage mr-1"></i>
+                    <i class="fas fa-percentage ml-1"></i>
                     <strong>
                         تبریک !
                         برای اولین خرید خود
@@ -35,20 +29,15 @@
                     </strong>
                 </div>
             {% endif %}
-            <!-- Cart Section use cart-list for shopping.js -->
-            <div class="cart-list card-section">
-                <!-- Cart title -->
-                <div class="cart-title">
-                    <h4>
-                        <img src="{% static 'home/images/icons/shopping-basket.svg' %}">
-                        سبد خرید
-                    </h4>
-                </div>
-                <!-- Cart items add with shopping.js -->
-                <div id="cartListItems"></div>
-                <!-- End cart items -->
+            <div class="cart-title">
+                <h4>
+                    <img src="{% static 'home/images/icons/shopping-basket.svg' %}">
+                    سبد خرید
+                </h4>
             </div>
-            <!-- Cart footer section -->
+            <!-- cart items buy user -->
+            <div id="cartListItems"></div>
+
             <div class="card cart-footer">
                 <!-- Cart purchase button -->
                 <form id="shopping-cart-form" action="{% url 'payment_request' %}" method="post">
@@ -63,7 +52,7 @@
                             <input type="text" class="form-control mx-2 w-25" id="discountCode" name="code"
                                    {% if 'event_discount' in request.session %}value="{{ request.user.phone_number }}"
                                    readonly{% endif %}>
-                            <button type="button" class="btn btn-info ml-auto text-white" id="discountButton">
+                            <button type="button" class="btn btn-info mr-auto text-white" id="discountButton">
                                 اعمال کد تخفیف
                             </button>
                         </div>
@@ -73,68 +62,10 @@
                             </p>
                         </div>
                     </div>
-                    <input type="submit" class="btn btn-success" id="payButton" value="تکمیل فرایند خرید">
+                    <input type="submit" class="btn btn-success" id="payButton" value="پرداخت">
                 </form>
             </div>
         </div>
-        <hr>
-        <!-- Shopping cards - include Courses & Search section -->
-        <div class="shopping-cards">
-            <!-- Shopping search title -->
-            <div class="shopping-search-title">
-                <h1>
-                    <img src="{% static 'home/images/icons/search.svg' %}">
-                    جستجوی دروس
-                </h1>
-            </div>
-            <!-- Search form -->
-            <form action="" id="searchForm">
-                <div class="row form-search">
-                    <!-- Select Grade -->
-                    <div class="col-md-4 mb-2">
-                        <select class="custom-select" id="searchGrade" data-search="grade">
-                            <option value="none">پایه</option>
-                            {% for grade in grades %}
-                                <option value="{{ grade.id }}"  {% if request.GET.grade|add:"0" == grade.id %}
-                                        selected {% endif %} >{{ grade.title }}</option>
-                            {% endfor %}
-                        </select>
-                    </div>
-                    <!-- Select Lessons -->
-                    <div class="col-md-4 mb-2">
-                        <select class="custom-select" id="searchLesson" data-search="lesson">
-                            <option value="none">دروس</option>
-                            {% for lesson in lessons %}
-                                <option value="{{ lesson.id }}"  {% if request.GET.lesson|add:"0" == lesson.id %}
-                                        selected {% endif %} >{{ lesson.title }}</option>
-                            {% endfor %}
-                        </select>
-                    </div>
-                    <!-- Select teachers -->
-                    <div class="col-md-4 mb-2">
-                        <select class="custom-select" id="searchTeacher" data-search="teacher">
-                            <option value="none">استاد</option>
-                            {% for teacher in teachers %}
-                                <option value="{{ teacher.id }}" {% if request.GET.teacher|add:"0" == teacher.id %}
-                                        selected {% endif %} >{{ teacher.full_name }}</option>
-                            {% endfor %}
-                        </select>
-                    </div>
-                </div>
-            </form>
-            <div class="loading-search spinner-border spinner-color" role="status">
-                <span class="sr-only">Loading...</span>
-            </div>
-            <!-- Shopping Cards -->
-            <div class="card-group">
-            </div>
-
-            <div class="pagination-wrapper mt-2 text-center" style="display: none">
-                <div class="pagination">
-                </div>
-            </div>
-        </div>
-
 
         <!-- Modal error for duplicate course in cart -->
         <div class="modal fade" id="errorModal" tabindex="-1" role="dialog" aria-labelledby="duplicateModalLabel"

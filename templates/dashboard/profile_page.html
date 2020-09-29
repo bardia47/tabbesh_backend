@@ -26,7 +26,7 @@
                     <img src="{{ user.avatar }}" id="avatar" class="avatar img-circle img-thumbnail" alt="avatar">
                     <div class="custom-file w-100 mt-2" lang="fa">
                         <input type="file" id="file" name="file" class="custom-file-input" accept="image/*" required/>
-                        <label class="custom-file-label text-left" for="file">روی آپلود کلیک کنید...</label>
+                        <label class="custom-file-label text-right" for="file">روی آپلود کلیک کنید...</label>
                     </div>
                     <input type="submit" name="upload" class="btn btn-primary my-2" value="تغییر عکس پروفایل" >
                     <hr>
@@ -40,18 +40,18 @@
                     <p class="vazir-bold">
                         <img src="{% static "dashboard/images/icons/name.svg" %}" width="30" height="30">
                         نام و نام خانوادگی:
-                        <span class="ml-1 vazir-medium">{{ request.user.get_full_name }}</span>
+                        <span class="mr-1 vazir-medium">{{ request.user.get_full_name }}</span>
                     </p>
                     <p class="vazir-bold">
                         <img src="{% static "dashboard/images/icons/mobile-phone.svg" %}" width="30" height="30">
                         شماره تلفن:
-                        <span class="ml-1 vazir-medium">{{ user.phone_number }}</span>
+                        <span class="mr-1 vazir-medium">{{ user.phone_number }}</span>
                     </p>
                     <p class="vazir-bold">
                         <img src="{% static "dashboard/images/icons/credit.svg" %}" width="30" height="30">
                         اعتبار:
-                        <span class="ml-1 vazir-medium">{{ user.credit }} هزار تومان </span>
-                        <span class="ml-2 vazir-medium small text-info text-sm-center text-nowrap">
+                        <span class="mr-1 vazir-medium">{{ user.credit }} هزار تومان </span>
+                        <span class="mr-2 vazir-medium small text-info text-sm-center text-nowrap">
                             <a id="checkout" href=""><i class="fas fa-question-circle"></i>
                             چی جوری نقدش کنیم ؟
                             </a>
@@ -129,7 +129,7 @@
                         <div class="form-group">
                             <label for="gender" class="control-label">جنسیت</label>
                             <div class="col-lg-8">
-                                <select id="gender" name="gender" class="custom-select w-25 ml-n3 text-center" size="2"
+                                <select id="gender" name="gender" class="custom-select w-25 mr-n3 text-center" size="2"
                                         required>
                                     <option value="True" {% ifequal user.gender True %}
                                             selected="selected" {% endifequal %}>
@@ -146,7 +146,7 @@
                             <label for="city" class="control-label">شهر</label>
                             <div class="col-lg-8">
                                 <div class="ui-select">
-                                    <select id="city" name="city" class="custom-select w-50 ml-n3 text-center" size="3"
+                                    <select id="city" name="city" class="custom-select w-50 mr-n3 text-center" size="3"
                                             required>
                                         {% for element in cities %}
                                             <option value="{{ element.id }}" {% ifequal user.cityTitle element.title %}
@@ -159,7 +159,7 @@
                         <div class="form-group">
                             <label for="grades" class="control-label">پایه تحصیلی</label>
                             <div class="col-md-8">
-                                <select id="grades[0]" name="grades[0]" class="custom-select ml-n3 text-center w-50"
+                                <select id="grades[0]" name="grades[0]" class="custom-select mr-n3 text-center w-50"
                                         required
                                         size="3">
                                     {% for element in grades %}
