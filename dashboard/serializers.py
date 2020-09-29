@@ -104,9 +104,10 @@ class ShoppingCourseSerializer(CourseLessonsSerializer):
     course_calendars = serializers.SerializerMethodField('get_start_dates')
     discount = serializers.SerializerMethodField('get_discount')
     installment = serializers.SerializerMethodField('get_installment')
+
     class Meta:
         model = Course
-        fields = ("installment",'title', 'start_date', 'end_date', 'code', 'description', 'image', 'teacher',
+        fields = ("installment", 'title', 'start_date', 'end_date', 'code', 'description', 'image', 'teacher',
                   'course_calendars', 'parent', 'discount')
 
     def get_start_dates(self, obj):
@@ -125,21 +126,31 @@ class ShoppingCourseSerializer(CourseLessonsSerializer):
             return DiscountSerializer(instance=discount).data
         return None
 
-    def get_installment(self,obj):
-      installment = obj.get_next_installment()
-      if installment:
-          return InstallmentSerializer(instance=installment).data
-      return None
+    def get_installment(self, obj):
+        installment = obj.get_next_installment()
+        if installment:
+            return InstallmentSerializer(instance=installment).data
+        return None
+
 
 class DiscountSerializer(serializers.ModelSerializer):
     class Meta:
         model = Discount
         fields = ('percent', 'end_date', 'title')
 
+
 class InstallmentSerializer(serializers.ModelSerializer):
+    title = serializers.SerializerMethodField('get_title')
+
     class Meta:
         model = Installment
-        fields = ('id','title','amount','start_date','end_date')
+        fields = ('id', 'title', 'amount', 'start_date', 'end_date')
+
+    def get_title(self, obj):
+        if obj.course.installment_set.all().count() == 1:
+            return None
+        return obj.title
+
 
 class UserProfileSerializer(UserBaseSerializer):
     grade = serializers.ReadOnlyField(source='student_grade')
@@ -153,11 +164,13 @@ class UserProfileSerializer(UserBaseSerializer):
                   'last_name', 'username', 'email', 'grade', 'cityTitle', 'gender', 'national_code', 'phone_number',
                   'grades', 'city', 'avatar', 'credit')
 
+
 # for get method
 class UserProfileShowSerializer(serializers.Serializer):
     user = UserProfileSerializer()
     grades = GradeSerializer(many=True)
     cities = CitySerializer(many=True)
+
 
 class DocumentSerializer(serializers.ModelSerializer):
     sender_name = serializers.ReadOnlyField(source='sender.get_full_name')
@@ -185,3 +198,21 @@ class StudentBriefSerializer(UserProfileSerializer):
 class ClassListSerializer(serializers.Serializer):
     course = CourseBriefSerializer()
     students = StudentBriefSerializer(many=True)
+
+
+class UserInstallmentSerializer(InstallmentSerializer):
+    is_bought = serializers.SerializerMethodField('get_is_bought')
+    is_disable = serializers.SerializerMethodField('get_is_disable')
+
+    class Meta:
+        model = Installment
+        fields = ('id', 'title', 'amount', 'start_date', 'end_date', 'is_bought', 'is_disable')
+
+    def get_is_bought(self, obj):
+        if obj.user_set.filter(pk=self.context['request'].user.pk).exists():
+            return True
+        return False
+
+    def get_is_disable(self, obj):
+        now = datetime.datetime.now().date()
+        return not ((obj.start_date > now) | (obj.end_date > (now + datetime.timedelta(days=10))))
