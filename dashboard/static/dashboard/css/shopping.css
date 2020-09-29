@@ -11,7 +11,7 @@
 }
 
 ::-webkit-scrollbar-thumb {
-    background-color: #06623b;
+    background-color: #065390;
     background-image: -webkit-linear-gradient(45deg, rgba(255, 255, 255, .2) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, .2) 50%, rgba(255, 255, 255, .2) 75%, transparent 75%, transparent)
 }
 
@@ -42,7 +42,7 @@
 
 .cart-title {
     text-align: center;
-    background-color: #06623b;
+    background-color: #065390;
     color: white;
     padding: 20px;
     border-radius: 4px;
@@ -68,22 +68,22 @@
     margin-bottom: 20px;
     text-align: center
 }
-
 .cart-total-price {
     font-family: 'Vazir_light';
     margin-top: 5px;
 }
 
 .button-purchase {
-    background-color: #649d66;
+    background-color: #065390;
     color: #FFFFFF;
     height: 50px;
 }
 
 .button-purchase:hover {
-    background-color: #06623b;
+    background-color: #065390;
     color: #FFFFFF;
 }
+
 
 /* Shopping card with filter CSS */
 .shopping-cards {

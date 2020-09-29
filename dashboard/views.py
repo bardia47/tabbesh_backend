@@ -182,6 +182,7 @@ class Lessons(APIView):
             return Response({"have_class": self.request.user.courses().count() != 0},
                             template_name='dashboard/lessons.html')
 
+
 class GetLessonsViewSet(viewsets.ModelViewSet):
     queryset = Course.objects.all()
     serializer_class = CourseLessonsSerializer
@@ -221,6 +222,7 @@ class GetLessonsViewSet(viewsets.ModelViewSet):
         courses = courses.order_by('-end_date')
         return courses
 
+
 # get child lessons of parent (using tree)
 def getAllLessons(lesson_id):
     lessons = Lesson.objects.filter(id=lesson_id)
@@ -237,6 +239,7 @@ def getAllLessons(lesson_id):
             lessons = lessons | whilelessons
     query = reduce(or_, (Q(lesson__id=lesson.id) for lesson in lessons))
     return query
+
 
 # Shopping Page
 class Shopping(APIView):
@@ -255,8 +258,9 @@ class Shopping(APIView):
         ser = ShoppingSerializer(instance={'grades': grades, 'lessons': lessons, 'teachers': teachers})
         return Response(ser.data, template_name='dashboard/shopping.html')
 
+
 class GetShoppingViewSet(viewsets.ModelViewSet):
-    #thats fake :/ because its Mandatory
+    # thats fake :/ because its Mandatory
     queryset = Course.objects.all()
     serializer_class = ShoppingCourseSerializer
     http_method_names = ['get', ]
@@ -389,3 +393,10 @@ class ClassList(generics.RetrieveAPIView):
 
 def teacher_course_panel(request, code):
     return render(request, 'dashboard/teacher_course_panel.html', {"code": code})
+
+
+def student_course_panel(request, code):
+    return render(request, 'dashboard/student_course_panel.html', {"code": code})
+
+def shopping_cart(request):
+    return render(request, 'dashboard/shopping-cart.html')

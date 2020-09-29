@@ -71,9 +71,9 @@ function renderLessenCards(courseCards) {
             `
         } else {
             buttonToClassPanel = `
-            <button onclick="location.href='files/${courseCard.code}'" class="btn btn-dark mr-2" type="button">
-                <img src="/static/home/images/icons/document.svg" alt="button link to class" />
-                جزوه ها
+            <button onclick="location.href='student_course_panel/${courseCard.code}'" class="btn btn-dark mr-2" type="button">
+                <img src="/static/home/images/icons/teacher-panel.svg" alt="student panel" />
+                پنل کلاس
             </button>
             `
         }

@@ -93,13 +93,13 @@
                     {% csrf_token %}
                     <div class="modal-body">
                         <div class="form-group">
-                            <label id="titleLabel" class="mr-2 vazir-bold" for="title">عنوان جزوه</label>
+                            <label id="titleLabel" class="ml-2 vazir-bold" for="title">عنوان جزوه</label>
                             <input class="form-control w-100" type="text" id="title" name="title"
                                    placeholder="مثال: فصل اول - ریاضی دهم" required>
                         </div>
                         <hr>
                         <div class="form-group">
-                            <label id="descriptionLabel" class="mr-2 vazir-bold" for="description">توضیحات</label>
+                            <label id="descriptionLabel" class="ml-2 vazir-bold" for="description">توضیحات</label>
                             <textarea class="form-control" name="description" id="description"
                                       rows="4" placeholder="توضیحات مربوط به جزوه را در این قسمت بنویسید."></textarea>
                         </div>
@@ -107,7 +107,7 @@
 
                         <!-- drag upload append to this div -->
                         <div class="drop-zone">
-                            <label id="fileLabel" class="mr-2 vazir-bold" for="description">فایل جزوه از این قسمت آپلود
+                            <label id="fileLabel" class="ml-2 vazir-bold" for="description">فایل جزوه از این قسمت آپلود
                                 کنید.</label>
                         </div>
 
@@ -119,13 +119,13 @@
                         </div>
                         <div id="uploadFailedAlert" class="text-center m-0" style="display: none">
                             <small class="text-danger mb-2">
-                                <i class="fas fa-exclamation-triangle mr-1"></i>
+                                <i class="fas fa-exclamation-triangle ml-1"></i>
                                 ارسال جزوه به مشکل خورده است ! دوباره امتحان کنید
                             </small>
                         </div>
                         <div id="validationForFile" class="text-center m-0" style="display: none">
                             <small class="text-danger mb-2">
-                                <i class="fas fa-exclamation-triangle mr-1"></i>
+                                <i class="fas fa-exclamation-triangle ml-1"></i>
                                 ارسال فایل الزامی می باشد. دوباره امتحان کنید.
                             </small>
                         </div>
@@ -167,9 +167,9 @@
 {% block JSfile %}
     <!-- persian date formatter -- hint: read doc: https://github.com/babakhani/PersianDate -->
     <script src="{% static "home/js/persian-date.min.js" %}"></script>
-    <!-- course students component -->
-    <script src="{% static 'dashboard/js/course-students-componenet.js' %}"></script>
     <!-- student list component -->
+    <script src="{% static 'dashboard/js/course-students-component.js' %}"></script>
+    <!-- file manager component -->
     <script src="{% static 'dashboard/js/file-manager-component.js' %}"></script>
     <!-- DropZone JS file -->
     <script src="{% static 'home/js/drag-upload.js' %}"></script>
