@@ -35,7 +35,7 @@ function renderDocuments(data) {
         <div id="fileManagerTitle"  class="row mb-2">
             <div class="d-flex col-md-5 file-manager-image">
                 <img src="${data.course.image}" width="50" height="50">
-                <div class="ml-2">
+                <div class="mr-2">
                     <p class="m-0"><strong>${data.course.title}</strong></p>
                     <h6 class="p-0"><small>${data.course.teacher}</small></h6>         
                 </div>

@@ -17,12 +17,14 @@ $(function () {
     $('#forgetPasswordTag').click(function () {
         // for forget password
         // $('#forgetPasswordModal').modal('show')
-        window.Raychat.toggle();
         setTimeout(
             function () {
                 if (!sendForgetPasswordMessage) {
-                    window.Raychat.sendOfflineMessage('در صورت فراموشی رمز، نام و نام خانوادگی و شماره تلفن را در اینجا وارد کنید تا همکاران ما رمز عبور جدید را ارسال کنند.');
-                    window.Raychat.sendOfflineMessage('مثال: محمد محمدی 09123456789');
+                    window.addEventListener('raychat_ready', function (ets) {
+                        window.Raychat.sendOfflineMessage('در صورت فراموشی رمز، نام و نام خانوادگی و شماره تلفن را در اینجا وارد کنید تا همکاران ما رمز عبور جدید را ارسال کنند.');
+                        window.Raychat.sendOfflineMessage('مثال: محمد محمدی 09123456789');
+                        window.Raychat.toggle();
+                    });
                     sendForgetPasswordMessage = true;
                 }
             }, 2000);

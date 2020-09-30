@@ -8,7 +8,7 @@
  * RTL rev. 1 (https://github.com/PerseusTheGreat/bootstrap-rtl)
  */
 :root {
-  --dark-blue: #00204E;
+  --dark-blue: #065390;
   --indigo: #6610f2;
   --purple: #6f42c1;
   --pink: #e83e8c;
@@ -22,7 +22,7 @@
   --gray: #6c757d;
   --gray-dark: #343a40;
   --primary: #ffc109;
-  --secondary: #00204E;
+  --secondary: #065390;
   --success: #269242;
   --info: #008cbd;
   --warning: #f56b22;
@@ -1378,18 +1378,18 @@ pre {
 .table-secondary,
 .table-secondary > th,
 .table-secondary > td {
-  background-color: #b8c1cd; }
+  background-color: #b9cfe0; }
 .table-secondary th,
 .table-secondary td,
 .table-secondary thead th,
 .table-secondary tbody + tbody {
-  border-color: #7a8ba3; }
+  border-color: #7ea6c5; }
 
 .table-hover .table-secondary:hover {
-  background-color: #a9b4c2; }
+  background-color: #a7c3d8; }
   .table-hover .table-secondary:hover > td,
   .table-hover .table-secondary:hover > th {
-    background-color: #a9b4c2; }
+    background-color: #a7c3d8; }
 
 .table-success,
 .table-success > th,
@@ -1965,27 +1965,27 @@ fieldset:disabled a.btn {
 
 .btn-secondary {
   color: #fff;
-  background-color: #00204E;
-  border-color: #00204E; }
+  background-color: #065390;
+  border-color: #065390; }
   .btn-secondary:hover {
     color: #fff;
-    background-color: #001028;
-    border-color: #000b1b; }
+    background-color: #043e6b;
+    border-color: #04375f; }
   .btn-secondary:focus, .btn-secondary.focus {
     color: #fff;
-    background-color: #001028;
-    border-color: #000b1b;
-    box-shadow: 0 0 0 0.2rem rgba(38, 65, 105, 0.5); }
+    background-color: #043e6b;
+    border-color: #04375f;
+    box-shadow: 0 0 0 0.2rem rgba(43, 109, 161, 0.5); }
   .btn-secondary.disabled, .btn-secondary:disabled {
     color: #fff;
-    background-color: #00204E;
-    border-color: #00204E; }
+    background-color: #065390;
+    border-color: #065390; }
   .btn-secondary:not(:disabled):not(.disabled):active, .btn-secondary:not(:disabled):not(.disabled).active, .show > .btn-secondary.dropdown-toggle {
     color: #fff;
-    background-color: #000b1b;
-    border-color: #00060e; }
+    background-color: #04375f;
+    border-color: #033053; }
     .btn-secondary:not(:disabled):not(.disabled):active:focus, .btn-secondary:not(:disabled):not(.disabled).active:focus, .show > .btn-secondary.dropdown-toggle:focus {
-      box-shadow: 0 0 0 0.2rem rgba(38, 65, 105, 0.5); }
+      box-shadow: 0 0 0 0.2rem rgba(43, 109, 161, 0.5); }
 
 .btn-success {
   color: #fff;
@@ -2151,23 +2151,23 @@ fieldset:disabled a.btn {
       box-shadow: 0 0 0 0.2rem rgba(255, 193, 9, 0.5); }
 
 .btn-outline-secondary {
-  color: #00204E;
-  border-color: #00204E; }
+  color: #065390;
+  border-color: #065390; }
   .btn-outline-secondary:hover {
     color: #fff;
-    background-color: #00204E;
-    border-color: #00204E; }
+    background-color: #065390;
+    border-color: #065390; }
   .btn-outline-secondary:focus, .btn-outline-secondary.focus {
-    box-shadow: 0 0 0 0.2rem rgba(0, 32, 78, 0.5); }
+    box-shadow: 0 0 0 0.2rem rgba(6, 83, 144, 0.5); }
   .btn-outline-secondary.disabled, .btn-outline-secondary:disabled {
-    color: #00204E;
+    color: #065390;
     background-color: transparent; }
   .btn-outline-secondary:not(:disabled):not(.disabled):active, .btn-outline-secondary:not(:disabled):not(.disabled).active, .show > .btn-outline-secondary.dropdown-toggle {
     color: #fff;
-    background-color: #00204E;
-    border-color: #00204E; }
+    background-color: #065390;
+    border-color: #065390; }
     .btn-outline-secondary:not(:disabled):not(.disabled):active:focus, .btn-outline-secondary:not(:disabled):not(.disabled).active:focus, .show > .btn-outline-secondary.dropdown-toggle:focus {
-      box-shadow: 0 0 0 0.2rem rgba(0, 32, 78, 0.5); }
+      box-shadow: 0 0 0 0.2rem rgba(6, 83, 144, 0.5); }
 
 .btn-outline-success {
   color: #269242;
@@ -3735,13 +3735,13 @@ input[type="button"].btn-block {
 
 .badge-secondary {
   color: #fff;
-  background-color: #00204E; }
+  background-color: #065390; }
   a.badge-secondary:hover, a.badge-secondary:focus {
     color: #fff;
-    background-color: #000b1b; }
+    background-color: #04375f; }
   a.badge-secondary:focus, a.badge-secondary.focus {
     outline: 0;
-    box-shadow: 0 0 0 0.2rem rgba(0, 32, 78, 0.5); }
+    box-shadow: 0 0 0 0.2rem rgba(6, 83, 144, 0.5); }
 
 .badge-success {
   color: #fff;
@@ -3849,13 +3849,13 @@ input[type="button"].btn-block {
     color: #543f03; }
 
 .alert-secondary {
-  color: #001129;
-  background-color: #ccd2dc;
-  border-color: #b8c1cd; }
+  color: #032b4b;
+  background-color: #cddde9;
+  border-color: #b9cfe0; }
   .alert-secondary hr {
-    border-top-color: #a9b4c2; }
+    border-top-color: #a7c3d8; }
   .alert-secondary .alert-link {
-    color: black; }
+    color: #010f1a; }
 
 .alert-success {
   color: #144c22;
@@ -4107,15 +4107,15 @@ input[type="button"].btn-block {
     border-color: #856405; }
 
 .list-group-item-secondary {
-  color: #001129;
-  background-color: #b8c1cd; }
+  color: #032b4b;
+  background-color: #b9cfe0; }
   .list-group-item-secondary.list-group-item-action:hover, .list-group-item-secondary.list-group-item-action:focus {
-    color: #001129;
-    background-color: #a9b4c2; }
+    color: #032b4b;
+    background-color: #a7c3d8; }
   .list-group-item-secondary.list-group-item-action.active {
     color: #fff;
-    background-color: #001129;
-    border-color: #001129; }
+    background-color: #032b4b;
+    border-color: #032b4b; }
 
 .list-group-item-success {
   color: #144c22;
@@ -4810,12 +4810,12 @@ button.bg-primary:focus {
   background-color: #d59f00 !important; }
 
 .bg-secondary {
-  background-color: #00204E !important; }
+  background-color: #065390 !important; }
 
 a.bg-secondary:hover, a.bg-secondary:focus,
 button.bg-secondary:hover,
 button.bg-secondary:focus {
-  background-color: #000b1b !important; }
+  background-color: #04375f !important; }
 
 .bg-success {
   background-color: #269242 !important; }
@@ -4905,7 +4905,7 @@ button.bg-dark:focus {
   border-color: #ffc109 !important; }
 
 .border-secondary {
-  border-color: #00204E !important; }
+  border-color: #065390 !important; }
 
 .border-success {
   border-color: #269242 !important; }
@@ -7667,10 +7667,10 @@ a.text-primary:hover, a.text-primary:focus {
   color: #bc8c00 !important; }
 
 .text-secondary {
-  color: #00204E !important; }
+  color: #065390 !important; }
 
 a.text-secondary:hover, a.text-secondary:focus {
-  color: #000102 !important; }
+  color: #032947 !important; }
 
 .text-success {
   color: #269242 !important; }

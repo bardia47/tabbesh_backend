@@ -94,16 +94,16 @@ function renderShoppingCards(courseCards) {
         let endDateCourse = new persianDate(Date.parse(courseCard.end_date));
         let coursePriceTemplate;
         // default is price without discount
-        let discountPrice = parseFloat(courseCard.amount);
+        let discountPrice = parseFloat(courseCard.installment.amount);
         let discountTitleTemplate = ``;
         // price check -- for free courses
-        if (courseCard.amount <= 0) {
+        if (courseCard.installment.amount <= 0) {
             coursePriceTemplate = `رايگان!`
         } else {
             // check course price have discount or not
             if (courseCard.discount == null) {
                 coursePriceTemplate = `
-                ${courseCard.amount}
+                ${courseCard.installment.amount}
                 <span class="currency">تومان</span>
                 `
             } else {
@@ -115,9 +115,9 @@ function renderShoppingCards(courseCards) {
                     ${courseCard.discount.title}
                 </p>
                 `;
-                discountPrice = (parseFloat(courseCard.amount) * (100 - parseInt(courseCard.discount.percent))) / 100;
+                discountPrice = (parseFloat(courseCard.installment.amount) * (100 - parseInt(courseCard.discount.percent))) / 100;
                 coursePriceTemplate = `
-                <span class="price" style="color: #e8505b;text-decoration: line-through">${courseCard.amount}</span>
+                <span class="price" style="color: #e8505b;text-decoration: line-through">${courseCard.installment.amount}</span>
                 ${discountPrice}
                 <span class="currency">تومان</span>
                 `

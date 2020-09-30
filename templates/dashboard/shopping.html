@@ -31,7 +31,7 @@
                         برای اولین خرید خود
                         10
                         درصد تخفیف دارید.
-                        پس از انتخاب دروس مورد نظر بر روی دکمه اعمال تخفیف کلیک کنید.
+                        پس از انتخاب دروس مورد نظر بر روی دکمه تکمیل خرید کلیک کنید.
                     </strong>
                 </div>
             {% endif %}
@@ -56,22 +56,20 @@
                     <!-- Total cart items id and price for pass to back-end -->
                     <input id="totalId" type="hidden" name="total_id" value="">
                     <input id="totalPrice" type="hidden" name="total_pr" value="">
-                    <div class="cart-total-price row px-2">
-                        <div class="col-md-8 d-flex text-sm-center align-items-center mb-2 discount">
-                            <!-- compute discount -->
-                            <label class="mb-0 text-nowrap" for="discountCode">کد تخفیف:</label>
-                            <input type="text" class="form-control mx-2 w-25" id="discountCode" name="code"
-                                   {% if 'event_discount' in request.session %}value="{{ request.user.phone_number }}"
-                                   readonly{% endif %}>
-                            <button type="button" class="btn btn-info ml-auto text-white" id="discountButton">
-                                اعمال کد تخفیف
-                            </button>
-                        </div>
-                        <div class="col-md-4 text-sm-center mb-3">
-                            <p class="mb-0 text-md-right">
+                    <div class="row px-3">
+{#                        <div class="col-md-8 d-flex text-sm-center align-items-center mb-2 discount">#}
+{#                            <!-- compute discount -->#}
+{#                            <label class="mb-0 text-nowrap" for="discountCode">کد تخفیف:</label>#}
+{#                            <input type="text" class="form-control mx-2 w-25" id="discountCode" name="code"#}
+{#                                   {% if 'event_discount' in request.session %}value="{{ request.user.phone_number }}"#}
+{#                                   readonly{% endif %}>#}
+{#                            <button type="button" class="btn btn-info ml-auto text-white" id="discountButton">#}
+{#                                اعمال کد تخفیف#}
+{#                            </button>#}
+{#                        </div>#}
+                            <p class="mb-0 mr-auto">
                                 مبلغ قابل پرداخت : <b class="total-price">0</b> تومان
                             </p>
-                        </div>
                     </div>
                     <input type="submit" class="btn btn-success" id="payButton" value="تکمیل فرایند خرید">
                 </form>
