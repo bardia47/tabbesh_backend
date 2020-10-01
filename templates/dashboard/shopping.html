@@ -55,7 +55,6 @@
                     {% csrf_token %}
                     <!-- Total cart items id and price for pass to back-end -->
                     <input id="totalId" type="hidden" name="total_id" value="">
-                    <input id="totalPrice" type="hidden" name="total_pr" value="">
                     <div class="row px-3">
 {#                        <div class="col-md-8 d-flex text-sm-center align-items-center mb-2 discount">#}
 {#                            <!-- compute discount -->#}
@@ -200,8 +199,8 @@
 {% block JSfile %}
     <!-- base validation js -->
     <script src="{% static 'dashboard/js/validation-base.js' %}"></script>
-    <script src="{% static "dashboard/js/shopping-cart.js" %}"></script>
-    <script src="{% static 'dashboard/js/shopping.js' %}"></script>
+    <script src="{% static "dashboard/js/shopping/shopping-cart.js" %}"></script>
+    <script src="{% static 'dashboard/js/shopping/shopping.js' %}"></script>
     <!-- persian date formatter -- hint: read doc: https://github.com/babakhani/PersianDate -->
     <script src="{% static "home/js/persian-date.min.js" %}"></script>
 {% endblock %}

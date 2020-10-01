@@ -331,6 +331,7 @@ function owlCarouselInitial(carouselId) {
         responsive: {
             0: {
                 items: 1,
+                dots:false,
             },
             720: {
                 items: 3,
