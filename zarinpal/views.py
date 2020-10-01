@@ -232,4 +232,10 @@ def pay_description(installments_id_list, amount, discount, request):
 
 
 def shopping_cart(request):
+    try:
+        # for first pay of introducing
+        event = Event.objects.get(user__id=request.user.id, type=Event.Introducing, is_active=True)
+        request.session['event_discount'] = event.type
+    except:
+        pass
     return render(request, 'dashboard/shopping-cart.html')

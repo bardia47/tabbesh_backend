@@ -246,12 +246,6 @@ class Shopping(APIView):
     renderer_classes = [TemplateHTMLRenderer, JSONRenderer]
 
     def get(self, request):
-        try:
-            # for first pay of introducing
-            event = Event.objects.get(user__id=request.user.id, type=Event.Introducing, is_active=True)
-            request.session['event_discount'] = event.type
-        except:
-            pass
         grades = Grade.objects.all()
         lessons = Lesson.objects.filter(parent__id=None)
         teachers = User.objects.filter(role__code=RoleCodes.TEACHER.value)
