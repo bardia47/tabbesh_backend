@@ -259,4 +259,9 @@ $("select[id^='search']").change(function (event) {
     pagination(urlMaker())
 });
 
+// paying button click handler
+$("#payButton").click(function(){
+    sessionStorage.setItem("totalId", document.getElementById("totalId").value);
+    window.location.href = document.getElementById("shopping-cart-form").action;
 
+});

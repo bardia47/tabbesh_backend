@@ -51,7 +51,7 @@
             <!-- Cart footer section -->
             <div class="card cart-footer">
                 <!-- Cart purchase button -->
-                <form id="shopping-cart-form" action="{% url 'payment_request' %}" method="post">
+                <form id="shopping-cart-form" action="{% url 'shopping_cart' %}" method="post">
                     {% csrf_token %}
                     <!-- Total cart items id and price for pass to back-end -->
                     <input id="totalId" type="hidden" name="total_id" value="">
@@ -70,7 +70,7 @@
                                 مبلغ قابل پرداخت : <b class="total-price">0</b> تومان
                             </p>
                     </div>
-                    <input type="submit" class="btn btn-success" id="payButton" value="تکمیل فرایند خرید">
+                     <button class="btn btn-success" id="payButton" >تکمیل فرایند خرید</button>
                 </form>
             </div>
         </div>

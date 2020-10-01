@@ -398,10 +398,6 @@ def teacher_course_panel(request, code):
 def student_course_panel(request, code):
     return render(request, 'dashboard/student_course_panel.html', {"code": code})
 
-def shopping_cart(request):
-    return render(request, 'dashboard/shopping-cart.html')
-
-
 
 class UserInstallmentsViewSet(generics.ListAPIView):
     queryset = Course.objects.all()

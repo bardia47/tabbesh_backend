@@ -118,7 +118,3 @@ $("#shopping-cart-form").submit(function (event) {
 });
 
 
-// paying button click handler
-$("#payButton").submit(function (event){
-   console.log("hi");
-});

@@ -19,7 +19,6 @@ urlpatterns = [
     #          change_password, name="change_password"),
     # path('shopping/', GetShoppingViewSet.as_view({'get': 'list'}), name="shopping"),
     path('shopping/', Shopping.as_view(), name="shopping"),
-    path('shopping_cart/', shopping_cart , name="shopping_cart"),
     path('lessons/files/<str:code>/', FileManager.as_view({'post': 'create', 'get': 'retrieve'}),
          name='retrieve_files'),
     path('lessons/files/<str:code>/<int:document_id>/', UpdateFile.as_view({'post': 'update', 'get': 'destroy'}),
