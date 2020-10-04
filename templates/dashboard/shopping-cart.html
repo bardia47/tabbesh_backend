@@ -67,6 +67,14 @@
             </div>
         </div>
 
+
+        <!-- section for course installment -->
+        <h1>در صورت تمایل به پرداخت شهریه های آینده آن را انتخاب کنید.</h1>
+        <hr>
+        <div id="installments">
+
+        </div>
+
         <!-- Modal error for duplicate course in cart -->
         <div class="modal fade" id="errorModal" tabindex="-1" role="dialog" aria-labelledby="duplicateModalLabel"
              aria-hidden="true">
@@ -133,8 +141,10 @@
 {% block JSfile %}
     <!-- base validation js -->
     <script src="{% static 'dashboard/js/validation-base.js' %}"></script>
-        <script src="{% static 'dashboard/js/shopping.js' %}"></script>
-    <script src="{% static "dashboard/js/shopping-cart.js" %}"></script>
+    <!-- config shopping cart js -->
+    <script src="{% static 'dashboard/js/shopping-cart/shopping-cart.js' %}"></script>
+    <!-- course installment component render -->
+    <script src="{% static 'dashboard/js/shopping-cart/course-installment-component.js' %}"></script>
     <!-- persian date formatter -- hint: read doc: https://github.com/babakhani/PersianDate -->
     <script src="{% static "home/js/persian-date.min.js" %}"></script>
 {% endblock %}
