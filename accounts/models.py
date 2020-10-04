@@ -1,12 +1,7 @@
-from django.core.cache import cache
-import pytz
 from django.db import models
 from django.core.mail import send_mail
 from django.contrib.auth.base_user import AbstractBaseUser
 from django.contrib.auth.models import PermissionsMixin
-from django.db.models.signals import post_save
-from django.dispatch import receiver
-from django.template.defaultfilters import default
 from accounts.enums import RoleCodes
 import datetime
 import jdatetime
@@ -14,11 +9,6 @@ from tinymce import models as tinymce_models
 from django.core.exceptions import ValidationError
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db.models import Q, Max, IntegerField
-# import for compress images
-import sys
-from PIL import Image
-from io import BytesIO
-from django.core.files.uploadedfile import InMemoryUploadedFile
 from django.db.models import Value as V
 from django.db.models.functions import Concat
 
@@ -74,18 +64,6 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     def get_short_name(self):
         return self.first_name
-
-    #   #compress images
-    # def compressImage(self,uploadedImage):
-    #     imageTemproary = Image.open(uploadedImage)
-    #     outputIoStream = BytesIO()
-    #     imageTemproaryResized = imageTemproary.resize((20,20), Image.ANTIALIAS)
-    #     imageTemproary = imageTemproary.convert('RGB')
-    #     imageTemproary.save(outputIoStream , format='JPEG', quality=60)
-    #     outputIoStream.seek(0)
-    #     uploadedImage = InMemoryUploadedFile(outputIoStream,'ImageField', "%s.jpg" % uploadedImage.name.split('.')[0], 'image/jpeg', sys.getsizeof(outputIoStream), None)
-    #     return uploadedImage
-
     def email_user(self, subject, message, from_email=None, **kwargs):
         send_mail(subject, message, from_email, [self.email], **kwargs)
 
@@ -118,6 +96,12 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     def is_student(self):
         return self.role.code == RoleCodes.STUDENT.value
+
+class TeacherUser(User):
+        class Meta:
+            proxy = True
+            verbose_name = 'اساتید'
+            verbose_name_plural = 'اساتید'
 
 
 # Roles Model
@@ -371,6 +355,12 @@ class Discount(models.Model):
         if self.end_date and self.start_date and self.end_date <= self.start_date:
             raise ValidationError("تاریخ پایان باید پس از تاریخ شروع باشد یا خالی باشد")
 
+class DiscountWithoutCode(Discount):
+    class Meta:
+        proxy = True
+        verbose_name = 'تخفیف بدون کد'
+        verbose_name_plural = 'تخفیف بدون کد'
+
 
 class Event(models.Model):
     # Introducer = 'INER'
@@ -480,9 +470,3 @@ class Installment(models.Model):
         if discount:
             return self.amount * discount.percent / 100
         return 0
-
-#
-# class User_Course(models.Model):
-#       user = models.ForeignKey(User, on_delete=models.CASCADE)
-#       course = models.ForeignKey(Course, on_delete=models.CASCADE)
-#       installments = models.ManyToManyField(Installment, blank=True,)

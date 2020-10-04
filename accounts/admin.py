@@ -1,56 +1,10 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
-from django import forms
-from django.contrib.auth.hashers import make_password
-from .models import *
-from jalali_date.admin import ModelAdminJalaliMixin, StackedInlineJalaliMixin, TabularInlineJalaliMixin
+
 from django.contrib.auth.models import Group
-from accounts.enums import RoleCodes, AdminEnums
-from django.contrib import messages
-from django.contrib.admin.options import InlineModelAdmin
-import datetime
-from django.urls import reverse
 from django.utils.safestring import mark_safe
-from django import forms
-from django.forms.models import BaseInlineFormSet
-from .utils import Utils
-from django.db.models import Max
-
-
-class installmentInline(admin.StackedInline):
-    model = User.installments.through
-    verbose_name_plural = "قسط ها"
-    verbose_name = "قسط ها"
-    extra = 0
-
-    def get_formset(self, request, obj=None, **kwargs):
-        formset = super(installmentInline, self).get_formset(request, obj, **kwargs)
-        form = formset.form
-        form.base_fields['installment'].label = "قسط"
-        widget = form.base_fields['installment'].widget
-        widget.can_add_related = False
-        widget.can_change_related = False
-        widget.can_add_related = False
-        widget.can_change_related = False
-        widget.label = "قسط"
-        return formset
-
-
-class PayHistoryInline(admin.TabularInline):
-    model = Pay_History
-    readonly_fields = ('submit_date_decorated',)
-    fields = ('amount', 'is_successful', 'submit_date_decorated', 'payment_code')
-    verbose_name_plural = "پرداختی ها"
-    verbose_name = "پرداختی"
-
-    def has_change_permission(self, request, obj=None):
-        return False
-
-    def has_add_permission(self, request, obj=None):
-        return False
-
-    def has_delete_permission(self, request, obj=None):
-        return False
+from .forms import *
+from zarinpal.admin import InstallmentUserInline, PayHistoryInline
 
 
 class EventInline(admin.TabularInline):
@@ -76,55 +30,6 @@ class EventRelatedInline(EventInline):
     verbose_name_plural = "رویداد های مرتبط"
     verbose_name = "رویداد های مرتبط"
     fk_name = 'related_user'
-
-
-class UserCreationForm(forms.ModelForm):
-    GENDERS = [(True, "پسر"), (False, "دختر")]
-    password1 = forms.CharField(label='رمز', widget=forms.PasswordInput)
-    password2 = forms.CharField(label='تکرار رمز', widget=forms.PasswordInput)
-    gender = forms.ChoiceField(choices=GENDERS, label="جنسیت", initial='', widget=forms.Select(), required=True)
-
-    class Meta:
-        model = User
-        fields = ('username', 'email', 'role',)
-
-    def clean_password2(self):
-        password1 = self.cleaned_data.get("password1")
-        password2 = self.cleaned_data.get("password2")
-        if password1 and password2 and password1 != password2:
-            raise forms.ValidationError("Passwords don't match")
-        return password2
-
-    def save(self, commit=True):
-        user = super(UserCreationForm, self).save(commit=False)
-        if user.role.code == RoleCodes.ADMIN.value:
-            user.is_superuser = True
-        else:
-            user.is_superuser = False
-
-        if self.data.get("password1") is not None and self.data.get("password1") != '':
-            password = make_password(self.cleaned_data["password1"])
-            user.password = password
-        user.set_default_avatar()
-        if commit:
-            user.save()
-        return user
-
-    def clean_avatar(self):
-        data = self.cleaned_data['avatar']
-        try:
-            if self.files['avatar']:
-                data = Utils.compressImage(data)
-                if not self.instance.avatar.url.startswith("/media/defaults"):
-                    self.instance.avatar.delete()
-        except:
-            pass
-        return data
-
-
-class UserChangeForm(UserCreationForm):
-    password1 = forms.CharField(label='رمز', required=False, widget=forms.PasswordInput)
-    password2 = forms.CharField(label='تکرار رمز', required=False, widget=forms.PasswordInput)
 
 
 class UserAdmin(BaseUserAdmin):
@@ -161,7 +66,7 @@ class UserAdmin(BaseUserAdmin):
         ('اعتبار', {'fields': ('credit',)}),
     )
     inlines = [
-        installmentInline , PayHistoryInline, EventInline, EventRelatedInline
+        InstallmentUserInline, PayHistoryInline, EventInline, EventRelatedInline
     ]
 
     def get_queryset(self, request):
@@ -184,13 +89,6 @@ class UserAdmin(BaseUserAdmin):
     send_password_sms.short_description = "ارسال فراموشی رمز"
 
 
-class TeacherUser(User):
-    class Meta:
-        proxy = True
-        verbose_name = 'اساتید'
-        verbose_name_plural = 'اساتید'
-
-
 class TeacherAdmin(UserAdmin):
     list_display = ('username', 'get_full_name', 'phone_number', 'is_active')
 
@@ -198,323 +96,12 @@ class TeacherAdmin(UserAdmin):
         return User.objects.filter(role__code=RoleCodes.TEACHER.value)
 
 
-class CourseCalendarFormSetInline(forms.models.BaseInlineFormSet):
-    def clean(self):
-        count = 0
-        for form in self.forms:
-            try:
-                if form.cleaned_data:
-                    if not form.cleaned_data["DELETE"]:
-                        count += 1
-            except AttributeError:
-                pass
-        if count < 1:
-            raise forms.ValidationError("زمان برگذاری برای دوره تعریف نشده است")
-
-
-class CourseCalendarInline(TabularInlineJalaliMixin, admin.TabularInline):
-    formset = CourseCalendarFormSetInline
-    model = Course_Calendar
-    max_num = 3
-
-
-class InstallmentInline(TabularInlineJalaliMixin, admin.TabularInline):
-    model = Installment
-    max_num = 3
-
-
-
-class DiscountWithoutCodeInline(admin.TabularInline):
-    model = Course.discount_set.through
-    max_num = 1
-
-    verbose_name_plural = "تخفیف بدون کد"
-    verbose_name = "تخفیف بدون کد"
-
-    def get_queryset(self, request):
-        qs = super(DiscountWithoutCodeInline, self).get_queryset(request)
-        return qs.filter(discount__code__isnull=True)
-
-    def formfield_for_foreignkey(self, db_field, request=None, **kwargs):
-        field = super(DiscountWithoutCodeInline, self).formfield_for_foreignkey(
-            db_field, request, **kwargs)
-        if db_field.name == 'discount':
-            field.limit_choices_to = {'code__isnull': "True"}
-        return field
-
-
-class CourseForm(forms.ModelForm):
-    def clean_image(self):
-        data = self.cleaned_data['image']
-        try:
-            if self.files['image']:
-                data = Utils.compressImage(data)
-                if not self.instance.image.url.startswith("/media/defaults"):
-                    self.instance.image.delete()
-        except:
-            pass
-        return data
-
-
-class CourseAdmin(ModelAdminJalaliMixin, admin.ModelAdmin):
-    form = CourseForm
-    inlines = [
-        CourseCalendarInline,
-        DiscountWithoutCodeInline,
-        InstallmentInline
-    ]
-    list_display = ['code', 'title', 'get_start_date_decorated', 'get_end_date_decorated', 'teacher_full_name', 'student_link']
-    search_fields = ['code', 'title']
-
-    def teacher_full_name(self, obj):
-        return obj.teacher.get_full_name()
-
-    teacher_full_name.short_description = 'نام مدرس'
-    teacher_full_name.admin_order_field = 'teacher__get_full_name'
-
-    def get_start_date_decorated(self, obj):
-        return jdatetime.datetime.fromgregorian(datetime=obj.start_date).strftime('%y/%m/%d')
-
-    def get_end_date_decorated(self, obj):
-        return jdatetime.datetime.fromgregorian(datetime=obj.end_date).strftime('%y/%m/%d')
-
-    get_start_date_decorated.short_description = 'تاریخ شروع'
-    get_start_date_decorated.admin_order_field = 'start_date'
-    get_end_date_decorated.short_description = 'تاریخ پایان'
-    get_end_date_decorated.admin_order_field = 'end_date'
-
-    def render_change_form(self, request, context, *args, **kwargs):
-        context['adminform'].form.fields['teacher'].queryset = User.objects.filter(role__code=RoleCodes.TEACHER.value)
-        return super(CourseAdmin, self).render_change_form(request, context, *args, **kwargs)
-
-    def student_link(self, obj):
-        return mark_safe('<a href="{0}">{1}</a>'.format(
-            reverse("teacher_course_panel", args=(obj.code,)),
-            "پنل اساتید"
-        ))
-
-    student_link.short_description = "پنل اساتید"
-
-
-class CourseCalendarAdmin(ModelAdminJalaliMixin, admin.ModelAdmin):
-    list_display = ['course', 'get_start_date_decorated', 'get_end_date_decorated', ]
-    search_fields = ['course']
-
-    def get_start_date_decorated(self, obj):
-        return jdatetime.datetime.fromgregorian(datetime=obj.start_date).strftime('%y/%m/%d , %H:%M:%S')
-
-    def get_end_date_decorated(self, obj):
-        return jdatetime.datetime.fromgregorian(datetime=obj.end_date).strftime('%y/%m/%d , %H:%M:%S')
-
-    get_start_date_decorated.short_description = 'تاریخ شروع'
-    get_start_date_decorated.admin_order_field = 'start_date'
-    get_end_date_decorated.short_description = 'تاریخ پایان'
-    get_end_date_decorated.admin_order_field = 'end_date'
-
-    def delete_model(self, request, obj):
-        if len(obj.course.course_calendar_set.all()) == 1:
-            self.message_user(request, "این آخرین زمان برگذاری دوره است و امکان حذف آن وجود ندارد",
-                              level=messages.ERROR)
-            return self
-        admin.ModelAdmin.delete_model(self, request, obj)
-
-    def remove_default_message(self, request):
-        storage = messages.get_messages(request)
-        try:
-            del storage._queued_messages[-1]
-        except KeyError:
-            pass
-        return True
-
-    def response_delete(self, request, obj_display, obj_id):
-        response = super().response_delete(request, obj_display, obj_id)
-        self.remove_default_message(request)
-        return response
-
-
-class InstallmentAdmin(ModelAdminJalaliMixin, admin.ModelAdmin):
-    list_display = ['course', 'get_start_date_decorated', 'get_end_date_decorated','title' , 'amount' ]
-    search_fields = ['course','title']
-
-
-    def get_start_date_decorated(self, obj):
-        return jdatetime.datetime.fromgregorian(datetime=obj.start_date).strftime('%y/%m/%d ')
-
-    def get_end_date_decorated(self, obj):
-        return jdatetime.datetime.fromgregorian(datetime=obj.end_date).strftime('%y/%m/%d ')
-
-    get_start_date_decorated.short_description = 'تاریخ شروع'
-    get_start_date_decorated.admin_order_field = 'start_date'
-    get_end_date_decorated.short_description = 'تاریخ پایان'
-    get_end_date_decorated.admin_order_field = 'end_date'
-
-
 class CityAdmin(admin.ModelAdmin):
-    list_display = ['code', 'title']
-
-
-class LessonAdmin(admin.ModelAdmin):
     list_display = ['code', 'title']
 
 
 class GradeAdmin(admin.ModelAdmin):
     list_display = ['code', 'title']
-
-
-class DocumentAdmin(admin.ModelAdmin):
-    class Meta:
-        labels = {
-            'upload_date_decorated': 'تاریخ بارگذاری',
-        }
-
-    readonly_fields = ('upload_date_decorated', 'sender')
-    fields = (
-        'title', 'upload_date_decorated', 'sender', 'course', 'upload_document', 'description')
-    list_display = ['title', 'course', 'upload_date_decorated']
-    search_fields = ['title', 'course']
-
-    def save_model(self, request, obj, form, change):
-        obj.sender = request.user
-        # obj.upload_date = datetime.datetime.now()
-        super().save_model(request, obj, form, change)
-
-
-class PayHistoryAdmin(admin.ModelAdmin):
-    list_display = ['purchaser_link', 'amount', 'is_successful', 'submit_date_decorated', 'payment_code',
-                    'get_installments']
-    fields = (
-        'purchaser', 'amount', 'is_successful', 'submit_date_decorated', 'payment_code', 'get_installments')
-    exclude = ['courses', ]
-    readonly_fields = ('purchaser_link',)
-
-    def has_change_permission(self, request, obj=None):
-        return False
-
-    def has_add_permission(self, request, obj=None):
-        return False
-
-    def has_delete_permission(self, request, obj=None):
-        return False
-
-    def purchaser_link(self, obj):
-        return mark_safe('<a href="{0}">{1}</a>'.format(
-            reverse("admin:accounts_user_change", args=(obj.purchaser.pk,)),
-            obj.purchaser
-        ))
-
-
-class CourseDiscountInline(TabularInlineJalaliMixin, admin.TabularInline):
-    model = Discount.courses.through
-    verbose_name_plural = "دروس مشمول تخفیف(در صورت خالی بودن تمام دروس شامل تخفیف میشوند)"
-    verbose_name = "دروس مشمول تخفیف"
-
-    def get_formset(self, request, obj=None, **kwargs):
-        formset = super(CourseDiscountInline, self).get_formset(request, obj, **kwargs)
-        form = formset.form
-        form.base_fields['course'].label = "دوره"
-        widget = form.base_fields['course'].widget
-        widget.label = 'دوره'
-        return formset
-
-
-class DiscountForm(forms.ModelForm):
-    class Meta:
-        model = Discount
-        fields = ('title', 'code', 'percent', 'start_date', 'end_date')
-
-    def __init__(self, *args, **kwargs):
-        super(DiscountForm, self).__init__(*args, **kwargs)
-        self.fields['code'].required = True
-
-
-class DiscountAdmin(ModelAdminJalaliMixin, admin.ModelAdmin):
-    list_display = ['code', 'title', 'percent', 'get_start_date_decorated', 'get_end_date_decorated']
-    search_fields = ['code', 'title']
-    form = DiscountForm
-    inlines = [
-        CourseDiscountInline
-    ]
-
-    def get_queryset(self, request):
-        return Discount.objects.filter(code__isnull=False)
-
-    def get_start_date_decorated(self, obj):
-        return jdatetime.datetime.fromgregorian(datetime=obj.start_date).strftime('%y/%m/%d , %H:%M:%S')
-
-    def get_end_date_decorated(self, obj):
-        if obj.end_date:
-            return jdatetime.datetime.fromgregorian(datetime=obj.end_date).strftime('%y/%m/%d , %H:%M:%S')
-        return ""
-
-    get_start_date_decorated.short_description = 'تاریخ شروع'
-    get_start_date_decorated.admin_order_field = 'start_date'
-    get_end_date_decorated.short_description = 'تاریخ پایان'
-    get_end_date_decorated.admin_order_field = 'end_date'
-
-
-class DiscountWithoutCode(Discount):
-    class Meta:
-        proxy = True
-        verbose_name = 'تخفیف بدون کد'
-        verbose_name_plural = 'تخفیف بدون کد'
-
-
-class DiscountWithoutCodeForm(forms.ModelForm):
-    title = forms.CharField(required=True, label="نام تخفیف")
-
-    class Meta:
-        model = DiscountWithoutCode
-        fields = ('title', 'percent', 'start_date', 'end_date')
-
-
-class CourseDiscountWithoutCodeFormSet(forms.models.BaseInlineFormSet):
-    def clean(self):
-        count = 0
-        discount_id = None
-        for form in self.forms:
-            if not form.errors and form.is_valid and form.cleaned_data and not form.cleaned_data.get('DELETE'):
-                discount_id = form.cleaned_data['discount'].id
-                discount = Discount.objects.filter(courses__id=form.cleaned_data['course'].id,
-                                                   code__isnull=True).exclude(id=discount_id)
-                count = count + 1
-                if discount:
-                    raise forms.ValidationError("درس " + form.cleaned_data['course'].title + " دارای تخفیف میباشند")
-            elif form.cleaned_data.get('DELETE'):
-                discount_id = form.cleaned_data['discount'].id
-        if count > 0:
-            discount = Discount.objects.filter(courses=None, code__isnull=True).exclude(id=discount_id)
-            if discount:
-                raise forms.ValidationError("تمامی دروس دارای تخفیف میباشند")
-        else:
-            discount = Discount.objects.filter(~Q(courses=None), code__isnull=True)
-            if discount_id is not None:
-                discount = discount.exclude(id=discount_id)
-            if discount:
-                raise forms.ValidationError("برخی دروس دارای تخفیف میباشند")
-
-
-class CourseDiscountWithoutCodeInline(CourseDiscountInline):
-    formset = CourseDiscountWithoutCodeFormSet
-
-
-class DiscountWithoutCodeAdmin(DiscountAdmin):
-    form = DiscountWithoutCodeForm
-    inlines = [
-        CourseDiscountWithoutCodeInline
-    ]
-
-    def get_queryset(self, request):
-        return Discount.objects.filter(code__isnull=True)
-
-
-class SupportAdmin(admin.ModelAdmin):
-    class Meta:
-        readonly_fields = ('update_date_decorated',)
-        fields = (
-            'title', 'code', 'update_date_decorated', 'description', 'type_choice')
-
-    list_display = ['title', 'update_date_decorated']
-    search_fields = ['title', 'code']
 
 
 class EventAdmin(admin.ModelAdmin):
@@ -532,19 +119,20 @@ class EventAdmin(admin.ModelAdmin):
         return False
 
 
+class SupportAdmin(admin.ModelAdmin):
+    class Meta:
+        readonly_fields = ('update_date_decorated',)
+        fields = (
+            'title', 'code', 'update_date_decorated', 'description', 'type_choice')
+
+    list_display = ['title', 'update_date_decorated']
+    search_fields = ['title', 'code']
+
+
+admin.site.unregister(Group)
 admin.site.register(User, UserAdmin)
 admin.site.register(TeacherUser, TeacherAdmin)
 admin.site.register(City, CityAdmin)
 admin.site.register(Grade, GradeAdmin)
-admin.site.register(Lesson, LessonAdmin)
-admin.site.register(Course, CourseAdmin)
-admin.site.register(Course_Calendar, CourseCalendarAdmin)
-admin.site.unregister(Group)
-admin.site.register(Document, DocumentAdmin)
-admin.site.register(Pay_History, PayHistoryAdmin)
-admin.site.register(Discount, DiscountAdmin)
-admin.site.register(DiscountWithoutCode, DiscountWithoutCodeAdmin)
-admin.site.register(Support, SupportAdmin)
 admin.site.register(Event, EventAdmin)
-admin.site.register(Installment, InstallmentAdmin)
-
+admin.site.register(Support, SupportAdmin)

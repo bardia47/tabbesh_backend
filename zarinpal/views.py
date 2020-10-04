@@ -16,14 +16,11 @@ from accounts.enums import Sms
 from accounts.webServices import SmsWebServices
 import datetime
 import logging
+from django.urls import reverse
 
 logger = logging.getLogger("django")
 
-MERCHANT = '0c5db223-a20f-4789-8c88-56d78e29ff63'
 client = Client('https://www.zarinpal.com/pg/services/WebGate/wsdl')
-email = ''  # Optional
-mobile = ''  # Optional
-CallbackURL = '/payment/verify/'
 
 
 # compare amount of request with courses
@@ -74,9 +71,10 @@ class SendRequest(APIView):
                 try:
                     url = request.data['url']
                 except:
-                    url = request.scheme + "://" + request.get_host() + CallbackURL
+                    # url = request.scheme + "://" + request.get_host() + reverse('payment_verify')
+                    url = request.build_absolute_uri(reverse('payment_verify'))
                 result = client.service.PaymentRequest(
-                    MERCHANT, amount, description, email, mobile, url)
+                    MERCHANT.merchant.value, amount, description, '', '', url)
                 if result.Status == 100:
                     new_pay = Pay_History.objects.create(purchaser=request.user, amount=amount,
                                                          installments=request.data["total_id"])
@@ -227,6 +225,17 @@ def pay_description(installments_id_list, amount, discount, request):
     else:
         discount_text = ''
     text = TextUtils.replacer(text, [TextUtils.convert_list_to_string(
-        list(Course.objects.filter(installment__in=installments_id_list).values_list('title', flat=True))), discount_text,
+        list(Course.objects.filter(installment__in=installments_id_list).values_list('title', flat=True))),
+        discount_text,
         request.user.get_full_name()])
     return text
+
+
+def shopping_cart(request):
+    try:
+        # for first pay of introducing
+        event = Event.objects.get(user__id=request.user.id, type=Event.Introducing, is_active=True)
+        request.session['event_discount'] = event.type
+    except:
+        pass
+    return render(request, 'dashboard/shopping-cart.html')

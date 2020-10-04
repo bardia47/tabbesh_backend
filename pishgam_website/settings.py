@@ -68,6 +68,7 @@ SESSION_COOKIE_SECURE = False
 
 INSTALLED_APPS = [
     'accounts',
+    'dashboard',
     'rest_framework',
     'rest_framework.authtoken',
     'jalali_date',

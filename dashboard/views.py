@@ -246,12 +246,6 @@ class Shopping(APIView):
     renderer_classes = [TemplateHTMLRenderer, JSONRenderer]
 
     def get(self, request):
-        try:
-            # for first pay of introducing
-            event = Event.objects.get(user__id=request.user.id, type=Event.Introducing, is_active=True)
-            request.session['event_discount'] = event.type
-        except:
-            pass
         grades = Grade.objects.all()
         lessons = Lesson.objects.filter(parent__id=None)
         teachers = User.objects.filter(role__code=RoleCodes.TEACHER.value)
@@ -397,10 +391,6 @@ def teacher_course_panel(request, code):
 
 def student_course_panel(request, code):
     return render(request, 'dashboard/student_course_panel.html', {"code": code})
-
-def shopping_cart(request):
-    return render(request, 'dashboard/shopping-cart.html')
-
 
 
 class UserInstallmentsViewSet(generics.ListAPIView):
