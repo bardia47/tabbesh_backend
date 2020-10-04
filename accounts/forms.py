@@ -42,7 +42,7 @@ class UserCreationForm(forms.ModelForm):
         data = self.cleaned_data['avatar']
         try:
             if self.files['avatar']:
-                data = Utils.compressImage(data)
+                data = Utils.compressImage(data,width=250)
                 if not self.instance.avatar.url.startswith("/media/defaults"):
                     self.instance.avatar.delete()
         except:

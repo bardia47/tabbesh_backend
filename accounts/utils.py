@@ -14,10 +14,18 @@ import jdatetime
 
 class Utils:
     # compress images
-    def compressImage(uploadedImage):
+    # if width = height we don't need both
+    def compressImage(uploadedImage, **extra_fields):
         imageTemproary = Image.open(uploadedImage)
+        if 'width' in extra_fields:
+            x = extra_fields['width']
+            if 'height' in extra_fields:
+                y = extra_fields['height']
+            else:
+                y = x
+            imageTemproary = imageTemproary.resize((x, y), Image.ANTIALIAS)
         outputIoStream = BytesIO()
-        imageTemproaryResized = imageTemproary.resize((20, 20), Image.ANTIALIAS)
+        #  imageTemproaryResized = imageTemproary.resize((20, 20), Image.ANTIALIAS)
         imageTemproary = imageTemproary.convert('RGB')
         imageTemproary.save(outputIoStream, format='JPEG', quality=60)
         outputIoStream.seek(0)
@@ -81,7 +89,6 @@ class EmailUtils:
         except:
             return {'message': 'try again.'}
 
-
 # use get_field_display for this !
 # get choice name from choice list
 # class ChoiceUtils:
@@ -91,7 +98,7 @@ class EmailUtils:
 #                 return value
 
 
-#this is not used now
+# this is not used now
 # class DateUtils:
 #     def month_difference(start_date, end_date):
 #         start_date_jalali = jdatetime.datetime.fromgregorian(datetime=start_date).strftime("%Y-%m-%d")

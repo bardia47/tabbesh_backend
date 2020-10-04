@@ -15,6 +15,8 @@ class CourseCalendarInline(TabularInlineJalaliMixin, admin.TabularInline):
     model = Course_Calendar
     max_num = 3
 
+class LessonAdmin(admin.ModelAdmin):
+    list_display = ['code', 'title']
 
 class CourseAdmin(ModelAdminJalaliMixin, admin.ModelAdmin):
     form = CourseForm
@@ -48,10 +50,6 @@ class CourseAdmin(ModelAdminJalaliMixin, admin.ModelAdmin):
         ))
 
     student_link.short_description = "پنل اساتید"
-
-
-class LessonAdmin(admin.ModelAdmin):
-    list_display = ['code', 'title']
 
 
 class CourseCalendarAdmin(ModelAdminJalaliMixin, admin.ModelAdmin):

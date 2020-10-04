@@ -116,7 +116,7 @@ class EditProfile(APIView):
             #     ext = format.split('/')[-1]
             #     avatar = ContentFile(base64.b64decode(imgstr), name=file_name + "." + ext)
             # except:
-            avatar = Utils.compressImage(request.FILES.get("file"))
+            avatar = Utils.compressImage(request.FILES.get("file"),width=200)
 
             if avatar:
                 if not request.user.avatar.url.startswith("/media/defaults"):
@@ -206,8 +206,9 @@ class GetLessonsViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         query = Q()
-        if self.request.GET.get("lesson"):
-            query &= getAllLessons(self.request.GET.get("lesson"))
+        # it was for app and now is depricated
+        # if self.request.GET.get("lesson"):
+        #     query &= getAllLessons(self.request.GET.get("lesson"))
 
         if self.request.user.is_student():
             courses = self.request.user.courses().filter(query)
