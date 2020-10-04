@@ -5,8 +5,9 @@ from django.utils.safestring import mark_safe
 from .forms import *
 from accounts.models import *
 
+
 class InstallmentUserInline(admin.StackedInline):
-    formset =  InstallmentUserInlineForm
+    formset = InstallmentUserInlineForm
     model = User.installments.through
     verbose_name_plural = "قسط ها"
     verbose_name = "قسط ها"
@@ -29,9 +30,11 @@ class PayHistoryInline(admin.TabularInline):
     def has_delete_permission(self, request, obj=None):
         return False
 
+
 class InstallmenCoursetInline(TabularInlineJalaliMixin, admin.TabularInline):
     model = Installment
     max_num = 3
+
 
 class DiscountWithoutCodeInline(admin.TabularInline):
     model = Course.discount_set.through
@@ -53,9 +56,8 @@ class DiscountWithoutCodeInline(admin.TabularInline):
 
 
 class InstallmentAdmin(ModelAdminJalaliMixin, admin.ModelAdmin):
-    list_display = ['course', 'get_start_date_decorated', 'get_end_date_decorated','title' , 'amount' ]
-    search_fields = ['course','title']
-
+    list_display = ['course', 'get_start_date_decorated', 'get_end_date_decorated', 'title', 'amount']
+    search_fields = ['course', 'title']
 
     def get_start_date_decorated(self, obj):
         return jdatetime.datetime.fromgregorian(datetime=obj.start_date).strftime('%y/%m/%d ')
@@ -94,17 +96,10 @@ class PayHistoryAdmin(admin.ModelAdmin):
 
 
 class CourseDiscountInline(TabularInlineJalaliMixin, admin.TabularInline):
+    formset = CourseDiscountInlineForm
     model = Discount.courses.through
     verbose_name_plural = "دروس مشمول تخفیف(در صورت خالی بودن تمام دروس شامل تخفیف میشوند)"
     verbose_name = "دروس مشمول تخفیف"
-
-    def get_formset(self, request, obj=None, **kwargs):
-        formset = super(CourseDiscountInline, self).get_formset(request, obj, **kwargs)
-        form = formset.form
-        form.base_fields['course'].label = "دوره"
-        widget = form.base_fields['course'].widget
-        widget.label = 'دوره'
-        return formset
 
 
 class DiscountAdmin(ModelAdminJalaliMixin, admin.ModelAdmin):
@@ -144,7 +139,6 @@ class DiscountWithoutCodeAdmin(DiscountAdmin):
 
     def get_queryset(self, request):
         return Discount.objects.filter(code__isnull=True)
-
 
 
 admin.site.register(Pay_History, PayHistoryAdmin)

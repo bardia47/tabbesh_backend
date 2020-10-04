@@ -1,12 +1,12 @@
 from django.contrib import admin
 
 from accounts.models import *
-from jalali_date.admin import ModelAdminJalaliMixin,TabularInlineJalaliMixin
+from jalali_date.admin import ModelAdminJalaliMixin, TabularInlineJalaliMixin
 from accounts.enums import RoleCodes
 from django.contrib import messages
 from django.urls import reverse
 from django.utils.safestring import mark_safe
-from zarinpal.admin import DiscountWithoutCodeInline,InstallmenCoursetInline
+from zarinpal.admin import DiscountWithoutCodeInline, InstallmenCoursetInline
 from .forms import *
 
 
@@ -89,6 +89,7 @@ class CourseCalendarAdmin(ModelAdminJalaliMixin, admin.ModelAdmin):
         self.remove_default_message(request)
         return response
 
+
 class DocumentAdmin(admin.ModelAdmin):
     class Meta:
         labels = {
@@ -105,6 +106,7 @@ class DocumentAdmin(admin.ModelAdmin):
         obj.sender = request.user
         # obj.upload_date = datetime.datetime.now()
         super().save_model(request, obj, form, change)
+
 
 admin.site.register(Course, CourseAdmin)
 admin.site.register(Course_Calendar, CourseCalendarAdmin)

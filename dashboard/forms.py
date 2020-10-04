@@ -15,6 +15,7 @@ class CourseCalendarFormSetInline(forms.models.BaseInlineFormSet):
         if count < 1:
             raise forms.ValidationError("زمان برگذاری برای دوره تعریف نشده است")
 
+
 class CourseForm(forms.ModelForm):
     def clean_image(self):
         data = self.cleaned_data['image']

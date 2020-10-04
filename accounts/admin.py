@@ -4,7 +4,7 @@ from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib.auth.models import Group
 from django.utils.safestring import mark_safe
 from .forms import *
-from zarinpal.admin import InstallmentUserInline,PayHistoryInline
+from zarinpal.admin import InstallmentUserInline, PayHistoryInline
 
 
 class EventInline(admin.TabularInline):
@@ -66,7 +66,7 @@ class UserAdmin(BaseUserAdmin):
         ('اعتبار', {'fields': ('credit',)}),
     )
     inlines = [
-        InstallmentUserInline , PayHistoryInline, EventInline, EventRelatedInline
+        InstallmentUserInline, PayHistoryInline, EventInline, EventRelatedInline
     ]
 
     def get_queryset(self, request):
@@ -88,11 +88,13 @@ class UserAdmin(BaseUserAdmin):
 
     send_password_sms.short_description = "ارسال فراموشی رمز"
 
+
 class TeacherAdmin(UserAdmin):
     list_display = ('username', 'get_full_name', 'phone_number', 'is_active')
 
     def get_queryset(self, request):
         return User.objects.filter(role__code=RoleCodes.TEACHER.value)
+
 
 class CityAdmin(admin.ModelAdmin):
     list_display = ['code', 'title']
@@ -116,6 +118,7 @@ class EventAdmin(admin.ModelAdmin):
     def has_delete_permission(self, request, obj=None):
         return False
 
+
 class SupportAdmin(admin.ModelAdmin):
     class Meta:
         readonly_fields = ('update_date_decorated',)
@@ -125,6 +128,7 @@ class SupportAdmin(admin.ModelAdmin):
     list_display = ['title', 'update_date_decorated']
     search_fields = ['title', 'code']
 
+
 admin.site.unregister(Group)
 admin.site.register(User, UserAdmin)
 admin.site.register(TeacherUser, TeacherAdmin)
@@ -132,5 +136,3 @@ admin.site.register(City, CityAdmin)
 admin.site.register(Grade, GradeAdmin)
 admin.site.register(Event, EventAdmin)
 admin.site.register(Support, SupportAdmin)
-
-

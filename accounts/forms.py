@@ -49,9 +49,7 @@ class UserCreationForm(forms.ModelForm):
             pass
         return data
 
+
 class UserChangeForm(UserCreationForm):
     password1 = forms.CharField(label='رمز', required=False, widget=forms.PasswordInput)
     password2 = forms.CharField(label='تکرار رمز', required=False, widget=forms.PasswordInput)
-
-
-

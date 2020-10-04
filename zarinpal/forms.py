@@ -12,6 +12,13 @@ class InstallmentUserInlineForm(forms.models.BaseInlineFormSet):
         widget = self.form.base_fields['installment'].widget
         widget.label = "قسط"
 
+class CourseDiscountInlineForm(forms.models.BaseInlineFormSet):
+    def __init__(self, *args, **kwargs):
+        super(CourseDiscountInlineForm, self).__init__(*args, **kwargs)
+        self.form.base_fields['course'].label = "دوره"
+        widget = self.form.base_fields['course'].widget
+        widget.label = "دوره"
+
 class DiscountForm(forms.ModelForm):
     class Meta:
         model = Discount
