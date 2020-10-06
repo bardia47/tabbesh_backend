@@ -1,9 +1,9 @@
 from django.contrib.auth.hashers import make_password
 from .models import *
-from accounts.enums import RoleCodes, AdminEnums
+from accounts.enums import RoleCodes
 
 from django import forms
-from .utils import Utils
+from core.utils import Utils
 
 
 class UserCreationForm(forms.ModelForm):
@@ -42,7 +42,7 @@ class UserCreationForm(forms.ModelForm):
         data = self.cleaned_data['avatar']
         try:
             if self.files['avatar']:
-                data = Utils.compressImage(data,width=250)
+                data = Utils.compressImage(data, width=250)
                 if not self.instance.avatar.url.startswith("/media/defaults"):
                     self.instance.avatar.delete()
         except:

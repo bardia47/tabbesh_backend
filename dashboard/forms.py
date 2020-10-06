@@ -1,5 +1,5 @@
 from django import forms
-from accounts.utils import Utils
+from core.utils import Utils
 
 
 class CourseCalendarFormSetInline(forms.models.BaseInlineFormSet):

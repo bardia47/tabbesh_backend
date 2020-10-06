@@ -3,11 +3,9 @@ from .models import *
 from rest_framework import serializers
 from html_json_forms.serializers import JSONFormSerializer
 from .enums import Sms
-from .webServices import SmsWebServices
+from core.webServices import SmsWebServices
 import re
-from pip._vendor.pkg_resources import require
 from unidecode import unidecode
-from django.contrib.auth.hashers import make_password
 import random
 
 

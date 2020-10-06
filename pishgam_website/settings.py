@@ -214,8 +214,8 @@ REST_FRAMEWORK = {
     'DEFAULT_FILTER_BACKENDS': ('django_filters.rest_framework.DjangoFilterBackend',
                                 'rest_framework.filters.SearchFilter',
                                 'rest_framework.filters.OrderingFilter'),
-    'EXCEPTION_HANDLER': 'accounts.exceptionHandler.api_exception_handler',  # custom exception handler
-    'DEFAULT_PAGINATION_CLASS': 'accounts.pagination.Pagination',  # custom pagination
+    'EXCEPTION_HANDLER': 'core.exceptionHandler.api_exception_handler',  # custom exception handler
+    'DEFAULT_PAGINATION_CLASS': 'core.pagination.Pagination',  # custom pagination
     'PAGE_SIZE': 6
 
 }

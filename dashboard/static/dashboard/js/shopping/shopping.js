@@ -1,3 +1,27 @@
+// hostname of project -- example : https://127.0.0.1:8000
+// let arrayHref = window.location.href.split("/")
+// let hostName = arrayHref[0] + "//" + arrayHref[2]
+let firstParameter = new URL(window.location.href).search.slice(1);
+let searchParameter;
+// add to GET variable page to url parameter --> read : https://developer.mozilla.org/en-US/docs/Web/API/URLSearchParams/append
+if (firstParameter) {
+    searchParameter = new URLSearchParams(firstParameter)
+} else {
+    searchParameter = new URLSearchParams("?page=1")
+}
+
+let getShoppingURL = "/dashboard/get-shopping/?";
+// first pagination when user request https://127.0.0.1:8000/dashboard/shopping/
+// initial shopping page
+$(function () {
+
+    // set menu active
+    $("#shoppingMenu").addClass("active-menu");
+
+    pagination(urlMaker())
+});
+
+
 // function for get Request.GET variable
 function getUrlParameter(url, param) {
     urlArray = url.split("/");
@@ -23,28 +47,6 @@ function loading() {
         $(".pagination-wrapper").show()
     }, 1000);
 }
-
-// hostname of project -- example : https://127.0.0.1:8000
-// let arrayHref = window.location.href.split("/")
-// let hostName = arrayHref[0] + "//" + arrayHref[2]
-let firstParameter = new URL(window.location.href).search.slice(1);
-let searchParameter;
-// add to GET variable page to url parameter --> read : https://developer.mozilla.org/en-US/docs/Web/API/URLSearchParams/append
-if (firstParameter) {
-    searchParameter = new URLSearchParams(firstParameter)
-} else {
-    searchParameter = new URLSearchParams("?page=1")
-}
-let getShoppingURL = "/dashboard/get-shopping/?";
-// first pagination when user request https://127.0.0.1:8000/dashboard/shopping/
-// initial shopping page
-$(function () {
-
-    // set menu active
-    $("#shoppingMenu").addClass("active-menu");
-
-    pagination(urlMaker())
-});
 
 // pagination when user return to previous page --> hint: read about history javascript stack
 window.onpopstate = function (event) {
@@ -124,8 +126,8 @@ function renderShoppingCards(courseCards) {
             }
         }
         let installmentTemplate = ``;
-        if (courseCard.installment.title !== null){
-          installmentTemplate = `
+        if (courseCard.installment.title !== null) {
+            installmentTemplate = `
           <div class="course-installment">
             <p>
                <img src="/static/home/images/icons/installment.svg" alt="installment">
@@ -212,7 +214,7 @@ function renderShoppingCards(courseCards) {
                      </button>
                   </div>
                   <!-- hidden first installment id for handel total buy id in shopping.js -->
-                  <input type="hidden" class="course-id" value="${courseCard.code}">
+                  <input type="hidden" class="course-id" value="${courseCard.installment.id}">
                </div>
             </div>
         `;
@@ -272,7 +274,6 @@ $("select[id^='search']").change(function (event) {
     history.pushState({url: urlMaker()}, null, "?" + searchParameter);
     pagination(urlMaker())
 });
-
 
 
 // event handler for all new card add to button
@@ -394,4 +395,10 @@ $("#shopping-cart-form").submit(function (event) {
     }
 });
 
+// paying button click handler
+$("#payButton").click(function () {
+    sessionStorage.setItem("totalId", $("#totalId").val());
+    window.location.href = document.getElementById("shopping-cart-form").action;
+
+});
 

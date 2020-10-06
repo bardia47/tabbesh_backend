@@ -1,8 +1,4 @@
-from django.shortcuts import render, redirect, get_object_or_404
-import datetime
-from accounts.models import *
-from accounts.enums import RoleCodes
-from django.db.models import Q
+from django.shortcuts import render, redirect
 from operator import or_
 from functools import reduce
 from rest_framework.views import APIView
@@ -12,16 +8,11 @@ from rest_framework.response import Response
 from rest_framework import viewsets
 from .serializers import *
 from rest_framework import status
-from django.http import response
-from rest_framework.decorators import api_view, renderer_classes
 from rest_framework import generics
-import base64
-from django.core.files.base import ContentFile
-from accounts.utils import Utils
+from core.utils import Utils
 from rest_framework.decorators import permission_classes
 
 # for load or dump jsons
-import json
 from django.db.models import Case, Value, When, IntegerField
 from .permission import EditDocumentPermission
 

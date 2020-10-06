@@ -1,6 +1,4 @@
 from django.apps import AppConfig
-from . import scheduler
-import logging
 
 
 class AccountsConfig(AppConfig):

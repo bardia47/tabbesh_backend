@@ -1,27 +1,22 @@
 from django.shortcuts import render
-from django.http import HttpResponse
 from django.shortcuts import redirect
 from zeep import Client
-from django.conf import settings
-from accounts.models import *
 from rest_framework.views import APIView
 from rest_framework.renderers import TemplateHTMLRenderer, JSONRenderer
 from rest_framework.response import Response
-from rest_framework import status
-from django.db.models import Q
-from django.db.models import Sum
+from rest_framework import status,viewsets
 from .enums import *
-from accounts.utils import TextUtils
+from core.utils import TextUtils
 from accounts.enums import Sms
-from accounts.webServices import SmsWebServices
+from core.webServices import SmsWebServices
+from django.urls import reverse
+from .serializers import *
+from core.filters import *
 import datetime
 import logging
-from django.urls import reverse
 
 logger = logging.getLogger("django")
-
 client = Client('https://www.zarinpal.com/pg/services/WebGate/wsdl')
-
 
 # compare amount of request with courses
 def is_valid(installments_id_list, amount, discount):
@@ -119,7 +114,7 @@ class Verify(APIView):
                     new_pay.is_successful = True
                     new_pay.payment_code = str(result.RefID)
                     new_pay.save()
-
+#this try is for events
                 try:
                     event = Event.objects.get(user__id=request.user.id, is_active=True)
                     event.is_active = False
@@ -128,7 +123,6 @@ class Verify(APIView):
                     related_user.credit += float(Events[event.type + "_AMOUNT"].value)
                     related_user.save()
                     to = "0" + related_user.phone_number
-
                     text = TextUtils.replacer(Sms.increaseCreditText.value, [str(Events[event.type + "_AMOUNT"].value),
                                                                              str(int(related_user.credit))])
                     sendSms = SmsWebServices.send_sms(to, text, None)
@@ -186,7 +180,6 @@ class ComputeDiscount(APIView):
         amount = amount - discount_amount
         return Response({'amount': amount})
 
-
 # query to find discount
 def discount_query(code):
     now = datetime.datetime.now()
@@ -194,7 +187,6 @@ def discount_query(code):
     query &= Q(code=code)
     query &= (Q(end_date__gte=now) | Q(end_date=None))
     return query
-
 
 def compute_discount(installments_id_list, amount, discount):
     if discount.id is None or discount.courses.count() == 0:
@@ -239,3 +231,14 @@ def shopping_cart(request):
     except:
         pass
     return render(request, 'dashboard/shopping-cart.html')
+
+
+class GetInstallmentViewSet(viewsets.ModelViewSet):
+    # thats fake :/ because its Mandatory
+    queryset = Installment.objects.all()
+    serializer_class = ShoppingInstallmentSerializer
+    filter_backends = [ListFilter]
+    search_fields = ['id']
+    SEARCH_PARAM = 'id'
+    http_method_names = ['get', ]
+    pagination_class = None

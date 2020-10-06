@@ -1,3 +1,43 @@
+$(function () {
+
+    // set menu active
+    $("#shoppingMenu").addClass("active-menu");
+    if (sessionStorage.getItem("totalId") != null) {
+       loadShopping(sessionStorage.getItem("totalId").replace(" ",","))
+}
+});
+
+
+//get lessons with ajax
+function loadShopping(ids) {
+    // get JSON and Response Header
+    $.ajax({
+        url: "/payment/get-installment/",
+        type: "GET",
+        dataType: "json",
+        data: {
+            "id": ids
+        },
+        success: function (installmentCards, textStatus, request) {
+            console.log(installmentCards);
+            renderShoppingCards(installmentCards);
+            localStorage.removeItem("totalId")
+        },
+        error: function () {
+            alert("خطا در بارگزاری دروس ... لطفا دوباره امتحان کنید!")
+        },
+    });
+}
+
+
+// Add course card to div card group
+function renderInstallmentCards(installmentCards) {
+    $.each(installmentCards, function (index, installmentCard) {
+ });
+
+}
+
+
 // event handler for all new card add to button
 function addToCardButtons() {
     $(".add-to-cart-button").each(function () {

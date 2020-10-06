@@ -8,6 +8,7 @@ router = DefaultRouter()
 router.register('get-lessons', GetLessonsViewSet)
 router.register('get-shopping', GetShoppingViewSet)
 
+
 urlpatterns = [
     path('', Dashboard.as_view(), name='dashboard'),
     path('lessons/', Lessons.as_view(), name="lessons"),

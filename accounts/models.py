@@ -12,6 +12,7 @@ from django.db.models import Q, Max, IntegerField
 from django.db.models import Value as V
 from django.db.models.functions import Concat
 
+
 # Create your models here.
 
 
@@ -31,8 +32,8 @@ class User(AbstractBaseUser, PermissionsMixin):
     address = models.CharField("آدرس", max_length=255, null=True, blank=True)
     phone_number = models.CharField("تلفن همراه", max_length=12, unique=True)
     grades = models.ManyToManyField('Grade', blank=True, verbose_name="پایه")
-   # courses = models.ManyToManyField('Course', blank=True )
-    installments = models.ManyToManyField('Installment', blank=True )
+    # courses = models.ManyToManyField('Course', blank=True )
+    installments = models.ManyToManyField('Installment', blank=True)
     is_superuser = models.BooleanField(default=False)
     is_staff = models.BooleanField(default=True)
     credit = models.FloatField("اعتبار", default=float(0),
@@ -52,7 +53,8 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     def __str__(self):
         return self.get_full_name()
-    #get courses from user installments
+
+    # get courses from user installments
     def courses(self):
         return Course.objects.filter(installment__in=self.installments.all())
 
@@ -64,6 +66,7 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     def get_short_name(self):
         return self.first_name
+
     def email_user(self, subject, message, from_email=None, **kwargs):
         send_mail(subject, message, from_email, [self.email], **kwargs)
 
@@ -97,11 +100,12 @@ class User(AbstractBaseUser, PermissionsMixin):
     def is_student(self):
         return self.role.code == RoleCodes.STUDENT.value
 
+
 class TeacherUser(User):
-        class Meta:
-            proxy = True
-            verbose_name = 'اساتید'
-            verbose_name_plural = 'اساتید'
+    class Meta:
+        proxy = True
+        verbose_name = 'اساتید'
+        verbose_name_plural = 'اساتید'
 
 
 # Roles Model
@@ -239,11 +243,13 @@ class Course(models.Model):
 
     def get_next_installment(self, exclude=None):
         now = datetime.datetime.now()
-        installment = Installment.objects.filter(Q(start_date__gt=now) | Q(end_date__gt=now + datetime.timedelta(days=10))).first()
+        installment = Installment.objects.filter(
+            Q(start_date__gt=now) | Q(end_date__gt=now + datetime.timedelta(days=10))).first()
         return installment
 
     def students(self):
         return User.objects.filter(installments__in=self.installment_set.all())
+
 
 # Course_Calendar Model
 class Course_Calendar(models.Model):
@@ -322,7 +328,8 @@ class Pay_History(models.Model):
 
     def get_installments(self):
         installments_id_list = self.installments.split()
-        return list(Installment.objects.filter(id__in=installments_id_list).annotate(full_title=Concat('title', V(' '), 'course__title')).values_list('full_title', flat=True))
+        return list(Installment.objects.filter(id__in=installments_id_list).annotate(
+            full_title=Concat('title', V(' '), 'course__title')).values_list('full_title', flat=True))
 
     get_installments.short_description = 'قسط های خریداری شده'
     submit_date_decorated.short_description = 'تاریخ ثبت'
@@ -354,6 +361,7 @@ class Discount(models.Model):
         super().clean_fields(exclude=exclude)
         if self.end_date and self.start_date and self.end_date <= self.start_date:
             raise ValidationError("تاریخ پایان باید پس از تاریخ شروع باشد یا خالی باشد")
+
 
 class DiscountWithoutCode(Discount):
     class Meta:
@@ -412,6 +420,7 @@ class Support(models.Model):
 
     update_date_decorated.short_description = 'تاریخ آخرین تغییر'
 
+
 # comment it because it can be heavy on server
 
 # this signal clear the cache after adding a new course or support we can add it for other table like user
@@ -438,8 +447,7 @@ class Installment(models.Model):
         verbose_name = "قسط"
 
     def __str__(self):
-        return self.title+ " " + self.course.title
-
+        return self.title + " " + self.course.title
 
     def clean_fields(self, exclude=None):
         super().clean_fields(exclude=exclude)
@@ -457,7 +465,6 @@ class Installment(models.Model):
                   )
         if Installment.objects.filter(query).exists():
             raise ValidationError("تاریخ قسط تداخل دارد")
-
 
     def get_amount_payable(self, exclude=None):
         discount = self.course.get_discount()
