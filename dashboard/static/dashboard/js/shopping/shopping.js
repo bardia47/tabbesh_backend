@@ -345,10 +345,13 @@ function addItemToCart(id, title, price, teacher, imageSrc) {
               <span class="cart-price-text">${price}</span>
               </p>
           </div>
-          <!-- Button-to-delete -->
-            <div class="col-md-4 cart-button-to-delete">
-              <button class="btn btn-danger btn-remove"><img src="/static/home/images/icons/delete.svg" alt="button link to class">حذف</button>
-            </div>
+        <!-- Button-to-delete -->
+        <div class="col-md-4 cart-button-to-delete">
+          <button class="btn btn-danger btn-remove">
+          حذف
+          <img src="/static/home/images/icons/delete.svg" alt="button link to class" width="20px">
+          </button>
+        </div>
           </div>
         </div>
       </div>
