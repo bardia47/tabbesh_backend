@@ -8,6 +8,7 @@
 <!-- CSS files -->
 {% block CSSfiles %}
     <link rel="stylesheet" href="{% static 'dashboard/css/shopping_cart.css' %}">
+    <link rel="stylesheet" href="{% static 'dashboard/css/course-installment-component.css' %}">
 {% endblock %}
 
 
@@ -15,7 +16,7 @@
 {% block content %}
     <section class="shopping-cart">
         <!-- Cart Section use cart-list for shopping.js -->
-        <div class="cart-list card-section">
+        <div class="container mb-4">
             <!-- first buy event -->
             {% if 'event_discount' in request.session %}
                 <div class="alert alert-info alert-dismissable">
@@ -30,49 +31,55 @@
                     </strong>
                 </div>
             {% endif %}
-            <div class="cart-title">
-                <h4>
-                    <img src="{% static 'home/images/icons/shopping-basket.svg' %}">
+            <div class="cart-title bg-secondary text-white p-3">
+                <h1 class="h4 vazir-bold">
+                    <img src="{% static 'home/images/icons/shopping-basket.svg' %}" alt="shopping cart" width="35">
                     سبد خرید
-                </h4>
+                </h1>
             </div>
-            <!-- cart items buy user -->
+            <!-- cart items -->
             <div id="cartListItems"></div>
 
-            <div class="card cart-footer">
-                <!-- Cart purchase button -->
+            <div class="container mt-3 px-2">
                 <form id="shopping-cart-form" action="{% url 'payment_request' %}" method="post">
                     {% csrf_token %}
-                    <!-- Total cart items id and price for pass to back-end -->
-                    <input id="totalId" type="hidden" name="total_id" value="">
-                    <input id="totalPrice" type="hidden" name="total_pr" value="">
-                    <div class="cart-total-price row px-2">
-                        <div class="col-md-8 d-flex text-sm-center align-items-center mb-2 discount">
+                    <!-- total installments and price -->
+                    <input id="totalId" type="hidden" name="total_id">
+                    <input id="totalPrice" type="hidden" name="total_pr" value="0">
+                    <div class="row">
+                        <div class="col-md-8 d-flex text-sm-center align-items-center mb-2">
                             <!-- compute discount -->
-                            <label class="mb-0 text-nowrap" for="discountCode">کد تخفیف:</label>
-                            <input type="text" class="form-control mx-2 w-25" id="discountCode" name="code"
+                            <strong class="mb-0 text-nowrap" for="discountCode">کد تخفیف</strong>
+                            <input type="text" class="form-control-sm mx-2 w-25" id="discountCode" name="code"
                                    {% if 'event_discount' in request.session %}value="{{ request.user.phone_number }}"
                                    readonly{% endif %}>
-                            <button type="button" class="btn btn-info mr-auto text-white" id="discountButton">
+                            <button type="button" class="btn btn-info ml-auto btn-sm" id="discountButton">
                                 اعمال کد تخفیف
                             </button>
                         </div>
-                        <div class="col-md-4 text-sm-center mb-3">
-                            <p class="mb-0 text-md-right">
-                                مبلغ قابل پرداخت : <b class="total-price">0</b> تومان
+                        <div class="col-md-4 text-center mb-3">
+                            <p class="mb-0 text-md-left">
+                                <strong>مبلغ قابل پرداخت : </strong>
+                                <b id="totalPriceText">0</b>
+                                تومان
                             </p>
                         </div>
                     </div>
-                    <input type="submit" class="btn btn-success" id="payButton" value="پرداخت">
+                    <div class="row justify-content-center">
+                        <input type="submit" class="btn btn-success text-center" id="payButton" value="پرداخت">
+                    </div>
                 </form>
             </div>
         </div>
 
 
         <!-- section for course installment -->
-        <strong class="">در صورت تمایل به پرداخت شهریه های آینده از این قسمت اقدام کنید.</strong>
+        <div class="alert alert-info vazir-bold" role="alert">
+            <i class="fas fa-info-circle"></i>
+            در صورت تمایل به پرداخت شهریه های آینده از این قسمت اقدام کنید.
+        </div>
         <hr>
-        <div id="installments">
+        <div id="installments" class="container">
 
         </div>
 

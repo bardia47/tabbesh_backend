@@ -214,7 +214,7 @@ function renderShoppingCards(courseCards) {
                      </button>
                   </div>
                   <!-- hidden first installment id for handel total buy id in shopping.js -->
-                  <input type="hidden" class="course-id" value="${courseCard.installment.id}">
+                  <input type="hidden" class="course-id" value="${courseCard.id}">
                </div>
             </div>
         `;
@@ -274,6 +274,12 @@ $("select[id^='search']").change(function (event) {
     history.pushState({url: urlMaker()}, null, "?" + searchParameter);
     pagination(urlMaker())
 });
+
+
+
+
+
+// shopping cart js
 
 
 // event handler for all new card add to button
@@ -382,7 +388,7 @@ function updateCartTotal() {
         // check if price is رایگان change to 0
         if ($(itemPrice).text() !== "رايگان!") totalPrice += parseFloat($(itemPrice).text());
         // make total id and price for back-end in hidden input
-        totalId = totalId + itemId.val() + " "
+        totalId = totalId + itemId.val() + ","
     });
     totalPrice = Math.round(totalPrice * 100) / 100;
     $(".total-price").text(totalPrice);

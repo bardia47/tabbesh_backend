@@ -8,5 +8,5 @@ class ShoppingCartSerializer(CourseBriefSerializer):
 
     class Meta:
         model = Course
-        fields = ('installments','teacher', 'title', 'image')
+        fields = ('id', 'teacher', 'title', 'image' , 'installments')
         depth = 1

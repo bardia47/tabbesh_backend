@@ -107,7 +107,7 @@ class ShoppingCourseSerializer(CourseLessonsSerializer):
 
     class Meta:
         model = Course
-        fields = ("installment", 'title', 'start_date', 'end_date', 'code', 'description', 'image', 'teacher',
+        fields = ("installment", 'title', 'start_date', 'end_date', 'id', 'description', 'image', 'teacher',
                   'course_calendars', 'parent', 'discount')
 
     def get_start_dates(self, obj):
