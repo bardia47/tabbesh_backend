@@ -244,7 +244,7 @@ class Course(models.Model):
     def get_next_installment(self, exclude=None):
         now = datetime.datetime.now()
         installment = Installment.objects.filter(
-            Q(start_date__gt=now) | Q(end_date__gt=now + datetime.timedelta(days=10))).first()
+            Q(start_date__gt=now) | Q(end_date__gt=now + datetime.timedelta(days=10)), course__id=self.id).first()
         return installment
 
     def students(self):

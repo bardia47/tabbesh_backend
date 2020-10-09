@@ -36,7 +36,6 @@ function loadShopping(ids) {
 
 
 $("#payButton").click(function (e) {
-    e.preventDefault();
     let installments = [];
     $("#installments input:checked").each(function () {
         installments.push($(this).val())

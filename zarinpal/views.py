@@ -4,7 +4,7 @@ from zeep import Client
 from rest_framework.views import APIView
 from rest_framework.renderers import TemplateHTMLRenderer, JSONRenderer
 from rest_framework.response import Response
-from rest_framework import status,viewsets
+from rest_framework import status, viewsets
 from .enums import *
 from core.utils import TextUtils
 from accounts.enums import Sms
@@ -14,9 +14,11 @@ from .serializers import *
 from core.filters import *
 import datetime
 import logging
+import json
 
 logger = logging.getLogger("django")
 client = Client('https://www.zarinpal.com/pg/services/WebGate/wsdl')
+
 
 # compare amount of request with courses
 def is_valid(installments_id_list, amount, discount):
@@ -34,7 +36,7 @@ class SendRequest(APIView):
 
     def post(self, request):
         user = request.user
-        installments_id_list = request.data["total_id"].split()
+        installments_id_list = json.loads(request.data["total_id"])
         try:
             amount = int(float(request.data["total_pr"]))
             code = request.data['code']
@@ -56,9 +58,9 @@ class SendRequest(APIView):
                 for installment_id in installments_id_list:
                     user.installments.add(installment_id)
                 user.save()
-                if request.accepted_renderer.format == 'html':
-                    return render(request, 'dashboard/success_shopping.html')
-                return Response({'massage': 'خرید موفق'}, status=status.HTTP_201_CREATED)
+                # if request.accepted_renderer.format == 'html':
+                return render(request, 'dashboard/success_shopping.html')
+                # return Response({'massage': 'خرید موفق'}, status=status.HTTP_201_CREATED)
 
             # request to zarinpal
             else:
@@ -73,19 +75,19 @@ class SendRequest(APIView):
                 if result.Status == 100:
                     new_pay = Pay_History.objects.create(purchaser=request.user, amount=amount,
                                                          installments=request.data["total_id"])
-                    if request.accepted_renderer.format == 'html':
-                        return redirect('https://www.zarinpal.com/pg/StartPay/' + str(result.Authority))
-                    else:
-                        return Response({'url': 'https://www.zarinpal.com/pg/StartPay/' + str(result.Authority)})
+                    # if request.accepted_renderer.format == 'html':
+                    return redirect('https://www.zarinpal.com/pg/StartPay/' + str(result.Authority))
+                    # else:
+                    #     return Response({'url': 'https://www.zarinpal.com/pg/StartPay/' + str(result.Authority)})
                 else:
-                    if request.accepted_renderer.format == 'html':
-                        return render(request, 'dashboard/unsuccess_shopping.html', {'error': str(result.Status)})
-                    else:
-                        return Response(status=status.HTTP_406_NOT_ACCEPTABLE)
+                    # if request.accepted_renderer.format == 'html':
+                    return render(request, 'dashboard/unsuccess_shopping.html', {'error': str(result.Status)})
+                # else:
+                #     return Response(status=status.HTTP_406_NOT_ACCEPTABLE)
         else:
-            if request.accepted_renderer.format == 'html':
-                return redirect('/dashboard/shopping/')  # what's up noob :)
-            return Response(status=status.HTTP_406_NOT_ACCEPTABLE)
+            # if request.accepted_renderer.format == 'html':
+            return redirect('/dashboard/shopping/')  # what's up noob :)
+        # return Response(status=status.HTTP_406_NOT_ACCEPTABLE)
 
 
 class Verify(APIView):
@@ -114,7 +116,7 @@ class Verify(APIView):
                     new_pay.is_successful = True
                     new_pay.payment_code = str(result.RefID)
                     new_pay.save()
-#this try is for events
+                # this try is for events
                 try:
                     event = Event.objects.get(user__id=request.user.id, is_active=True)
                     event.is_active = False
@@ -180,6 +182,7 @@ class ComputeDiscount(APIView):
         amount = amount - discount_amount
         return Response({'amount': amount})
 
+
 # query to find discount
 def discount_query(code):
     now = datetime.datetime.now()
@@ -187,6 +190,7 @@ def discount_query(code):
     query &= Q(code=code)
     query &= (Q(end_date__gte=now) | Q(end_date=None))
     return query
+
 
 def compute_discount(installments_id_list, amount, discount):
     if discount.id is None or discount.courses.count() == 0:
