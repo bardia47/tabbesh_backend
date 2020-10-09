@@ -112,10 +112,11 @@ function removeCourse(element) {
 }
 
 // update cart total credit
-function updateCartTotalPrice(){
+function updateCartTotalPrice() {
     let totalPrice = 0;
     $("#installments input:checked").each(function () {
         totalPrice += $(this).data("amount");
     })
     $("#totalPriceText").text(totalPrice)
+    $("#totalPrice").val(totalPrice)
 }
