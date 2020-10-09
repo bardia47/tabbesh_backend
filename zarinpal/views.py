@@ -235,10 +235,10 @@ def shopping_cart(request):
 
 class GetInstallmentViewSet(viewsets.ModelViewSet):
     # thats fake :/ because its Mandatory
-    queryset = Installment.objects.all()
-    serializer_class = ShoppingInstallmentSerializer
+    queryset = Course.objects.all()
+    serializer_class = ShoppingCartSerializer
     filter_backends = [ListFilter]
-    search_fields = ['id']
+    search_fields = ['installment__id']
     SEARCH_PARAM = 'id'
     http_method_names = ['get', ]
     pagination_class = None

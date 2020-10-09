@@ -8,5 +8,5 @@ class ListFilter(rest_framework.BaseInFilter):
             if list.endswith(','):
                 list = list.rsplit(',', 1)[0]
             integers = [int(v) for v in list.split(',')]
-            return queryset.filter(**{'%s__%s' % (view.SEARCH_PARAM, 'in'): integers})
+            return queryset.filter(**{'%s__%s' % (view.search_fields[0], 'in'): integers})
         return queryset
