@@ -16,6 +16,16 @@
     <div class="container">
         <!-- Countdown & date section -->
         <div class="row">
+            {% if need_buy %}
+
+                <div class="alert alert-danger alert-dismissable">
+                    <a class="panel-close close" data-dismiss="alert">×</a>
+                    <i class="fas fa-exclamation-circle mr-2"></i>
+                    {# for test how error work send post with postman to this url #}
+                    <strong>{{ need_buy.need_buy_text }} </strong>
+                    <input id="needBuyIds" type="hidden" value="{{ need_buy.need_buy_ids }}">
+                </div>
+            {% endif %}
             <!--- Countdown to first class --->
             <div class="col-md-7">
                 <!-- Title of countdown -->
@@ -123,6 +133,8 @@
                     </div>
                 </div>
             </div>
+
+
             <!-- Responsive date with jformat -->
             <div class="col-md-5">
                 <div class="row calender justify-content-start mt-3">

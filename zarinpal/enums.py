@@ -1,8 +1,15 @@
 from enum import Enum
 from accounts.models import Event
 
+
+class PaymentMassages(Enum):
+    discountMassage = 'تخفیف با موفقیت اعمال شد'
+    discountErrorMassage = 'کد تخفیف معتبر نمیباشد'
+
+
 class MERCHANT(Enum):
     merchant = '0c5db223-a20f-4789-8c88-56d78e29ff63'
+
 
 # for pay desc
 class ZarinPal(Enum):
