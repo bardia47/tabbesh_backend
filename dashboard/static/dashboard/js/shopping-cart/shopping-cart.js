@@ -1,7 +1,7 @@
 var shoppingCardIds = [];
 
 $(function () {
-
+    successDiscount();
     // set menu active
     $("#shoppingMenu").addClass("active-menu");
     if (sessionStorage.getItem("totalId") != null) {
@@ -34,6 +34,39 @@ function loadShopping(ids) {
     });
 }
 
+// discount button
+function successDiscount() {
+    let modalBodyTemplate = `
+    <div class="text-center vazir-bold">
+        <img src="/static/dashboard/images/icons/discount.svg" width="120px" height="120px">
+        <p>
+            به خاطرش
+            <span id="profitPrice"></span>
+            تومن سود کردی :)
+        </p>
+        <p>
+            مبلغ قابل پرداخت:
+            <span id="discountPrice"></span>
+            تومان
+        </p>
+    </div>
+    `
+    let modalFooterTemplate = `
+    <div class="mx-auto">
+        <button id="modalDiscountButton" type="button" class="btn btn-success"
+            data-dismiss="modal">بریم پرداختش کنیم
+        </button>
+        <button id="discountRefreshButton" type="button" class="btn btn-danger" data-dismiss="modal">
+            ريست تخفيف  
+        </button>
+    </div>
+    `
+    let template = modalRender("successDiscountModal", `<p class="mb-0 vazir-bold">كد تخفيف با موفقيت اعمال شد</p>`, modalBodyTemplate, modalFooterTemplate)
+    $("body").append(template);
+    $("#successDiscountModal").modal();
+}
+
+
 
 $("#payButton").click(function (e) {
     let installments = [];
@@ -44,14 +77,8 @@ $("#payButton").click(function (e) {
 });
 
 
-// // error modal function -> get modal id & header & message
-// function errorModal(modalId, modalHeader, modalMessage) {
-//     $(modalId).find(".modal-title").text(modalHeader);
-//     $(modalId).find(".modal-body-p").text(modalMessage);
-//     $(modalId).modal()
-// }
 
-// // disable and reset discount
+
 // function discountStatus(status) {
 //     if (status === "disable") {
 //         $("#discountCode").prop("read-only", true);
@@ -87,8 +114,7 @@ $("#payButton").click(function (e) {
 //                 total_id: $('#totalId').val(),
 //                 total_pr: $('#totalPrice').val()
 //             },
-//             beforeSend: function (xhr, settings) {
-//             },
+//             beforeSend: function (xhr, settings) {},
 //             success: function (data, textStatus, xhr) {
 //                 if (data !== 406) {
 //                     discountStatus("disable");
@@ -97,14 +123,17 @@ $("#payButton").click(function (e) {
 //                     $("#profitPrice").text(profitPrice);
 //                     $("#discountPrice").text(data.amount);
 //                     // disable close modal when click outside
-//                     $("#discountModal").modal({backdrop: 'static', keyboard: false}).modal();
+//                     $("#discountModal").modal({
+//                         backdrop: 'static',
+//                         keyboard: false
+//                     }).modal();
 //                     let discountPriceTemplate = `<span style="color: #e8505b;text-decoration: line-through">${oldTotalPrice.val()}</span> ${data.amount}`
 //                     oldTotalPrice.val(data.amount);
 //                     $(".total-price").empty().append(discountPriceTemplate)
 //                 } else {
 //                     errorModal("#errorModal", "خطا در اعمال تخفیف", "کد تخفیف شما معتبر نمی باشد، دوباره امتحان کنید.")
 //                 }
-//
+
 //             },
 //             error: function (xhr, status, error) {
 //                 alert(error);
@@ -112,6 +141,8 @@ $("#payButton").click(function (e) {
 //         });
 //     }
 // });
+
+
 //
 //
 // $("#modalDiscountButton").click(function () {
