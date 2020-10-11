@@ -65,7 +65,7 @@ class CourseLessonsSerializer(CourseBriefSerializer):
 
     class Meta:
         model = Course
-        fields = ('code', 'title', 'start_date', 'end_date', 'image', 'teacher', 'url',
+        fields = ('id', 'code', 'title', 'start_date', 'end_date', 'image', 'teacher', 'url',
                   'is_active', 'first_class', 'private_description', 'parent')
 
 

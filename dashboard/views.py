@@ -25,6 +25,11 @@ class Dashboard(APIView):
         now = datetime.datetime.now()
         if self.request.user.is_student():
             courses = request.user.courses().filter(end_date__gt=now)
+            value = jdatetime.datetime.fromgregorian(datetime=now).day
+            # if (value >= 20):
+            #     need_buys =  Course.objects.filter(installment__start_date__gt=now+ datetime.timedelta(days=10)).exclude(installment__users=request.user)
+            #     list(Installment.objects.filter(id__in=installments_id_list).annotate(
+            #         full_title=Concat('title', V(' '), 'course__title')).values_list('full_title', flat=True))
         elif self.request.user.is_teacher():
             courses = Course.objects.filter(teacher__id=self.request.user.id, end_date__gt=now)
         else:

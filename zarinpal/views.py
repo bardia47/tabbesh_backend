@@ -12,6 +12,9 @@ from core.webServices import SmsWebServices
 from django.urls import reverse
 from .serializers import *
 from core.filters import *
+from drf_yasg import openapi
+from drf_yasg.utils import swagger_auto_schema
+
 import datetime
 import logging
 import json
@@ -74,7 +77,8 @@ class SendRequest(APIView):
                     MERCHANT.merchant.value, amount, description, '', '', url)
                 if result.Status == 100:
                     new_pay = Pay_History.objects.create(purchaser=request.user, amount=amount,
-                                                         installments=request.data["total_id"])
+                                                         installments=TextUtils.convert_list_to_string(
+                                                             installments_id_list, " "))
                     # if request.accepted_renderer.format == 'html':
                     return redirect('https://www.zarinpal.com/pg/StartPay/' + str(result.Authority))
                     # else:
@@ -161,9 +165,15 @@ class Verify(APIView):
 # compute discount code
 class ComputeDiscount(APIView):
     renderer_classes = [TemplateHTMLRenderer, JSONRenderer]
-
+    # @swagger_auto_schema(request_body=openapi.Parameters(openapi.IN_BODY,
+    #     type=openapi.TYPE_OBJECT,
+    #     properties={
+    #         'total_id': openapi.Schema(type=openapi.TYPE_STRING, description='this is list of installment id',pattern='[1,2,3,5]'),
+    #         'code': openapi.Schema(type=openapi.TYPE_STRING, description='this is discount code',),
+    #     }
+    # ))
     def post(self, request):
-        installments_list = request.data["total_id"].split()
+        installments_list = json.loads(request.data["total_id"])
         code = request.data['code']
         query = discount_query(code)
         # query &= (Q(courses__id__in=courses_id_list) | Q(courses=None))
@@ -180,7 +190,7 @@ class ComputeDiscount(APIView):
         if discount_amount == 0:
             return Response(status.HTTP_406_NOT_ACCEPTABLE)
         amount = amount - discount_amount
-        return Response({'amount': amount})
+        return Response({'amount': amount, 'massage': 'تخفیف با موفقیت اعمال شد'})
 
 
 # query to find discount
@@ -242,7 +252,7 @@ class GetInstallmentViewSet(viewsets.ModelViewSet):
     queryset = Course.objects.all()
     serializer_class = ShoppingCartSerializer
     filter_backends = [ListFilter]
-    search_fields = ['installment__id']
+    search_fields = ['id']
     SEARCH_PARAM = 'id'
     http_method_names = ['get', ]
     pagination_class = None
