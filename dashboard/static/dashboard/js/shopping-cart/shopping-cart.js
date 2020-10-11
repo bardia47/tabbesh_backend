@@ -1,13 +1,11 @@
 var shoppingCardIds = [];
 
 $(function () {
-    successDiscount();
     // set menu active
     $("#shoppingMenu").addClass("active-menu");
     if (sessionStorage.getItem("totalId") != null) {
         loadShopping(sessionStorage.getItem("totalId"))
         shoppingCardIds = sessionStorage.getItem("totalId").split(',', -1);
-        console.log(shoppingCardIds)
     }
 });
 
@@ -34,113 +32,90 @@ function loadShopping(ids) {
     });
 }
 
-// discount button
-function successDiscount() {
-    let modalBodyTemplate = `
-    <div class="text-center vazir-bold">
-        <img src="/static/dashboard/images/icons/discount.svg" width="120px" height="120px">
-        <p>
-            به خاطرش
-            <span id="profitPrice"></span>
-            تومن سود کردی :)
-        </p>
-        <p>
-            مبلغ قابل پرداخت:
-            <span id="discountPrice"></span>
-            تومان
-        </p>
-    </div>
-    `
-    let modalFooterTemplate = `
-    <div class="mx-auto">
-        <button id="modalDiscountButton" type="button" class="btn btn-success"
-            data-dismiss="modal">بریم پرداختش کنیم
-        </button>
-        <button id="discountRefreshButton" type="button" class="btn btn-danger" data-dismiss="modal">
-            ريست تخفيف  
-        </button>
-    </div>
-    `
-    let template = modalRender("successDiscountModal", `<p class="mb-0 vazir-bold">كد تخفيف با موفقيت اعمال شد</p>`, modalBodyTemplate, modalFooterTemplate)
-    $("body").append(template);
-    $("#successDiscountModal").modal();
-}
 
 
 
 $("#payButton").click(function (e) {
+    idSet();
+});
+
+
+function idSet() {
     let installments = [];
     $("#installments input:checked").each(function () {
         installments.push($(this).val())
     })
     $("#totalId").val(JSON.stringify(installments))
+}
+
+
+
+
+$('#discountButton').click(function () {
+    if ($("div[id^='course-cart-']").length === 0) failedDiscountModal("خطا در تخفیف")
+    else discountAjax();
 });
 
 
+function discountAjax() {
+    idSet();
+    $.ajax({
+        url: "/payment/compute-discount/",
+        dataType: "json",
+        type: "POST",
+        data: {
+            csrfmiddlewaretoken: $("input[name='csrfmiddlewaretoken']").val(),
+            code: $("#discountCode").val(),
+            total_id: $("#totalId").val(),
+            total_pr: $("#totalPrice").val()
+        },
+        success: function (data) {
+            discountStatus(data)
+        },
+        error: function (xhr, status, error) {
+            console.log(xhr.responseText)
+            alert(xhr);
+        }
+    });
+}
 
 
-// function discountStatus(status) {
-//     if (status === "disable") {
-//         $("#discountCode").prop("read-only", true);
-//         $("#discountButton").prop("disabled", true);
-//     }
-//     // reset discount --> no required
-//     // else if (status === "reset") {  // reset cart items and hidden inputs
-//     //     errorModal("#errorModal", "خطا در اعمال کد تخفیف", "کد تخفیف شما باطل شد.");
-//     //     $("#totalId").val("");
-//     //     $("#totalPrice").val("").prop("read-only", false);
-//     //     $("#discountCode").val("");
-//     //     $("#cartListItems").empty();
-//     //     $(".total-price").text("0");
-//     //     $("#discountButton").prop("disabled", false);
-//     // }
-// }
+function discountStatus(data) {
+    if (data === 406) failedDiscountModal("کد تخفیف مشکل داره")
+    else {
+        successDiscountModal(data.massage)
+        let oldTotalPrice = $("#totalPrice");
+        let discountPriceTemplate = `<span class="text-danger" style="text-decoration: line-through">${oldTotalPrice.val()}</span> ${data.amount}`
+        $("#totalPrice").val(data.amount)
+        $("#discountButton").prop("disabled", true)
+        $("#totalPriceText").empty().append(discountPriceTemplate)
+    }
+}
 
+// success modal for discount
+function successDiscountModal(message) {
+    let modalHeaderTemplate = `<h5 class="modal-title text-success"><i class="fas fa-check-circle"></i>موفق</h5>`
+    let modalBodyTemplate = `
+    <div class="text-center">
+        <p class="vazir-bold">${message}</p>
+        <p>بر روی دکمه پرداخت کلیک کنید</p>
+    </div>
+    `
+    let modalFooterTemplate = ``
+    let template = modalRender("successDiscountModal", modalHeaderTemplate, modalBodyTemplate, modalFooterTemplate)
+    $("body").append(template);
+    $("#successDiscountModal").modal();
+}
 
-
-// $('#discountButton').click(function () {
-//     let discountCode = $("#discountCode");
-//     discountCode.val(persianToEnglishNumbers(discountCode.val()));
-//     if ($(".cart-item").length === 0) {
-//         errorModal("#errorModal", "مشکل در خرید دوره", "سبد خرید شما خالی می باشد، یک درس را انتخاب کنید.")
-//     } else {
-//         $.ajax({
-//             url: "/payment/compute-discount/",
-//             dataType: "json",
-//             type: "POST",
-//             data: {
-//                 csrfmiddlewaretoken: $("input[name='csrfmiddlewaretoken']").val(),
-//                 code: $('#discountCode').val(),
-//                 total_id: $('#totalId').val(),
-//                 total_pr: $('#totalPrice').val()
-//             },
-//             beforeSend: function (xhr, settings) {},
-//             success: function (data, textStatus, xhr) {
-//                 if (data !== 406) {
-//                     discountStatus("disable");
-//                     let oldTotalPrice = $("#totalPrice");
-//                     let profitPrice = parseFloat(oldTotalPrice.val()) - parseFloat(data.amount);
-//                     $("#profitPrice").text(profitPrice);
-//                     $("#discountPrice").text(data.amount);
-//                     // disable close modal when click outside
-//                     $("#discountModal").modal({
-//                         backdrop: 'static',
-//                         keyboard: false
-//                     }).modal();
-//                     let discountPriceTemplate = `<span style="color: #e8505b;text-decoration: line-through">${oldTotalPrice.val()}</span> ${data.amount}`
-//                     oldTotalPrice.val(data.amount);
-//                     $(".total-price").empty().append(discountPriceTemplate)
-//                 } else {
-//                     errorModal("#errorModal", "خطا در اعمال تخفیف", "کد تخفیف شما معتبر نمی باشد، دوباره امتحان کنید.")
-//                 }
-
-//             },
-//             error: function (xhr, status, error) {
-//                 alert(error);
-//             }
-//         });
-//     }
-// });
+// failed modal for discount
+function failedDiscountModal(message) {
+    let modalHeaderTemplate = `<h5 class="modal-title text-danger"><i class="fas fa-exclamation-circle ml-1"></i>خطا</h5>`
+    let modalBodyTemplate = ``
+    let modalFooterTemplate = `<button class="btn btn-danger w-100" data-dismiss="modal">فهمیدم!</button>`
+    let template = modalRender("failedDiscountModal", modalHeaderTemplate, modalBodyTemplate, modalFooterTemplate)
+    $("body").append(template);
+    $("#failedDiscountModal").modal();
+}
 
 
 //
