@@ -13,4 +13,4 @@ class ListFilter(rest_framework.BaseInFilter):
         return queryset
 
     def get_schema_fields(self, view):
-        return [coreapi.Field(name='id', location='query', required=True, type='string', example="[1,2,5]")]
+        return [coreapi.Field(name=view.SEARCH_PARAM, location='query', required=True, type='string', example="[1,2,5]")]
