@@ -481,10 +481,8 @@ class Installment(models.Model):
             query &= ~Q(id=self.id)
         query &= ((Q(start_date__gte=self.start_date) & (Q(end_date__lte=self.end_date))) |
                   (Q(start_date__lte=self.start_date) & (Q(end_date__gte=self.end_date))) |
-                  (Q(start_date__lte=self.start_date) & (Q(end_date__lte=self.end_date)) & (
-                      Q(end_date__gte=self.start_date))) |
-                  (Q(start_date__gte=self.start_date) & (Q(start_date__lte=self.end_date)) & (
-                      Q(end_date__gte=self.end_date)))
+                  ((Q(start_date__lte=self.start_date)) & (Q(end_date__gte=self.start_date))) |
+                  (Q(end_date__gte=self.end_date) & (Q(end_date__lte=self.end_date)))
                   )
         if Installment.objects.filter(query).exists():
             raise ValidationError("تاریخ قسط تداخل دارد")

@@ -86,10 +86,17 @@ class CourseCalendarSerializer(JSONFormSerializer, serializers.ModelSerializer):
         return data
 
 
+# TODO use this after react
+class DashoboardInstallmentSerializer(serializers.Serializer):
+    ids = serializers.CharField()
+    titles = serializers.CharField()
+
+
 class DashboardSerializer(serializers.Serializer):
     course_calendars = CourseCalendarSerializer(many=True)
     now = serializers.DateTimeField()
     calendar_time = serializers.DurationField(required=False, allow_null=True)
+    need_buy = DashoboardInstallmentSerializer(many=False)
 
 
 # for shopping page

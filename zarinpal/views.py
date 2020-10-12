@@ -19,6 +19,8 @@ import datetime
 import logging
 import json
 
+# TODO change app name to payments
+
 logger = logging.getLogger("django")
 client = Client('https://www.zarinpal.com/pg/services/WebGate/wsdl')
 
@@ -165,16 +167,16 @@ class Verify(APIView):
 # compute discount code
 class ComputeDiscount(APIView):
     renderer_classes = [TemplateHTMLRenderer, JSONRenderer]
-    # @swagger_auto_schema(request_body=openapi.Parameters(openapi.IN_BODY,
-    #     type=openapi.TYPE_OBJECT,
-    #     properties={
-    #         'total_id': openapi.Schema(type=openapi.TYPE_STRING, description='this is list of installment id',pattern='[1,2,3,5]'),
-    #         'code': openapi.Schema(type=openapi.TYPE_STRING, description='this is discount code',),
-    #     }
-    # ))
-    def post(self, request):
-        installments_list = json.loads(request.data["total_id"])
-        code = request.data['code']
+
+    @swagger_auto_schema(manual_parameters=[
+        openapi.Parameter(name='total_id', in_=openapi.IN_QUERY, required=True, type=openapi.TYPE_STRING,description='this is list of installment id',format='[1,2,3,5]'),
+        openapi.Parameter(name='code', in_=openapi.IN_QUERY, required=True, type=openapi.TYPE_STRING, description='this is discount code'),
+        openapi.Parameter(name='total_pr', in_=openapi.IN_QUERY, required=True, type=openapi.TYPE_STRING,description='this is sum amount of installments')
+       ]
+    )
+    def get(self, request):
+        installments_list = json.loads(request.GET.get("total_id"))
+        code = request.GET.get('code')
         query = discount_query(code)
         # query &= (Q(courses__id__in=courses_id_list) | Q(courses=None))
         try:
@@ -184,13 +186,15 @@ class ComputeDiscount(APIView):
             else:
                 discount = Discount.objects.get(query)
         except:
-            return Response(status.HTTP_406_NOT_ACCEPTABLE)
-        amount = int(request.data["total_pr"])
+            return Response({'massage': PaymentMassages.discountErrorMassage.value},
+                            status=status.HTTP_406_NOT_ACCEPTABLE)
+        amount = int( request.GET.get('total_pr'))
         discount_amount = compute_discount(installments_list, amount, discount)
         if discount_amount == 0:
-            return Response(status.HTTP_406_NOT_ACCEPTABLE)
+            return Response({'massage': PaymentMassages.discountErrorMassage.value},
+                            status=status.HTTP_406_NOT_ACCEPTABLE)
         amount = amount - discount_amount
-        return Response({'amount': amount, 'massage': 'تخفیف با موفقیت اعمال شد'})
+        return Response({'amount': amount, 'massage': PaymentMassages.discountMassage.value})
 
 
 # query to find discount
@@ -248,7 +252,9 @@ def shopping_cart(request):
 
 
 class GetInstallmentViewSet(viewsets.ModelViewSet):
-    # thats fake :/ because its Mandatory
+    """
+                add list of installmentIds to params
+          """
     queryset = Course.objects.all()
     serializer_class = ShoppingCartSerializer
     filter_backends = [ListFilter]

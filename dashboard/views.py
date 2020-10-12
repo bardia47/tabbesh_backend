@@ -11,25 +11,33 @@ from rest_framework import status
 from rest_framework import generics
 from core.utils import Utils
 from rest_framework.decorators import permission_classes
-
+from core.utils import TextUtils
 # for load or dump jsons
 from django.db.models import Case, Value, When, IntegerField
 from .permission import EditDocumentPermission
+from .enums import DashboardMessages
 
 
-class Dashboard(APIView):
+# TODO clean this  after using react
+class Dashboard(generics.RetrieveAPIView):
+    """
+                    ### swagger of this is incorrect !
+          """
     renderer_classes = [TemplateHTMLRenderer, JSONRenderer]
     template_name = 'dashboard/dashboard.html'
+    serializer_class = DashboardSerializer
 
-    def get(self, request):
+    def retrieve(self, request, *args, **kwargs):
         now = datetime.datetime.now()
         if self.request.user.is_student():
             courses = request.user.courses().filter(end_date__gt=now)
             value = jdatetime.datetime.fromgregorian(datetime=now).day
-            # if (value >= 20):
-            #     need_buys =  Course.objects.filter(installment__start_date__gt=now+ datetime.timedelta(days=10)).exclude(installment__users=request.user)
-            #     list(Installment.objects.filter(id__in=installments_id_list).annotate(
-            #         full_title=Concat('title', V(' '), 'course__title')).values_list('full_title', flat=True))
+            if (value >= 20):
+                need_buys = courses.filter(
+                    installment__start_date__gt=now + datetime.timedelta(days=10)).distinct()
+                if (need_buys.exists()):
+                    need_buy_ids = list(need_buys.values_list('id', flat=True))
+                    need_buy_titles = TextUtils.convert_list_to_string(list(need_buys.values_list('title', flat=True)))
         elif self.request.user.is_teacher():
             courses = Course.objects.filter(teacher__id=self.request.user.id, end_date__gt=now)
         else:
@@ -41,9 +49,14 @@ class Dashboard(APIView):
         else:
             calendar_time = None
         if request.accepted_renderer.format == 'html':
-            return Response({'now': now, 'classes': classes, 'calendar_time': calendar_time})
-        ser = DashboardSerializer(instance={'course_calendars': classes, 'now': now, 'calendar_time': calendar_time})
-        return Response(ser.data)
+            resp = {'now': now, 'classes': classes, 'calendar_time': calendar_time}
+            if need_buy_ids:
+                resp.update({'need_buy': {'need_buy_ids': need_buy_ids,
+                                          'need_buy_text': TextUtils.replacer(DashboardMessages.needBuyMassage.value,
+                                                                              [need_buy_titles])}})
+            return Response(resp)
+        # ser = DashboardSerializer(instance={'course_calendars': classes, 'now': now, 'calendar_time': calendar_time})
+        # return Response(ser.data)
 
 
 class AppProfile(APIView):
@@ -112,7 +125,7 @@ class EditProfile(APIView):
             #     ext = format.split('/')[-1]
             #     avatar = ContentFile(base64.b64decode(imgstr), name=file_name + "." + ext)
             # except:
-            avatar = Utils.compressImage(request.FILES.get("file"),width=200)
+            avatar = Utils.compressImage(request.FILES.get("file"), width=200)
 
             if avatar:
                 if not request.user.avatar.url.startswith("/media/defaults"):
