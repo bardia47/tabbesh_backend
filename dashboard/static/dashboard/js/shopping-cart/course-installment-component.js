@@ -1,23 +1,27 @@
 // create cart item
 function renderCartItems(installmentCards) {
     let cartTemplate, cartList = $("#cartListItems");
-
+    if (installmentCards.length === 0) noShoppingItem()
     $.each(installmentCards, function (index, course) {
         cartTemplate = `
             <div id="course-cart-${course.id}" class="card">
             <div class="card-body">
               <div class="row text-center">
                 <!-- Course image -->
-                <div class="col-md-2">
+                <div class="col-md-1">
                   <img class="rounded" src="${course.image}" alt="course image" width="60px">
                 </div>
                 <!-- Course title -->
-                <div class="col-md-3">
+                <div class="col-md-2">
                   <p>${course.title}</p>
                 </div>
                 <!--Course teacher name -->
-                <div class="col-md-3">
+                <div class="col-md-2">
                   <p>${course.teacher}</p>
+                </div>
+                <!-- course price -->
+                <div class="col-md-3">
+                  <p><b class="ml-2">پرداختی:</b><span class="total-amount">${course.installments[0].amount + " تومان"}</span></p>
                 </div>
                 <!-- Button-to-delete -->
                 <div class="col-md-4">
@@ -33,7 +37,7 @@ function renderCartItems(installmentCards) {
         cartList.append(cartTemplate);
 
         // render course installment
-        let instalmentsRowsTemplate = renderCourseInstallments(course.installments)
+        let instalmentsRowsTemplate = renderCourseInstallments(course.installments, course.id)
 
         let installmentsTemplate = `
         <div id="course-${course.id}" class="container mt-3">
@@ -65,11 +69,10 @@ function renderCartItems(installmentCards) {
         $("#installments").append(installmentsTemplate)
         updateCartTotalPrice();
     })
-
 }
 
 
-function renderCourseInstallments(instalments) {
+function renderCourseInstallments(instalments, courseId) {
     let instalmentsRowsTemplate = ``
     let firstInstallment = false;
     $.each(instalments, function (index, installment) {
@@ -81,7 +84,7 @@ function renderCourseInstallments(instalments) {
             <td></td>
             <td class="pl-5">
                 <div class="form-check">
-                    <input onchange="updateCartTotalPrice(this)" data-amount="${installment.amount}" type="checkbox" value="${installment.id}" ${firstInstallment === false ? "disabled checked" : ""} style="width: 20px; height: 20px">
+                    <input onchange="updateCoursePrice(this)" data-course-id="${courseId}" data-amount="${installment.amount}" type="checkbox" value="${installment.id}" ${firstInstallment === false ? "disabled checked" : ""} style="width: 20px; height: 20px">
                 </div>
             </td>
         </tr>`
@@ -94,6 +97,16 @@ function renderCourseInstallments(instalments) {
 // select all checkbox
 function selectInstallments(element) {
     $("#course-" + $(element).data("id") + " input[type='checkbox']").prop('checked', true);
+    updateCartTotalPrice();
+}
+
+// update total course total price
+function updateCoursePrice(element) {
+    let totalPrice = 0;
+    $("#course-" + $(element).data("course-id") + " input:checked").each(function () {
+        totalPrice += $(this).data("amount");
+    })
+    $("#course-cart-" + $(element).data("course-id") + " .total-amount").text(totalPrice + " تومان ")
     updateCartTotalPrice();
 }
 
@@ -110,7 +123,8 @@ function removeCourse(element) {
         shoppingCardIds.splice(index, 1);
     }
     // show redirect to shopping
-    if (shoppingCardIds.length === 1) noShoppingItem()
+    if (shoppingCardIds.length === 0) noShoppingItem()
+    console.log(shoppingCardIds.length)
     sessionStorage.setItem("totalId", JSON.stringify(shoppingCardIds));
     updateCartTotalPrice();
 }
