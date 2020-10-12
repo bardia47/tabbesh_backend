@@ -65,7 +65,7 @@ class SendRequest(APIView):
                 user.save()
                 # if request.accepted_renderer.format == 'html':
                 return render(request, 'dashboard/success_shopping.html')
-                # return Response({'massage': 'خرید موفق'}, status=status.HTTP_201_CREATED)
+                # return Response({'message': 'خرید موفق'}, status=status.HTTP_201_CREATED)
 
             # request to zarinpal
             else:
@@ -186,15 +186,15 @@ class ComputeDiscount(APIView):
             else:
                 discount = Discount.objects.get(query)
         except:
-            return Response({'massage': PaymentMassages.discountErrorMassage.value},
+            return Response({'message': PaymentMassages.discountErrorMassage.value},
                             status=status.HTTP_406_NOT_ACCEPTABLE)
         amount = int( request.GET.get('total_pr'))
         discount_amount = compute_discount(installments_list, amount, discount)
         if discount_amount == 0:
-            return Response({'massage': PaymentMassages.discountErrorMassage.value},
+            return Response({'message': PaymentMassages.discountErrorMassage.value},
                             status=status.HTTP_406_NOT_ACCEPTABLE)
         amount = amount - discount_amount
-        return Response({'amount': amount, 'massage': PaymentMassages.discountMassage.value})
+        return Response({'amount': amount, 'message': PaymentMassages.discountMassage.value})
 
 
 # query to find discount

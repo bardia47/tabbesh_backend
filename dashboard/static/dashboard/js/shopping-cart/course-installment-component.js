@@ -99,6 +99,7 @@ function selectInstallments(element) {
 
 // remove course from cart
 function removeCourse(element) {
+    let shoppingCardIds = JSON.parse(sessionStorage.getItem("totalId"));
     let id = $(element).data("id");
     $("#course-" + id).remove();
     $("#course-cart-" + id).remove();
@@ -109,7 +110,8 @@ function removeCourse(element) {
         shoppingCardIds.splice(index, 1);
     }
     // show redirect to shopping
-    if (shoppingCardIds.length == 1) noShoppingItem()
+    if (shoppingCardIds.length === 1) noShoppingItem()
+    sessionStorage.setItem("totalId", JSON.stringify(shoppingCardIds));
     updateCartTotalPrice();
 }
 

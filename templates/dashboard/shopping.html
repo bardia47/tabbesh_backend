@@ -54,7 +54,6 @@
                 <form id="shopping-cart-form" action="{% url 'shopping_cart' %}" method="post">
                     {% csrf_token %}
                     <!-- Total cart items id and price for pass to back-end -->
-                    <input id="totalId" type="hidden" name="total_id" value="">
                     <div class="row px-3">
                         <p class="mb-0 mr-auto">
                             مبلغ قابل پرداخت : <b class="total-price">0</b> تومان

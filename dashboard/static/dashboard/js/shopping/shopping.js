@@ -276,9 +276,6 @@ $("select[id^='search']").change(function (event) {
 });
 
 
-
-
-
 // shopping cart js
 
 
@@ -381,18 +378,18 @@ function addItemToCart(id, title, price, teacher, imageSrc) {
 // Update cart total price
 function updateCartTotal() {
     let totalPrice = 0;
-    let totalId = "";
+    let totalId = [];
     $(".cart-item").each(function (index, cartItem) {
         let itemPrice = $(cartItem).find(".cart-price-text");
         let itemId = $(cartItem).find(".cart-course-id");
         // check if price is رایگان change to 0
         if ($(itemPrice).text() !== "رايگان!") totalPrice += parseFloat($(itemPrice).text());
         // make total id and price for back-end in hidden input
-        totalId = totalId + itemId.val() + ","
+        totalId.push(itemId.val());
     });
     totalPrice = Math.round(totalPrice * 100) / 100;
     $(".total-price").text(totalPrice);
-    $("#totalId").val(totalId);
+    sessionStorage.setItem("totalId", JSON.stringify(totalId));
 }
 
 
@@ -406,8 +403,6 @@ $("#shopping-cart-form").submit(function (event) {
 
 // paying button click handler
 $("#payButton").click(function () {
-    sessionStorage.setItem("totalId", $("#totalId").val());
     window.location.href = document.getElementById("shopping-cart-form").action;
-
 });
 

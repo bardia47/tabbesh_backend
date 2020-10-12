@@ -1,38 +1,28 @@
-var shoppingCardIds = [];
-
 $(function () {
-    // set menu active
-    $("#shoppingMenu").addClass("active-menu");
     if (sessionStorage.getItem("totalId") != null) {
         loadShopping(sessionStorage.getItem("totalId"))
-        shoppingCardIds = sessionStorage.getItem("totalId").split(',', -1);
     }
 });
 
 
 //get lessons with ajax
-function loadShopping(ids) {
-    console.log(ids)
+function loadShopping(courseIds) {
     // get JSON and Response Header
     $.ajax({
         url: "/payment/get-installment/",
         type: "GET",
         dataType: "json",
         data: {
-            "id": ids
+            "id": courseIds
         },
-        success: function (installmentCards, textStatus, request) {
-            console.log(installmentCards);
-            renderCartItems(installmentCards);
-            localStorage.removeItem("totalId")
+        success: function (data) {
+            renderCartItems(data);
         },
         error: function () {
             alert("خطا در بارگزاری دروس ... لطفا دوباره امتحان کنید!")
         },
     });
 }
-
-
 
 
 $("#payButton").click(function (e) {
@@ -49,10 +39,8 @@ function idSet() {
 }
 
 
-
-
 $('#discountButton').click(function () {
-    if ($("div[id^='course-cart-']").length === 0) failedDiscountModal("خطا در تخفیف")
+    if ($("div[id^='course-cart-']").length === 0) failedDiscountModal("دوره ای در سبد خرید موجود نمی باشد")
     else discountAjax();
 });
 
@@ -62,34 +50,32 @@ function discountAjax() {
     $.ajax({
         url: "/payment/compute-discount/",
         dataType: "json",
-        type: "POST",
+        type: "GET",
         data: {
-            csrfmiddlewaretoken: $("input[name='csrfmiddlewaretoken']").val(),
             code: $("#discountCode").val(),
             total_id: $("#totalId").val(),
             total_pr: $("#totalPrice").val()
         },
-        success: function (data) {
-            discountStatus(data)
+        success: function (data, status) {
+            applyDiscount(data, status)
         },
-        error: function (xhr, status, error) {
-            console.log(xhr.responseText)
-            alert(xhr);
+        statusCode: {
+            406: function (data) {
+                console.log(data.responseJSON.massage)
+                failedDiscountModal(data.responseJSON.message)
+            }
         }
     });
 }
 
 
-function discountStatus(data) {
-    if (data === 406) failedDiscountModal("کد تخفیف مشکل داره")
-    else {
-        successDiscountModal(data.massage)
-        let oldTotalPrice = $("#totalPrice");
-        let discountPriceTemplate = `<span class="text-danger" style="text-decoration: line-through">${oldTotalPrice.val()}</span> ${data.amount}`
-        $("#totalPrice").val(data.amount)
-        $("#discountButton").prop("disabled", true)
-        $("#totalPriceText").empty().append(discountPriceTemplate)
-    }
+function applyDiscount(data) {
+    successDiscountModal(data.message)
+    let oldTotalPrice = $("#totalPrice");
+    let discountPriceTemplate = `<span class="text-danger" style="text-decoration: line-through">${oldTotalPrice.val()}</span> ${data.amount}`
+    $("#totalPrice").val(data.amount)
+    $("#discountButton").prop("disabled", true)
+    $("#totalPriceText").empty().append(discountPriceTemplate)
 }
 
 // success modal for discount
@@ -101,30 +87,38 @@ function successDiscountModal(message) {
         <p>بر روی دکمه پرداخت کلیک کنید</p>
     </div>
     `
-    let modalFooterTemplate = ``
+    let modalFooterTemplate = `
+    <div class="mx-auto">
+        <button id="discountPayment" type="button" class="btn btn-success ml-2">پرداخت</button>
+        <button id="discountRefreshButton" type="button" class="btn btn-danger">ريست تخفيف</button>    
+    </div>
+    `
     let template = modalRender("successDiscountModal", modalHeaderTemplate, modalBodyTemplate, modalFooterTemplate)
     $("body").append(template);
-    $("#successDiscountModal").modal();
+    $("#successDiscountModal").modal({backdrop: 'static', keyboard: false}).modal();
+    $("#successDiscountModal").on("hidden.bs.modal", function (e) {
+        $(this).remove();
+    })
+    // submit discount and purchase
+    $("#discountPayment").click(function () {
+        $("#shopping-cart-form").submit()
+    });
+
+    // reset discount
+    $("#discountRefreshButton").click(function () {
+        location.reload();
+    });
 }
 
 // failed modal for discount
 function failedDiscountModal(message) {
     let modalHeaderTemplate = `<h5 class="modal-title text-danger"><i class="fas fa-exclamation-circle ml-1"></i>خطا</h5>`
-    let modalBodyTemplate = ``
+    let modalBodyTemplate = `<p class="vazir-bold text-center">${message}</p>`
     let modalFooterTemplate = `<button class="btn btn-danger w-100" data-dismiss="modal">فهمیدم!</button>`
     let template = modalRender("failedDiscountModal", modalHeaderTemplate, modalBodyTemplate, modalFooterTemplate)
     $("body").append(template);
     $("#failedDiscountModal").modal();
+    $("#failedDiscountModal").on("hidden.bs.modal", function (e) {
+        $(this).remove();
+    })
 }
-
-
-//
-//
-// $("#modalDiscountButton").click(function () {
-//     $("form#shopping-cart-form").submit()
-// });
-//
-// // reset discount
-// $("#discountRefreshButton").click(function () {
-//     location.reload();
-// });

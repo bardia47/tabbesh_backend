@@ -4,7 +4,7 @@ from accounts.models import Event
 
 class PaymentMassages(Enum):
     discountMassage = 'تخفیف با موفقیت اعمال شد'
-    discountErrorMassage = 'کد تخفیف معتبر نمیباشد'
+    discountErrorMassage = 'کد تخفیف معتبر نمی باشد دوباره امتحان کنید'
 
 
 class MERCHANT(Enum):
