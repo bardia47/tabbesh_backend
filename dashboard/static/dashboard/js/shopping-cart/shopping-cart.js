@@ -1,6 +1,10 @@
 $(function () {
-    if (sessionStorage.getItem("totalId") != null) {
+    let totalId = [];
+    totalId = sessionStorage.getItem("totalId");
+    if (totalId != null && totalId.length !== 0) {
         loadShopping(sessionStorage.getItem("totalId"))
+    } else {
+        noShoppingItem();
     }
 });
 
@@ -121,4 +125,20 @@ function failedDiscountModal(message) {
     $("#failedDiscountModal").on("hidden.bs.modal", function (e) {
         $(this).remove();
     })
+}
+
+function noShoppingItem() {
+    let template = `
+    <!-- no cart list item -->
+    <div class="d-flex justify-content-center text-center flex- flex-column shadow-sm bg-white p-2">
+        <img class="m-auto" src="/static/home/images/icons/sad-emoji.svg" width="80" height="80">
+        <p class="vazir-bold">سبد خرید شما خالی می باشد!</p>
+        <p class="mt-n3 text-center vazir-light">
+            برای مشاهده و خرید درس بر روی دکمه ی زیر کلیک کنید
+        </p>
+        <a class="btn btn-dark mx-auto btn-sm" href="/dashboard/shopping/">برگشت به خرید درس</a>
+    </div>
+    `
+
+    $("#cartListItems").append(template)
 }
