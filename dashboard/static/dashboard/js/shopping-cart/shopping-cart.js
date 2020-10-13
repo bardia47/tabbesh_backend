@@ -1,10 +1,6 @@
 $(function () {
-    let totalId = [];
-    totalId = sessionStorage.getItem("totalId");
-    if (totalId != null && totalId.length !== 0) {
+    if (sessionStorage.getItem("totalId") != null) {
         loadShopping(sessionStorage.getItem("totalId"))
-    } else {
-        noShoppingItem();
     }
 });
 

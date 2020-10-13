@@ -1,6 +1,7 @@
 // create cart item
 function renderCartItems(installmentCards) {
     let cartTemplate, cartList = $("#cartListItems");
+    if (installmentCards.length === 0) noShoppingItem()
     $.each(installmentCards, function (index, course) {
         cartTemplate = `
             <div id="course-cart-${course.id}" class="card">
