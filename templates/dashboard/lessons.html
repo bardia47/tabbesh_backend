@@ -36,10 +36,14 @@
     {% else %}
         <!-- active courses section -->
         <div class="container">
-            <h1 class="text-right vazir-bold mb-3" style="font-size: 20px;">
-                <img class="ml-2" src="{% static 'dashboard/images/icons/active-course.svg' %}" width="48" height="48">
-                دوره های در حال برگزاری
-            </h1>
+            <div class="d-flex align-items-center">
+                <h1 class="text-right vazir-bold mb-3" style="font-size: 20px;">
+                    <img class="ml-2" src="{% static 'dashboard/images/icons/active-course.svg' %}" width="48"
+                         height="48">
+                    دوره های در حال برگزاری
+                </h1>
+                <a onclick="sessionStorage.setItem('totalId' , '')" class="btn btn-secondary mr-auto" href="/payment/shopping-cart/">پرداخت شهریه</a>
+            </div>
             <div id="activeCourses" class="row">
 
             </div>

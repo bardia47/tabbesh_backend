@@ -191,3 +191,12 @@ function renderPagination(pageNumber, urlAjax) {
     $(".pagination-wrapper").show();
     $("html, body").animate({scrollTop: 0}, "slow");
 }
+
+
+// clear session for installment
+function installmentPayment(){
+
+}
+$("#installmentPaymentBtn").click(function (){
+
+})
