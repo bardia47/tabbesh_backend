@@ -169,10 +169,13 @@ class ComputeDiscount(APIView):
     renderer_classes = [TemplateHTMLRenderer, JSONRenderer]
 
     @swagger_auto_schema(manual_parameters=[
-        openapi.Parameter(name='total_id', in_=openapi.IN_QUERY, required=True, type=openapi.TYPE_STRING,description='this is list of installment id',format='[1,2,3,5]'),
-        openapi.Parameter(name='code', in_=openapi.IN_QUERY, required=True, type=openapi.TYPE_STRING, description='this is discount code'),
-        openapi.Parameter(name='total_pr', in_=openapi.IN_QUERY, required=True, type=openapi.TYPE_STRING,description='this is sum amount of installments')
-       ]
+        openapi.Parameter(name='total_id', in_=openapi.IN_QUERY, required=True, type=openapi.TYPE_STRING,
+                          description='this is list of installment id', format='[1,2,3,5]'),
+        openapi.Parameter(name='code', in_=openapi.IN_QUERY, required=True, type=openapi.TYPE_STRING,
+                          description='this is discount code'),
+        openapi.Parameter(name='total_pr', in_=openapi.IN_QUERY, required=True, type=openapi.TYPE_STRING,
+                          description='this is sum amount of installments')
+    ]
     )
     def get(self, request):
         installments_list = json.loads(request.GET.get("total_id"))
@@ -188,7 +191,7 @@ class ComputeDiscount(APIView):
         except:
             return Response({'message': PaymentMassages.discountErrorMassage.value},
                             status=status.HTTP_406_NOT_ACCEPTABLE)
-        amount = int( request.GET.get('total_pr'))
+        amount = int(request.GET.get('total_pr'))
         discount_amount = compute_discount(installments_list, amount, discount)
         if discount_amount == 0:
             return Response({'message': PaymentMassages.discountErrorMassage.value},
@@ -262,3 +265,13 @@ class GetInstallmentViewSet(viewsets.ModelViewSet):
     SEARCH_PARAM = 'id'
     http_method_names = ['get', ]
     pagination_class = None
+
+    def get_queryset(self):
+        if (self.request.GET.get(self.SEARCH_PARAM) not in (None, '')):
+            return super(GetInstallmentViewSet, self).get_queryset()
+        now = datetime.datetime.now()
+        courses = self.request.user.courses().filter(end_date__gt=now)
+        courses = courses.filter(Q(installment__start_date__gt=now) | Q(
+            installment__end_date__gt=now + datetime.timedelta(
+                days=ModelEnums.installmentDateBefore.value))).distinct()
+        return courses

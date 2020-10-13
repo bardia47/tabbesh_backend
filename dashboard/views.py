@@ -29,15 +29,15 @@ class Dashboard(generics.RetrieveAPIView):
 
     def retrieve(self, request, *args, **kwargs):
         now = datetime.datetime.now()
-        need_buy_ids = None
+        need_buy_titles = None
         if self.request.user.is_student():
             courses = request.user.courses().filter(end_date__gt=now)
             value = jdatetime.datetime.fromgregorian(datetime=now).day
             if (value >= 20):
                 need_buys = courses.filter(
-                    installment__start_date__gt=now + datetime.timedelta(days=10)).distinct()
+                    installment__start_date__gt=now).distinct()
                 if (need_buys.exists()):
-                    need_buy_ids = list(need_buys.values_list('id', flat=True))
+                    # need_buy_ids = list(need_buys.values_list('id', flat=True))
                     need_buy_titles = TextUtils.convert_list_to_string(list(need_buys.values_list('title', flat=True)))
         elif self.request.user.is_teacher():
             courses = Course.objects.filter(teacher__id=self.request.user.id, end_date__gt=now)
@@ -51,9 +51,8 @@ class Dashboard(generics.RetrieveAPIView):
             calendar_time = None
         if request.accepted_renderer.format == 'html':
             resp = {'now': now, 'classes': classes, 'calendar_time': calendar_time}
-            if need_buy_ids:
-                resp.update({'need_buy': {'need_buy_ids': need_buy_ids,
-                                          'need_buy_text': TextUtils.replacer(DashboardMessages.needBuyMassage.value,
+            if need_buy_titles:
+                resp.update({'need_buy': {'need_buy_text': TextUtils.replacer(DashboardMessages.needBuyMassage.value,
                                                                               [need_buy_titles])}})
             return Response(resp)
         # ser = DashboardSerializer(instance={'course_calendars': classes, 'now': now, 'calendar_time': calendar_time})
@@ -273,7 +272,7 @@ class GetShoppingViewSet(viewsets.ModelViewSet):
     # default show all active courses
     def get_queryset(self):
         now = datetime.datetime.now()
-        query = Q(end_date__gt=now + datetime.timedelta(days=10))
+        query = Q(end_date__gt=now + datetime.timedelta(days=ModelEnums.installmentDateBefore.value))
         if self.request.user.courses().all():
             queryNot = reduce(or_, (Q(id=course.id)
                                     for course in self.request.user.courses().all()))

@@ -4,6 +4,7 @@ from django.urls import reverse
 from django.utils.safestring import mark_safe
 from .forms import *
 from accounts.models import *
+from dashboard.validators import AdminValidator
 
 
 class InstallmentUserInline(admin.StackedInline):
@@ -56,7 +57,7 @@ class DiscountWithoutCodeInline(admin.TabularInline):
 
 
 class InstallmentAdmin(ModelAdminJalaliMixin, admin.ModelAdmin):
-    list_display = ['course', 'get_start_date_decorated', 'get_end_date_decorated', 'title', 'amount']
+    list_display = ['title', 'get_start_date_decorated', 'get_end_date_decorated', 'course', 'amount']
     search_fields = ['course', 'title']
 
     def get_start_date_decorated(self, obj):
@@ -69,6 +70,15 @@ class InstallmentAdmin(ModelAdminJalaliMixin, admin.ModelAdmin):
     get_start_date_decorated.admin_order_field = 'start_date'
     get_end_date_decorated.short_description = 'تاریخ پایان'
     get_end_date_decorated.admin_order_field = 'end_date'
+
+    def render_change_form(self, request, context, *args, **kwargs):
+        if (kwargs['obj']):
+            AdminValidator.showErrorsOfCourse(kwargs['obj'].course, request)
+        return super(InstallmentAdmin, self).render_change_form(request, context, *args, **kwargs)
+
+    def save_model(self, request, obj, form, change):
+        super(InstallmentAdmin, self).save_model(request, obj, form, change)
+        AdminValidator.showErrorsOfCourse(obj.course, request)
 
 
 class PayHistoryAdmin(admin.ModelAdmin):
