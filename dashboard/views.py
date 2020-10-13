@@ -35,7 +35,8 @@ class Dashboard(generics.RetrieveAPIView):
             value = jdatetime.datetime.fromgregorian(datetime=now).day
             if (value >= 20):
                 need_buys = courses.filter(
-                    installment__start_date__gt=now + datetime.timedelta(days=10)).distinct()
+                    installment__start_date__gt=now + datetime.timedelta(
+                        days=ModelEnums.installmentDateBefore.value)).distinct()
                 if (need_buys.exists()):
                     need_buy_ids = list(need_buys.values_list('id', flat=True))
                     need_buy_titles = TextUtils.convert_list_to_string(list(need_buys.values_list('title', flat=True)))
@@ -273,7 +274,7 @@ class GetShoppingViewSet(viewsets.ModelViewSet):
     # default show all active courses
     def get_queryset(self):
         now = datetime.datetime.now()
-        query = Q(end_date__gt=now + datetime.timedelta(days=10))
+        query = Q(end_date__gt=now + datetime.timedelta(days=ModelEnums.installmentDateBefore.value))
         if self.request.user.courses().all():
             queryNot = reduce(or_, (Q(id=course.id)
                                     for course in self.request.user.courses().all()))

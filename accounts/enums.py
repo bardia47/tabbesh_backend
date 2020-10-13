@@ -11,6 +11,10 @@ class RoleCodes(Enum):
     TEACHER = '3'
 
 
+class ModelEnums(Enum):
+    installmentDateBefore = 10
+
+
 class Sms(Enum):
     username = '09357727769'
     password = '8794'

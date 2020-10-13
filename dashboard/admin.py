@@ -1,5 +1,4 @@
 from django.contrib import admin
-
 from accounts.models import *
 from jalali_date.admin import ModelAdminJalaliMixin, TabularInlineJalaliMixin
 from accounts.enums import RoleCodes
@@ -8,15 +7,18 @@ from django.urls import reverse
 from django.utils.safestring import mark_safe
 from zarinpal.admin import DiscountWithoutCodeInline, InstallmenCoursetInline
 from .forms import *
+from .validators import AdminValidator
 
 
 class CourseCalendarInline(TabularInlineJalaliMixin, admin.TabularInline):
-    formset = CourseCalendarFormSetInline
+    # formset = CourseCalendarFormSetInline
     model = Course_Calendar
     max_num = 3
 
+
 class LessonAdmin(admin.ModelAdmin):
     list_display = ['code', 'title']
+
 
 class CourseAdmin(ModelAdminJalaliMixin, admin.ModelAdmin):
     form = CourseForm
@@ -41,7 +43,12 @@ class CourseAdmin(ModelAdminJalaliMixin, admin.ModelAdmin):
 
     def render_change_form(self, request, context, *args, **kwargs):
         context['adminform'].form.fields['teacher'].queryset = User.objects.filter(role__code=RoleCodes.TEACHER.value)
+        AdminValidator.showErrorsOfCourse(kwargs['obj'], request)
         return super(CourseAdmin, self).render_change_form(request, context, *args, **kwargs)
+
+    def save_related(self, request, form, formsets, change):
+        super(CourseAdmin, self).save_related(request, form, formsets, change)
+        AdminValidator.showErrorsOfCourse(form.instance, request)
 
     def student_link(self, obj):
         return mark_safe('<a href="{0}">{1}</a>'.format(

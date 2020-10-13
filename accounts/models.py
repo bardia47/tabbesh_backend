@@ -11,6 +11,7 @@ from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db.models import Q, Max, IntegerField
 from django.db.models import Value as V
 from django.db.models.functions import Concat
+from .enums import ModelEnums
 
 
 # Create your models here.
@@ -255,7 +256,9 @@ class Course(models.Model):
     def get_next_installment(self, exclude=None):
         now = datetime.datetime.now()
         installment = Installment.objects.filter(
-            Q(start_date__gt=now) | Q(end_date__gt=now + datetime.timedelta(days=1)), course__id=self.id).first()
+            Q(start_date__gt=now) | Q(
+                end_date__gt=now + datetime.timedelta(days=ModelEnums.installmentDateBefore.value)),
+            course__id=self.id).first()
         return installment
 
     def students(self):
@@ -476,6 +479,8 @@ class Installment(models.Model):
         super().clean_fields(exclude=exclude)
         if not self.start_date or not self.end_date or self.end_date < self.start_date:
             raise ValidationError("تاریخ پایان باید پس از تاریخ شروع باشد")
+        if self.start_date < self.course.start_date.date() or self.end_date > self.course.end_date.date():
+            raise ValidationError("تاریخ قسط قبل / بعد از تاریخ دوره است")
         query = Q(course__id=self.course.id)
         if self.id is not None:
             query &= ~Q(id=self.id)
