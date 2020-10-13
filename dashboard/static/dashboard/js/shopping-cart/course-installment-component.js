@@ -1,45 +1,6 @@
-// create cart item
-function renderCartItems(installmentCards) {
-    let cartTemplate, cartList = $("#cartListItems");
-    if (installmentCards.length === 0) noShoppingItem()
-    $.each(installmentCards, function (index, course) {
-        cartTemplate = `
-            <div id="course-cart-${course.id}" class="card">
-            <div class="card-body">
-              <div class="row text-center">
-                <!-- Course image -->
-                <div class="col-md-1">
-                  <img class="rounded" src="${course.image}" alt="course image" width="60px">
-                </div>
-                <!-- Course title -->
-                <div class="col-md-2">
-                  <p>${course.title}</p>
-                </div>
-                <!--Course teacher name -->
-                <div class="col-md-2">
-                  <p>${course.teacher}</p>
-                </div>
-                <!-- course price -->
-                <div class="col-md-3">
-                  <p><b class="ml-2">پرداختی:</b><span class="total-amount">${course.installments[0].amount + " تومان"}</span></p>
-                </div>
-                <!-- Button-to-delete -->
-                <div class="col-md-4">
-                  <button class="btn btn-danger" data-id="${course.id}" onclick="removeCourse(this)">
-                  حذف
-                  <img src="/static/home/images/icons/delete.svg" alt="button link to class" width="20px">
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>`;
-
-        cartList.append(cartTemplate);
-
-        // render course installment
-        let instalmentsRowsTemplate = renderCourseInstallments(course.installments, course.id)
-
-        let installmentsTemplate = `
+function renderCartInstallments(course) {
+    let instalmentsRowsTemplate = renderCourseInstallments(course.installments, course.id)
+    let installmentsTemplate = `
         <div id="course-${course.id}" class="container mt-3">
              <div class="row text-sm-center mb-2">
                 <img src="${course.image}" width="50" height="50">
@@ -66,9 +27,8 @@ function renderCartItems(installmentCards) {
                 </table>
             </div>
         </div>`
-        $("#installments").append(installmentsTemplate)
-        updateCartTotalPrice();
-    })
+    $("#installments").append(installmentsTemplate)
+    updateCartTotalPrice();
 }
 
 

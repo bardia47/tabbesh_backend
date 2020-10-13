@@ -4,8 +4,7 @@ $(function () {
     }
 });
 
-
-//get lessons with ajax
+// get shopping carts
 function loadShopping(courseIds) {
     // get JSON and Response Header
     $.ajax({
@@ -16,7 +15,7 @@ function loadShopping(courseIds) {
             "id": courseIds
         },
         success: function (data) {
-            renderCartItems(data);
+            renderShoppingCarts(data , true);
         },
         error: function () {
             alert("خطا در بارگزاری دروس ... لطفا دوباره امتحان کنید!")
@@ -24,12 +23,12 @@ function loadShopping(courseIds) {
     });
 }
 
-
-$("#payButton").click(function (e) {
+// shopping cart payment handler
+$("#payButton").click(function () {
     idSet();
 });
 
-
+// set ids of installment
 function idSet() {
     let installments = [];
     $("#installments input:checked").each(function () {
@@ -38,13 +37,13 @@ function idSet() {
     $("#totalId").val(JSON.stringify(installments))
 }
 
-
+// discount check button handler
 $('#discountButton').click(function () {
     if ($("div[id^='course-cart-']").length === 0) failedDiscountModal("دوره ای در سبد خرید موجود نمی باشد")
     else discountAjax();
 });
 
-
+// check discount code
 function discountAjax() {
     idSet();
     $.ajax({
@@ -68,7 +67,7 @@ function discountAjax() {
     });
 }
 
-
+// apply discount when status is true
 function applyDiscount(data) {
     successDiscountModal(data.message)
     let oldTotalPrice = $("#totalPrice");
@@ -77,6 +76,7 @@ function applyDiscount(data) {
     $("#discountButton").prop("disabled", true)
     $("#totalPriceText").empty().append(discountPriceTemplate)
 }
+
 
 // success modal for discount
 function successDiscountModal(message) {
@@ -96,7 +96,7 @@ function successDiscountModal(message) {
     let template = modalRender("successDiscountModal", modalHeaderTemplate, modalBodyTemplate, modalFooterTemplate)
     $("body").append(template);
     $("#successDiscountModal").modal({backdrop: 'static', keyboard: false}).modal();
-    $("#successDiscountModal").on("hidden.bs.modal", function (e) {
+    $("#successDiscountModal").on("hidden.bs.modal", function () {
         $(this).remove();
     })
     // submit discount and purchase
@@ -118,23 +118,7 @@ function failedDiscountModal(message) {
     let template = modalRender("failedDiscountModal", modalHeaderTemplate, modalBodyTemplate, modalFooterTemplate)
     $("body").append(template);
     $("#failedDiscountModal").modal();
-    $("#failedDiscountModal").on("hidden.bs.modal", function (e) {
+    $("#failedDiscountModal").on("hidden.bs.modal", function () {
         $(this).remove();
     })
-}
-
-function noShoppingItem() {
-    let template = `
-    <!-- no cart list item -->
-    <div class="d-flex justify-content-center text-center flex- flex-column shadow-sm bg-white p-2">
-        <img class="m-auto" src="/static/home/images/icons/sad-emoji.svg" width="80" height="80">
-        <p class="vazir-bold">سبد خرید شما خالی می باشد!</p>
-        <p class="mt-n3 text-center vazir-light">
-            برای مشاهده و خرید درس بر روی دکمه ی زیر کلیک کنید
-        </p>
-        <a class="btn btn-dark mx-auto btn-sm" href="/dashboard/shopping/">برگشت به خرید درس</a>
-    </div>
-    `
-
-    $("#cartListItems").append(template)
 }

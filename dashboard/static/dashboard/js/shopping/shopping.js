@@ -1,9 +1,7 @@
-// hostname of project -- example : https://127.0.0.1:8000
-// let arrayHref = window.location.href.split("/")
-// let hostName = arrayHref[0] + "//" + arrayHref[2]
 let firstParameter = new URL(window.location.href).search.slice(1);
 let searchParameter;
-// add to GET variable page to url parameter --> read : https://developer.mozilla.org/en-US/docs/Web/API/URLSearchParams/append
+let courseCardsId = []
+
 if (firstParameter) {
     searchParameter = new URLSearchParams(firstParameter)
 } else {
@@ -14,6 +12,12 @@ let getShoppingURL = "/dashboard/get-shopping/?";
 // first pagination when user request https://127.0.0.1:8000/dashboard/shopping/
 // initial shopping page
 $(function () {
+    // load shopping cart
+    if (sessionStorage.getItem("totalId") !== null) {
+        courseCardsId = JSON.parse(sessionStorage.getItem("totalId"));
+        getShoppingCart(JSON.stringify(courseCardsId))
+    }
+
 
     // set menu active
     $("#shoppingMenu").addClass("active-menu");
@@ -207,7 +211,7 @@ function renderShoppingCards(courseCards) {
                   </div>
                   <!-- Button add course to cart -->
                   <div class="card-footer add-to-cart">
-                     <button class="btn add-to-cart-button">
+                     <button data-course-id="${courseCard.id}" class="btn add-to-cart-button" onclick="addToCartHandler(this)">
                      <img src="/static/home/images/icons/add-to-cart.svg"
                         alt="button link to class">
                      اضافه به سبد خرید
@@ -233,7 +237,6 @@ function renderShoppingCards(courseCards) {
         })
 
     });
-    addToCardButtons();
     loading()
 }
 
@@ -276,16 +279,37 @@ $("select[id^='search']").change(function (event) {
 });
 
 
-// shopping cart js
-
-
 // event handler for all new card add to button
-function addToCardButtons() {
-    $(".add-to-cart-button").each(function () {
-        $(this).click(addToCartClicked);
+function addToCartHandler(event) {
+    const courseId = $(event).data("course-id").toString();
+    if (courseCardsId.indexOf(courseId) !== -1) duplicateCartItemModal()
+    else {
+        courseCardsId.push(courseId);
+        sessionStorage.setItem("totalId", JSON.stringify(courseCardsId))
+        getShoppingCart(`[${courseId}]`)
+    }
+}
+
+// get shopping cart information
+function getShoppingCart(courseId) {
+    $.get(`/payment/get-installment/?id=${courseId}`, function (data) {
+        renderShoppingCarts(data, false);
+        animatedToCardList();
     });
 }
 
+
+function duplicateCartItemModal() {
+    let modalHeaderTemplate = `<h5 class="modal-title text-danger"><i class="fas fa-exclamation-circle ml-1"></i>خطا در خرید دوره</h5>`
+    let modalBodyTemplate = `<p class="vazir-bold text-center">درس مورد نظر قبلا به سبد خرید اضافه شده است</p>`
+    let modalFooterTemplate = `<button class="btn btn-danger w-100" data-dismiss="modal">فهمیدم!</button>`
+    let template = modalRender("duplicateFailedModal", modalHeaderTemplate, modalBodyTemplate, modalFooterTemplate)
+    $("body").append(template);
+    $("#duplicateFailedModal").modal();
+    $("#duplicateFailedModal").on("hidden.bs.modal", function (e) {
+        $(this).remove();
+    })
+}
 
 // animate to top of cart list
 function animatedToCardList() {
@@ -294,115 +318,21 @@ function animatedToCardList() {
     }, 500);
 }
 
-// error modal function -> get modal id & header & message
-function errorModal(modalId, modalHeader, modalMessage) {
-    $(modalId).find(".modal-title").text(modalHeader);
-    $(modalId).find(".modal-body-p").text(modalMessage);
-    $(modalId).modal()
-}
+// remove course function
+function removeCourse(event) {
+    let id = $(event).data("id");
+    $("#course-cart-" + id).remove();
 
-
-// add cart item with add-to-cart button
-function addToCartClicked() {
-    let courseCard = $(this).parents(".course-card").first();
-    let id = courseCard.find(".course-id").val();
-    let title = courseCard.find(".title").text();
-    let price = courseCard.find(".priceId").val();
-    if (parseFloat(price) === 0) price = "رايگان!";
-    let teacher = courseCard.find(".teacher-name").text();
-    let imageSrc = courseCard.find(".card-img-top").attr('src');
-    let status = false;
-    $(".cart-course-title").each(function (index, cardItemTitle) {
-        if ($(cardItemTitle).text() === title) {
-            errorModal("#errorModal", "مشکل در خرید دوره", "درس مورد نظر قبلا به سبد خرید اضافه شده است.");
-            status = true;
-        }
-    });
-    if (!status) addItemToCart(id, title, price, teacher, imageSrc)
-}
-
-// create cart item
-function addItemToCart(id, title, price, teacher, imageSrc) {
-    let cartTemplate = `
-    <div class="row card-row">
-        <div class="col-md-12 cart-item ">
-        <div class="card">
-        <div class="card-body">
-          <div class="row">
-            <!-- Course image -->
-            <div class="col-md-1 cart-course-image">
-              <img src="${imageSrc}" alt="course image">
-            </div>
-            <!-- Course title -->
-            <div class="col-md-2 cart-course-title">
-              <p class="cart-course-title">${title}</p>
-            </div>
-            <!--Course teacher name -->
-            <div class="col-md-2 cart-course-teacher-name">
-              <p>${teacher}</p>
-            </div>
-            <!-- Course price -->
-            <div class="col-md-3 cart-price">
-              <p style="font-family:'Vazir_Bold'">
-              <span style="font-family:'Vazir_Light'">قیمت : </span>
-              <span class="cart-price-text">${price}</span>
-              </p>
-          </div>
-        <!-- Button-to-delete -->
-        <div class="col-md-4 cart-button-to-delete">
-          <button class="btn btn-danger btn-remove">
-          حذف
-          <img src="/static/home/images/icons/delete.svg" alt="button link to class" width="20px">
-          </button>
-        </div>
-          </div>
-        </div>
-      </div>
-      <input type="hidden" class="cart-course-id" value="${id}">
-      </div>
-    </div>`;
-    let cartList = $("#cartListItems");
-    cartList.append(cartTemplate);
-    let cartItem = cartList.children(".row").last();
-    // remove cart item handler
-    cartItem.find(".btn-remove").click(function () {
-        $(this).parents(".card-row").remove();
-        $(".shopping-title")[0].scrollIntoView();
-        updateCartTotal()
-    });
-    animatedToCardList();
-    updateCartTotal()
-
-}
-
-// Update cart total price
-function updateCartTotal() {
-    let totalPrice = 0;
-    let totalId = [];
-    $(".cart-item").each(function (index, cartItem) {
-        let itemPrice = $(cartItem).find(".cart-price-text");
-        let itemId = $(cartItem).find(".cart-course-id");
-        // check if price is رایگان change to 0
-        if ($(itemPrice).text() !== "رايگان!") totalPrice += parseFloat($(itemPrice).text());
-        // make total id and price for back-end in hidden input
-        totalId.push(itemId.val());
-    });
-    totalPrice = Math.round(totalPrice * 100) / 100;
-    $(".total-price").text(totalPrice);
-    sessionStorage.setItem("totalId", JSON.stringify(totalId));
-}
-
-
-// shopping cart button
-$("#shopping-cart-form").submit(function (event) {
-    if ($(".cart-item").length === 0) {
-        errorModal("#errorModal", "مشکل در خرید دوره", "سبد خرید شما خالی می باشد، یک درس را انتخاب کنید.")
-        event.preventDefault();
+    // remove id from courseCardsId list
+    const index = courseCardsId.indexOf(id.toString());
+    if (index > -1) {
+        courseCardsId.splice(index, 1);
+        sessionStorage.setItem("totalId", JSON.stringify(courseCardsId))
     }
-});
+    console.log(courseCardsId)
+}
 
-// paying button click handler
-$("#payButton").click(function () {
-    window.location.href = document.getElementById("shopping-cart-form").action;
-});
-
+// complete shopping
+function completeShopping() {
+    sessionStorage.setItem("totalId", JSON.stringify(courseCardsId))
+}
