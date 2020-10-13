@@ -2,7 +2,7 @@ from accounts.models import *
 from .enums import AdminEnums
 from core.utils import TextUtils
 from django.contrib import messages
-from accounts.enums import ModelEnums
+from accounts.enums import InstallmentModelEnum
 
 class AdminValidator():
     def showErrorsOfCourse(obj, request):
@@ -11,7 +11,7 @@ class AdminValidator():
                 messages.warning(request,
                                      TextUtils.replacer(AdminEnums.courseCalendarWarning.value, [obj.title]))
             now = datetime.datetime.now()
-            if (obj.end_date > now + datetime.timedelta(days=ModelEnums.installmentDateBefore.value)):
+            if (obj.end_date > now + datetime.timedelta(days=InstallmentModelEnum.installmentDateBefore.value)):
                 if (not obj.get_next_installment()):
                     messages.error(request,
                                          TextUtils.replacer(AdminEnums.noInstallmentError.value, [obj.title]))

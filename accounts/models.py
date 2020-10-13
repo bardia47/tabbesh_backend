@@ -11,7 +11,7 @@ from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db.models import Q, Max, IntegerField
 from django.db.models import Value as V
 from django.db.models.functions import Concat
-from .enums import ModelEnums
+from .enums import InstallmentModelEnum
 
 
 # Create your models here.
@@ -257,7 +257,7 @@ class Course(models.Model):
         now = datetime.datetime.now()
         installment = Installment.objects.filter(
             Q(start_date__gt=now) | Q(
-                end_date__gt=now + datetime.timedelta(days=ModelEnums.installmentDateBefore.value)),
+                end_date__gt=now + datetime.timedelta(days=InstallmentModelEnum.installmentDateBefore.value)),
             course__id=self.id).first()
         return installment
 

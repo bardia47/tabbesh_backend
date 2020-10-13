@@ -205,21 +205,3 @@ class StudentBriefSerializer(UserProfileSerializer):
 class ClassListSerializer(serializers.Serializer):
     course = CourseBriefSerializer()
     students = StudentBriefSerializer(many=True)
-
-
-class UserInstallmentSerializer(InstallmentSerializer):
-    is_bought = serializers.SerializerMethodField('get_is_bought')
-    is_disable = serializers.SerializerMethodField('get_is_disable')
-
-    class Meta:
-        model = Installment
-        fields = ('id', 'title', 'amount', 'start_date', 'end_date', 'is_bought', 'is_disable')
-
-    def get_is_bought(self, obj):
-        if obj.user_set.filter(pk=self.context['request'].user.pk).exists():
-            return True
-        return False
-
-    def get_is_disable(self, obj):
-        now = datetime.datetime.now().date()
-        return not ((obj.start_date > now) | (obj.end_date > (now + datetime.timedelta(days=10))))

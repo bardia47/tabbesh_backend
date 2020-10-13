@@ -272,7 +272,7 @@ class GetShoppingViewSet(viewsets.ModelViewSet):
     # default show all active courses
     def get_queryset(self):
         now = datetime.datetime.now()
-        query = Q(end_date__gt=now + datetime.timedelta(days=ModelEnums.installmentDateBefore.value))
+        query = Q(end_date__gt=now + datetime.timedelta(days=InstallmentModelEnum.installmentDateBefore.value))
         if self.request.user.courses().all():
             queryNot = reduce(or_, (Q(id=course.id)
                                     for course in self.request.user.courses().all()))
@@ -402,14 +402,13 @@ def teacher_course_panel(request, code):
 def student_course_panel(request, code):
     return render(request, 'dashboard/student_course_panel.html', {"code": code})
 
-
-class UserInstallmentsViewSet(generics.ListAPIView):
-    queryset = Course.objects.all()
-    serializer_class = UserInstallmentSerializer
-    lookup_field = 'code'
-
-    def get_object(self):
-        return Course.objects.get(code=self.kwargs['code'])
-
-    def get_queryset(self):
-        return self.get_object().installment_set.all()
+# class UserInstallmentsViewSet(generics.ListAPIView):
+#     queryset = Course.objects.all()
+#     serializer_class = UserInstallmentSerializer
+#     lookup_field = 'code'
+#
+#     def get_object(self):
+#         return Course.objects.get(code=self.kwargs['code'])
+#
+#     def get_queryset(self):
+#         return self.get_object().installment_set.all()

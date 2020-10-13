@@ -11,9 +11,11 @@ class RoleCodes(Enum):
     TEACHER = '3'
 
 
-class ModelEnums(Enum):
+class InstallmentModelEnum(Enum):
     installmentDateBefore = 10
-
+    installmentIsBought='در این دوره شرکت کرده اید'
+    installmentIsExpired = 'این دوره را از دست داده اید'
+    installmentIsNotBought='این دوره هنوز خریداری نشده است'
 
 class Sms(Enum):
     username = '09357727769'

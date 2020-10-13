@@ -273,5 +273,5 @@ class GetInstallmentViewSet(viewsets.ModelViewSet):
         courses = self.request.user.courses().filter(end_date__gt=now)
         courses = courses.filter(Q(installment__start_date__gt=now) | Q(
             installment__end_date__gt=now + datetime.timedelta(
-                days=ModelEnums.installmentDateBefore.value))).distinct()
+                days=InstallmentModelEnum.installmentDateBefore.value))).distinct()
         return courses
