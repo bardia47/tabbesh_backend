@@ -35,8 +35,7 @@ class Dashboard(generics.RetrieveAPIView):
             value = jdatetime.datetime.fromgregorian(datetime=now).day
             if (value >= 20):
                 need_buys = courses.filter(
-                    installment__start_date__gt=now + datetime.timedelta(
-                        days=ModelEnums.installmentDateBefore.value)).distinct()
+                    installment__start_date__gt=now).distinct()
                 if (need_buys.exists()):
                     # need_buy_ids = list(need_buys.values_list('id', flat=True))
                     need_buy_titles = TextUtils.convert_list_to_string(list(need_buys.values_list('title', flat=True)))

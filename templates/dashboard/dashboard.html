@@ -22,8 +22,10 @@
                     <a class="panel-close close" data-dismiss="alert">×</a>
                     <i class="fas fa-exclamation-circle mr-2"></i>
                     {# for test how error work send post with postman to this url #}
-                    <strong>{{ need_buy.need_buy_text }} </strong>
-{#                    <input id="needBuyIds" type="hidden" value="{{ need_buy.need_buy_ids }}">#}
+                    <a onclick="sessionStorage.setItem('totalId' , '')"
+                       href="/payment/shopping-cart/"><strong>{{ need_buy.need_buy_text }} </strong></a>
+
+                    {#                    <input id="needBuyIds" type="hidden" value="{{ need_buy.need_buy_ids }}">#}
                 </div>
             {% endif %}
             <!--- Countdown to first class --->
