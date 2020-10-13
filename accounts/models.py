@@ -199,6 +199,8 @@ class Course(models.Model):
         'توضیحات خرید درس', null=True, blank=True)
     private_description = tinymce_models.HTMLField(
         'توضیحات درس', null=True, blank=True)
+    is_active = models.BooleanField(default=True, verbose_name='فعال',
+                                    help_text='در صورتی که این گزینه غیر فعال باشد درس در قسمت خرید درس نشان داده نمیشود')
 
     class Meta:
         ordering = ['start_date']
@@ -253,13 +255,18 @@ class Course(models.Model):
             return discount.first()
         return None
 
+    # for first future installments
     def get_next_installment(self, exclude=None):
         now = datetime.datetime.now()
-        installment = Installment.objects.filter(
+        return self.get_next_installments().first()
+
+    # for future installments
+    def get_next_installments(self, exclude=None):
+        now = datetime.datetime.now()
+        return Installment.objects.filter(
             Q(start_date__gt=now) | Q(
                 end_date__gt=now + datetime.timedelta(days=InstallmentModelEnum.installmentDateBefore.value)),
-            course__id=self.id).first()
-        return installment
+            course__id=self.id)
 
     def students(self):
         return User.objects.filter(installments__in=self.installment_set.all())

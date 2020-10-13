@@ -16,6 +16,7 @@ from core.utils import TextUtils
 from django.db.models import Case, Value, When, IntegerField
 from .permission import EditDocumentPermission
 from .enums import DashboardMessages
+from zarinpal.serializers import CartInstallmentSerializer
 
 
 # TODO clean this  after using react
@@ -265,13 +266,14 @@ class Shopping(APIView):
 
 class GetShoppingViewSet(viewsets.ModelViewSet):
     # thats fake :/ because its Mandatory
-    queryset = Course.objects.all()
+    queryset = Course.objects.filter(is_active=True)
     serializer_class = ShoppingCourseSerializer
     http_method_names = ['get', ]
 
     # default show all active courses
     def get_queryset(self):
         now = datetime.datetime.now()
+        queryset = super(GetShoppingViewSet, self).get_queryset()
         query = Q(end_date__gt=now + datetime.timedelta(days=InstallmentModelEnum.installmentDateBefore.value))
         if self.request.user.courses().all():
             queryNot = reduce(or_, (Q(id=course.id)
@@ -285,13 +287,13 @@ class GetShoppingViewSet(viewsets.ModelViewSet):
                 query &= (Q(grade__id=self.request.GET.get("grade")) | Q(grade__id=None))
             if self.request.GET.get("teacher"):
                 query &= Q(teacher__id=self.request.GET.get("teacher"))
-            courses = Course.objects.filter(query)
+            queryset = queryset.filter(query)
         else:
-            courses = Course.objects.filter(query)
+            queryset = queryset.filter(query)
             if self.request.user.grades.count() > 0:
                 query1 = (Q(grade__id=self.request.user.grades.first().id) | Q(grade__id=None))
                 query2 = ~(Q(grade__id=self.request.user.grades.first().id) | Q(grade__id=None))
-                courses = (courses
+                queryset = (queryset
                            .filter(query1 | query2).annotate(
                     search_type_ordering=Case(
                         When(query1, then=Value(2)),
@@ -300,7 +302,7 @@ class GetShoppingViewSet(viewsets.ModelViewSet):
                         output_field=IntegerField()))
                            .order_by('-search_type_ordering'))
 
-        return courses
+        return queryset
 
 
 # @api_view(['GET', ])
@@ -402,13 +404,15 @@ def teacher_course_panel(request, code):
 def student_course_panel(request, code):
     return render(request, 'dashboard/student_course_panel.html', {"code": code})
 
-# class UserInstallmentsViewSet(generics.ListAPIView):
-#     queryset = Course.objects.all()
-#     serializer_class = UserInstallmentSerializer
-#     lookup_field = 'code'
-#
-#     def get_object(self):
-#         return Course.objects.get(code=self.kwargs['code'])
-#
-#     def get_queryset(self):
-#         return self.get_object().installment_set.all()
+
+class UserInstallmentsViewSet(generics.ListAPIView):
+    queryset = Course.objects.all()
+    serializer_class = CartInstallmentSerializer
+    lookup_field = 'code'
+    pagination_class = None
+
+    def get_object(self):
+        return Course.objects.get(code=self.kwargs['code'])
+
+    def get_queryset(self):
+        return self.get_object().installment_set.all()

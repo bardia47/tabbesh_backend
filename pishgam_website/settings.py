@@ -28,38 +28,38 @@ DEBUG = True
 # ALLOWED_HOSTS = ["127.0.0.1","tabbesh.ir","185.4.31.70"]
 ALLOWED_HOSTS = ['*']
 # log errors in file
-LOGGING = {
-    'version': 1,
-    'disable_existing_loggers': False,
-    'formatters': {
-        'verbose': {
-            'format': '{asctime} {message}',
-            'style': '{',
-        },
-        'simple': {
-            'format': '{message}',
-            'style': '{',
-        },
-    },
-    'handlers': {
-        'file': {
-            'level': 'DEBUG',
-            'class': 'logging.handlers.TimedRotatingFileHandler',
-            'filename': os.path.join(BASE_DIR, 'bug.log'),
-            'when': 'D',  # this specifies the interval
-            'interval': 1,  # defaults to 1, only necessary for other values
-            'backupCount': 10,  # how many backup file to keep, 10 days
-            'formatter': 'verbose',
-        },
-    },
-    'loggers': {
-        'django': {
-            'handlers': ['file'],
-            'level': 'ERROR',
-            'propagate': True,
-        },
-    },
-}
+# LOGGING = {
+#     'version': 1,
+#     'disable_existing_loggers': False,
+#     'formatters': {
+#         'verbose': {
+#             'format': '{asctime} {message}',
+#             'style': '{',
+#         },
+#         'simple': {
+#             'format': '{message}',
+#             'style': '{',
+#         },
+#     },
+#     'handlers': {
+#         'file': {
+#             'level': 'DEBUG',
+#             'class': 'logging.handlers.TimedRotatingFileHandler',
+#             'filename': os.path.join(BASE_DIR, 'bug.log'),
+#             'when': 'D',  # this specifies the interval
+#             'interval': 1,  # defaults to 1, only necessary for other values
+#             'backupCount': 10,  # how many backup file to keep, 10 days
+#             'formatter': 'verbose',
+#         },
+#     },
+#     'loggers': {
+#         'django': {
+#             'handlers': ['file'],
+#             'level': 'ERROR',
+#             'propagate': True,
+#         },
+#     },
+# }
 
 STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.ManifestStaticFilesStorage'
 SESSION_COOKIE_SECURE = False
