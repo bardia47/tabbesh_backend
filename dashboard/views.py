@@ -29,10 +29,10 @@ class Dashboard(generics.RetrieveAPIView):
 
     def retrieve(self, request, *args, **kwargs):
         now = datetime.datetime.now()
+        need_buy_ids = None
         if self.request.user.is_student():
             courses = request.user.courses().filter(end_date__gt=now)
             value = jdatetime.datetime.fromgregorian(datetime=now).day
-            need_buy_ids = None
             if (value >= 20):
                 need_buys = courses.filter(
                     installment__start_date__gt=now + datetime.timedelta(days=10)).distinct()
