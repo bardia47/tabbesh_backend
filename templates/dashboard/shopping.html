@@ -21,128 +21,75 @@
                     دوره های تابش
                 </h1>
             </div>
-
-            {% if 'event_discount' in request.session %}
-                <div class="alert alert-info alert-dismissable">
-                    <a class="panel-close close" data-dismiss="alert">×</a>
-                    <i class="fas fa-percentage mr-1"></i>
-                    <strong>
-                        تبریک !
-                        برای اولین خرید خود
-                        10
-                        درصد تخفیف دارید.
-                        پس از انتخاب دروس مورد نظر بر روی دکمه تکمیل خرید کلیک کنید.
-                    </strong>
-                </div>
-            {% endif %}
-            <!-- Cart Section use cart-list for shopping.js -->
-            <div class="cart-list card-section">
-                <!-- Cart title -->
-                <div class="cart-title">
-                    <h4>
-                        <img src="{% static 'home/images/icons/shopping-basket.svg' %}">
+            <div class="cart-section mb-4">
+                <div class="cart-title bg-secondary text-white p-3">
+                    <h1 class="h4 vazir-bold">
+                        <img src="{% static 'home/images/icons/shopping-basket.svg' %}" alt="shopping cart" width="35">
                         سبد خرید
-                    </h4>
+                    </h1>
                 </div>
-                <!-- Cart items add with shopping.js -->
-                <div id="cartListItems"></div>
-                <!-- End cart items -->
+                <!-- cart items -->
+                <div id="cartListItems">
+                </div>
+                <div class="d-flex mt-2">
+                    <a class="btn btn-success mx-auto" onclick="completeShopping()" href="/payment/shopping-cart/">تکمیل
+                        فرایند خرید </a>
+                </div>
             </div>
-            <!-- Cart footer section -->
-            <div class="card cart-footer">
-                <!-- Cart purchase button -->
-                <form id="shopping-cart-form" action="{% url 'shopping_cart' %}" method="post">
-                    {% csrf_token %}
-                    <!-- Total cart items id and price for pass to back-end -->
-                    <div class="row px-3">
-                        <p class="mb-0 mr-auto">
-                            مبلغ قابل پرداخت : <b class="total-price">0</b> تومان
-                        </p>
+            <hr>
+            <!-- Shopping cards - include Courses & Search section -->
+            <div class="shopping-cards">
+                <!-- Shopping search title -->
+                <div class="shopping-search-title">
+                    <h1>
+                        <img src="{% static 'home/images/icons/search.svg' %}">
+                        جستجوی دروس
+                    </h1>
+                </div>
+                <!-- Search form -->
+                <form action="" id="searchForm">
+                    <div class="row form-search">
+                        <!-- Select Grade -->
+                        <div class="col-md-4 mb-2">
+                            <select class="custom-select" id="searchGrade" data-search="grade">
+                                <option value="none">پایه</option>
+                                {% for grade in grades %}
+                                    <option value="{{ grade.id }}"  {% if request.GET.grade|add:"0" == grade.id %}
+                                            selected {% endif %} >{{ grade.title }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <!-- Select Lessons -->
+                        <div class="col-md-4 mb-2">
+                            <select class="custom-select" id="searchLesson" data-search="lesson">
+                                <option value="none">دروس</option>
+                                {% for lesson in lessons %}
+                                    <option value="{{ lesson.id }}"  {% if request.GET.lesson|add:"0" == lesson.id %}
+                                            selected {% endif %} >{{ lesson.title }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <!-- Select teachers -->
+                        <div class="col-md-4 mb-2">
+                            <select class="custom-select" id="searchTeacher" data-search="teacher">
+                                <option value="none">استاد</option>
+                                {% for teacher in teachers %}
+                                    <option value="{{ teacher.id }}" {% if request.GET.teacher|add:"0" == teacher.id %}
+                                            selected {% endif %} >{{ teacher.full_name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
                     </div>
-                    <button class="btn btn-success" id="payButton">تکمیل فرایند خرید</button>
                 </form>
-            </div>
-        </div>
-        <hr>
-        <!-- Shopping cards - include Courses & Search section -->
-        <div class="shopping-cards">
-            <!-- Shopping search title -->
-            <div class="shopping-search-title">
-                <h1>
-                    <img src="{% static 'home/images/icons/search.svg' %}">
-                    جستجوی دروس
-                </h1>
-            </div>
-            <!-- Search form -->
-            <form action="" id="searchForm">
-                <div class="row form-search">
-                    <!-- Select Grade -->
-                    <div class="col-md-4 mb-2">
-                        <select class="custom-select" id="searchGrade" data-search="grade">
-                            <option value="none">پایه</option>
-                            {% for grade in grades %}
-                                <option value="{{ grade.id }}"  {% if request.GET.grade|add:"0" == grade.id %}
-                                        selected {% endif %} >{{ grade.title }}</option>
-                            {% endfor %}
-                        </select>
-                    </div>
-                    <!-- Select Lessons -->
-                    <div class="col-md-4 mb-2">
-                        <select class="custom-select" id="searchLesson" data-search="lesson">
-                            <option value="none">دروس</option>
-                            {% for lesson in lessons %}
-                                <option value="{{ lesson.id }}"  {% if request.GET.lesson|add:"0" == lesson.id %}
-                                        selected {% endif %} >{{ lesson.title }}</option>
-                            {% endfor %}
-                        </select>
-                    </div>
-                    <!-- Select teachers -->
-                    <div class="col-md-4 mb-2">
-                        <select class="custom-select" id="searchTeacher" data-search="teacher">
-                            <option value="none">استاد</option>
-                            {% for teacher in teachers %}
-                                <option value="{{ teacher.id }}" {% if request.GET.teacher|add:"0" == teacher.id %}
-                                        selected {% endif %} >{{ teacher.full_name }}</option>
-                            {% endfor %}
-                        </select>
-                    </div>
+                <div class="loading-search spinner-border spinner-color" role="status">
+                    <span class="sr-only">Loading...</span>
                 </div>
-            </form>
-            <div class="loading-search spinner-border spinner-color" role="status">
-                <span class="sr-only">Loading...</span>
-            </div>
-            <!-- Shopping Cards -->
-            <div class="card-group">
-            </div>
-
-            <div class="pagination-wrapper mt-2 text-center" style="display: none">
-                <div class="pagination">
+                <!-- Shopping Cards -->
+                <div class="card-group">
                 </div>
-            </div>
-        </div>
 
-
-        <!-- Modal error for duplicate course in cart -->
-        <div class="modal fade" id="errorModal" tabindex="-1" role="dialog" aria-labelledby="duplicateModalLabel"
-             aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h1 class="modal-title text-danger h5"
-                            style="font-family: 'Vazir_Bold';">
-                            مشکل
-                            در خرید دوره</h1>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <strong>
-                            <p class="modal-body-p"></p>
-                        </strong>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="buttons" class="btn btn-danger w-100" data-dismiss="modal">فهمیدم!</button>
+                <div class="pagination-wrapper mt-2 text-center" style="display: none">
+                    <div class="pagination">
                     </div>
                 </div>
             </div>
@@ -154,8 +101,12 @@
 {% block JSfile %}
     <!-- base validation js -->
     <script src="{% static 'dashboard/js/validation-base.js' %}"></script>
-    <script src="{% static "dashboard/js/shopping/shopping-cart.js" %}"></script>
+    <!-- modal -->
+    <script src="{% static 'home/js/modal.js' %}"></script>
+    <!-- shopping config js -->
     <script src="{% static 'dashboard/js/shopping/shopping.js' %}"></script>
+    <!-- shopping cart component -->
+    <script src="{% static 'dashboard/js/shopping-cart/shopping-cart-component.js' %}"></script>
     <!-- persian date formatter -- hint: read doc: https://github.com/babakhani/PersianDate -->
     <script src="{% static "home/js/persian-date.min.js" %}"></script>
 {% endblock %}
