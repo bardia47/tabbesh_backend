@@ -101,8 +101,8 @@ function updateCartTotalPrice() {
 
 
 function installmentAmountRender(amount, discount) {
-    let originalPrice = parseInt((amount * 100) / (100 - discount.percent))
     if (discount !== null) {
+        let originalPrice = parseInt((amount * 100) / (100 - discount.percent))
         return `<span class="price" style="color: #e8505b;text-decoration: line-through">${originalPrice}</span>
                 <span>${amount + " تومان"}</span>`
     } else return amount + " تومان";
