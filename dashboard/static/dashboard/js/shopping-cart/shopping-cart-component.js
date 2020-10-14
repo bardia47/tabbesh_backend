@@ -2,7 +2,9 @@ function renderShoppingCarts(carts, installmentStatus) {
     let totalId = []; // for add buy lesson ids
     if (carts.length === 0 && installmentStatus) noShoppingItem()
     let cartTemplate = ``;
+    let amountTemplate = ``
     $.each(carts, function (index, cart) {
+        console.log(cart)
         totalId.push(cart.id.toString())
         cartTemplate = `
             <div id="course-cart-${cart.id}" class="card">
@@ -22,7 +24,10 @@ function renderShoppingCarts(carts, installmentStatus) {
                 </div>
                 <!-- course price -->
                 <div class="col-md-3">
-                  <p><b class="ml-2">پرداختی:</b><span class="total-amount">${cart.installments[0].amount + " تومان"}</span></p>
+                <p class="text-nowrap">
+                <span>پرداختی:</span>
+                    ${amountRender(cart.installments[0].amount, cart.discount)}
+                </p>
                 </div>
                 <!-- Button-to-delete -->
                 <div class="col-md-4">
@@ -57,4 +62,14 @@ function noShoppingItem() {
     `
 
     $("#cartListItems").append(template)
+}
+
+
+function amountRender(amount, discount) {
+    if (discount !== null) {
+        let discountMessage = ` با ${discount.percent} درصد تخفیف`;
+        return `<strong class="text-success mx-1">${discountMessage}</strong>
+                <span class="total-amount">${amount + " تومان"}</span>
+                `
+    } else return amount + " تومان";
 }

@@ -121,10 +121,10 @@ function renderShoppingCards(courseCards) {
                     ${courseCard.discount.title}
                 </p>
                 `;
-                discountPrice = (parseFloat(courseCard.installment.amount) * (100 - parseInt(courseCard.discount.percent))) / 100;
+                let originalPrice = parseInt((courseCard.installment.amount * 100) / (100 - courseCard.discount.percent))
                 coursePriceTemplate = `
-                <span class="price" style="color: #e8505b;text-decoration: line-through">${courseCard.installment.amount}</span>
-                ${discountPrice}
+                <span class="price" style="color: #e8505b;text-decoration: line-through">${originalPrice}</span>
+                ${courseCard.installment.amount}
                 <span class="currency">تومان</span>
                 `
             }
@@ -133,10 +133,10 @@ function renderShoppingCards(courseCards) {
         if (courseCard.installment.title !== null) {
             installmentTemplate = `
           <div class="course-installment">
-            <p>
-               <img src="/static/home/images/icons/installment.svg" alt="installment">
+            <p class="vazir-bold">
+               <img src="/static/home/images/icons/installment.svg" alt="installment" width="20">
                شهریه:
-               <span class="vazir-light">${coursePriceTemplate}</span>
+               <span class="vazir-light">${courseCard.installment.title}</span>
             </p>
          </div>
           `
@@ -197,7 +197,7 @@ function renderShoppingCards(courseCards) {
                         <div class="course-description-p pr-2">${courseCard.description}</div>
                      </div>
                      <!-- installment title show when have one more installment -->
-
+                    ${installmentTemplate}
                      <!-- Course price -->
                      <div class="course-price">
                         ${discountTitleTemplate}

@@ -1,5 +1,5 @@
 function renderCartInstallments(course) {
-    let instalmentsRowsTemplate = renderCourseInstallments(course.installments, course.id)
+    let instalmentsRowsTemplate = renderCourseInstallments(course.installments, course.id, course.discount)
     let installmentsTemplate = `
         <div id="course-${course.id}" class="container mt-3">
              <div class="row text-sm-center mb-2">
@@ -32,7 +32,7 @@ function renderCartInstallments(course) {
 }
 
 
-function renderCourseInstallments(instalments, courseId) {
+function renderCourseInstallments(instalments, courseId, disocunt) {
     let instalmentsRowsTemplate = ``
     let firstInstallment = false;
     $.each(instalments, function (index, installment) {
@@ -40,8 +40,8 @@ function renderCourseInstallments(instalments, courseId) {
         instalmentsRowsTemplate += `
         <tr>
             <td scope="row">${installment.title === null ? "تمام شهریه" : installment.title}</td>
-            <td>${installment.amount + " تومان"}</td>
-            <td></td>
+            <td>${installmentAmountRender(installment.amount, disocunt)}</td>
+            <td>${installment.message}</td>
             <td class="pl-5">
                 <div class="form-check">
                     <input onchange="updateCoursePrice(this)" data-course-id="${courseId}" data-amount="${installment.amount}" type="checkbox" value="${installment.id}" ${firstInstallment === false ? "disabled checked" : ""} style="width: 20px; height: 20px">
@@ -97,4 +97,13 @@ function updateCartTotalPrice() {
     })
     $("#totalPriceText").text(totalPrice)
     $("#totalPrice").val(totalPrice)
+}
+
+
+function installmentAmountRender(amount, discount) {
+    let originalPrice = parseInt((amount * 100) / (100 - discount.percent))
+    if (discount !== null) {
+        return `<span class="price" style="color: #e8505b;text-decoration: line-through">${originalPrice}</span>
+                <span>${amount + " تومان"}</span>`
+    } else return amount + " تومان";
 }
