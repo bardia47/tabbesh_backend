@@ -8,7 +8,7 @@ $(function () {
     fileManagerRender($("#courseCode").val());
     $("#fileManager").show();
 
-    paymentsRender($("#courseCode").val());
-    $("#payments").show();
+    // paymentsRender($("#courseCode").val());
+    // $("#payments").show();
 });
 
