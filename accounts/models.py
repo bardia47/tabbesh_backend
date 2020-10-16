@@ -60,7 +60,7 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     # get courses from user installments
     def courses(self):
-        return Course.objects.filter(installment__in=self.installments.all())
+        return Course.objects.filter(installment__in=self.installments.all()).distinct()
 
     def get_full_name(self):
         full_name = '%s %s' % (self.first_name, self.last_name)
