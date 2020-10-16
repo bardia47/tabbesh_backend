@@ -95,43 +95,42 @@ function pagination(url) {
 // Add course card to div card group
 function renderShoppingCards(courseCards) {
     $.each(courseCards, function (index, courseCard) {
-        // parse Date to ISO date format and use persianDate jQuery
-        let startDateCourse = new persianDate(Date.parse(courseCard.start_date));
-        let endDateCourse = new persianDate(Date.parse(courseCard.end_date));
-        let coursePriceTemplate;
-        // default is price without discount
-        let discountPrice = parseFloat(courseCard.installment.amount);
-        let discountTitleTemplate = ``;
-        // price check -- for free courses
-        if (courseCard.installment.amount <= 0) {
-            coursePriceTemplate = `رايگان!`
-        } else {
-            // check course price have discount or not
-            if (courseCard.discount == null) {
-                coursePriceTemplate = `
-                ${courseCard.installment.amount}
-                <span class="currency">تومان</span>
-                `
+        try {
+            // parse Date to ISO date format and use persianDate jQuery
+            let startDateCourse = new persianDate(Date.parse(courseCard.start_date));
+            let endDateCourse = new persianDate(Date.parse(courseCard.end_date));
+            let coursePriceTemplate;
+            // default is price without discount
+            let discountPrice = parseFloat(courseCard.installment.amount);
+            let discountTitleTemplate = ``;
+            // price check -- for free courses
+            if (courseCard.installment.amount <= 0) {
+                coursePriceTemplate = `رايگان!`
             } else {
-                // add discount title if course have discount
-                discountTitleTemplate = `
-                <p style="text-align: center ; color: #e8505b">
-                    <img src="/static/dashboard/images/icons/course-discount.svg" width="25px" height="25px">
-                 با تخفیف   
-                    ${courseCard.discount.title}
-                </p>
-                `;
-                let originalPrice = parseInt((courseCard.installment.amount * 100) / (100 - courseCard.discount.percent))
-                coursePriceTemplate = `
-                <span class="price" style="color: #e8505b;text-decoration: line-through">${originalPrice}</span>
+                // check course price have discount or not
+                if (courseCard.discount == null) {
+                    coursePriceTemplate = `
                 ${courseCard.installment.amount}
                 <span class="currency">تومان</span>
                 `
+                } else {
+                    // add discount title if course have discount
+                    discountTitleTemplate = `
+                    <p style="text-align: center ; color: #e8505b">
+                        <img src="/static/dashboard/images/icons/course-discount.svg" width="25px" height="25px">
+                     با تخفیف   
+                        ${courseCard.discount.title}
+                    </p>`;
+                    let originalPrice = parseInt((courseCard.installment.amount * 100) / (100 - courseCard.discount.percent))
+                    coursePriceTemplate = `
+                    <span class="price" style="color: #e8505b;text-decoration: line-through">${originalPrice}</span>
+                    ${courseCard.installment.amount}
+                    <span class="currency">تومان</span>`
+                }
             }
-        }
-        let installmentTemplate = ``;
-        if (courseCard.installment.title !== null) {
-            installmentTemplate = `
+            let installmentTemplate = ``;
+            if (courseCard.installment.title !== null) {
+                installmentTemplate = `
           <div class="course-installment">
             <p class="vazir-bold">
                <img src="/static/home/images/icons/installment.svg" alt="installment" width="20">
@@ -140,9 +139,9 @@ function renderShoppingCards(courseCards) {
             </p>
          </div>
           `
-        }
-        // shopping card template
-        let shoppingCardTemplate = `
+            }
+            // shopping card template
+            let shoppingCardTemplate = `
             <div class="col-md-4 mb-3">
                <div class="card course-card h-100">
                   <!-- Course poster -->
@@ -222,19 +221,23 @@ function renderShoppingCards(courseCards) {
                </div>
             </div>
         `;
-        $(".card-group").append(shoppingCardTemplate);
-        // loop for course calender times
-        $.each(courseCard.course_calendars, function (index, courseCalender) {
-            let courseStandardTime = new persianDate(Date.parse(courseCalender));
-            let courseCalenderTemplate = `
+            $(".card-group").append(shoppingCardTemplate);
+            // loop for course calender times
+            $.each(courseCard.course_calendars, function (index, courseCalender) {
+                let courseStandardTime = new persianDate(Date.parse(courseCalender));
+                let courseCalenderTemplate = `
                 <p class="course-calender-time">
                     <img src="/static/home/images/icons/add-time.svg" class="animated"
                     alt="time icon">
                     ${courseStandardTime.format("dddd")} ها ساعت ${courseStandardTime.format("H:m")}
                 </p>
             `
-            $(".course-calender").last().append(courseCalenderTemplate)
-        })
+                $(".course-calender").last().append(courseCalenderTemplate)
+            })
+        } catch (error) {
+            console.log("failed to add shopping card", error);
+        }
+
 
     });
     loading()

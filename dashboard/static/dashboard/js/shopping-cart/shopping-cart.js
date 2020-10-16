@@ -15,6 +15,7 @@ function loadShopping(courseIds) {
             "id": courseIds
         },
         success: function (data) {
+            sessionStorage.removeItem("totalId")
             renderShoppingCarts(data , true);
         },
         error: function () {
@@ -25,6 +26,7 @@ function loadShopping(courseIds) {
 
 // shopping cart payment handler
 $("#payButton").click(function () {
+    sessionStorage.removeItem("totalId")
     idSet();
 });
 

@@ -13,9 +13,10 @@ class RoleCodes(Enum):
 
 class InstallmentModelEnum(Enum):
     installmentDateBefore = 10
-    installmentIsBought='در این دوره شرکت کرده اید'
+    installmentIsBought = 'این دوره پرداخت شده است'
     installmentIsExpired = 'این دوره را از دست داده اید'
-    installmentIsNotBought='این دوره هنوز خریداری نشده است'
+    installmentIsNotBought = 'این دوره پرداخت نشده است'
+
 
 class Sms(Enum):
     username = '09357727769'

@@ -36,17 +36,12 @@ function renderCourseInstallments(instalments, courseId, disocunt) {
     let instalmentsRowsTemplate = ``
     let firstInstallment = false;
     $.each(instalments, function (index, installment) {
-
         instalmentsRowsTemplate += `
         <tr>
             <td scope="row">${installment.title === null ? "تمام شهریه" : installment.title}</td>
             <td>${installmentAmountRender(installment.amount, disocunt)}</td>
             <td>${installment.message}</td>
-            <td class="pl-5">
-                <div class="form-check">
-                    <input onchange="updateCoursePrice(this)" data-course-id="${courseId}" data-amount="${installment.amount}" type="checkbox" value="${installment.id}" ${firstInstallment === false ? "disabled checked" : ""} style="width: 20px; height: 20px">
-                </div>
-            </td>
+            <td>${installmentCheckBox(courseId, installment , firstInstallment)}</td>
         </tr>`
         firstInstallment = true;
     })
@@ -72,20 +67,9 @@ function updateCoursePrice(element) {
 
 // remove course from cart
 function removeCourse(element) {
-    let shoppingCardIds = JSON.parse(sessionStorage.getItem("totalId"));
     let id = $(element).data("id");
     $("#course-" + id).remove();
     $("#course-cart-" + id).remove();
-
-    // remove from local storage
-    const index = shoppingCardIds.indexOf(id.toString());
-    if (index > -1) {
-        shoppingCardIds.splice(index, 1);
-    }
-    // show redirect to shopping
-    if (shoppingCardIds.length === 0) noShoppingItem()
-    console.log(shoppingCardIds.length)
-    sessionStorage.setItem("totalId", JSON.stringify(shoppingCardIds));
     updateCartTotalPrice();
 }
 
@@ -106,4 +90,13 @@ function installmentAmountRender(amount, discount) {
         return `<span class="price" style="color: #e8505b;text-decoration: line-through">${originalPrice}</span>
                 <span>${amount + " تومان"}</span>`
     } else return amount + " تومان";
+}
+
+
+function installmentCheckBox(courseId, installment , firstInstallment) {
+    if (!installment.is_bought) {
+        return `<div class="form-check">
+                    <input onchange="updateCoursePrice(this)" data-course-id="${courseId}" data-amount="${installment.amount}" type="checkbox" value="${installment.id}" ${firstInstallment === false ? "disabled checked" : ""} style="width: 20px; height: 20px">
+                </div>`
+    } else return ``
 }

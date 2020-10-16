@@ -43,7 +43,6 @@ function renderShoppingCarts(carts, installmentStatus) {
         $("#cartListItems").append(cartTemplate);
         if (installmentStatus === true) renderCartInstallments(cart)
     })
-    sessionStorage.setItem("totalId", JSON.stringify(totalId));
 }
 
 
