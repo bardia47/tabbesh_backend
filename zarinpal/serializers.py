@@ -8,7 +8,6 @@ from accounts.enums import InstallmentModelEnum
 class CartInstallmentSerializer(InstallmentSerializer):
     is_bought = serializers.SerializerMethodField('get_is_bought')
     is_disable = serializers.SerializerMethodField('get_is_disable')
-    amount = serializers.ReadOnlyField(source='get_amount_payable', help_text='مبلغ با احتساب تخفیف')
     message = serializers.SerializerMethodField('get_message')
 
     class Meta:
@@ -33,16 +32,14 @@ class CartInstallmentSerializer(InstallmentSerializer):
 
 
 class ShoppingCartSerializer(CourseBriefSerializer):
-    installments = CartInstallmentSerializer(source='get_next_installments', many=True, read_only=True)
-    discount = serializers.SerializerMethodField('get_discount')
+    installments = serializers.SerializerMethodField('get_installments',help_text='get installment not buyed')
+    discount = DiscountSerializer(source='get_discount',read_only=True)
 
     class Meta:
         model = Course
         fields = ('id', 'teacher', 'title', 'image', 'installments', 'discount')
         depth = 1
 
-    def get_discount(self, obj):
-        discount = obj.get_discount()
-        if discount:
-            return DiscountSerializer(instance=discount).data
-        return None
+
+    def get_installments(self, obj):
+        return CartInstallmentSerializer(obj.get_next_installments(exclude={'user__id': self.context['request'].user.id}),context=self.context, many=True).data

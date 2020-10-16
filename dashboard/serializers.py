@@ -148,6 +148,7 @@ class DiscountSerializer(serializers.ModelSerializer):
 
 class InstallmentSerializer(serializers.ModelSerializer):
     title = serializers.SerializerMethodField('get_title')
+    amount = serializers.ReadOnlyField(source='get_amount_payable', help_text='مبلغ با احتساب تخفیف')
 
     class Meta:
         model = Installment

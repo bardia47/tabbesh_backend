@@ -8,7 +8,7 @@ import jdatetime
 from tinymce import models as tinymce_models
 from django.core.exceptions import ValidationError
 from django.core.validators import MaxValueValidator, MinValueValidator
-from django.db.models import Q, Max, IntegerField
+from django.db.models import Q, Max, IntegerField ,  F
 from django.db.models import Value as V
 from django.db.models.functions import Concat
 from .enums import InstallmentModelEnum
@@ -260,13 +260,17 @@ class Course(models.Model):
         now = datetime.datetime.now()
         return self.get_next_installments().first()
 
+
     # for future installments
     def get_next_installments(self, exclude=None):
         now = datetime.datetime.now()
-        return Installment.objects.filter(
+        installments =  Installment.objects.filter(
             Q(start_date__gt=now) | Q(
                 end_date__gt=now + datetime.timedelta(days=InstallmentModelEnum.installmentDateBefore.value)),
             course__id=self.id)
+        if exclude :
+            installments = installments.exclude(**exclude)
+        return installments
 
     def students(self):
         return User.objects.filter(installments__in=self.installment_set.all())

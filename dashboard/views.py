@@ -35,11 +35,11 @@ class Dashboard(generics.RetrieveAPIView):
             courses = request.user.courses().filter(end_date__gt=now)
             value = jdatetime.datetime.fromgregorian(datetime=now).day
             if (value >= 20):
-                need_buys = courses.filter(
-                    installment__start_date__gt=now).distinct()
+                need_buys = Installment.objects.filter(
+                    start_date__gt=now,start_date__lt=now + datetime.timedelta(30),course__in=courses).exclude(user=request.user)
                 if (need_buys.exists()):
                     # need_buy_ids = list(need_buys.values_list('id', flat=True))
-                    need_buy_titles = TextUtils.convert_list_to_string(list(need_buys.values_list('title', flat=True)))
+                    need_buy_titles = TextUtils.convert_list_to_string(list(need_buys.values_list('course__title', flat=True)))
         elif self.request.user.is_teacher():
             courses = Course.objects.filter(teacher__id=self.request.user.id, end_date__gt=now)
         else:
