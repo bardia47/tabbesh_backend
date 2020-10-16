@@ -270,8 +270,8 @@ class GetInstallmentViewSet(viewsets.ModelViewSet):
         if (self.request.GET.get(self.SEARCH_PARAM) not in (None, '')):
             return super(GetInstallmentViewSet, self).get_queryset()
         now = datetime.datetime.now()
-        courses = self.request.user.courses().filter(end_date__gt=now)
-        courses = courses.filter(Q(installment__start_date__gt=now) | Q(
-            installment__end_date__gt=now + datetime.timedelta(
-                days=InstallmentModelEnum.installmentDateBefore.value))).distinct()
+        installments = Installment.objects.filter(Q(start_date__gt=now) | Q(
+            end_date__gt=now + datetime.timedelta(
+                days=InstallmentModelEnum.installmentDateBefore.value))).exclude(user=self.request.user)
+        courses = Course.objects.filter(installment__in=installments).distinct()
         return courses

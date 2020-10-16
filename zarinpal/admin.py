@@ -7,12 +7,13 @@ from accounts.models import *
 from dashboard.validators import AdminValidator
 
 
-class InstallmentUserInline(admin.StackedInline):
-    formset = InstallmentUserInlineForm
-    model = User.installments.through
-    verbose_name_plural = "قسط ها"
-    verbose_name = "قسط ها"
-    extra = 0
+# class InstallmentUserInline(admin.StackedInline):
+#     autocomplete_fields = ['installment__course__title']
+#     formset = InstallmentUserInlineForm
+#     model = User.installments.through
+#     verbose_name_plural = "قسط ها"
+#     verbose_name = "قسط ها"
+#     extra = 0
 
 
 class PayHistoryInline(admin.TabularInline):
@@ -34,8 +35,8 @@ class PayHistoryInline(admin.TabularInline):
 
 class InstallmenCoursetInline(TabularInlineJalaliMixin, admin.TabularInline):
     model = Installment
-    max_num = 3
-
+    max_num = 6
+    extra = 6
 
 class DiscountWithoutCodeInline(admin.TabularInline):
     model = Course.discount_set.through
@@ -58,7 +59,7 @@ class DiscountWithoutCodeInline(admin.TabularInline):
 
 class InstallmentAdmin(ModelAdminJalaliMixin, admin.ModelAdmin):
     list_display = ['title', 'get_start_date_decorated', 'get_end_date_decorated', 'course', 'amount']
-    search_fields = ['course', 'title']
+    search_fields = ['course__title', 'title']
 
     def get_start_date_decorated(self, obj):
         return jdatetime.datetime.fromgregorian(datetime=obj.start_date).strftime('%y/%m/%d ')

@@ -4,7 +4,7 @@ from accounts.enums import AdminEnums
 from django.contrib.auth.models import Group
 from django.utils.safestring import mark_safe
 from .forms import *
-from zarinpal.admin import InstallmentUserInline, PayHistoryInline
+from zarinpal.admin import PayHistoryInline
 
 
 class EventInline(admin.TabularInline):
@@ -39,6 +39,7 @@ class UserAdmin(BaseUserAdmin):
             'custom_admin/js/user-admin.js'
         )
 
+    autocomplete_fields = ('installments',)
     ordering = ('-date_joined',)
     readonly_fields = ('date_joined_decorated', 'send_password_sms')
     form = UserChangeForm
@@ -55,6 +56,8 @@ class UserAdmin(BaseUserAdmin):
             'gender')}),
         ('دسترسی ها', {'fields': ('is_active', "role")}),
         ('اعتبار', {'fields': ('credit',)}),
+        ('قسط ها ', {'fields': ('installments',)}),
+
     )
     add_fieldsets = (
         (None, {'fields': ('username', 'email', 'date_joined_decorated')}),
@@ -66,7 +69,7 @@ class UserAdmin(BaseUserAdmin):
         ('اعتبار', {'fields': ('credit',)}),
     )
     inlines = [
-        InstallmentUserInline, PayHistoryInline, EventInline, EventRelatedInline
+        PayHistoryInline, EventInline, EventRelatedInline
     ]
 
     def get_queryset(self, request):
