@@ -1,7 +1,7 @@
 $(function () {
     if (sessionStorage.getItem("totalId") != null) {
         loadShopping(sessionStorage.getItem("totalId"))
-    }
+    } else noShoppingItem()
 });
 
 // get shopping carts
@@ -16,7 +16,7 @@ function loadShopping(courseIds) {
         },
         success: function (data) {
             sessionStorage.removeItem("totalId")
-            renderShoppingCarts(data , true);
+            renderShoppingCarts(data, true);
         },
         error: function () {
             alert("خطا در بارگزاری دروس ... لطفا دوباره امتحان کنید!")

@@ -54,9 +54,9 @@ function noShoppingItem() {
         <img class="m-auto" src="/static/home/images/icons/sad-emoji.svg" width="80" height="80">
         <p class="vazir-bold">سبد خرید شما خالی می باشد!</p>
         <p class="mt-n3 text-center vazir-light">
-            برای مشاهده و خرید درس بر روی دکمه ی زیر کلیک کنید
+            برای بازگشت به صفحه ی قبلی بر روی دکمه ی زیر کلیک کنید
         </p>
-        <a class="btn btn-dark mx-auto btn-sm" href="/dashboard/shopping/">برگشت به خرید درس</a>
+        <a class="btn btn-dark mx-auto btn-sm" href="javascript:history.back()">برگشت به صفحه ی قبل</a>
     </div>
     `
 

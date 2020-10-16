@@ -70,6 +70,8 @@ function removeCourse(element) {
     let id = $(element).data("id");
     $("#course-" + id).remove();
     $("#course-cart-" + id).remove();
+    console.log($("#installments input:checked").length)
+    if ($("#installments input:checked").length === 0) noShoppingItem()
     updateCartTotalPrice();
 }
 
@@ -96,7 +98,7 @@ function installmentAmountRender(amount, discount) {
 function installmentCheckBox(courseId, installment , firstInstallment) {
     if (!installment.is_bought) {
         return `<div class="form-check">
-                    <input onchange="updateCoursePrice(this)" data-course-id="${courseId}" data-amount="${installment.amount}" type="checkbox" value="${installment.id}" ${firstInstallment === false ? "disabled checked" : ""} style="width: 20px; height: 20px">
+                    <input onchange="updateCoursePrice(this)" data-course-id="${courseId}" data-amount="${installment.amount}" type="checkbox" value="${installment.id}" ${firstInstallment === false ? "checked" : ""} style="width: 20px; height: 20px">
                 </div>`
     } else return ``
 }
