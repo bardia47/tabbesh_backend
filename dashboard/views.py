@@ -36,10 +36,12 @@ class Dashboard(generics.RetrieveAPIView):
             value = jdatetime.datetime.fromgregorian(datetime=now).day
             if (value >= 20):
                 need_buys = Installment.objects.filter(
-                    start_date__gt=now,start_date__lt=now + datetime.timedelta(30),course__in=courses).exclude(user=request.user)
+                    start_date__gt=now, start_date__lt=now + datetime.timedelta(30), course__in=courses).exclude(
+                    user=request.user)
                 if (need_buys.exists()):
                     # need_buy_ids = list(need_buys.values_list('id', flat=True))
-                    need_buy_titles = TextUtils.convert_list_to_string(list(need_buys.values_list('course__title', flat=True)))
+                    need_buy_titles = TextUtils.convert_list_to_string(
+                        list(need_buys.values_list('course__title', flat=True)))
         elif self.request.user.is_teacher():
             courses = Course.objects.filter(teacher__id=self.request.user.id, end_date__gt=now)
         else:
@@ -136,50 +138,6 @@ class EditProfile(APIView):
                 showSer = UserProfileShowSerializer(instance={'grades': grades, 'cities': cities, "user": request.user})
                 Utils.cleanMenuCache(request)
                 return Response(showSer.data)
-
-
-# # Edit profile page --> change avatar form
-# @login_required
-# def change_avatar(request):
-#     if request.method == 'POST':
-#         form = ProfileForm()
-#         avatar = request.user.compressImage(request.FILES.get("file"))
-#         if avatar:
-#             if not request.user.avatar.url.startswith("/media/defaults"):
-#                 request.user.avatar.delete()
-#             request.user.avatar = avatar
-#             request.user.save()
-#         return redirect('dashboard')
-#     else:
-#         error = 'تغییر پروفایل با مشکل رو به رو شد'
-#         return render(request, 'dashboard/profile_page.html', {'form': form, 'error': error})
-#
-#
-# # Edit profile page --> change field except avatar field
-# @login_required
-# def change_profile(request):
-#     if request.method == 'POST':
-#         form = ProfileForm(data=request.POST, instance=request.user)
-#         if form.is_valid():
-#             form.save()
-#             return redirect('dashboard')
-#         else:
-#             return render(request, 'dashboard/profile_page.html', {'form': form})
-
-
-# # Edit profile page --> change password
-# @login_required
-# def change_password(request):
-#     if request.method == 'POST':
-#         form = ProfileForm()
-#         if not request.user.check_password(request.POST['old_password']):
-#             error = 'رمز وارد شده اشتباه است'
-#             return render(request, 'dashboard/profile_page.html', {'form': form, 'error': error})
-#         else:
-#             error = 'تغییر رمز با موفقیت انجام شد'
-#             request.user.password = make_password(request.POST['password'])
-#             request.user.save()
-#             return render(request, 'dashboard/profile_page.html', {'form': form, 'error': error})
 
 
 # Lessons Page
@@ -294,13 +252,13 @@ class GetShoppingViewSet(viewsets.ModelViewSet):
                 query1 = (Q(grade__id=self.request.user.grades.first().id) | Q(grade__id=None))
                 query2 = ~(Q(grade__id=self.request.user.grades.first().id) | Q(grade__id=None))
                 queryset = (queryset
-                           .filter(query1 | query2).annotate(
+                            .filter(query1 | query2).annotate(
                     search_type_ordering=Case(
                         When(query1, then=Value(2)),
                         When(query2, then=Value(1)),
                         default=Value(0),
                         output_field=IntegerField()))
-                           .order_by('-search_type_ordering'))
+                            .order_by('-search_type_ordering'))
 
         return queryset
 
@@ -404,15 +362,15 @@ def teacher_course_panel(request, code):
 def student_course_panel(request, code):
     return render(request, 'dashboard/student_course_panel.html', {"code": code})
 
-
-class UserInstallmentsViewSet(generics.ListAPIView):
-    queryset = Course.objects.all()
-    serializer_class = CartInstallmentSerializer
-    lookup_field = 'code'
-    pagination_class = None
-
-    def get_object(self):
-        return Course.objects.get(code=self.kwargs['code'])
-
-    def get_queryset(self):
-        return self.get_object().installment_set.all()
+# not used now !
+# class UserInstallmentsViewSet(generics.ListAPIView):
+#     queryset = Course.objects.all()
+#     serializer_class = CartInstallmentSerializer
+#     lookup_field = 'code'
+#     pagination_class = None
+#
+#     def get_object(self):
+#         return Course.objects.get(code=self.kwargs['code'])
+#
+#     def get_queryset(self):
+#         return self.get_object().installment_set.all()

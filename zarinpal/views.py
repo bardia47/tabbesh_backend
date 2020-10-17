@@ -273,5 +273,5 @@ class GetInstallmentViewSet(viewsets.ModelViewSet):
         installments = Installment.objects.filter(Q(start_date__gt=now) | Q(
             end_date__gt=now + datetime.timedelta(
                 days=InstallmentModelEnum.installmentDateBefore.value))).exclude(user=self.request.user)
-        courses = Course.objects.filter(installment__in=installments).distinct()
+        courses = self.request.user.courses().filter(installment__in=installments).distinct()
         return courses
