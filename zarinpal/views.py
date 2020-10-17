@@ -31,7 +31,7 @@ def is_valid(installments_id_list, amount, discount):
     total_price = 0
     for installment in installments:
         total_price += installment.get_amount_payable()
-    if discount is not None:
+    if discount:
         total_price = total_price - compute_discount(installments_id_list, total_price, discount)
     return True if int(total_price) == amount else False
 
@@ -112,16 +112,16 @@ class Verify(APIView):
         new_pay.submit_date = now
         if request.GET.get('Status') == 'OK':
             result = client.service.PaymentVerification(
-                MERCHANT, request.GET['Authority'], new_pay.amount)
+                MERCHANT.merchant.value, request.GET.get('Authority'), new_pay.amount)
             if result.Status == 100:
                 installment_id_list = new_pay.installments.split()
                 user = request.user
                 for installment_id in installment_id_list:
                     user.installments.add(installment_id)
-                    user.save()
-                    new_pay.is_successful = True
-                    new_pay.payment_code = str(result.RefID)
-                    new_pay.save()
+                user.save()
+                new_pay.is_successful = True
+                new_pay.payment_code = str(result.RefID)
+                new_pay.save()
                 # this try is for events
                 try:
                     event = Event.objects.get(user__id=request.user.id, is_active=True)
@@ -191,7 +191,7 @@ class ComputeDiscount(APIView):
         except:
             return Response({'message': PaymentMassages.discountErrorMassage.value},
                             status=status.HTTP_406_NOT_ACCEPTABLE)
-        amount = int(request.GET.get('total_pr'))
+        amount = int(float(request.GET.get('total_pr')))
         discount_amount = compute_discount(installments_list, amount, discount)
         if discount_amount == 0:
             return Response({'message': PaymentMassages.discountErrorMassage.value},

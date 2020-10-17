@@ -362,15 +362,15 @@ def teacher_course_panel(request, code):
 def student_course_panel(request, code):
     return render(request, 'dashboard/student_course_panel.html', {"code": code})
 
-# not used now !
-# class UserInstallmentsViewSet(generics.ListAPIView):
-#     queryset = Course.objects.all()
-#     serializer_class = CartInstallmentSerializer
-#     lookup_field = 'code'
-#     pagination_class = None
-#
-#     def get_object(self):
-#         return Course.objects.get(code=self.kwargs['code'])
-#
-#     def get_queryset(self):
-#         return self.get_object().installment_set.all()
+
+class UserInstallmentsViewSet(generics.ListAPIView):
+    queryset = Course.objects.all()
+    serializer_class = CartInstallmentSerializer
+    lookup_field = 'code'
+    pagination_class = None
+
+    def get_object(self):
+        return Course.objects.get(code=self.kwargs['code'])
+
+    def get_queryset(self):
+        return self.get_object().installment_set.all()

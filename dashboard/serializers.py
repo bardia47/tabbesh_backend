@@ -41,7 +41,6 @@ class CourseBriefSerializer(JSONFormSerializer, serializers.ModelSerializer):
 class CourseLessonsSerializer(CourseBriefSerializer):
     first_class = serializers.SerializerMethodField('get_first_class')
     is_active = serializers.SerializerMethodField('is_class_active')
-    parent = LessonSerializer(source='get_parent_lesson', read_only=True)
 
     def is_class_active(self, obj):
         first_class = obj.get_first_class()
@@ -58,7 +57,7 @@ class CourseLessonsSerializer(CourseBriefSerializer):
     class Meta:
         model = Course
         fields = ('id', 'code', 'title', 'start_date', 'end_date', 'image', 'teacher', 'url',
-                  'is_active', 'first_class', 'private_description', 'parent')
+                  'is_active', 'first_class', 'private_description')
 
 
 class CourseCalendarSerializer(JSONFormSerializer, serializers.ModelSerializer):
@@ -113,7 +112,7 @@ class ShoppingCourseSerializer(CourseLessonsSerializer):
     class Meta:
         model = Course
         fields = ('title', 'start_date', 'end_date', 'id', 'description', 'image', 'teacher',
-                  'course_calendars', 'parent', 'discount', 'amount')
+                  'course_calendars', 'discount', 'amount')
 
     def get_start_dates(self, obj):
         dates = []
@@ -121,15 +120,6 @@ class ShoppingCourseSerializer(CourseLessonsSerializer):
         for i in calendars:
             dates.append(i.start_date)
         return dates
-
-    def get_parent_lesson(self, obj):
-        return LessonSerializer(instance=obj.get_parent_lesson()).data
-
-    def get_discount(self, obj):
-        discount = obj.get_discount()
-        if discount:
-            return DiscountSerializer(instance=discount).data
-        return None
 
 
 class InstallmentSerializer(serializers.ModelSerializer):
