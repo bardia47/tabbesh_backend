@@ -70,5 +70,5 @@ function amountRender(amount, discount) {
         return `<strong class="text-success mx-1">${discountMessage}</strong>
                 <span class="total-amount">${amount + " تومان"}</span>
                 `
-    } else return amount + " تومان";
+    } else return `<span class="total-amount">${amount + " تومان"}</span>`;
 }

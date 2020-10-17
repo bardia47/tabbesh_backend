@@ -108,7 +108,7 @@ function successDiscountModal(message) {
 
     // reset discount
     $("#discountRefreshButton").click(function () {
-        location.reload();
+        history.back();
     });
 }
 
