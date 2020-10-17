@@ -8,7 +8,7 @@ import jdatetime
 from tinymce import models as tinymce_models
 from django.core.exceptions import ValidationError
 from django.core.validators import MaxValueValidator, MinValueValidator
-from django.db.models import Q, Max, IntegerField ,  F
+from django.db.models import Q, Max, IntegerField, F, Sum
 from django.db.models import Value as V
 from django.db.models.functions import Concat
 from .enums import InstallmentModelEnum
@@ -210,26 +210,12 @@ class Course(models.Model):
     def __str__(self):
         return self.title
 
-    # def is_course_active(self):
-    #     now = datetime.datetime.now()
-    #     a = now - self.start_date
-    #     b = now - self.end_date
-    #     if a.total_seconds() >= 0 and b.total_seconds() < 0:
-    #         return True
-    #     else:
-    #         return False
-
     def clean_fields(self, exclude=None):
         super().clean_fields(exclude=exclude)
         if self.end_date and self.start_date and self.end_date < self.start_date:
             raise ValidationError("تاریخ پایان باید پس از تاریخ شروع باشد")
 
     def get_first_class(self, exclude=None):
-        if len(self.course_calendar_set.all()) == 0:
-            return None
-        return self.course_calendar_set.first()
-
-    def get_next_class(self, exclude=None):
         if len(self.course_calendar_set.all()) == 0:
             return None
         now = datetime.datetime.now()
@@ -260,20 +246,29 @@ class Course(models.Model):
         now = datetime.datetime.now()
         return self.get_next_installments().first()
 
-
     # for future installments
     def get_next_installments(self, exclude=None):
         now = datetime.datetime.now()
-        installments =  Installment.objects.filter(
+        installments = Installment.objects.filter(
             Q(start_date__gt=now) | Q(
                 end_date__gt=now + datetime.timedelta(days=InstallmentModelEnum.installmentDateBefore.value)),
             course__id=self.id)
-        if exclude :
+        if exclude:
             installments = installments.exclude(**exclude)
         return installments
 
     def students(self):
         return User.objects.filter(installments__in=self.installment_set.all())
+
+    def get_amount(self, exclude=None):
+        return self.get_next_installments().aggregate(Sum('amount'))['amount__sum']
+
+    def get_amount_payable(self, exclude=None):
+        discount = self.get_discount()
+        amount = self.get_amount()
+        if discount:
+            return amount * (100 - discount.percent) / 100
+        return amount
 
 
 # Course_Calendar Model
@@ -508,9 +503,3 @@ class Installment(models.Model):
         if discount:
             return self.amount * (100 - discount.percent) / 100
         return self.amount
-
-    def get_discount_amount(self, exclude=None):
-        discount = self.course.get_discount()
-        if discount:
-            return self.amount * discount.percent / 100
-        return 0

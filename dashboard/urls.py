@@ -26,8 +26,8 @@ urlpatterns = [
     path('lessons/list/<str:code>/', ClassList.as_view(), name="student_list"),
     path('lessons/teacher_course_panel/<str:code>/', teacher_course_panel, name="teacher_course_panel"),
     path('lessons/student_course_panel/<str:code>/', student_course_panel, name="student_course_panel"),
-    path('lessons/user-installments/<str:code>/', UserInstallmentsViewSet.as_view(),
-         name="user_installments"),
+    # path('lessons/user-installments/<str:code>/', UserInstallmentsViewSet.as_view(),
+    #      name="user_installments"),
 
 ]
 

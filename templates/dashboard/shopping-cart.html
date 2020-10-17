@@ -25,9 +25,9 @@
                     <strong>
                         تبریک !
                         برای اولین خرید خود
-                        10
+                        {% event_discount request.session.event_discount %}
                         درصد تخفیف دارید.
-                        پس از انتخاب دروس مورد نظر بر روی دکمه اعمال تخفیف کلیک کنید.
+                        برای اعمال آن بر روی دکمه اعمال تخفیف کلیک کنید.
                     </strong>
                 </div>
             {% endif %}
@@ -52,7 +52,7 @@
                             <!-- compute discount -->
                             <strong class="mb-0 text-nowrap" for="discountCode">کد تخفیف</strong>
                             <input type="text" class="form-control-sm mx-2 w-25" id="discountCode" name="code"
-                                   {% if 'event_discount' in request.session %}value="{{ request.user.phone_number }}"
+                                    {% if 'event_discount' in request.session %} value="{{ request.user.phone_number }}"
                                    readonly{% endif %}>
                             <button type="button" class="btn btn-info ml-auto btn-sm" id="discountButton">
                                 اعمال کد تخفیف

@@ -41,27 +41,19 @@ class CourseBriefSerializer(JSONFormSerializer, serializers.ModelSerializer):
 class CourseLessonsSerializer(CourseBriefSerializer):
     first_class = serializers.SerializerMethodField('get_first_class')
     is_active = serializers.SerializerMethodField('is_class_active')
-    parent = serializers.SerializerMethodField('get_parent_lesson')
+    parent = LessonSerializer(source='get_parent_lesson', read_only=True)
 
     def is_class_active(self, obj):
-        next_class = obj.get_next_class()
-        if next_class is not None:
-            return next_class.is_class_active()
+        first_class = obj.get_first_class()
+        if first_class is not None:
+            return first_class.is_class_active()
         return False
 
     def get_first_class(self, obj):
-        next_class = obj.get_next_class()
-        if next_class is not None:
-            return next_class.start_date
+        first_class = obj.get_first_class()
+        if first_class is not None:
+            return first_class.start_date
         return None
-
-    def get_parent_lesson(self, obj):
-        lesson = obj.lesson
-        while True:
-            if lesson.parent is None:
-                return LessonSerializer(instance=lesson).data
-            else:
-                lesson = lesson.parent
 
     class Meta:
         model = Course
@@ -106,16 +98,22 @@ class ShoppingSerializer(serializers.Serializer):
     grades = GradeSerializer(many=True)
 
 
+class DiscountSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Discount
+        fields = ('percent', 'end_date', 'title')
+
+
 # for shopping page
 class ShoppingCourseSerializer(CourseLessonsSerializer):
     course_calendars = serializers.SerializerMethodField('get_start_dates')
-    discount = serializers.SerializerMethodField('get_discount')
-    installment = serializers.SerializerMethodField('get_installment')
+    discount = DiscountSerializer(source='get_discount', read_only=True)
+    amount = serializers.ReadOnlyField(source='get_amount_payable')
 
     class Meta:
         model = Course
-        fields = ("installment", 'title', 'start_date', 'end_date', 'id', 'description', 'image', 'teacher',
-                  'course_calendars', 'parent', 'discount')
+        fields = ('title', 'start_date', 'end_date', 'id', 'description', 'image', 'teacher',
+                  'course_calendars', 'parent', 'discount', 'amount')
 
     def get_start_dates(self, obj):
         dates = []
@@ -132,18 +130,6 @@ class ShoppingCourseSerializer(CourseLessonsSerializer):
         if discount:
             return DiscountSerializer(instance=discount).data
         return None
-
-    def get_installment(self, obj):
-        installment = obj.get_next_installment()
-        if installment:
-            return InstallmentSerializer(instance=installment).data
-        return None
-
-
-class DiscountSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Discount
-        fields = ('percent', 'end_date', 'title')
 
 
 class InstallmentSerializer(serializers.ModelSerializer):
