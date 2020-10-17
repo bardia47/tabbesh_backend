@@ -100,7 +100,7 @@ function renderShoppingCards(courseCards) {
             let coursePriceTemplate;
             // default is price without discount
             let discountPrice = parseFloat(courseCard.amount);
-            let discountTitleTemplate = ``;
+            let discountTitleTemplate = ``, discountTimerTemplate = ``;
             // price check -- for free courses
             if (courseCard.amount <= 0) {
                 coursePriceTemplate = `رايگان!`
@@ -119,6 +119,14 @@ function renderShoppingCards(courseCards) {
                      با تخفیف   
                         ${courseCard.discount.title}
                     </p>`;
+                    if (courseCard.discount.end_date !== null) {
+                        discountTimerTemplate = `
+                        <div class="d-flex justify-content-center text-black-50 timer vazir-bold" dir="ltr">
+                            <div class="mr-1"><i class="fas fa-clock"></i></div>
+                            <div class="countdown" data-date="${courseCard.discount.end_date}" ></div>
+                        </div>`
+                    }
+
                     let originalPrice = parseInt((courseCard.amount * 100) / (100 - courseCard.discount.percent))
                     coursePriceTemplate = `
                     <span class="price" style="color: #e8505b;text-decoration: line-through">${originalPrice}</span>
@@ -191,6 +199,8 @@ function renderShoppingCards(courseCards) {
                            <input class="priceId" type="text" value=" ${discountPrice} تومان" hidden>
                         </p>
                      </div>
+                     <!-- dicount timer -->
+                     ${discountTimerTemplate}
                   </div>
                   <!-- Button add course to cart -->
                   <div class="card-footer add-to-cart">
@@ -223,6 +233,15 @@ function renderShoppingCards(courseCards) {
         }
 
 
+    });
+    $(".countdown").each(function () {
+        try {
+            const countDown = $(this)
+            $(this).countdown(countDown.data("date").replace("T", " "), (event) => $(this).text(event.strftime('%D:%H:%M:%S')))
+                .on('finish.countdown', (event) => $(this).text(event.strftime('مهلت تخفیف به پایان رسید')))
+        } catch (e) {
+            console.log(e)
+        }
     });
     loading()
 }
