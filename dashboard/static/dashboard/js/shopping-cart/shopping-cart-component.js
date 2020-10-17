@@ -1,11 +1,10 @@
+const shoppingCartsId = [];
 function renderShoppingCarts(carts, installmentStatus) {
-    let totalId = []; // for add buy lesson ids
     if (carts.length === 0 && installmentStatus) noShoppingItem()
     let cartTemplate = ``;
     let amountTemplate = ``
     $.each(carts, function (index, cart) {
-        console.log(cart)
-        totalId.push(cart.id.toString())
+        shoppingCartsId.push(cart.id.toString())
         cartTemplate = `
             <div id="course-cart-${cart.id}" class="card">
             <div class="card-body">
@@ -66,7 +65,7 @@ function noShoppingItem() {
 
 function amountRender(installments, discount) {
     let amount = 0
-    $.each(installments , function (index , installment){
+    $.each(installments, function (index, installment) {
         amount += installment.amount;
     })
     if (discount !== null) {
@@ -75,4 +74,12 @@ function amountRender(installments, discount) {
                 <span class="total-amount">${amount + " تومان"}</span>
                 `
     } else return `<span class="total-amount">${amount + " تومان"}</span>`;
+}
+
+
+function removeArray(array, value) {
+    const index = array.indexOf(value);
+    if (index > -1) {
+        array.splice(index, 1);
+    }
 }

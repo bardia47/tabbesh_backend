@@ -2,6 +2,11 @@ $(function () {
     if (sessionStorage.getItem("totalId") != null) {
         loadShopping(sessionStorage.getItem("totalId"))
     } else noShoppingItem()
+
+
+    window.onbeforeunload = () => {
+        sessionStorage.setItem("totalId", JSON.stringify(shoppingCartsId))
+    }
 });
 
 // get shopping carts
@@ -108,7 +113,7 @@ function successDiscountModal(message) {
 
     // reset discount
     $("#discountRefreshButton").click(function () {
-        history.back();
+        location.reload();
     });
 }
 

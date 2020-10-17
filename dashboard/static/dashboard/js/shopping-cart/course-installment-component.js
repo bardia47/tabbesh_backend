@@ -61,7 +61,6 @@ function updateCoursePrice(courseId) {
     $("#course-" + courseId + " input:checked").each(function () {
         totalPrice += $(this).data("amount");
     })
-    console.log("#course-cart-" + courseId + " .total-amount")
     $("#course-cart-" + courseId + " .total-amount").text(totalPrice + " تومان ")
     updateCartTotalPrice();
 }
@@ -71,7 +70,7 @@ function removeCourse(element) {
     let id = $(element).data("id");
     $("#course-" + id).remove();
     $("#course-cart-" + id).remove();
-    console.log($("#installments input:checked").length)
+    removeArray(shoppingCartsId , id.toString())
     if ($("#installments input:checked").length === 0) noShoppingItem()
     updateCartTotalPrice();
 }

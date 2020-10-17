@@ -1,6 +1,5 @@
 let firstParameter = new URL(window.location.href).search.slice(1);
 let searchParameter;
-let courseCardsId = []
 
 if (firstParameter) {
     searchParameter = new URLSearchParams(firstParameter)
@@ -14,8 +13,7 @@ let getShoppingURL = "/dashboard/get-shopping/?";
 $(function () {
     // load shopping cart
     if (sessionStorage.getItem("totalId") !== null) {
-        courseCardsId = JSON.parse(sessionStorage.getItem("totalId"));
-        getShoppingCart(JSON.stringify(courseCardsId))
+        getShoppingCart(JSON.stringify(shoppingCartsId))
     }
 
 
@@ -271,10 +269,10 @@ $("select[id^='search']").change(function (event) {
 // event handler for all new card add to button
 function addToCartHandler(event) {
     const courseId = $(event).data("course-id").toString();
-    if (courseCardsId.indexOf(courseId) !== -1) duplicateCartItemModal()
+    if (shoppingCartsId.indexOf(courseId) !== -1) duplicateCartItemModal()
     else {
-        courseCardsId.push(courseId);
-        sessionStorage.setItem("totalId", JSON.stringify(courseCardsId))
+        shoppingCartsId.push(courseId);
+        sessionStorage.setItem("totalId", JSON.stringify(shoppingCartsId))
         getShoppingCart(`[${courseId}]`)
     }
 }
@@ -300,6 +298,18 @@ function duplicateCartItemModal() {
     })
 }
 
+function emptyShoppingCart() {
+    let modalHeaderTemplate = `<h5 class="modal-title text-danger"><i class="fas fa-exclamation-circle ml-1"></i>خطا در خرید دوره</h5>`
+    let modalBodyTemplate = `<p class="vazir-bold text-center">سبد خرید خالی می باشد</p>`
+    let modalFooterTemplate = `<button class="btn btn-danger w-100" data-dismiss="modal">فهمیدم!</button>`
+    let template = modalRender("emptyShoppingCartModal", modalHeaderTemplate, modalBodyTemplate, modalFooterTemplate)
+    $("body").append(template);
+    $("#emptyShoppingCartModal").modal();
+    $("#emptyShoppingCartModal").on("hidden.bs.modal", function (e) {
+        $(this).remove();
+    })
+}
+
 // animate to top of cart list
 function animatedToCardList() {
     $([document.documentElement, document.body]).animate({
@@ -313,15 +323,13 @@ function removeCourse(event) {
     $("#course-cart-" + id).remove();
 
     // remove id from courseCardsId list
-    const index = courseCardsId.indexOf(id.toString());
-    if (index > -1) {
-        courseCardsId.splice(index, 1);
-        sessionStorage.setItem("totalId", JSON.stringify(courseCardsId))
-    }
-    console.log(courseCardsId)
+    removeArray(shoppingCartsId, id.toString())
 }
 
-// complete shopping
-function completeShopping() {
-    sessionStorage.setItem("totalId", JSON.stringify(courseCardsId))
-}
+$("#completeShoppingBtn").click(function (e) {
+    if (shoppingCartsId.length !== 0) sessionStorage.setItem("totalId", JSON.stringify(shoppingCartsId))
+    else {
+        e.preventDefault();
+        emptyShoppingCart()
+    }
+});
