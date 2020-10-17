@@ -26,7 +26,7 @@ function renderShoppingCarts(carts, installmentStatus) {
                 <div class="col-md-3">
                 <p class="text-nowrap">
                 <span>پرداختی:</span>
-                    ${amountRender(cart.installments[0].amount, cart.discount)}
+                    ${amountRender(cart.installments, cart.discount)}
                 </p>
                 </div>
                 <!-- Button-to-delete -->
@@ -64,7 +64,11 @@ function noShoppingItem() {
 }
 
 
-function amountRender(amount, discount) {
+function amountRender(installments, discount) {
+    let amount = 0
+    $.each(installments , function (index , installment){
+        amount += installment.amount;
+    })
     if (discount !== null) {
         let discountMessage = ` با ${discount.percent} درصد تخفیف`;
         return `<strong class="text-success mx-1">${discountMessage}</strong>

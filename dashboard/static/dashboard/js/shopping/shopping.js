@@ -101,16 +101,16 @@ function renderShoppingCards(courseCards) {
             let endDateCourse = new persianDate(Date.parse(courseCard.end_date));
             let coursePriceTemplate;
             // default is price without discount
-            let discountPrice = parseFloat(courseCard.installment.amount);
+            let discountPrice = parseFloat(courseCard.amount);
             let discountTitleTemplate = ``;
             // price check -- for free courses
-            if (courseCard.installment.amount <= 0) {
+            if (courseCard.amount <= 0) {
                 coursePriceTemplate = `رايگان!`
             } else {
                 // check course price have discount or not
                 if (courseCard.discount == null) {
                     coursePriceTemplate = `
-                ${courseCard.installment.amount}
+                ${courseCard.amount}
                 <span class="currency">تومان</span>
                 `
                 } else {
@@ -121,24 +121,12 @@ function renderShoppingCards(courseCards) {
                      با تخفیف   
                         ${courseCard.discount.title}
                     </p>`;
-                    let originalPrice = parseInt((courseCard.installment.amount * 100) / (100 - courseCard.discount.percent))
+                    let originalPrice = parseInt((courseCard.amount * 100) / (100 - courseCard.discount.percent))
                     coursePriceTemplate = `
                     <span class="price" style="color: #e8505b;text-decoration: line-through">${originalPrice}</span>
-                    ${courseCard.installment.amount}
+                    ${courseCard.amount}
                     <span class="currency">تومان</span>`
                 }
-            }
-            let installmentTemplate = ``;
-            if (courseCard.installment.title !== null) {
-                installmentTemplate = `
-          <div class="course-installment">
-            <p class="vazir-bold">
-               <img src="/static/home/images/icons/installment.svg" alt="installment" width="20">
-               شهریه:
-               <span class="vazir-light">${courseCard.installment.title}</span>
-            </p>
-         </div>
-          `
             }
             // shopping card template
             let shoppingCardTemplate = `
@@ -195,8 +183,6 @@ function renderShoppingCards(courseCards) {
                         </p>
                         <div class="course-description-p pr-2">${courseCard.description}</div>
                      </div>
-                     <!-- installment title show when have one more installment -->
-                    ${installmentTemplate}
                      <!-- Course price -->
                      <div class="course-price">
                         ${discountTitleTemplate}
@@ -216,7 +202,7 @@ function renderShoppingCards(courseCards) {
                      اضافه به سبد خرید
                      </button>
                   </div>
-                  <!-- hidden first installment id for handel total buy id in shopping.js -->
+                  <!-- course id  -->
                   <input type="hidden" class="course-id" value="${courseCard.id}">
                </div>
             </div>
