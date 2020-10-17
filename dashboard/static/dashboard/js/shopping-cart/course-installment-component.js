@@ -1,5 +1,4 @@
 function renderCartInstallments(course) {
-    let instalmentsRowsTemplate = renderCourseInstallments(course.installments, course.id, course.discount)
     let installmentsTemplate = `
         <div id="course-${course.id}" class="container mt-3">
              <div class="row text-sm-center mb-2">
@@ -22,12 +21,13 @@ function renderCartInstallments(course) {
                     </tr>
                     </thead>
                     <tbody>
-                        ${instalmentsRowsTemplate}
+                        ${renderCourseInstallments(course.installments, course.id, course.discount)}
                     </tbody>
                 </table>
             </div>
         </div>`
     $("#installments").append(installmentsTemplate)
+    updateCoursePrice()
     updateCartTotalPrice();
 }
 
@@ -41,7 +41,7 @@ function renderCourseInstallments(instalments, courseId, disocunt) {
             <td scope="row">${installment.title === null ? "تمام شهریه" : installment.title}</td>
             <td>${installmentAmountRender(installment.amount, disocunt)}</td>
             <td>${installment.message}</td>
-            <td>${installmentCheckBox(courseId, installment , firstInstallment)}</td>
+            <td>${installmentCheckBox(courseId, installment, firstInstallment)}</td>
         </tr>`
         firstInstallment = true;
     })
@@ -55,13 +55,14 @@ function selectInstallments(element) {
     updateCartTotalPrice();
 }
 
-// update total course total price
-function updateCoursePrice(element) {
+// update course total price
+function updateCoursePrice(courseId) {
     let totalPrice = 0;
-    $("#course-" + $(element).data("course-id") + " input:checked").each(function () {
+    $("#course-" + courseId + " input:checked").each(function () {
         totalPrice += $(this).data("amount");
     })
-    $("#course-cart-" + $(element).data("course-id") + " .total-amount").text(totalPrice + " تومان ")
+    console.log("#course-cart-" + courseId + " .total-amount")
+    $("#course-cart-" + courseId + " .total-amount").text(totalPrice + " تومان ")
     updateCartTotalPrice();
 }
 
@@ -95,10 +96,10 @@ function installmentAmountRender(amount, discount) {
 }
 
 
-function installmentCheckBox(courseId, installment , firstInstallment) {
+function installmentCheckBox(courseId, installment) {
     if (!installment.is_bought) {
         return `<div class="form-check">
-                    <input onchange="updateCoursePrice(this)" data-course-id="${courseId}" data-amount="${installment.amount}" type="checkbox" value="${installment.id}" ${firstInstallment === false ? "checked" : ""} style="width: 20px; height: 20px">
+                    <input onchange="updateCoursePrice($(this).data('course-id').toString())" data-course-id="${courseId}" data-amount="${installment.amount}" type="checkbox" value="${installment.id}" checked style="width: 20px; height: 20px">
                 </div>`
     } else return ``
 }
