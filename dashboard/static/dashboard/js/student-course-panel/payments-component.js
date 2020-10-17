@@ -1,44 +1,14 @@
 function renderPayments(data) {
     let paymentRow = ``, paymentRowsTemplate = ``, paymentsTemplate, paymentStatus = ``, privateClassStatus = ``;
-    $.each(data, function (index, payment) {
+    $.each(data.installments, function (index, payment) {
         // status of payment
-        console.log("is_disable", payment.is_disable)
-        console.log("is_bought", payment.is_bought)
-        if (payment.is_disable === true) {
-            if (payment.is_bought === false) {
-                paymentStatus = `
-                    <img class="ml-1" src="/static/home/images/icons/close.svg" alt="alert" width="20px" height="20px">
-                   <span class="text-danger">این دوره را از دست دادی</span>
-                `
-                privateClassStatus = `<a class="btn btn-info btn-sm" onclick="rayChatPrivateClass()">می خوای جبران کنی ؟</a>`
-            } else {
-                paymentStatus = `
-                    <img class="ml-1"  src="/static/home/images/icons/tick.svg" alt="tick" width="20px" height="20px">
-                    <span class="text-success">در این دوره شرکت کردی</span>
-                `
-                privateClassStatus = "";
-            }
-        } else {
-            if (payment.is_bought === false) {
-                paymentStatus = `
-                    <img class="ml-1" src="/static/home/images/icons/alert.svg" alt="close" width="20px" height="20px">
-                    <span class="text-warning">این دوره هنوز خریداری نشده</span>
-                `
-                privateClassStatus = "";
-            } else {
-                paymentStatus = `
-                    <img class="ml-1" src="/static/home/images/icons/tick.svg" alt="tick" width="20px" height="20px">
-                    <span class="text-success">این دوره خریداری شده</span>
-                `
-                privateClassStatus = "";
-            }
-
+        if (payment.is_bought === false && payment.is_disable === true) {
+            privateClassStatus = `<a class="btn btn-info btn-sm" onclick="rayChatPrivateClass()">می خوای جبران کنی ؟</a>`
         }
         paymentRow = `
             <tr>
                 <td scope="row">${payment.title}</td>
-                <td>${payment.amount}  تومان </td>
-                <td> ${paymentStatus} </td>
+                <td class="${messageClass(payment)}">${payment.message}</td>
                 <td>
                     ${privateClassStatus}
                 </td>
@@ -53,10 +23,9 @@ function renderPayments(data) {
                 <thead>
                 <tr>
                     <th scope="col">شهریه</th>
-                    <th scope="col">قیمت</th>
                     <th scope="col">وضعیت</th>
                     <th scope="col">
-                        <button type="button" class="btn btn-secondary">پرداخت شهریه</button>
+                        <a onclick="sessionStorage.setItem('totalId' , '[${data.id}]')" type="button" class="btn btn-secondary btn-sm" href="/payment/shopping-cart/">پرداخت شهریه</a>
                     </th>
                 </tr>
                 </thead>
@@ -107,6 +76,15 @@ function rayChatPrivateClass() {
                 });
             }
         }, 2000);
+}
+
+
+function messageClass(payment){
+    if (payment.is_bought === true) return "text-success"
+    else{
+        if (payment.is_disable === false) return "text-danger"
+        else return "text-warning"
+    }
 }
 
 // set default tooltip to hover
