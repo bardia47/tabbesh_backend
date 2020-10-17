@@ -25,6 +25,8 @@ class SignUp(APIView):
     renderer_classes = [TemplateHTMLRenderer, JSONRenderer]
 
     def get(self, request):
+        if request.user.is_authenticated:
+            return redirect('dashboard')
         grades = Grade.objects.all()
         cities = City.objects.all()
         if request.accepted_renderer.format == 'html':
