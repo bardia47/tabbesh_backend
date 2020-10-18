@@ -7,7 +7,7 @@ function renderPayments(data) {
         }
         paymentRow = `
             <tr>
-                <td scope="row">${payment.title}</td>
+                <td scope="row">${payment.title === null ? "تمام شهریه" : payment.title}</td>
                 <td class="${messageClass(payment)}">${payment.message}</td>
                 <td>
                     ${privateClassStatus}
