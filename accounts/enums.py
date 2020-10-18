@@ -11,6 +11,13 @@ class RoleCodes(Enum):
     TEACHER = '3'
 
 
+class InstallmentModelEnum(Enum):
+    installmentDateBefore = 10
+    installmentIsBought = 'پرداخت شده'
+    installmentIsExpired = 'از دست داده اید'
+    installmentIsNotBought = 'پرداخت نشده'
+
+
 class Sms(Enum):
     username = '09357727769'
     password = '8794'

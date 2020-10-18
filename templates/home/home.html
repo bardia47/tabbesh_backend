@@ -7,17 +7,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>صفحه ی اصلی تابش</title>
 
-    <!-- Bootstrap -->
-    <link rel="stylesheet" href="https://cdn.rtlcss.com/bootstrap/v4.2.1/css/bootstrap.min.css"
-          integrity="sha384-vus3nQHTD+5mpDiZ4rkEPlnkcyTP+49BhJ4wJeJunw06ZAp+wzzeBPUXr42fi8If" crossorigin="anonymous">
-
     <!-- favicon !-->
     <link rel="shortcut icon" type="image/png" href="{% static 'home/images/favicon.ico' %}"/>
 
     <!-- css files -->
     <link rel="stylesheet" href="{% static "home/css/fonts.css" %}">
     <link rel="stylesheet" href="{% static "home/css/home-page.css" %}">
-    <link rel="stylesheet" href="{% static "home/css/tabbesh-bootstrap-theme-version 1.css" %}">
+    <link rel="stylesheet" href="{% static "home/css/tabbesh-bootstrap-theme.css" %}">
 
     <!-- owl carousel css -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.css"
@@ -40,7 +36,7 @@
              class="d-inline-block" alt="tabbesh logo">
         مدرسه آنلاین تابش
     </a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-   target="#navbarSupportedContent"
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
             aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
@@ -300,11 +296,11 @@
 
             <div class="card shadow">
                 <div class="card-body">
-                        <h1>
-                                <img class=" mobile-img" src="{% static "home/images/home-page/icons/sale.svg" %}"
-                                     width="50" alt="discount course icon">
-                               با تخفیف بخر ✌
-                        </h1>
+                    <h1>
+                        <img class=" mobile-img" src="{% static "home/images/home-page/icons/sale.svg" %}"
+                             width="50" alt="discount course icon">
+                        با تخفیف بخر ✌
+                    </h1>
                     <hr>
 
                     <div class="container">
@@ -494,7 +490,7 @@
 </div>
 
 <!-- footer -->
-<footer class="footer bg-secondary" id="contact-us">
+<footer class="footer" style="background-color:#001a4d " id="contact-us">
     <hr class="hr-footer">
     <div class="container-fluid">
         <div class="row">
@@ -511,11 +507,11 @@
                         <img src="{% static "home/images/home-page/icons/Eitaa.svg" %}" width="30" alt="eitaa logo">
                     </a>
                     <a href="https://t.me/taabbesh">
-                        <img class="ml-3" src="{% static "home/images/home-page/icons/telegram.svg" %}" width="30"
+                        <img class="mr-2" src="{% static "home/images/home-page/icons/telegram.svg" %}" width="30"
                              alt="telegram logo">
                     </a>
                     <a href="https://www.instagram.com/tabbeshclass/">
-                        <img class="ml-2" src="{% static "home/images/home-page/icons/instagram.svg" %}" width="30"
+                        <img class="mr-2" src="{% static "home/images/home-page/icons/instagram.svg" %}" width="30"
                              alt="instagram logo">
                     </a>
                 </div>
@@ -523,18 +519,21 @@
             </div>
 
             <div class="col-md-4 footer-logo text-center text-wrap ">
-                <img class="bg-white rounded" src="{% static "home/images/favicon.ico" %}" width="100" height="100" alt="tabbesh logo">
+                <img class="bg-white rounded" src="{% static "home/images/favicon.ico" %}" width="100" height="100"
+                     alt="tabbesh logo">
                 <p class="p mt-4">
                     ساخته شده با
                     <img src="{% static "home/images/home-page/icons/heart2.svg" %}" width="20" alt="footer heart">
                     در تابش
                 </p>
                 <p class="p mt-2">
-                    <span><img src="{% static "home/images/home-page/icons/license.svg" %}" width="18" alt="licence icon"></span>
+                    <span><img src="{% static "home/images/home-page/icons/license.svg" %}" width="18"
+                               alt="licence icon"></span>
                     <span>تمامی حقوق متعلق به آموزشگاه آنلاین تابش می باشد</span>
                 </p>
                 <p class="p">
-                    <span><img src="{% static "home/images/home-page/icons/theta.svg" %}" width="16" alt="theta logo"></span>
+                    <span><img src="{% static "home/images/home-page/icons/theta.svg" %}" width="16"
+                               alt="theta logo"></span>
                     <span>طراحی و توسعه توسط تیم تتا</span>
                 </p>
             </div>

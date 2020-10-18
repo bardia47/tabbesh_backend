@@ -123,6 +123,8 @@
                     </div>
                 </div>
             </div>
+
+
             <!-- Responsive date with jformat -->
             <div class="col-md-5">
                 <div class="row calender justify-content-start mt-3">
@@ -138,27 +140,39 @@
         {% is_student request.user as student %}
         <!-- Course cards -->
         <div class="row">
+            <!-- installment reminder -->
+            {% if need_buy %}
+                <div class="col-md-12">
+                    <div class="alert alert-warning alert-dismissable fade show" role="alert">
+                        <div class="d-flex">
+                            <strong>
+                                <i class="fas fa-exclamation-circle mr-2"></i>
+                                {{ need_buy.need_buy_text }}
+                            </strong>
+                            {# for test how error work send post with postman to this url #}
+                            <a class="btn btn-secondary btn-sm mr-auto ml-2"
+                               onclick="sessionStorage.setItem('totalId' , '')"
+                               href="/payment/shopping-cart/">پرداخت شهریه</a>
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
             <div class="col-md-12 card-section">
                 <!-- Course cards title -->
                 <div class="card-title">
                     <h4>کلاس های امروز و فردای شما</h4>
                 </div>
                 {% if not classes %}
-                    <div class="shadow-lg container w-100 my-n2 text-center rounded" style="font-family: 'Vazir_Bold';">
-                        <div class="col-md-12 mb-1">
-                            <img class="m-auto" src="{% static 'home/images/icons/no-class.svg' %}" width="90"
-                                 height="90">
-                        </div>
-                        <div class="col-md-12">
-                            <p class="text-center" style="font-size: 20px;">امروز و فردا کلاسی نداری :(</p>
-                        </div>
+                    <div class="shadow-lg container w-100 my-n2 text-center rounded p-2 vazir-bold">
+                        <img class="m-auto" src="{% static 'home/images/icons/no-class.svg' %}" width="80"
+                             height="80">
+                        <p>امروز و فردا کلاسی نداری :(</p>
                         {% if student %}
-                            <div class="col-md-12 my-n2">
-                                <p class="text-center" style="font-family: 'Vazir_Light'; font-size: 15px;">
-                                    می خوای کلاس جدید ثبت نام کنی ؟
-                                </p>
-                                <a class="btn btn-dark text-white mb-2" href="{% url 'shopping' %}">آره بزن بریم </a>
-                            </div>
+                            <p class="vazir-light">می خوای کلاس جدید ثبت نام کنی ؟</p>
+                            <a class="btn btn-dark text-white mb-2" href="{% url 'shopping' %}">آره بزن بریم </a>
                             </div>
                         {% endif %}
                 {% endif %}

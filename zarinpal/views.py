@@ -1,39 +1,38 @@
 from django.shortcuts import render
-from django.http import HttpResponse
 from django.shortcuts import redirect
 from zeep import Client
-from django.conf import settings
-from accounts.models import *
 from rest_framework.views import APIView
 from rest_framework.renderers import TemplateHTMLRenderer, JSONRenderer
 from rest_framework.response import Response
-from rest_framework import status
-from django.db.models import Q
-from django.db.models import Sum
+from rest_framework import status, viewsets
 from .enums import *
-from accounts.utils import TextUtils
+from core.utils import TextUtils
 from accounts.enums import Sms
-from accounts.webServices import SmsWebServices
+from core.webServices import SmsWebServices
+from django.urls import reverse
+from .serializers import *
+from core.filters import *
+from drf_yasg import openapi
+from drf_yasg.utils import swagger_auto_schema
+
 import datetime
 import logging
+import json
+
+# TODO change app name to payments
 
 logger = logging.getLogger("django")
-
-MERCHANT = '0c5db223-a20f-4789-8c88-56d78e29ff63'
 client = Client('https://www.zarinpal.com/pg/services/WebGate/wsdl')
-email = ''  # Optional
-mobile = ''  # Optional
-CallbackURL = '/payment/verify/'
 
 
 # compare amount of request with courses
-def is_valid(courses_id_list, amount, discount):
-    courses = Course.objects.filter(id__in=courses_id_list)
+def is_valid(installments_id_list, amount, discount):
+    installments = Installment.objects.filter(id__in=installments_id_list)
     total_price = 0
-    for course in courses:
-        total_price += course.get_amount_payable()
-    if discount is not None:
-        total_price = total_price - compute_discount(courses_id_list, total_price, discount)
+    for installment in installments:
+        total_price += installment.get_amount_payable()
+    if discount:
+        total_price = total_price - compute_discount(installments_id_list, total_price, discount)
     return True if int(total_price) == amount else False
 
 
@@ -42,7 +41,7 @@ class SendRequest(APIView):
 
     def post(self, request):
         user = request.user
-        courses_id_list = request.data["total_id"].split()
+        installments_id_list = json.loads(request.data["total_id"])
         try:
             amount = int(float(request.data["total_pr"]))
             code = request.data['code']
@@ -58,41 +57,43 @@ class SendRequest(APIView):
                     discount = None
         except:
             discount = None
-        if courses_id_list and is_valid(courses_id_list, amount, discount):
+        if installments_id_list and is_valid(installments_id_list, amount, discount):
             # handel free courses
             if amount == 0:
-                for course_id in courses_id_list:
-                    user.courses.add(course_id)
+                for installment_id in installments_id_list:
+                    user.installments.add(installment_id)
                 user.save()
-                if request.accepted_renderer.format == 'html':
-                    return render(request, 'dashboard/success_shopping.html')
-                return Response({'massage': 'خرید موفق'}, status=status.HTTP_201_CREATED)
+                # if request.accepted_renderer.format == 'html':
+                return render(request, 'dashboard/success_shopping.html')
+                # return Response({'message': 'خرید موفق'}, status=status.HTTP_201_CREATED)
 
             # request to zarinpal
             else:
-                description = pay_description(courses_id_list, amount, discount, request)
+                description = pay_description(installments_id_list, amount, discount, request)
                 try:
                     url = request.data['url']
                 except:
-                    url = request.scheme + "://" + request.get_host() + CallbackURL
+                    # url = request.scheme + "://" + request.get_host() + reverse('payment_verify')
+                    url = request.build_absolute_uri(reverse('payment_verify'))
                 result = client.service.PaymentRequest(
-                    MERCHANT, amount, description, email, mobile, url)
+                    MERCHANT.merchant.value, amount, description, '', '', url)
                 if result.Status == 100:
                     new_pay = Pay_History.objects.create(purchaser=request.user, amount=amount,
-                                                         courses=request.data["total_id"])
-                    if request.accepted_renderer.format == 'html':
-                        return redirect('https://www.zarinpal.com/pg/StartPay/' + str(result.Authority))
-                    else:
-                        return Response({'url': 'https://www.zarinpal.com/pg/StartPay/' + str(result.Authority)})
+                                                         installments=TextUtils.convert_list_to_string(
+                                                             installments_id_list, " "))
+                    # if request.accepted_renderer.format == 'html':
+                    return redirect('https://www.zarinpal.com/pg/StartPay/' + str(result.Authority))
+                    # else:
+                    #     return Response({'url': 'https://www.zarinpal.com/pg/StartPay/' + str(result.Authority)})
                 else:
-                    if request.accepted_renderer.format == 'html':
-                        return render(request, 'dashboard/unsuccess_shopping.html', {'error': str(result.Status)})
-                    else:
-                        return Response(status=status.HTTP_406_NOT_ACCEPTABLE)
+                    # if request.accepted_renderer.format == 'html':
+                    return render(request, 'dashboard/unsuccess_shopping.html', {'error': str(result.Status)})
+                # else:
+                #     return Response(status=status.HTTP_406_NOT_ACCEPTABLE)
         else:
-            if request.accepted_renderer.format == 'html':
-                return redirect('/dashboard/shopping/')  # what's up noob :)
-            return Response(status=status.HTTP_406_NOT_ACCEPTABLE)
+            # if request.accepted_renderer.format == 'html':
+            return redirect('/dashboard/shopping/')  # what's up noob :)
+        # return Response(status=status.HTTP_406_NOT_ACCEPTABLE)
 
 
 class Verify(APIView):
@@ -111,17 +112,17 @@ class Verify(APIView):
         new_pay.submit_date = now
         if request.GET.get('Status') == 'OK':
             result = client.service.PaymentVerification(
-                MERCHANT, request.GET['Authority'], new_pay.amount)
+                MERCHANT.merchant.value, request.GET.get('Authority'), new_pay.amount)
             if result.Status == 100:
-                courses_id_list = new_pay.courses.split()
+                installment_id_list = new_pay.installments.split()
                 user = request.user
-                for course_id in courses_id_list:
-                    user.courses.add(course_id)
-                    user.save()
-                    new_pay.is_successful = True
-                    new_pay.payment_code = str(result.RefID)
-                    new_pay.save()
-
+                for installment_id in installment_id_list:
+                    user.installments.add(installment_id)
+                user.save()
+                new_pay.is_successful = True
+                new_pay.payment_code = str(result.RefID)
+                new_pay.save()
+                # this try is for events
                 try:
                     event = Event.objects.get(user__id=request.user.id, is_active=True)
                     event.is_active = False
@@ -130,7 +131,6 @@ class Verify(APIView):
                     related_user.credit += float(Events[event.type + "_AMOUNT"].value)
                     related_user.save()
                     to = "0" + related_user.phone_number
-
                     text = TextUtils.replacer(Sms.increaseCreditText.value, [str(Events[event.type + "_AMOUNT"].value),
                                                                              str(int(related_user.credit))])
                     sendSms = SmsWebServices.send_sms(to, text, None)
@@ -168,9 +168,18 @@ class Verify(APIView):
 class ComputeDiscount(APIView):
     renderer_classes = [TemplateHTMLRenderer, JSONRenderer]
 
-    def post(self, request):
-        courses_id_list = request.data["total_id"].split()
-        code = request.data['code']
+    @swagger_auto_schema(manual_parameters=[
+        openapi.Parameter(name='total_id', in_=openapi.IN_QUERY, required=True, type=openapi.TYPE_STRING,
+                          description='this is list of installment id', format='[1,2,3,5]'),
+        openapi.Parameter(name='code', in_=openapi.IN_QUERY, required=True, type=openapi.TYPE_STRING,
+                          description='this is discount code'),
+        openapi.Parameter(name='total_pr', in_=openapi.IN_QUERY, required=True, type=openapi.TYPE_STRING,
+                          description='this is sum amount of installments')
+    ]
+    )
+    def get(self, request):
+        installments_list = json.loads(request.GET.get("total_id"))
+        code = request.GET.get('code')
         query = discount_query(code)
         # query &= (Q(courses__id__in=courses_id_list) | Q(courses=None))
         try:
@@ -180,13 +189,15 @@ class ComputeDiscount(APIView):
             else:
                 discount = Discount.objects.get(query)
         except:
-            return Response(status.HTTP_406_NOT_ACCEPTABLE)
-        amount = int(request.data["total_pr"])
-        discount_amount = compute_discount(courses_id_list, amount, discount)
+            return Response({'message': PaymentMassages.discountErrorMassage.value},
+                            status=status.HTTP_406_NOT_ACCEPTABLE)
+        amount = int(float(request.GET.get('total_pr')))
+        discount_amount = compute_discount(installments_list, amount, discount)
         if discount_amount == 0:
-            return Response(status.HTTP_406_NOT_ACCEPTABLE)
+            return Response({'message': PaymentMassages.discountErrorMassage.value},
+                            status=status.HTTP_406_NOT_ACCEPTABLE)
         amount = amount - discount_amount
-        return Response({'amount': amount})
+        return Response({'amount': amount, 'message': PaymentMassages.discountMassage.value})
 
 
 # query to find discount
@@ -198,20 +209,20 @@ def discount_query(code):
     return query
 
 
-def compute_discount(courses_id_list, amount, discount):
+def compute_discount(installments_id_list, amount, discount):
     if discount.id is None or discount.courses.count() == 0:
         return amount * discount.percent / 100
     else:
-        courses = Course.objects.filter(id__in=courses_id_list, discount__id=discount.id)
+        installments = Installment.objects.filter(id__in=installments_id_list, course__discount__id=discount.id)
         sum_amount = 0
-        for course in courses:
-            sum_amount += course.get_amount_payable()
+        for installment in installments:
+            sum_amount += installment.get_amount_payable()
         return sum_amount * discount.percent / 100
 
 
 # pay desc for zarin pal
 # in this method use replacer for create dynamic text
-def pay_description(courses_id_list, amount, discount, request):
+def pay_description(installments_id_list, amount, discount, request):
     text = ZarinPal.descriptionText.value
 
     if request.session.get('event_discount'):
@@ -227,6 +238,40 @@ def pay_description(courses_id_list, amount, discount, request):
     else:
         discount_text = ''
     text = TextUtils.replacer(text, [TextUtils.convert_list_to_string(
-        list(Course.objects.filter(id__in=courses_id_list).values_list('title', flat=True))), discount_text,
+        list(Course.objects.filter(installment__in=installments_id_list).values_list('title', flat=True))),
+        discount_text,
         request.user.get_full_name()])
     return text
+
+
+def shopping_cart(request):
+    try:
+        # for first pay of introducing
+        event = Event.objects.get(user__id=request.user.id, type=Event.Introducing, is_active=True)
+        request.session['event_discount'] = event.type
+    except:
+        pass
+    return render(request, 'dashboard/shopping-cart.html')
+
+
+class GetInstallmentViewSet(viewsets.ModelViewSet):
+    """
+                add list of installmentIds to params
+          """
+    queryset = Course.objects.all()
+    serializer_class = ShoppingCartSerializer
+    filter_backends = [ListFilter]
+    search_fields = ['id']
+    SEARCH_PARAM = 'id'
+    http_method_names = ['get', ]
+    pagination_class = None
+
+    def get_queryset(self):
+        if (self.request.GET.get(self.SEARCH_PARAM) not in (None, '')):
+            return super(GetInstallmentViewSet, self).get_queryset()
+        now = datetime.datetime.now()
+        installments = Installment.objects.filter(Q(start_date__gt=now) | Q(
+            end_date__gt=now + datetime.timedelta(
+                days=InstallmentModelEnum.installmentDateBefore.value))).exclude(user=self.request.user)
+        courses = self.request.user.courses().filter(installment__in=installments).distinct()
+        return courses

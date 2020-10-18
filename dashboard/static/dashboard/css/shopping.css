@@ -11,7 +11,7 @@
 }
 
 ::-webkit-scrollbar-thumb {
-    background-color: #06623b;
+    background-color: #065390;
     background-image: -webkit-linear-gradient(45deg, rgba(255, 255, 255, .2) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, .2) 50%, rgba(255, 255, 255, .2) 75%, transparent 75%, transparent)
 }
 
@@ -42,7 +42,7 @@
 
 .cart-title {
     text-align: center;
-    background-color: #06623b;
+    background-color: #065390;
     color: white;
     padding: 20px;
     border-radius: 4px;
@@ -68,22 +68,22 @@
     margin-bottom: 20px;
     text-align: center
 }
-
 .cart-total-price {
     font-family: 'Vazir_light';
     margin-top: 5px;
 }
 
 .button-purchase {
-    background-color: #649d66;
+    background-color: #065390;
     color: #FFFFFF;
     height: 50px;
 }
 
 .button-purchase:hover {
-    background-color: #06623b;
+    background-color: #065390;
     color: #FFFFFF;
 }
+
 
 /* Shopping card with filter CSS */
 .shopping-cards {
@@ -344,58 +344,6 @@
     font-family: 'Vazir_light', sans-serif;
     font-size: 15px;
     padding: 10px 6px 6px 6px;
-}
-
-.cart-button-to-delete {
-    direction: ltr;
-    height: 50px;
-    margin-top: -5px;
-}
-
-.cart-button-to-delete img {
-    width: 20px;
-    height: 20px;
-    margin-right: 5px;
-}
-
-.cart-button-to-delete button {
-    border: none;
-    color: white;
-    font-size: 16px;
-    cursor: pointer;
-    height: 50px;
-    text-align: center;
-}
-
-.cart-button-to-delete button:hover {
-    border: none;
-    color: white;
-    font-size: 16px;
-    cursor: pointer;
-    height: 50px;
-    text-align: center;
-}
-
-.btn-remove {
-    background-color: #da2d2d;
-    border: none;
-    color: white;
-    font-size: 16px;
-    cursor: pointer;
-    height: 50px;
-    text-align: center;
-}
-
-.btn-remove:focus,
-.btn-remove:hover {
-    background-color: #da2d2d;
-    border: none;
-    color: white;
-    font-size: 16px;
-    cursor: pointer;
-    height: 50px;
-    text-align: center;
-    box-shadow: none;
 }
 
 /* CSS for pagination */

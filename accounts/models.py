@@ -1,26 +1,17 @@
-from django.core.cache import cache
-import pytz
 from django.db import models
 from django.core.mail import send_mail
 from django.contrib.auth.base_user import AbstractBaseUser
 from django.contrib.auth.models import PermissionsMixin
-from django.db.models.signals import post_save
-from django.dispatch import receiver
-from django.template.defaultfilters import default
 from accounts.enums import RoleCodes
 import datetime
 import jdatetime
 from tinymce import models as tinymce_models
 from django.core.exceptions import ValidationError
 from django.core.validators import MaxValueValidator, MinValueValidator
-from django.db.models import Q
-from django.db.models import Max
-
-# import for compress images
-import sys
-from PIL import Image
-from io import BytesIO
-from django.core.files.uploadedfile import InMemoryUploadedFile
+from django.db.models import Q, Max, IntegerField, F, Sum
+from django.db.models import Value as V
+from django.db.models.functions import Concat
+from .enums import InstallmentModelEnum
 
 
 # Create your models here.
@@ -36,13 +27,17 @@ class User(AbstractBaseUser, PermissionsMixin):
     is_active = models.BooleanField('فعال', default=True)
     avatar = models.ImageField(upload_to='avatars/', null=True, blank=True)
     gender = models.BooleanField(default=True)
-    role = models.ForeignKey('Role', on_delete=models.DO_NOTHING, verbose_name="نقش")
-    national_code = models.CharField("کد ملی", max_length=10, null=True, blank=True)
-    city = models.ForeignKey('City', blank=True, null=True, on_delete=models.DO_NOTHING, verbose_name="شهر")
+    role = models.ForeignKey(
+        'Role', on_delete=models.DO_NOTHING, verbose_name="نقش")
+    national_code = models.CharField(
+        "کد ملی", max_length=10, null=True, blank=True)
+    city = models.ForeignKey(
+        'City', blank=True, null=True, on_delete=models.DO_NOTHING, verbose_name="شهر")
     address = models.CharField("آدرس", max_length=255, null=True, blank=True)
     phone_number = models.CharField("تلفن همراه", max_length=12, unique=True)
     grades = models.ManyToManyField('Grade', blank=True, verbose_name="پایه")
-    courses = models.ManyToManyField('Course', blank=True)
+    # courses = models.ManyToManyField('Course', blank=True )
+    installments = models.ManyToManyField('Installment', blank=True)
     is_superuser = models.BooleanField(default=False)
     is_staff = models.BooleanField(default=True)
     credit = models.FloatField("اعتبار", default=float(0),
@@ -63,6 +58,10 @@ class User(AbstractBaseUser, PermissionsMixin):
     def __str__(self):
         return self.get_full_name()
 
+    # get courses from user installments
+    def courses(self):
+        return Course.objects.filter(installment__in=self.installments.all()).distinct()
+
     def get_full_name(self):
         full_name = '%s %s' % (self.first_name, self.last_name)
         return full_name.strip()
@@ -71,17 +70,6 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     def get_short_name(self):
         return self.first_name
-
-    #   #compress images
-    # def compressImage(self,uploadedImage):
-    #     imageTemproary = Image.open(uploadedImage)
-    #     outputIoStream = BytesIO()
-    #     imageTemproaryResized = imageTemproary.resize((20,20), Image.ANTIALIAS)
-    #     imageTemproary = imageTemproary.convert('RGB')
-    #     imageTemproary.save(outputIoStream , format='JPEG', quality=60)
-    #     outputIoStream.seek(0)
-    #     uploadedImage = InMemoryUploadedFile(outputIoStream,'ImageField', "%s.jpg" % uploadedImage.name.split('.')[0], 'image/jpeg', sys.getsizeof(outputIoStream), None)
-    #     return uploadedImage
 
     def email_user(self, subject, message, from_email=None, **kwargs):
         send_mail(subject, message, from_email, [self.email], **kwargs)
@@ -115,6 +103,13 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     def is_student(self):
         return self.role.code == RoleCodes.STUDENT.value
+
+
+class TeacherUser(User):
+    class Meta:
+        proxy = True
+        verbose_name = 'اساتید'
+        verbose_name_plural = 'اساتید'
 
 
 # Roles Model
@@ -151,7 +146,8 @@ class Grade(models.Model):
     Other = 'OTHER'
     Grade_CHOICES = ((First, 'ابتدایی'), (Second, 'متوسطه اول'), (Third, 'متوسطه دوم'),
                      (Other, 'مهارتی'))
-    grade_choice = models.CharField("پایه", max_length=10, choices=Grade_CHOICES, default='Other')
+    grade_choice = models.CharField(
+        "پایه", max_length=10, choices=Grade_CHOICES, default='Other')
     code = models.CharField("کد", max_length=10)
     title = models.CharField("عنوان", max_length=30)
 
@@ -169,7 +165,8 @@ class Lesson(models.Model):
     code = models.CharField("کد", max_length=10)
     title = models.CharField("عنوان", max_length=30)
     grades = models.ManyToManyField('Grade', blank=True, verbose_name="پایه")
-    parent = models.ForeignKey('self', blank=True, null=True, on_delete=models.DO_NOTHING, verbose_name="درس پدر")
+    parent = models.ForeignKey(
+        'self', blank=True, null=True, on_delete=models.DO_NOTHING, verbose_name="درس پدر")
     unique_together = [['title', 'grade']]
 
     def __str__(self):
@@ -184,18 +181,26 @@ class Lesson(models.Model):
 class Course(models.Model):
     code = models.CharField("کد", max_length=10, unique=True)
     title = models.CharField("عنوان", max_length=30)
-    lesson = models.ForeignKey('Lesson', on_delete=models.DO_NOTHING, verbose_name="درس")
-    grade = models.ForeignKey('Grade', blank=True, null=True, on_delete=models.DO_NOTHING, verbose_name="پایه")
-    teacher = models.ForeignKey(User, on_delete=models.DO_NOTHING, verbose_name="مدرس")
+    lesson = models.ForeignKey(
+        'Lesson', on_delete=models.DO_NOTHING, verbose_name="درس")
+    grade = models.ForeignKey(
+        'Grade', blank=True, null=True, on_delete=models.DO_NOTHING, verbose_name="پایه")
+    teacher = models.ForeignKey(
+        User, on_delete=models.DO_NOTHING, verbose_name="مدرس")
     start_date = models.DateTimeField("تاریخ شروع")
     end_date = models.DateTimeField("تاریخ پایان")
-    amount = models.FloatField("مبلغ", default=float(0),
-                               validators=[MinValueValidator(0)]
-                               )
+    # amount = models.FloatField("مبلغ", default=float(0),
+    #                             validators=[MinValueValidator(0)]
+    #                             )
     url = models.URLField("لینک", blank=True, null=True)
-    image = models.ImageField(upload_to='courses_image/', default='defaults/course.jpg')
-    description = tinymce_models.HTMLField('توضیحات خرید درس', null=True, blank=True)
-    private_description = tinymce_models.HTMLField('توضیحات درس', null=True, blank=True)
+    image = models.ImageField(
+        upload_to='courses_image/', default='defaults/course.jpg')
+    description = tinymce_models.HTMLField(
+        'توضیحات خرید درس', null=True, blank=True)
+    private_description = tinymce_models.HTMLField(
+        'توضیحات درس', null=True, blank=True)
+    is_active = models.BooleanField(default=True, verbose_name='فعال',
+                                    help_text='در صورتی که این گزینه غیر فعال باشد درس در قسمت خرید درس نشان داده نمیشود')
 
     class Meta:
         ordering = ['start_date']
@@ -205,26 +210,12 @@ class Course(models.Model):
     def __str__(self):
         return self.title
 
-    # def is_course_active(self):
-    #     now = datetime.datetime.now()
-    #     a = now - self.start_date
-    #     b = now - self.end_date
-    #     if a.total_seconds() >= 0 and b.total_seconds() < 0:
-    #         return True
-    #     else:
-    #         return False
-
     def clean_fields(self, exclude=None):
         super().clean_fields(exclude=exclude)
         if self.end_date and self.start_date and self.end_date < self.start_date:
             raise ValidationError("تاریخ پایان باید پس از تاریخ شروع باشد")
 
     def get_first_class(self, exclude=None):
-        if len(self.course_calendar_set.all()) == 0:
-            return None
-        return self.course_calendar_set.first()
-
-    def get_next_class(self, exclude=None):
         if len(self.course_calendar_set.all()) == 0:
             return None
         now = datetime.datetime.now()
@@ -250,22 +241,40 @@ class Course(models.Model):
             return discount.first()
         return None
 
+    # for first future installments
+    def get_next_installment(self, exclude=None):
+        now = datetime.datetime.now()
+        return self.get_next_installments().first()
+
+    # for future installments
+    def get_next_installments(self, exclude=None):
+        now = datetime.datetime.now()
+        installments = Installment.objects.filter(
+            Q(start_date__gt=now) | Q(
+                end_date__gt=now + datetime.timedelta(days=InstallmentModelEnum.installmentDateBefore.value)),
+            course__id=self.id)
+        if exclude:
+            installments = installments.exclude(**exclude)
+        return installments
+
+    def students(self):
+        return User.objects.filter(installments__in=self.installment_set.all())
+
+    def get_amount(self, exclude=None):
+        return self.get_next_installments().aggregate(Sum('amount'))['amount__sum']
+
     def get_amount_payable(self, exclude=None):
         discount = self.get_discount()
+        amount = self.get_amount()
         if discount:
-            return self.amount * (100 - discount.percent) / 100
-        return self.amount
-
-    def get_discount_amount(self, exclude=None):
-        discount = self.get_discount()
-        if discount:
-            return self.amount * discount.percent / 100
-        return 0
+            return amount * (100 - discount.percent) / 100
+        return amount
 
 
 # Course_Calendar Model
 class Course_Calendar(models.Model):
-    course = models.ForeignKey('Course', on_delete=models.CASCADE, verbose_name="دوره")
+    course = models.ForeignKey(
+        'Course', on_delete=models.CASCADE, verbose_name="دوره")
     start_date = models.DateTimeField("تاریخ شروع")
     end_date = models.DateTimeField("تاریخ پایان")
 
@@ -298,12 +307,15 @@ def document_directory_path(instance, filename):
 
 # Documents_model
 class Document(models.Model):
-    course = models.ForeignKey('Course', on_delete=models.DO_NOTHING, verbose_name="دوره")
-    upload_document = models.FileField('فایل', upload_to=document_directory_path, null=True, blank=True)
+    course = models.ForeignKey(
+        'Course', on_delete=models.DO_NOTHING, verbose_name="دوره")
+    upload_document = models.FileField(
+        'فایل', upload_to=document_directory_path, null=True, blank=True)
     upload_date = models.DateTimeField("تاریخ بارگذاری", auto_now_add=True)
     title = models.CharField("عنوان", max_length=60)
     description = models.TextField("توضیحات", null=True, blank=True)
-    sender = models.ForeignKey(User, on_delete=models.DO_NOTHING, verbose_name="فرد بارگذار")
+    sender = models.ForeignKey(
+        User, on_delete=models.DO_NOTHING, verbose_name="فرد بارگذار")
 
     class Meta:
         ordering = ['-upload_date']
@@ -320,11 +332,12 @@ class Document(models.Model):
 
 
 class Pay_History(models.Model):
-    purchaser = models.ForeignKey(User, on_delete=models.DO_NOTHING, verbose_name="خریدار")
+    purchaser = models.ForeignKey(
+        User, on_delete=models.DO_NOTHING, verbose_name="خریدار")
     amount = models.FloatField("هزینه", default=float(0))
     is_successful = models.BooleanField('موفق', default=False)
     submit_date = models.DateTimeField("تاریخ ثبت", null=True)
-    courses = models.TextField()
+    installments = models.TextField()
     payment_code = models.CharField("شناسه پرداخت", max_length=20)
 
     class Meta:
@@ -338,17 +351,20 @@ class Pay_History(models.Model):
         else:
             "-"
 
-    def get_courses(self):
-        courses_id_list = self.courses.split()
-        return list(Course.objects.filter(id__in=courses_id_list).values_list('title', flat=True))
+    def get_installments(self):
+        installments_id_list = self.installments.split()
+        return list(Installment.objects.filter(id__in=installments_id_list).annotate(
+            full_title=Concat('title', V(' '), 'course__title')).values_list('full_title', flat=True))
 
-    get_courses.short_description = 'دروس خریداری شده'
+    get_installments.short_description = 'قسط های خریداری شده'
     submit_date_decorated.short_description = 'تاریخ ثبت'
 
 
 class Discount(models.Model):
-    title = models.CharField("نام تخفیف", max_length=30, null=True, blank=True, unique=True)
-    code = models.CharField("کد", max_length=15, null=True, blank=True, unique=True)
+    title = models.CharField("نام تخفیف", max_length=30,
+                             null=True, blank=True, unique=True)
+    code = models.CharField("کد", max_length=15,
+                            null=True, blank=True, unique=True)
     percent = models.IntegerField("درصد",
                                   default=10,
                                   validators=[
@@ -358,7 +374,8 @@ class Discount(models.Model):
                                   )
     start_date = models.DateTimeField("تاریخ شروع")
     end_date = models.DateTimeField("تاریخ پایان", null=True, blank=True)
-    courses = models.ManyToManyField('Course', blank=True, verbose_name="درس های تخفیف خورده")
+    courses = models.ManyToManyField(
+        'Course', blank=True, verbose_name="درس های تخفیف خورده")
 
     class Meta:
         ordering = ['-start_date']
@@ -371,7 +388,15 @@ class Discount(models.Model):
     def clean_fields(self, exclude=None):
         super().clean_fields(exclude=exclude)
         if self.end_date and self.start_date and self.end_date <= self.start_date:
-            raise ValidationError("تاریخ پایان باید پس از تاریخ شروع باشد یا خالی باشد")
+            raise ValidationError(
+                "تاریخ پایان باید پس از تاریخ شروع باشد یا خالی باشد")
+
+
+class DiscountWithoutCode(Discount):
+    class Meta:
+        proxy = True
+        verbose_name = 'تخفیف بدون کد'
+        verbose_name_plural = 'تخفیف بدون کد'
 
 
 class Event(models.Model):
@@ -382,7 +407,8 @@ class Event(models.Model):
         # (Introducer, 'معرفی کننده'),
         (Introducing, 'معرفی شونده'),
     ]
-    user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name="کاربر", related_name='event')
+    user = models.ForeignKey(
+        User, on_delete=models.CASCADE, verbose_name="کاربر", related_name='event')
     change_date = models.DateTimeField("تاریخ آخرین تغییر", auto_now=True)
     type = models.CharField('نوع', max_length=5, choices=TYPE_CHOICES)
     is_active = models.BooleanField('فعال', default=True)
@@ -405,7 +431,8 @@ class Support(models.Model):
     public = 'PUBLIC'
     teacher = 'TEACHER'
     TYPE_CHOICES = ((public, 'عمومی'), (teacher, 'استاد'),)
-    type_choice = models.CharField("نوع", max_length=7, choices=TYPE_CHOICES, default='PUBLIC')
+    type_choice = models.CharField(
+        "نوع", max_length=7, choices=TYPE_CHOICES, default='PUBLIC')
     code = models.CharField("کد", max_length=10, unique=True)
     title = models.CharField("عنوان", max_length=30)
     description = models.TextField('توضیحات', null=True, blank=True)
@@ -424,6 +451,7 @@ class Support(models.Model):
 
     update_date_decorated.short_description = 'تاریخ آخرین تغییر'
 
+
 # comment it because it can be heavy on server
 
 # this signal clear the cache after adding a new course or support we can add it for other table like user
@@ -432,3 +460,46 @@ class Support(models.Model):
 # @receiver(post_save, sender=Support)
 # def clear_cache(sender, instance, **kwargs):
 #     cache.clear()
+
+
+# Installment model Model
+class Installment(models.Model):
+    course = models.ForeignKey(
+        'Course', on_delete=models.CASCADE, verbose_name="دوره")
+    start_date = models.DateField("تاریخ شروع")
+    end_date = models.DateField("تاریخ پایان")
+    title = models.CharField("عنوان", max_length=30)
+    amount = models.FloatField("مبلغ", default=float(0),
+                               validators=[MinValueValidator(0)]
+                               )
+
+    class Meta:
+        ordering = ['start_date']
+        verbose_name_plural = "قسط"
+        verbose_name = "قسط"
+
+    def __str__(self):
+        return self.title + " " + self.course.title
+
+    def clean_fields(self, exclude=None):
+        super().clean_fields(exclude=exclude)
+        if not self.start_date or not self.end_date or self.end_date < self.start_date:
+            raise ValidationError("تاریخ پایان باید پس از تاریخ شروع باشد")
+        if self.start_date < self.course.start_date.date() or self.end_date > self.course.end_date.date():
+            raise ValidationError("تاریخ قسط قبل / بعد از تاریخ دوره است")
+        query = Q(course__id=self.course.id)
+        if self.id is not None:
+            query &= ~Q(id=self.id)
+        query &= ((Q(start_date__gte=self.start_date) & (Q(end_date__lte=self.end_date))) |
+                  (Q(start_date__lte=self.start_date) & (Q(end_date__gte=self.end_date))) |
+                  ((Q(start_date__lte=self.start_date)) & (Q(end_date__gte=self.start_date))) |
+                  (Q(end_date__gte=self.end_date) & (Q(end_date__lte=self.end_date)))
+                  )
+        if Installment.objects.filter(query).exists():
+            raise ValidationError("تاریخ قسط تداخل دارد")
+
+    def get_amount_payable(self, exclude=None):
+        discount = self.course.get_discount()
+        if discount:
+            return self.amount * (100 - discount.percent) / 100
+        return self.amount

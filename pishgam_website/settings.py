@@ -46,7 +46,7 @@ LOGGING = {
             'level': 'DEBUG',
             'class': 'logging.handlers.TimedRotatingFileHandler',
             'filename': os.path.join(BASE_DIR, 'bug.log'),
-            'when': 'D',  # this specifies the interval
+            'when': 'W0',  # this specifies the interval
             'interval': 1,  # defaults to 1, only necessary for other values
             'backupCount': 10,  # how many backup file to keep, 10 days
             'formatter': 'verbose',
@@ -68,6 +68,7 @@ SESSION_COOKIE_SECURE = False
 
 INSTALLED_APPS = [
     'accounts',
+    'dashboard',
     'rest_framework',
     'rest_framework.authtoken',
     'jalali_date',
@@ -213,8 +214,8 @@ REST_FRAMEWORK = {
     'DEFAULT_FILTER_BACKENDS': ('django_filters.rest_framework.DjangoFilterBackend',
                                 'rest_framework.filters.SearchFilter',
                                 'rest_framework.filters.OrderingFilter'),
-    'EXCEPTION_HANDLER': 'accounts.exceptionHandler.api_exception_handler',  # custom exception handler
-    'DEFAULT_PAGINATION_CLASS': 'accounts.pagination.Pagination',  # custom pagination
+    'EXCEPTION_HANDLER': 'core.exceptionHandler.api_exception_handler',  # custom exception handler
+    'DEFAULT_PAGINATION_CLASS': 'core.pagination.Pagination',  # custom pagination
     'PAGE_SIZE': 6
 
 }

@@ -1,0 +1,104 @@
+{% extends 'dashboard/base.html' %}
+{% load static %}
+{% load jformat %}
+{% load pay_enums %}
+<!-- Title block of base.html -->
+{% block title %}سبد خرید{% endblock %}
+
+<!-- CSS files -->
+{% block CSSfiles %}
+    <link rel="stylesheet" href="{% static 'dashboard/css/shopping_cart.css' %}">
+    <link rel="stylesheet" href="{% static 'dashboard/css/course-installment-component.css' %}">
+{% endblock %}
+
+
+<!-- Content of page -->
+{% block content %}
+    <section class="shopping-cart">
+        <!-- Cart Section use cart-list for shopping.js -->
+        <div class="cart-section mb-4">
+            <!-- first buy event -->
+            {% if 'event_discount' in request.session %}
+                <div class="alert alert-info alert-dismissable">
+                    <a class="panel-close close" data-dismiss="alert">×</a>
+                    <i class="fas fa-percentage ml-1"></i>
+                    <strong>
+                        تبریک !
+                        برای اولین خرید خود
+                        {% event_discount request.session.event_discount %}
+                        درصد تخفیف دارید.
+                        برای اعمال آن بر روی دکمه اعمال تخفیف کلیک کنید.
+                    </strong>
+                </div>
+            {% endif %}
+            <div class="cart-title bg-secondary text-white p-3">
+                <h1 class="h4 vazir-bold">
+                    <img src="{% static 'home/images/icons/shopping-basket.svg' %}" alt="shopping cart" width="35">
+                    سبد خرید
+                </h1>
+            </div>
+            <!-- cart items -->
+            <div id="cartListItems">
+            </div>
+
+            <div class="container mt-3 px-2">
+                <form id="shopping-cart-form" action="{% url 'payment_request' %}" method="post">
+                    {% csrf_token %}
+                    <!-- total installments and price -->
+                    <input id="totalId" type="hidden" name="total_id">
+                    <input id="totalPrice" type="hidden" name="total_pr" value="0">
+                    <div class="row">
+                        <div class="col-md-8 d-flex text-sm-center align-items-center mb-2">
+                            <!-- compute discount -->
+                            <strong class="mb-0 text-nowrap" for="discountCode">کد تخفیف</strong>
+                            <input type="text" class="form-control-sm mx-2 w-25" id="discountCode" name="code"
+                                    {% if 'event_discount' in request.session %} value="{{ request.user.phone_number }}"
+                                   readonly{% endif %}>
+                            <button type="button" class="btn btn-info ml-auto btn-sm" id="discountButton">
+                                اعمال کد تخفیف
+                            </button>
+                        </div>
+                        <div class="col-md-4 text-center mb-3">
+                            <p class="mb-0 text-md-left">
+                                <strong>مبلغ پرداختی کل : </strong>
+                                <span id="totalPriceText">0</span>
+                                تومان
+                            </p>
+                        </div>
+                    </div>
+                    <div class="row justify-content-center">
+                        <input type="submit" class="btn btn-success text-center" id="payButton" value="پرداخت">
+                    </div>
+                </form>
+            </div>
+        </div>
+
+
+        <!-- section for course installment -->
+        <div class="alert alert-info vazir-bold" role="alert">
+            <i class="fas fa-info-circle"></i>
+            در صورت تمایل به پرداخت شهریه به صورت قسطی از این قسمت اقدام کنید.
+        </div>
+        <hr>
+        <div id="installments" class="container">
+
+        </div>
+
+    </section>
+{% endblock %}
+
+<!-- JS files -->
+{% block JSfile %}
+    <!-- base validation js -->
+    <script src="{% static 'dashboard/js/validation-base.js' %}"></script>
+    <!-- modal -->
+    <script src="{% static 'home/js/modal.js' %}"></script>
+    <!-- config shopping cart js -->
+    <script src="{% static 'dashboard/js/shopping-cart/shopping-cart.js' %}"></script>
+    <!-- shopping carts component -->
+    <script src="{% static 'dashboard/js/shopping-cart/shopping-cart-component.js' %}"></script>
+    <!-- course installment component render -->
+    <script src="{% static 'dashboard/js/shopping-cart/course-installment-component.js' %}"></script>
+    <!-- persian date formatter -- hint: read doc: https://github.com/babakhani/PersianDate -->
+    <script src="{% static "home/js/persian-date.min.js" %}"></script>
+{% endblock %}

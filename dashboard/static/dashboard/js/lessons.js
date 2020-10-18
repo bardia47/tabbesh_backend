@@ -64,16 +64,16 @@ function renderLessenCards(courseCards) {
         // if user is student --> show file manager otherwise show teacher panel
         if ($("#roleStatus").val() === "False") {
             buttonToClassPanel = `
-            <button onclick="location.href='teacher_course_panel/${courseCard.code}'" class="btn btn-dark mr-2" type="button">
+            <button onclick="location.href='teacher_course_panel/${courseCard.code}'" class="btn btn-dark ml-2" type="button">
                 <img src="/static/home/images/icons/teacher-panel.svg" alt="teacher panel" />
                 پنل کلاس
             </button>
             `
         } else {
             buttonToClassPanel = `
-            <button onclick="location.href='files/${courseCard.code}'" class="btn btn-dark mr-2" type="button">
-                <img src="/static/home/images/icons/document.svg" alt="button link to class" />
-                جزوه ها
+            <button onclick="location.href='student_course_panel/${courseCard.code}'" class="btn btn-dark ml-2" type="button">
+                <img src="/static/home/images/icons/teacher-panel.svg" alt="student panel" />
+                پنل کلاس
             </button>
             `
         }
@@ -177,9 +177,9 @@ function renderPagination(pageNumber, urlAjax) {
     // $('.pagination').append(`<a class="next page-numbers" href="${hostName}/dashboard/get_lessons/"> Prev </a>`)
     for (let number = 1; number <= pageNumber; number++) {
         if (page == number) {
-            $('.pagination').append(`<span aria-current="page" class="page-numbers current ml-3">${number}</span>`)
+            $('.pagination').append(`<span aria-current="page" class="page-numbers current mr-3">${number}</span>`)
         } else {
-            $('.pagination').append(`<a class="page-numbers ml-3" href="` + url + `?page=${number}">${number}</a>`)
+            $('.pagination').append(`<a class="page-numbers mr-3" href="` + url + `?page=${number}">${number}</a>`)
         }
     }
     $(".page-numbers").click(function (event) {
@@ -191,3 +191,12 @@ function renderPagination(pageNumber, urlAjax) {
     $(".pagination-wrapper").show();
     $("html, body").animate({scrollTop: 0}, "slow");
 }
+
+
+// clear session for installment
+function installmentPayment(){
+
+}
+$("#installmentPaymentBtn").click(function (){
+
+})

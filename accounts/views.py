@@ -2,21 +2,17 @@ from django.shortcuts import render, redirect
 from django.contrib import auth
 from accounts.models import *
 from accounts.serializers import *
-from rest_framework.parsers import JSONParser
-from django.db.models import Q
 from rest_framework.views import APIView
 from rest_framework.renderers import TemplateHTMLRenderer, JSONRenderer
 from rest_framework.response import Response
-from rest_framework.permissions import AllowAny, IsAuthenticated
+from rest_framework.permissions import AllowAny
 from rest_framework.decorators import permission_classes
-from zeep.xsd.elements import element
-from django.core.serializers import serialize
 from rest_framework import status
 from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.authtoken.serializers import AuthTokenSerializer
 from django.core.exceptions import ObjectDoesNotExist
-from accounts.enums import RoleCodes
 from rest_framework import exceptions
+from django.contrib.auth.hashers import make_password
 
 
 # Create your views here.
@@ -29,6 +25,8 @@ class SignUp(APIView):
     renderer_classes = [TemplateHTMLRenderer, JSONRenderer]
 
     def get(self, request):
+        if request.user.is_authenticated:
+            return redirect('dashboard')
         grades = Grade.objects.all()
         cities = City.objects.all()
         if request.accepted_renderer.format == 'html':

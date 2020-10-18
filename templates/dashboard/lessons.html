@@ -30,16 +30,20 @@
                 <p class="mt-2 text-center vazir-light" style="font-size: 15px;">
                     می خوای کلاس جدید ثبت نام کنی ؟
                 </p>
-                <a class="btn btn-dark text-white m-1 mr-4" href="{% url 'shopping' %}">آره بزن بریم</a>
+                <a class="btn btn-dark text-white m-1 ml-4" href="{% url 'shopping' %}">آره بزن بریم</a>
             </div>
         </div>
     {% else %}
         <!-- active courses section -->
         <div class="container">
-            <h1 class="text-left vazir-bold mb-3" style="font-size: 20px;">
-                <img class="mr-2" src="{% static 'dashboard/images/icons/active-course.svg' %}" width="48" height="48">
-                دوره های در حال برگزاری
-            </h1>
+            <div class="d-flex align-items-center">
+                <h1 class="text-right vazir-bold mb-3" style="font-size: 20px;">
+                    <img class="ml-2" src="{% static 'dashboard/images/icons/active-course.svg' %}" width="48"
+                         height="48">
+                    دوره های در حال برگزاری
+                </h1>
+                <a onclick="sessionStorage.setItem('totalId' , '')" class="btn btn-secondary mr-auto" href="/payment/shopping-cart/">پرداخت شهریه</a>
+            </div>
             <div id="activeCourses" class="row">
 
             </div>
@@ -48,7 +52,7 @@
     <hr>
     <!-- finished courses section -->
     <div class="container">
-        <h1 class="text-left vazir-bold mb-3 gray-img" style="font-size: 20px;">
+        <h1 class="text-right vazir-bold mb-3 gray-img" style="font-size: 20px;">
             <img class="mr-2" src="{% static 'dashboard/images/icons/finished-course.svg' %}" width="40" height="40">
             دوره هایی که قبلا در آن ها حضور داشتید
         </h1>

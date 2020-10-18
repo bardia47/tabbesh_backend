@@ -91,7 +91,7 @@ function teacherListRender(teachersList) {
         let teacherTemplate = `
         <div class="mx-2">
             <div class="card">
-                <img class="img-card mt-2" src="${teacher.avatar}" style="width: 150px !important; ; height: 150px !important;" alt="course image">
+                <img class="img-card mt-2 rounded-circle" src="${teacher.avatar}" style="width: 150px !important; ; height: 150px !important;" alt="course image">
                 <div class="card-body text-center">
                     <h4 class="text-nowrap">${teacher.get_full_name}</h4>
                     <h5 class="vazir-medium">${teacher.grade_choice}</h5>
@@ -331,6 +331,7 @@ function owlCarouselInitial(carouselId) {
         responsive: {
             0: {
                 items: 1,
+                dots:false,
             },
             720: {
                 items: 3,
