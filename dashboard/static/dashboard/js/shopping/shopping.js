@@ -298,7 +298,7 @@ function addToCartHandler(event) {
 
 // get shopping cart information
 function getShoppingCart(courseId) {
-    $.get(`/payment/get-installment/?id=${courseId}`, function (data) {
+    $.get(`/payment/installments/?id=${courseId}`, function (data) {
         renderShoppingCarts(data, false);
         animatedToCardList();
     });

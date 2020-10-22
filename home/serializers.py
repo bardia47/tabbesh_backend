@@ -7,7 +7,7 @@ class TeacherSerializer(serializers.HyperlinkedModelSerializer):
     grade_choice = serializers.SerializerMethodField('get_choices')
 
     class Meta:
-        model = User
+        model = TeacherUser
         fields = ('id', 'avatar', 'get_full_name', 'grade_choice', 'url')
         extra_kwargs = {
             'url': {'lookup_field': 'username'},
@@ -26,11 +26,11 @@ class TeacherDetailSerializer(serializers.ModelSerializer):
     courses = serializers.SerializerMethodField('get_courses')
 
     class Meta:
-        model = User
+        model = TeacherUser
         fields = ('avatar', 'get_full_name', 'grade_choice', 'description', 'courses')
 
     def get_courses(self, instance):
-        return ShoppingCourseSerializer(Course.objects.filter(teacher=instance), read_only=True, many=True).data
+        return ShoppingCourseSerializer((TeacherUser)(instance).get_shopping_courses(), read_only=True, many=True).data
 
     def get_choices(self, instance):
         grades = set()

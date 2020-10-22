@@ -10,10 +10,6 @@ class UserManager(BaseUserManager):
     use_in_migrations = True
 
     def _create_user(self, username, password, **extra_fields):
-        #         if not email:
-        #             raise ValueError('The given email must be set')
-        #         email = self.normalize_email(email)
-        #         user = self.model(email=email, **extra_fields)
         try:
             grades = extra_fields['grades']
             del extra_fields['grades']
@@ -33,15 +29,7 @@ class UserManager(BaseUserManager):
             else:
                 user.role = role.objects.get(code=RoleCodes.STUDENT.value)
         user.set_default_avatar()
-
-        # try:
-        #     user.city
-        # except ObjectDoesNotExist:
-        #     city = apps.get_model(app_label='accounts', model_name='City')
-        #     user.city = city.objects.get(code='1')    
-
         user.save(using=self._db)
-
         try:
             if grades:
                 user.grades.add(*grades)
@@ -56,8 +44,11 @@ class UserManager(BaseUserManager):
 
     def create_superuser(self, username, password, **extra_fields):
         extra_fields.setdefault('is_superuser', True)
-
         if extra_fields.get('is_superuser') is not True:
             raise ValueError('Superuser must have is_superuser=True.')
-
         return self._create_user(username, password, **extra_fields)
+
+# not working :(((
+# class TeacherUserManager(UserManager):
+#     def get_queryset(self):
+#         return super(TeacherUserManager, self).get_queryset().filter(role__code=RoleCodes.TEACHER.value)

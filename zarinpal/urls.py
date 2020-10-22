@@ -5,7 +5,7 @@ from django.conf.urls.static import static
 from rest_framework.routers import DefaultRouter
 
 router = DefaultRouter()
-router.register('get-installment', GetInstallmentViewSet)
+router.register('installments',InstallmentViewSet)
 
 urlpatterns = [
     path('request/', SendRequest.as_view(), name='payment_request'),

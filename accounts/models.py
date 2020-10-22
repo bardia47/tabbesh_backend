@@ -111,6 +111,10 @@ class TeacherUser(User):
         proxy = True
         verbose_name = 'اساتید'
         verbose_name_plural = 'اساتید'
+    # get courses of teacher showing in shopping
+    def get_shopping_courses(self):
+        now = datetime.datetime.now()
+        return Course.objects.filter( teacher=self.id,is_active=True,end_date__gt=now + datetime.timedelta(days=InstallmentModelEnum.installmentDateBefore.value))
 
 
 # Roles Model

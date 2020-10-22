@@ -13,7 +13,7 @@ $(function () {
 function loadShopping(courseIds) {
     // get JSON and Response Header
     $.ajax({
-        url: "/payment/get-installment/",
+        url: "/payment/installments/",
         type: "GET",
         dataType: "json",
         data: {
