@@ -2,12 +2,15 @@ from accounts.models import *
 from rest_framework import serializers
 
 
-class TeacherSerializer(serializers.ModelSerializer):
+class TeacherSerializer(serializers.HyperlinkedModelSerializer):
     grade_choice = serializers.SerializerMethodField('get_choices')
 
     class Meta:
         model = User
-        fields = ('id', 'avatar', 'get_full_name', 'grade_choice')
+        fields = ('id', 'avatar', 'get_full_name', 'grade_choice', 'url')
+        extra_kwargs = {
+            'url': {'lookup_field': 'username'},
+        }
 
     def get_choices(self, instance):
         all_grades = instance.grades.all()

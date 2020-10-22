@@ -5,8 +5,8 @@ from django.conf.urls.static import static
 from rest_framework.routers import DefaultRouter
 
 router = DefaultRouter()
-router.register('user-courses', UserCoursesViewSet)
-router.register('shopping-courses', ShoppingCoursesViewSet)
+router.register('user-courses', UserCourseViewSet)
+router.register('shopping-courses', ShoppingCourseViewSet)
 
 urlpatterns = [
     path('', Dashboard.as_view(), name='dashboard'),

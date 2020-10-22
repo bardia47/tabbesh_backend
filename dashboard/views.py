@@ -151,7 +151,7 @@ class Lessons(APIView):
                             template_name='dashboard/lessons.html')
 
 
-class UserCoursesViewSet(viewsets.ModelViewSet):
+class UserCourseViewSet(viewsets.ModelViewSet):
     queryset = Course.objects.all()
     serializer_class = CourseLessonsSerializer
     http_method_names = ['get', ]
@@ -222,7 +222,7 @@ class Shopping(APIView):
         return Response(ser.data, template_name='dashboard/shopping.html')
 
 
-class ShoppingCoursesViewSet(viewsets.ModelViewSet):
+class ShoppingCourseViewSet(viewsets.ModelViewSet):
     # thats fake :/ because its Mandatory
     queryset = Course.objects.filter(is_active=True)
     serializer_class = ShoppingCourseSerializer
@@ -231,7 +231,7 @@ class ShoppingCoursesViewSet(viewsets.ModelViewSet):
     # default show all active courses
     def get_queryset(self):
         now = datetime.datetime.now()
-        queryset = super(ShoppingCoursesViewSet, self).get_queryset()
+        queryset = super(ShoppingCourseViewSet, self).get_queryset()
         query = Q(end_date__gt=now + datetime.timedelta(days=InstallmentModelEnum.installmentDateBefore.value))
         if self.request.user.courses().all():
             queryNot = reduce(or_, (Q(id=course.id)

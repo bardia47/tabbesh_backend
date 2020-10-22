@@ -70,7 +70,7 @@ function homeCounter() {
 
 function teacherListAjax() {
     $.ajax({
-        url: "/all-teacher/",
+        url: "/teachers/",
         type: "GET",
         dataType: "json",
         headers: {
@@ -95,7 +95,7 @@ function teacherListRender(teachersList) {
                 <div class="card-body text-center">
                     <h4 class="text-nowrap">${teacher.get_full_name}</h4>
                     <h5 class="vazir-medium">${teacher.grade_choice}</h5>
-                    <a href="/dashboard/shopping/?teacher=${teacher.id}" class="btn btn-secondary vazir-bold mt-2">مشاهده دروس</a>
+                    <a href="${teacher.url}" class="btn btn-secondary vazir-bold mt-2">مشاهده دروس</a>
                 </div>
             </div>
         </div>
