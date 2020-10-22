@@ -25,12 +25,11 @@ class TeacherSerializer(serializers.HyperlinkedModelSerializer):
 class TeacherDetailSerializer(serializers.HyperlinkedModelSerializer):
     grade_choice = serializers.SerializerMethodField('get_choices')
     courses = serializers.SerializerMethodField('get_courses')
-    url = SearchHyperlinkField(view_name='shopping-courses-list', read_only=True, search_field='id', param_name='teacher')
+    url = SearchHyperlinkField(view_name='shopping', read_only=True, search_field='id', param_name='teacher')
 
     class Meta:
         model = TeacherUser
         fields = ('avatar', 'get_full_name', 'grade_choice', 'description', 'courses', 'url')
-
 
     def get_courses(self, instance):
         return ShoppingCourseSerializer((TeacherUser)(instance).get_shopping_courses(), read_only=True, many=True).data
