@@ -1,6 +1,7 @@
 from dashboard.serializers import *
 from accounts.models import *
 from rest_framework import serializers
+from core.fields import SearchHyperlinkField
 
 
 class TeacherSerializer(serializers.HyperlinkedModelSerializer):
@@ -21,13 +22,15 @@ class TeacherSerializer(serializers.HyperlinkedModelSerializer):
         return grades
 
 
-class TeacherDetailSerializer(serializers.ModelSerializer):
+class TeacherDetailSerializer(serializers.HyperlinkedModelSerializer):
     grade_choice = serializers.SerializerMethodField('get_choices')
     courses = serializers.SerializerMethodField('get_courses')
+    url = SearchHyperlinkField(view_name='shopping-courses-list', read_only=True, search_field='id', param_name='teacher')
 
     class Meta:
         model = TeacherUser
-        fields = ('avatar', 'get_full_name', 'grade_choice', 'description', 'courses')
+        fields = ('avatar', 'get_full_name', 'grade_choice', 'description', 'courses', 'url')
+
 
     def get_courses(self, instance):
         return ShoppingCourseSerializer((TeacherUser)(instance).get_shopping_courses(), read_only=True, many=True).data

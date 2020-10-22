@@ -6,7 +6,7 @@ from rest_framework.routers import DefaultRouter
 
 router = DefaultRouter()
 router.register('user-courses', UserCourseViewSet)
-router.register('shopping-courses', ShoppingCourseViewSet)
+router.register('shopping-courses', ShoppingCourseViewSet,basename='shopping-courses')
 
 urlpatterns = [
     path('', Dashboard.as_view(), name='dashboard'),
