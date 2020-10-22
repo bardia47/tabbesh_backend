@@ -1,3 +1,4 @@
+from dashboard.serializers import *
 from accounts.models import *
 from rest_framework import serializers
 
@@ -16,6 +17,24 @@ class TeacherSerializer(serializers.HyperlinkedModelSerializer):
         all_grades = instance.grades.all()
         grades = set()
         for grade in all_grades:
+            grades.add(grade.get_grade_choice_display())
+        return grades
+
+
+class TeacherDetailSerializer(serializers.ModelSerializer):
+    grade_choice = serializers.SerializerMethodField('get_choices')
+    courses = serializers.SerializerMethodField('get_courses')
+
+    class Meta:
+        model = User
+        fields = ('avatar', 'get_full_name', 'grade_choice', 'description', 'courses')
+
+    def get_courses(self, instance):
+        return ShoppingCourseSerializer(Course.objects.filter(teacher=instance), read_only=True, many=True).data
+
+    def get_choices(self, instance):
+        grades = set()
+        for grade in instance.grades.all():
             grades.add(grade.get_grade_choice_display())
         return grades
 
@@ -56,3 +75,11 @@ class SupportSerializer(serializers.ModelSerializer):
     class Meta:
         model = Support
         fields = ('description',)
+
+
+class MessageSerializer(serializers.ModelSerializer):
+    grade = serializers.ReadOnlyField(source='grade.title')
+
+    class Meta:
+        model = Message
+        fields = ('name', 'grade', 'message',)

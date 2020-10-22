@@ -53,7 +53,7 @@ class UserAdmin(BaseUserAdmin):
         ('رمز عبور (در صورت ارسال نشدن رمز از این گزینه استفاده کنید)', {'fields': ('password1', 'password2',)}),
         ('اطلاعات شخص', {'fields': (
             'first_name', 'last_name', 'avatar', 'grades', 'national_code', 'phone_number', 'address', 'city',
-            'gender')}),
+            'gender', 'description')}),
         ('دسترسی ها', {'fields': ('is_active', "role")}),
         ('اعتبار', {'fields': ('credit',)}),
         ('قسط ها ', {'fields': ('installments',)}),
@@ -132,6 +132,13 @@ class SupportAdmin(admin.ModelAdmin):
     search_fields = ['title', 'code']
 
 
+class MessageAdmin(admin.ModelAdmin):
+    fields = ('name', 'message', 'grade',)
+    list_display = ['name', 'grade', ]
+    search_fields = ['name', 'grade__title', ]
+
+
+admin.site.register(Message, MessageAdmin)
 admin.site.unregister(Group)
 admin.site.register(User, UserAdmin)
 admin.site.register(TeacherUser, TeacherAdmin)

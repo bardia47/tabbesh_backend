@@ -23,6 +23,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField('ایمیل', unique=True, null=True, blank=True)
     first_name = models.CharField('نام', max_length=30, blank=True)
     last_name = models.CharField('نام خانوادگی', max_length=30, blank=True)
+    description = tinymce_models.HTMLField('توضیحات معلم', null=True, blank=True)
     date_joined = models.DateTimeField('تاریخ عضویت', auto_now_add=True)
     is_active = models.BooleanField('فعال', default=True)
     avatar = models.ImageField(upload_to='avatars/', null=True, blank=True)
@@ -503,3 +504,17 @@ class Installment(models.Model):
         if discount:
             return self.amount * (100 - discount.percent) / 100
         return self.amount
+
+
+class Message(models.Model):
+    name = models.CharField('اسم', max_length=50)
+    message = tinymce_models.HTMLField('پیام')
+    grade = models.ForeignKey('Grade', verbose_name='پایه', on_delete=models.SET_NULL, null=True, blank=True)
+
+    class Meta:
+        ordering = ['-id']
+        verbose_name_plural = "پیام ها"
+        verbose_name = "پیام"
+
+    def __str__(self):
+        return self.name

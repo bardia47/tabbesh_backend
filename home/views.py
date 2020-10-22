@@ -53,15 +53,20 @@ class Counter(APIView):
         return Response(data)
 
 
-class TeacherViewset(viewsets.ModelViewSet):
+class TeacherViewset(viewsets.ReadOnlyModelViewSet):
     renderer_classes = [BrowsableAPIRenderer, JSONRenderer]
     permission_classes = (AllowAny,)
-    serializer_class = TeacherSerializer
     pagination_class = None
     lookup_field = 'username'
     queryset = User.objects.filter(role__code=RoleCodes.TEACHER.value)
     # return those users that are teacher
-    http_method_names = ['get', ]
+    # http_method_names = ['get', ]
+
+    def get_serializer_class(self):
+        if self.action == 'list':
+            return TeacherSerializer
+        else:
+            return TeacherDetailSerializer
 
     @method_decorator(cache_page(60 * 60 * 2))
     def list(self, request, *args, **kwargs):
@@ -177,4 +182,12 @@ class Support(generics.ListAPIView):
     renderer_classes = [JSONRenderer]
     permission_classes = (AllowAny,)
     serializer_class = SupportSerializer
+    pagination_class = None
+
+
+class Messages(generics.ListAPIView):
+    queryset = Message.objects.all()
+    renderer_classes = [JSONRenderer, BrowsableAPIRenderer]
+    permission_classes = (AllowAny,)
+    serializer_class = MessageSerializer
     pagination_class = None
