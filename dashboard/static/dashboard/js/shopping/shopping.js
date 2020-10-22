@@ -7,7 +7,7 @@ if (firstParameter) {
     searchParameter = new URLSearchParams("?page=1")
 }
 
-let getShoppingURL = "/dashboard/get-shopping/?";
+let getShoppingURL = "/dashboard/shopping-courses/?";
 // first pagination when user request https://127.0.0.1:8000/dashboard/shopping/
 // initial shopping page
 $(function () {

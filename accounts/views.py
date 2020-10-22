@@ -13,6 +13,7 @@ from rest_framework.authtoken.serializers import AuthTokenSerializer
 from django.core.exceptions import ObjectDoesNotExist
 from rest_framework import exceptions
 from django.contrib.auth.hashers import make_password
+from django.urls import reverse
 
 
 # Create your views here.
@@ -74,7 +75,7 @@ class SignIn(APIView):
         if user is not None:
             auth.login(request, user)
             if request.session.get('new_login') is not None:
-                return redirect('/dashboard/edit_profile/#changePassword')
+                return redirect('{}#changePassword'.format(reverse('profile')))
             elif request.GET.get('next') is None:
                 return redirect('dashboard')
             else:

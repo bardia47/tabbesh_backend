@@ -5,14 +5,14 @@ from django.conf.urls.static import static
 from rest_framework.routers import DefaultRouter
 
 router = DefaultRouter()
-router.register('get-lessons', GetLessonsViewSet)
-router.register('get-shopping', GetShoppingViewSet)
+router.register('user-courses', UserCoursesViewSet)
+router.register('shopping-courses', ShoppingCoursesViewSet)
 
 urlpatterns = [
     path('', Dashboard.as_view(), name='dashboard'),
     path('lessons/', Lessons.as_view(), name="lessons"),
-    path('app_profile/', AppProfile.as_view(), name="app_profile"),
-    path('edit_profile/', EditProfile.as_view(), name="edit_profile"),
+    path('app-profile/', AppProfile.as_view(), name="app_profile"),
+    path('profile/', Profile.as_view(), name="profile"),
     #     path('edit_profile/change-avatar', change_avatar, name="change_avatar"),
     #     path('edit_profile/change-profile', change_profile, name="change_profile"),
     #     path('edit_profile/change_password',

@@ -19,7 +19,7 @@
             <!-- right column -->
             <div class="col-md-3 text-center">
                 <!-- Change avatar form & enctype requried for file input -->
-                <form class="form-horizontal" id="avatar_form" action="{% url 'edit_profile' %}?method=changeAvatar"
+                <form class="form-horizontal" id="avatar_form" action="{% url 'profile' %}?method=changeAvatar"
                       method="POST"
                       enctype="multipart/form-data">
                     {% csrf_token %}
@@ -79,7 +79,7 @@
                 <!-- Change Profile form -->
                 <h4 class="vazir-medium"> تغییر پروفایل</h4>
                 <hr>
-                <form id="changeProfile" action="{% url 'edit_profile' %}" method="POST">
+                <form id="changeProfile" action="{% url 'profile' %}" method="POST">
                     {% csrf_token %}
                     <div class="pl-2">
                         <div class="form-row">
@@ -179,7 +179,7 @@
                 <!-- Change password form -->
                 <h4 class="vazir-medium">تغییر رمز عبور</h4>
                 <hr>
-                <form action="{% url 'edit_profile' %}?method=changePassword" id="changePassword" method="POST">
+                <form action="{% url 'profile' %}?method=changePassword" id="changePassword" method="POST">
                     {% if 'new_login' in request.session %}
                         <div class="alert alert-info alert-dismissable">
                             <a class="panel-close close" data-dismiss="alert">×</a>

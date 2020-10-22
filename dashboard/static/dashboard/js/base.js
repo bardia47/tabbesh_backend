@@ -41,7 +41,7 @@ function pageReady() {
     // set user of ray chat
     $(function () {
         $.ajax({
-            url: "/dashboard/app_profile",
+            url: "/dashboard/app-profile",
             dataType: "json",
             type: "GET",
             success: function (data) {

@@ -132,7 +132,7 @@ class InstallmentSerializer(serializers.ModelSerializer):
 
     def get_title(self, obj):
         if obj.course.installment_set.all().count() == 1:
-            return None
+            return InstallmentModelEnum.installmentAll.value
         return obj.title
 
 
