@@ -8,7 +8,7 @@ class TeacherSerializer(serializers.HyperlinkedModelSerializer):
     grade_choice = serializers.SerializerMethodField('get_choices')
 
     class Meta:
-        model = TeacherUser
+        model = User
         fields = ('id', 'avatar', 'get_full_name', 'grade_choice', 'url')
         extra_kwargs = {
             'url': {'lookup_field': 'username'},
