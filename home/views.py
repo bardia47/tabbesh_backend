@@ -1,15 +1,15 @@
 from django.shortcuts import render, redirect
 from django.db.models import Count
+from django.db.models import Value
+from django.views.decorators.cache import cache_page
+from django.utils.decorators import method_decorator
 from rest_framework import status, generics, viewsets
 from rest_framework.permissions import AllowAny
 from rest_framework.renderers import BrowsableAPIRenderer, JSONRenderer, TemplateHTMLRenderer
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from django.db.models import F
 from accounts.enums import *
 from home.serializers import *
-from django.views.decorators.cache import cache_page
-from django.utils.decorators import method_decorator
 
 
 def main_page(request):
@@ -61,6 +61,11 @@ class TeacherViewset(viewsets.ReadOnlyModelViewSet):
     queryset = User.objects.filter(role__code=RoleCodes.TEACHER.value)
     # return those users that are teacher
     # http_method_names = ['get', ]
+
+    def get_queryset(self):
+        teachers = TeacherUser.objects.filter(role__code=RoleCodes.TEACHER.value).annotate(member=Count('course__installment__user'))
+        teachers.order_by('-member')
+        return teachers
 
     def get_serializer_class(self):
         if self.action == 'list':
@@ -191,3 +196,16 @@ class Messages(generics.ListAPIView):
     permission_classes = (AllowAny,)
     serializer_class = MessageSerializer
     pagination_class = None
+
+
+class WeblogViewSet(viewsets.ReadOnlyModelViewSet):
+    renderer_classes = [BrowsableAPIRenderer, JSONRenderer]
+    queryset = Weblog.objects.all()
+    pagination_class = None
+    lookup_field = 'slug'
+
+    def get_serializer_class(self):
+        if self.action == 'list':
+            return WeblogSerializer
+        else:
+            return WeblogDetailSerializer

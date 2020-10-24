@@ -2,6 +2,8 @@ from django.db import models
 from django.core.mail import send_mail
 from django.contrib.auth.base_user import AbstractBaseUser
 from django.contrib.auth.models import PermissionsMixin
+from django.utils.text import slugify
+
 from accounts.enums import RoleCodes
 import datetime
 import jdatetime
@@ -451,6 +453,7 @@ class Support(models.Model):
     def __str__(self):
         return self.title
 
+
     def update_date_decorated(self):
         return jdatetime.datetime.fromgregorian(datetime=self.update_date).strftime("%a, %d %b %Y %H:%M:%S")
 
@@ -517,8 +520,59 @@ class Message(models.Model):
 
     class Meta:
         ordering = ['-id']
-        verbose_name_plural = "پیام ها"
-        verbose_name = "پیام"
+        verbose_name_plural = 'پیام ها'
+        verbose_name = 'پیام'
 
     def __str__(self):
         return self.name
+
+
+class Slide(models.Model):
+    url = models.URLField('لینک')
+    image = models.ImageField('عکس', upload_to='slides/')
+
+    class Meta:
+        ordering = ['-id']
+        verbose_name_plural = 'اسلاید ها'
+        verbose_name = 'اسلاید'
+
+    def __str__(self):
+        return self.url
+
+
+class Package(models.Model):
+    title = models.CharField('موضوع', max_length=40)
+    courses = models.ManyToManyField('Course', blank=True, verbose_name='دوره های این پکیج')
+
+    class Meta:
+        ordering = ['-id']
+        verbose_name_plural = 'پکیج ها'
+        verbose_name = 'پکیج'
+
+    def __str__(self):
+        return self.title
+
+
+class Weblog(models.Model):
+    title = models.CharField("عنوان", max_length=40)
+    image = models.ImageField('عکس', null=True, blank=True, upload_to='weblog/')
+    text = tinymce_models.HTMLField('متن')
+    pub_date = models.DateTimeField("تاریخ", auto_now_add=True)
+    slug = models.SlugField('لینک', allow_unicode=True, unique=True, blank=True, help_text='نحوه نمایش آدرس پست در صورت خالی ماندن از عنوان پست برای ساخت لینک استفاده می شود.')
+
+    class Meta:
+        ordering = ['-pub_date']
+        verbose_name_plural = 'پست ها'
+        verbose_name = 'پست'
+
+    def __str__(self):
+        return self.title
+
+    def clean(self):
+        if self.slug is '':
+            self.slug = slugify(self.title, allow_unicode=True)
+
+    def update_date_decorated(self):
+        return jdatetime.datetime.fromgregorian(datetime=self.pub_date).strftime('%a, %d %b %Y %H:%M:%S')
+
+    update_date_decorated.short_description = 'تاریخ انتشار پست'

@@ -32,7 +32,7 @@ class TeacherDetailSerializer(serializers.HyperlinkedModelSerializer):
         fields = ('avatar', 'get_full_name', 'grade_choice', 'description', 'courses', 'url')
 
     def get_courses(self, instance):
-        return ShoppingCourseSerializer((TeacherUser)(instance).get_shopping_courses(), read_only=True, many=True).data
+        return ShoppingCourseSerializer(TeacherUser(instance).get_shopping_courses(), read_only=True, many=True).data
 
     def get_choices(self, instance):
         grades = set()
@@ -85,3 +85,18 @@ class MessageSerializer(serializers.ModelSerializer):
     class Meta:
         model = Message
         fields = ('name', 'grade', 'message',)
+
+
+class WeblogDetailSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Weblog
+        fields = '__all__'
+
+
+class WeblogSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = Weblog
+        fields = ['title', 'image', 'pub_date', 'slug', 'url']
+        extra_kwargs = {
+            'url': {'lookup_field': 'slug'},
+        }
