@@ -6,6 +6,7 @@ from rest_framework.routers import DefaultRouter
 
 router = DefaultRouter()
 router.register('teachers', TeacherViewset)
+router.register('weblog', WeblogViewSet)
 
 urlpatterns = [
     path('', main_page, name='main-page'),
