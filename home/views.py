@@ -192,3 +192,7 @@ class Messages(generics.ListAPIView):
     permission_classes = (AllowAny,)
     serializer_class = MessageSerializer
     pagination_class = None
+
+
+def blog(request):
+    return render(request , 'home/blog.html')
