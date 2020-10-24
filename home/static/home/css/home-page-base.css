@@ -1,0 +1,64 @@
+/* Scroll Bar CSS */
+::-webkit-scrollbar-track {
+    box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+    background-color: #F5F5F5;
+}
+
+::-webkit-scrollbar {
+    width: 10px;
+    background-color: #F5F5F5;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: #ffc109;
+    background-image: -webkit-linear-gradient(45deg, rgba(255, 255, 255, .2) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, .2) 50%, rgba(255, 255, 255, .2) 75%, transparent 75%, transparent)
+}
+
+html,
+body {
+    height: 100%;
+    width: 100%;
+    background-color: #FAFAFA;
+    font-family: 'Vazir_Light', 'Vazir_Bold', 'Vazir_Medium', sans-serif;
+}
+
+
+.vazir-bold {
+    font-family: "Vazir_Bold", sans-serif;
+}
+
+.vazir-medium {
+    font-family: "Vazir_Medium", sans-serif;
+}
+
+.vazir-light {
+    font-family: "Vazir_Light", sans-serif;
+}
+
+
+/* home footer */
+.footer-items {
+    margin: 80px 50px 0 0;
+}
+
+.footer-logo {
+    margin: 180px 50px 0 0;
+}
+
+.hr-footer {
+    height: 6px;
+    background-color: #ffc109;
+}
+
+
+@media (max-width: 576px) {
+    .footer-items {
+        margin: 50px 0 0 0;
+    }
+
+    .footer-logo {
+        margin: 50px 0 0 0;
+    }
+}
+

@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="fa" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% block meta_tags %}
+    {% endblock %}
+
+    <!-- favicon !-->
+    <link rel="shortcut icon" type="image/png" href="{% static 'home/images/favicon.ico' %}"/>
+
+    <!-- css files -->
+    <link rel="stylesheet" href="{% static "home/css/fonts.css" %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css">
+    <link rel="stylesheet" href="{% static "home/css/tabbesh-bootstrap-theme.css" %}">
+    <link rel="stylesheet" href="{% static "home/css/home-page-base.css" %}">
+    {% block css_files %}
+    {% endblock %}
+</head>
+
+<body>
+{% csrf_token %}
+<!-- Navbar -->
+<nav class="navbar sticky-top navbar-expand-lg navbar-light bg-white">
+    <a class="navbar-brand text-secondary vazir-bold" href="/home/">
+        <img src="{% static "home/images/home-page/tabesh_logo.png" %}" width="70" height="70"
+             class="d-inline-block" alt="tabbesh logo">
+        مدرسه آنلاین تابش
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto float">
+            <li class="nav-item">
+                <a data-scroll="#why-choose-us" class="nav-link text-dark vazir-bold nav-scroll"
+                   href="/home/#why-choose-us">چرا
+                    ما؟</a>
+            </li>
+            <li id="teachersItem" class="nav-item">
+                <a data-scroll="#teachers" class="nav-link text-dark vazir-bold nav-scroll"
+                   href="/home/#teachers">اساتید</a>
+            </li>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle text-dark vazir-bold" id="navbarDropdown" role="button"
+                   data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    دوره ها
+                </a>
+                <div class="dropdown-menu vazir-medium" aria-labelledby="navbarDropdown">
+                    <a data-scroll="#full-discount-courses" class="dropdown-item nav-scroll"
+                       href="/home/#full-discount-courses">پر تخفیف
+                        ترین ها</a>
+                    <a data-scroll="#best-selling-courses" class="dropdown-item nav-scroll"
+                       href="/home/#best-selling-courses">پر فروش
+                        ترین ها</a>
+                    <div class="dropdown-divider"></div>
+                    <a data-scroll="#search-course" class="dropdown-item nav-scroll" href="/home/#search-course">جستجو
+                        دوره</a>
+                </div>
+            </li>
+            <li class="nav-item">
+                <a data-scroll="#supports" class="nav-link text-dark vazir-bold nav-scroll"
+                   href="/home/#supports">پشتیبانی</a>
+            </li>
+            <li class="nav-item">
+                <a data-scroll="#comments" class="nav-link text-dark vazir-bold nav-scroll" href="/home/#comments">نظرات
+                    کاربران</a>
+            </li>
+            <li class="nav-item">
+                <a data-scroll="#contact-us" class="nav-link text-dark vazir-bold nav-scroll"
+                   href="/home/#contact-us">ارتباط
+                    با ما</a>
+            </li>
+        </ul>
+
+        <div class="mr-auto">
+            <a class="btn btn-secondary ml-1" href="{% url "signin" %}">ورود</a>
+            <a class="btn btn-primary" href="{% url "signup" %}">ثبت نام</a>
+        </div>
+    </div>
+</nav>
+
+<!-- End Of Navbar -->
+
+<!-- content -->
+<div class="content">
+    {% block content %}
+    {% endblock %}
+</div>
+
+<!-- footer -->
+<footer class="footer text-primary" style="background-color:#001a4d " id="contact-us">
+    <hr class="hr-footer">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-3 footer-items">
+                <h3 class="h3">راه های ارتباطی با ما</h3>
+                <p class="p mt-3">شماره تلفن پشتیبان فنی : 09391811412 </p>
+                <p class="p text-nowrap">شماره تلفن پشتیبان آموزشی : 09374789830</p>
+                {#                <p class="p mt-3">#}
+                {#                    <img src="{% static "home/images/home-page/icons/mail.svg" %}" width="30">#}
+                {#                    something@email.com#}
+                {#                </p>#}
+                <div class="ul d-flex list-unstyled mx-2">
+                    <a href="https://eitaa.com/taabbesh">
+                        <img src="{% static "home/images/home-page/icons/Eitaa.svg" %}" width="30" alt="eitaa logo">
+                    </a>
+                    <a href="https://t.me/taabbesh">
+                        <img class="mr-2" src="{% static "home/images/home-page/icons/telegram.svg" %}" width="30"
+                             alt="telegram logo">
+                    </a>
+                    <a href="https://www.instagram.com/tabbeshclass/">
+                        <img class="mr-2" src="{% static "home/images/home-page/icons/instagram.svg" %}" width="30"
+                             alt="instagram logo">
+                    </a>
+                </div>
+
+            </div>
+
+            <div class="col-md-4 footer-logo text-center text-wrap ">
+                <img class="bg-white rounded" src="{% static "home/images/favicon.ico" %}" width="100" height="100"
+                     alt="tabbesh logo">
+                <p class="p mt-4">
+                    ساخته شده با
+                    <img src="{% static "home/images/home-page/icons/heart2.svg" %}" width="20" alt="footer heart">
+                    در تابش
+                </p>
+                <p class="p mt-2">
+                    <span><img src="{% static "home/images/home-page/icons/license.svg" %}" width="18"
+                               alt="licence icon"></span>
+                    <span>تمامی حقوق متعلق به آموزشگاه آنلاین تابش می باشد</span>
+                </p>
+                <p class="p">
+                    <span><img src="{% static "home/images/home-page/icons/theta.svg" %}" width="16"
+                               alt="theta logo"></span>
+                    <span>طراحی و توسعه توسط تیم تتا</span>
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"
+        integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg=="
+        crossorigin="anonymous">
+</script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"
+        integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous">
+</script>
+
+<script src="https://cdn.rtlcss.com/bootstrap/v4.2.1/js/bootstrap.min.js"
+        integrity="sha384-a9xOd0rz8w0J8zqj1qJic7GPFfyMfoiuDjC9rqXlVOcGO/dmRqzMn34gZYDTel8k" crossorigin="anonymous">
+</script>
+
+<!-- ray chat -->
+<script src="{% static 'home/js/raychat.js' %}"></script>
+
+<!-- extend js files -->
+{% block js_files %}
+{% endblock %}
+
+</body>
+
+</html>

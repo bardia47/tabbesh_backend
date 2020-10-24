@@ -1,0 +1,29 @@
+{% extends 'home/home-page-base.html' %}
+{% load static %}
+
+{% block meta_tags %}
+    <meta name="title" content="روزمه‌ی دبیران">
+    <meta name="description"
+          content="در این صفحه رزومه‌ی دبیران و دوره‌های تدریس شده توسط آن‌ها نمایش داده می‌شود.">
+    <meta name="keywords" content="رزومه‌ی دبیر، کلاس آنلاین، تابش، مدرسه آنلاین تابش">
+    <meta name="robots" content="index, follow">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="language" content="English">
+    <meta name="revisit-after" content="30 days">
+{% endblock %}
+
+{% block css_files %}
+    <link rel="stylesheet" href="{% static 'home/teacher-resume/teacher-resume.css' %}">
+{% endblock %}
+
+{% block content %}
+    <div id="teacherResume" class="container-fluid"></div>
+    <div id="teacherCourses" class="container-fluid mt-2"></div>
+{% endblock %}
+
+
+{% block js_files %}
+    <!-- timer -->
+    <script src="{% static 'home/js/timer/timer.js' %}"></script>
+    <script src="{% static 'home/teacher-resume/teacher-resume.js' %}"></script>
+{% endblock %}
