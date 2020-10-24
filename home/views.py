@@ -59,6 +59,7 @@ class TeacherViewset(viewsets.ReadOnlyModelViewSet):
     pagination_class = None
     lookup_field = 'username'
     queryset = User.objects.filter(role__code=RoleCodes.TEACHER.value)
+
     # return those users that are teacher
     # http_method_names = ['get', ]
 
@@ -81,8 +82,8 @@ class TeacherViewset(viewsets.ReadOnlyModelViewSet):
         if request.accepted_renderer.format == 'json':
             return super(TeacherViewset, self).retrieve(request, *args, **kwargs)
         # add template !
-        # return render()
-        return super(TeacherViewset, self).retrieve(request, *args, **kwargs)
+        return render(request, 'home/teacher-resume.html')
+        # return super(TeacherViewset, self).retrieve(request, *args, **kwargs)
 
 
 class BestSellingCourses(generics.ListAPIView):
