@@ -540,25 +540,27 @@ class Slide(models.Model):
         return self.url
 
 
-class Package(models.Model):
-    title = models.CharField('موضوع', max_length=40)
-    courses = models.ManyToManyField('Course', blank=True, verbose_name='دوره های این پکیج')
-
-    class Meta:
-        ordering = ['-id']
-        verbose_name_plural = 'پکیج ها'
-        verbose_name = 'پکیج'
-
-    def __str__(self):
-        return self.title
+# class Package(models.Model):
+#     title = models.CharField('موضوع', max_length=40)
+#     courses = models.ManyToManyField('Course', blank=True, verbose_name='دوره های این پکیج')
+#
+#     class Meta:
+#         ordering = ['-id']
+#         verbose_name_plural = 'پکیج ها'
+#         verbose_name = 'پکیج'
+#
+#     def __str__(self):
+#         return self.title
 
 
 class Weblog(models.Model):
     title = models.CharField("عنوان", max_length=40)
-    image = models.ImageField('عکس', null=True, blank=True, upload_to='weblog/')
+    image = models.ImageField('عکس', upload_to='weblog/')
     text = tinymce_models.HTMLField('متن')
     pub_date = models.DateTimeField("تاریخ", auto_now_add=True)
     slug = models.SlugField('لینک', allow_unicode=True, unique=True, blank=True, help_text='نحوه نمایش آدرس پست در صورت خالی ماندن از عنوان پست برای ساخت لینک استفاده می شود.')
+    sender = models.ForeignKey(
+        User, on_delete=models.DO_NOTHING, verbose_name="فرد بارگذار")
 
     class Meta:
         ordering = ['-pub_date']

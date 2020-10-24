@@ -10,12 +10,19 @@
 {% block content %}
     <div class="container shadow">
         <div class="row">
-            <div class="col-md-12"><h1 class="vazir-bold text-center">تیتر خبر</h1></div>
+            <div class="col-md-12"><h1 class="vazir-bold text-center">{{ title }}</h1></div>
             <div class="col-md-12">
-                <img src="/static/home/images/home-page/icons/default_profile.svg" width="50px">
-                <span>نام و نام خانوادگی</span>
-                <span>۱ آبان ۱۳۹۹</span>
+                <img src="{{ sender.avatar }}" width="50px">
+                <span>{{ sender.first_name }} {{ sender.last_name }}</span>
+                <span>{{ update_date }}</span>
             </div>
+            <div class="col-md-12"><img src="{{ image }}"></div>
+            <div class="col-md-12">
+                {% autoescape off %}
+                {{ text }}
+                {% endautoescape %}
+            </div>
+
         </div>
     </div>
 {% endblock %}

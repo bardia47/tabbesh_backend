@@ -5,6 +5,7 @@ from django.contrib.auth.models import Group
 from django.utils.safestring import mark_safe
 from .forms import *
 from zarinpal.admin import PayHistoryInline
+from dashboard.admin import CourseInline
 
 
 class EventInline(admin.TabularInline):
@@ -98,8 +99,15 @@ class TeacherAdmin(UserAdmin):
     def get_fieldsets(self, request, obj=None):
         fieldsets = list((super(UserAdmin, self).get_fieldsets(request, obj)))
         fieldsets.remove((None, {'fields': ('username', 'email', 'date_joined_decorated')}), )
+        fieldsets.remove(        ('قسط ها ', {'fields': ('installments',)}), )
+
         fieldsets.insert(0, (None, {'fields': ('username', 'email', 'date_joined_decorated', 'description')}))
+
         return fieldsets
+    def get_inlines(self, request, obj):
+        inlines = list((super(UserAdmin,self).get_inlines(request,obj)))
+        inlines.append(CourseInline)
+        return  inlines
 
     def get_queryset(self, request):
         return User.objects.filter(role__code=RoleCodes.TEACHER.value)
@@ -144,14 +152,19 @@ class MessageAdmin(admin.ModelAdmin):
     search_fields = ['name', 'grade__title', ]
 
 
-class PackageAdmin(admin.ModelAdmin):
-    search_fields = ['title', ]
+# class PackageAdmin(admin.ModelAdmin):
+#     search_fields = ['title', ]
 
 
 class WeblogAdmin(admin.ModelAdmin):
-    readonly_fields = ('update_date_decorated',)
-    list_display = ['title', 'update_date_decorated']
+    readonly_fields = ('update_date_decorated','sender')
+    list_display = ['title', 'update_date_decorated',]
     search_fields = ['title']
+
+    def save_model(self, request, obj, form, change):
+        obj.sender = request.user
+        # obj.upload_date = datetime.datetime.now()
+        super().save_model(request, obj, form, change)
 
 
 admin.site.unregister(Group)
@@ -162,6 +175,6 @@ admin.site.register(Grade, GradeAdmin)
 admin.site.register(Event, EventAdmin)
 admin.site.register(Support, SupportAdmin)
 admin.site.register(Message, MessageAdmin)
-admin.site.register(Package, PackageAdmin)
+# admin.site.register(Package, PackageAdmin)
 admin.site.register(Slide)
 admin.site.register(Weblog, WeblogAdmin)

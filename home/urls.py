@@ -6,7 +6,7 @@ from rest_framework.routers import DefaultRouter
 
 router = DefaultRouter()
 router.register('teachers', TeacherViewset)
-router.register('weblog', WeblogViewSet)
+router.register('blog', WeblogViewSet)
 
 urlpatterns = [
     path('', main_page, name='main-page'),
@@ -19,8 +19,7 @@ urlpatterns = [
     path('search-home/', SearchHome.as_view(), name='search-home'),
     path('new-course-home/', cache_page(60 * 60 * 2)(NewCourseHome.as_view()), name='new-course-home'),
     path('support/', cache_page(60 * 60 * 2)(Support.as_view()), name='support'),
-    path('message/', (Messages.as_view()), name='message'),
-    path('blog/', blog , name='blog')
+    path('message/', cache_page(60 * 60 * 2)(Messages.as_view()), name='message'),
 
 ]
 

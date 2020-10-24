@@ -198,7 +198,6 @@ class Messages(generics.ListAPIView):
     serializer_class = MessageSerializer
     pagination_class = None
 
-
 class WeblogViewSet(viewsets.ReadOnlyModelViewSet):
     renderer_classes = [BrowsableAPIRenderer, JSONRenderer]
     queryset = Weblog.objects.all()
@@ -210,3 +209,8 @@ class WeblogViewSet(viewsets.ReadOnlyModelViewSet):
             return WeblogSerializer
         else:
             return WeblogDetailSerializer
+
+    def retrieve(self, request, *args, **kwargs):
+        instance = self.get_object()
+        serializer = self.get_serializer(instance)
+        return render(request, 'home/blog.html',serializer.data )
