@@ -188,7 +188,7 @@ class Lesson(models.Model):
 
 # Course Model
 class Course(models.Model):
-    code = models.CharField("کد", max_length=10, unique=True)
+    code = models.CharField("کد", max_length=18, unique=True)
     title = models.CharField("عنوان", max_length=30)
     lesson = models.ForeignKey(
         'Lesson', on_delete=models.DO_NOTHING, verbose_name="درس")
