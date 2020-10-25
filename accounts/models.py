@@ -113,10 +113,12 @@ class TeacherUser(User):
         proxy = True
         verbose_name = 'اساتید'
         verbose_name_plural = 'اساتید'
+
     # get courses of teacher showing in shopping
     def get_shopping_courses(self):
         now = datetime.datetime.now()
-        return Course.objects.filter( teacher=self.id,is_active=True,end_date__gt=now + datetime.timedelta(days=InstallmentModelEnum.installmentDateBefore.value))
+        return Course.objects.filter(teacher=self.id, is_active=True, end_date__gt=now + datetime.timedelta(
+            days=InstallmentModelEnum.installmentDateBefore.value))
 
 
 # Roles Model
@@ -453,7 +455,6 @@ class Support(models.Model):
     def __str__(self):
         return self.title
 
-
     def update_date_decorated(self):
         return jdatetime.datetime.fromgregorian(datetime=self.update_date).strftime("%a, %d %b %Y %H:%M:%S")
 
@@ -558,7 +559,8 @@ class Weblog(models.Model):
     image = models.ImageField('عکس', upload_to='weblog/')
     text = tinymce_models.HTMLField('متن')
     pub_date = models.DateTimeField("تاریخ", auto_now_add=True)
-    slug = models.SlugField('لینک', allow_unicode=True, unique=True, blank=True, help_text='نحوه نمایش آدرس پست در صورت خالی ماندن از عنوان پست برای ساخت لینک استفاده می شود.')
+    slug = models.SlugField('لینک', allow_unicode=True, unique=True, blank=True,
+                            help_text='نحوه نمایش آدرس پست در صورت خالی ماندن از عنوان پست برای ساخت لینک استفاده می شود.')
     sender = models.ForeignKey(
         User, on_delete=models.DO_NOTHING, verbose_name="فرد بارگذار")
 
