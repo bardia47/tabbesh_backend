@@ -36,7 +36,7 @@ function renderTeacherResume(teacherResume) {
             </div>
             <hr class="w-100 bg-secondary" style="height: 2px">
             <div class="row px-5">
-                ${teacherResume.description}
+                ${teacherResume.description === null ? "رزومه‌ای برای مشاهده موجود نیست " : teacherResume.description}
             </div>
         </div>
     `
