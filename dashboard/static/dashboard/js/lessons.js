@@ -12,7 +12,7 @@ $(function () {
     // set menu active
     $("#lessonsMenu").addClass("active-menu");
 
-    url = "/dashboard/get-lessons/?page=" + (getUrlParameter(window.location.href, "page") ? +getUrlParameter(window.location.href, "page") : "1")
+    url = "/dashboard/user-courses/?page=" + (getUrlParameter(window.location.href, "page") ? +getUrlParameter(window.location.href, "page") : "1")
     pagination(url)
 });
 

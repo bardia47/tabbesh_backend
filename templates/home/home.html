@@ -1,20 +1,12 @@
-<!DOCTYPE html>
+{% extends 'home/home-page-base.html' %}
 {% load static %}
-<html lang="fa" dir="rtl">
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+{% block meta_tags %}
     <title>صفحه ی اصلی تابش</title>
+{% endblock %}
 
-    <!-- favicon !-->
-    <link rel="shortcut icon" type="image/png" href="{% static 'home/images/favicon.ico' %}"/>
-
-    <!-- css files -->
-    <link rel="stylesheet" href="{% static "home/css/fonts.css" %}">
+{% block css_files %}
     <link rel="stylesheet" href="{% static "home/css/home-page.css" %}">
-    <link rel="stylesheet" href="{% static "home/css/tabbesh-bootstrap-theme.css" %}">
-
     <!-- owl carousel css -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.css"
           integrity="sha512-UTNP5BXLIptsaj5WdKFrkFov94lDx+eBvbKyoe1YAfjeRPC+gT5kyZ10kOHCfNZqEui1sxmqvodNUx3KbuYI/A=="
@@ -24,288 +16,220 @@
           href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css"
           integrity="sha512-sMXtMNL1zRzolHYKEujM2AqCLUR9F2C4/05cdbxjjLSRvMQIciEPCQZo++nk7go3BtSuK9kfa/s+a4f4i5pLkw=="
           crossorigin="anonymous"/>
+{% endblock %}
 
-</head>
 
-<body>
-{% csrf_token %}
-<!-- Navbar -->
-<nav class="navbar sticky-top navbar-expand-lg navbar-light bg-white">
-    <a class="navbar-brand text-secondary vazir-bold" href="">
-        <img src="{% static "home/images/home-page/tabesh_logo.png" %}" width="70" height="70"
-             class="d-inline-block" alt="tabbesh logo">
-        مدرسه آنلاین تابش
-    </a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
-            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-    </button>
-
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav mr-auto float">
-            <li class="nav-item">
-                <a data-scroll="#why-choose-us" class="nav-link text-dark vazir-bold nav-scroll"
-                   href="#why-choose-us">چرا
-                    ما؟</a>
-            </li>
-            <li id="teachersItem" class="nav-item">
-                <a data-scroll="#teachers" class="nav-link text-dark vazir-bold nav-scroll"
-                   href="#teachers">اساتید</a>
-            </li>
-            <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle text-dark vazir-bold" id="navbarDropdown" role="button"
-                   data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    دوره ها
-                </a>
-                <div class="dropdown-menu vazir-medium" aria-labelledby="navbarDropdown">
-                    <a data-scroll="#full-discount-courses" class="dropdown-item nav-scroll"
-                       href="#full-discount-courses">پر تخفیف
-                        ترین ها</a>
-                    <a data-scroll="#best-selling-courses" class="dropdown-item nav-scroll"
-                       href="#best-selling-courses">پر فروش
-                        ترین ها</a>
-                    <div class="dropdown-divider"></div>
-                    <a data-scroll="#search-course" class="dropdown-item nav-scroll" href="#search-course">جستجو
-                        دوره</a>
+{% block content %}
+    <!-- ورود و ثبت نام نسخه ی دسکتاپ -->
+    <div class="desktop-version">
+        <div class="header-description">
+            <div class="container text-center">
+                <h1 class="h-header-desktop">حس خوب</h1>
+                <h2 class="h-header-desktop">
+                    <span style="color: #ffc109;">آنلاین</span>
+                    <span>بودن</span>
+                </h2>
+                <div class="row justify-content-center">
+                    <a class="btn btn-secondary btn-header mt-4 ml-2" href="{% url 'signin' %}">ورود</a>
+                    <a class="btn btn-primary btn-header mt-4" href="{% url 'signup' %}">ثبت نام</a>
                 </div>
-            </li>
-            <li class="nav-item">
-                <a data-scroll="#supports" class="nav-link text-dark vazir-bold nav-scroll"
-                   href="#supports">پشتیبانی</a>
-            </li>
-            <li class="nav-item">
-                <a data-scroll="#comments" class="nav-link text-dark vazir-bold nav-scroll" href="#comments">نظرات
-                    کاربران</a>
-            </li>
-            <li class="nav-item">
-                <a data-scroll="#contact-us" class="nav-link text-dark vazir-bold nav-scroll"
-                   href="#contact-us">ارتباط
-                    با ما</a>
-            </li>
-        </ul>
-    </div>
-</nav>
-
-
-<!-- End Of Navbar -->
-
-<!-- ورود و ثبت نام نسخه ی دسکتاپ -->
-<div class="desktop-version">
-    <div class="header-description">
-        <div class="container text-center">
-            <h1 class="h-header-desktop">حس خوب</h1>
-            <h2 class="h-header-desktop">
-                <span style="color: #ffc109;">آنلاین</span>
-                <span>بودن</span>
-            </h2>
-            <div class="row justify-content-center">
-                <a class="btn btn-secondary btn-header mt-4 ml-2" href="{% url 'signin' %}">ورود</a>
-                <a class="btn btn-primary btn-header mt-4" href="{% url 'signup' %}">ثبت نام</a>
             </div>
         </div>
     </div>
-</div>
 
-<!-- ورود و ثبت نام نسخه ی گوشی -->
-<div class="container text-center mobile-version ">
-    <img class="text-center" src="{% static "home/images/home-page/mobile-poster.svg" %}" width="250" height="250"
-         alt="home poster mobile version">
-    <h1 class="h-header-mobile">حس خوب</h1>
-    <h2 class="h-header-mobile">
-        <span style="color: #ffc109;">آنلاین</span>
-        <span>بودن</span>
-    </h2>
-    <div class="row justify-content-center">
-        <a class="btn btn-secondary btn-header mt-4 ml-2" href="{% url 'signin' %}">ورود</a>
-        <a class="btn btn-primary btn-header mt-4" href="{% url 'signup' %}">ثبت نام</a>
-    </div>
-</div>
-
-<!-- چرا تابش -->
-<div class="container mt-5 desktop-why" id="why-choose-us">
-    <div class="row justify-content-center">
-        <h1 class="mobile-font">
-            <img class="mr-3 why-img"
-                 src="{% static "home/images/home-page/icons/student.svg" %}" width="90" alt="student icon">
-            چرا تابش؟
-        </h1>
-    </div>
-    <div class="row justify-content-center">
-
-        <div class="col-md-3 mb-2 w-75">
-            <div class="box-card why-margin">
-                <div class="row justify-content-center">
-                    <img src="{% static "home/images/home-page/icons/teaching.svg" %}" width="80" alt="teacher-icon">
-                </div>
-                <div class="row justify-content-center">
-                    <h5 class="mt-3 px-4 text-center">
-                        تدریس تعاملی <br>
-                        و<br>
-                        گفتگو محور
-                    </h5>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-md-3 mb-2 w-75">
-            <div class="box-card why-margin">
-                <div class="row justify-content-center">
-                    <img src="{% static "home/images/home-page/icons/advisor.svg" %}" width="90" alt="advisor icon">
-                </div>
-                <div class="row justify-content-center">
-                    <h5 class="mt-4 px-4 text-center">
-                        مشاوره آموزشی <br>
-                    </h5>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-md-3 mb-2 w-75">
-            <div class="box-card why-margin">
-                <div class="row justify-content-center">
-                    <img src="{% static "home/images/home-page/icons/discount.svg" %}" width="100" alt="discount icon">
-                </div>
-                <div class="row justify-content-center">
-                    <h5 class="mt-3 px-4 text-center">
-                        قیمت های به صرفه
-                    </h5>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-md-3 mb-2 w-75">
-            <div class="box-card why-margin">
-                <div class="row justify-content-center">
-                    <img src="{% static "home/images/home-page/icons/subscription.svg" %}" width="90"
-                         alt="content icon">
-                </div>
-                <div class="row justify-content-center text-center">
-                    <h5 class="mt-3 px-4">
-                        محتوای تالیفی<br>
-                        قدم به قدم<br>
-                    </h5>
-                </div>
-            </div>
-        </div>
-
-    </div>
-
-
-</div>
-
-
-<!-- اساتید -->
-
-<div class="container-fluid mt-5 justify-content-center" id="teachers">
-    <div class="row align-items-center img-circle p-5">
-
-        <div class="col-12 text-center">
-            <h1 class="mt-5 mb-5">اساتید</h1>
-        </div>
-
-        <div class="container w-75">
-            <div class="row mt-n4">
-                <div id="teacherList" class="owl-carousel owl-theme">
-                </div>
-            </div>
-
+    <!-- ورود و ثبت نام نسخه ی گوشی -->
+    <div class="container text-center mobile-version ">
+        <img class="text-center" src="{% static "home/images/home-page/mobile-poster.svg" %}" width="250" height="250"
+             alt="home poster mobile version">
+        <h1 class="h-header-mobile">حس خوب</h1>
+        <h2 class="h-header-mobile">
+            <span style="color: #ffc109;">آنلاین</span>
+            <span>بودن</span>
+        </h2>
+        <div class="row justify-content-center">
+            <a class="btn btn-secondary btn-header mt-4 ml-2" href="{% url 'signin' %}">ورود</a>
+            <a class="btn btn-primary btn-header mt-4" href="{% url 'signup' %}">ثبت نام</a>
         </div>
     </div>
-</div>
 
+    <!-- اساتید -->
+    <div class="container-fluid mt-5 justify-content-center" id="teachers">
+        <div class="row align-items-center img-circle p-5">
 
-<!-- شمارشگر تابش -->
-<div class="container mt-5 mb-5 desktop-counter">
-    <div class="row justify-content-center ">
+            <div class="col-12 text-center">
+                <h1 class="mt-5 mb-5">اساتید</h1>
+            </div>
 
-        <h1 class="text-center mobile-font">
-            <img class="mr-3 counter-img" src="{% static "home/images/home-page/icons/counter.svg" %}" width="60"
-                 alt="counter icon">
-            شمارشگر تابش
-            <img class="ml-3 counter-img" src="{% static "home/images/home-page/icons/counter.svg" %}" width="60"
-                 alt="counter icon">
-        </h1>
-
-
-        <div class="container mt-5 mb-5 justify-content-center">
-            <div class="row align-items-center">
-
-                <div class="col-md-4 mt-2 mb-2 text-center">
-                    <img class="counters-img" src="{% static "home/images/home-page/icons/book.svg" %}" width="200"
-                         alt="books icon">
-                    <h3 class="h-counters">دوره ها</h3>
-                    <h2 id="coursesCounter" class="h2 mt-3"></h2>
-                </div>
-
-                <div class="col-md-4 mt-2 mb-2 text-center">
-                    <img class="counters-img" src="{% static "home/images/home-page/icons/students.svg" %}"
-                         width="200" alt="students icon">
-                    <h3 class="h-counters">دانش آموزان</h3>
-                    <h2 id="studentsCounter" class="h2 mt-3"></h2>
-                </div>
-
-                <div class="col-md-4 mt-2 mb-2 text-center">
-                    <img class="counters-img" src="{% static "home/images/home-page/icons/teachers.svg" %}"
-                         width="200" alt="">
-                    <h3 class="h-counters">اساتید</h3>
-                    <h2 id="teachersCounter" class="h2 mt-2"></h2>
+            <div class="container w-75">
+                <div class="row mt-n4">
+                    <div id="teacherList" class="owl-carousel owl-theme">
+                    </div>
                 </div>
 
             </div>
         </div>
-
     </div>
-</div>
 
-<!-- دوره ها -->
 
-<hr class="hr">
-
-<div class="container justify-content-center">
-    <div class="row justify-content-center">
-        <h1 class="course">دوره های ما</h1>
-    </div>
-</div>
-
-<!-- جدید ترین دوره ها -->
-<div class="container mt-5 mb-5">
-    <div class="row">
-        <div class="col-12">
-            <div class="card shadow">
-                <div class="card-body">
-                    <h1 class="mt-3 ml-4 mobile-font">
-                        <img class="mobile-img" src="{% static "home/images/home-page/icons/new-course.svg" %}"
-                             width="50" alt="new course icon">
-                        جدید ترین دوره ها
-                    </h1>
-                    <hr>
-                    <div class="container">
-                        <div id="newCourse" class="owl-carousel owl-theme">
-                        </div>
+    <!-- بسته های آموزشی تابش -->
+    <div class="container-fluid text-center">
+        <h1 class="pt-4">بسته های آموزشی تابش</h1>
+        <hr class="hr">
+        <div class="row px-1">
+            <!-- بسته های فرست کلس -->
+            <div class="col-md-4">
+                <div class="first-class-card">
+                    <div class="card-body">
+                        <img src="{% static 'home/images/home-page/icons/first-class-package.svg' %}" alt="first-class-tabbesh" width="80px">
+                        <h1 class="first-class-h mt-3">فرست کلس</h1>
+                        <p class="mt-5 font-weight-bold">بسته ی کامل دروس + تضمین قبولی</p>
+                        <a href="/blog/first-class-package/" class="btn btn-first-class mt-5"
+                           style="font-size: 25px;">مشاهده</a>
                     </div>
                 </div>
             </div>
+
+            <!-- بسته های گولد کلس -->
+            <div class="col-md-4">
+                <div class="gold-card">
+                    <div class="card-body">
+                        <img src="{% static 'home/images/home-page/icons/gold-package.svg' %}" alt="gold tabbesh" width="80px">
+                        <h1 class="text-primary gold-h mt-3">طلایی</h1>
+                        <p class="mt-5 font-weight-bold">بسته ی کامل دروس + تضمین قبولی</p>
+                        <a href="/blog/gold-package/" class="btn btn-primary mt-5"
+                           style="font-size: 25px;">مشاهده</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- بسته های سیلور کلس -->
+            <div class="col-md-4">
+                <div class="silver-card">
+                    <div class="card-body">
+                        <img src="{% static 'home/images/home-page/icons/silver-package.svg' %}" alt="silver tabbesh" width="80px">
+                        <h1 class="silver-h mt-3">نقره ای</h1>
+                        <p class="mt-5 font-weight-bold">بسته ی کامل دروس + تضمین قبولی</p>
+                        <a href="/blog/silver-class-package/" class="btn btn-silver mt-5"
+                           style="font-size: 25px;">مشاهده</a>
+                    </div>
+                </div>
+            </div>
+
+
         </div>
     </div>
-</div>
 
-<!-- پرتخفیف ترین ها -->
-<div class="container mt-5 mb-5" id="full-discount-courses">
-    <div class="row">
-        <div class="col-12">
 
-            <div class="card shadow">
-                <div class="card-body">
-                    <h1>
-                        <img class=" mobile-img" src="{% static "home/images/home-page/icons/sale.svg" %}"
-                             width="50" alt="discount course icon">
-                        با تخفیف بخر ✌
-                    </h1>
-                    <hr>
+    <!-- چرا تابش -->
+    <div class="container mt-5 desktop-why" id="why-choose-us">
+        <div class="row justify-content-center">
+            <h1 class="mobile-font">
+                <img class="mr-3 why-img"
+                     src="{% static "home/images/home-page/icons/student.svg" %}" width="90" alt="student icon">
+                چرا تابش؟
+            </h1>
+        </div>
+        <div class="row justify-content-center">
 
-                    <div class="container">
-                        <div id="fullDiscountCourse" class="owl-carousel owl-theme">
-                        </div>
+            <div class="col-md-3 mb-2 w-75">
+                <div class="box-card why-margin">
+                    <div class="row justify-content-center">
+                        <img src="{% static "home/images/home-page/icons/teaching.svg" %}" width="80"
+                             alt="teacher-icon">
+                    </div>
+                    <div class="row justify-content-center">
+                        <h5 class="mt-3 px-4 text-center">
+                            تدریس تعاملی <br>
+                            و<br>
+                            گفتگو محور
+                        </h5>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-3 mb-2 w-75">
+                <div class="box-card why-margin">
+                    <div class="row justify-content-center">
+                        <img src="{% static "home/images/home-page/icons/advisor.svg" %}" width="90" alt="advisor icon">
+                    </div>
+                    <div class="row justify-content-center">
+                        <h5 class="mt-4 px-4 text-center">
+                            مشاوره آموزشی <br>
+                        </h5>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-3 mb-2 w-75">
+                <div class="box-card why-margin">
+                    <div class="row justify-content-center">
+                        <img src="{% static "home/images/home-page/icons/discount.svg" %}" width="100"
+                             alt="discount icon">
+                    </div>
+                    <div class="row justify-content-center">
+                        <h5 class="mt-3 px-4 text-center">
+                            قیمت های به صرفه
+                        </h5>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-3 mb-2 w-75">
+                <div class="box-card why-margin">
+                    <div class="row justify-content-center">
+                        <img src="{% static "home/images/home-page/icons/subscription.svg" %}" width="90"
+                             alt="content icon">
+                    </div>
+                    <div class="row justify-content-center text-center">
+                        <h5 class="mt-3 px-4">
+                            محتوای تالیفی<br>
+                            قدم به قدم<br>
+                        </h5>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+
+    </div>
+
+
+    <!-- شمارشگر تابش -->
+    <div class="container mt-5 mb-5 desktop-counter">
+        <div class="row justify-content-center ">
+
+            <h1 class="text-center mobile-font">
+                <img class="mr-3 counter-img" src="{% static "home/images/home-page/icons/counter.svg" %}" width="60"
+                     alt="counter icon">
+                شمارشگر تابش
+                <img class="ml-3 counter-img" src="{% static "home/images/home-page/icons/counter.svg" %}" width="60"
+                     alt="counter icon">
+            </h1>
+
+
+            <div class="container mt-5 mb-5 justify-content-center">
+                <div class="row align-items-center">
+
+                    <div class="col-md-4 mt-2 mb-2 text-center">
+                        <img class="counters-img" src="{% static "home/images/home-page/icons/book.svg" %}" width="200"
+                             alt="books icon">
+                        <h3 class="h-counters">دوره ها</h3>
+                        <h2 id="coursesCounter" class="h2 mt-3"></h2>
+                    </div>
+
+                    <div class="col-md-4 mt-2 mb-2 text-center">
+                        <img class="counters-img" src="{% static "home/images/home-page/icons/students.svg" %}"
+                             width="200" alt="students icon">
+                        <h3 class="h-counters">دانش آموزان</h3>
+                        <h2 id="studentsCounter" class="h2 mt-3"></h2>
+                    </div>
+
+                    <div class="col-md-4 mt-2 mb-2 text-center">
+                        <img class="counters-img" src="{% static "home/images/home-page/icons/teachers.svg" %}"
+                             width="200" alt="">
+                        <h3 class="h-counters">اساتید</h3>
+                        <h2 id="teachersCounter" class="h2 mt-2"></h2>
                     </div>
 
                 </div>
@@ -313,141 +237,196 @@
 
         </div>
     </div>
-</div>
 
-<!-- پر فروش ترین ها -->
-<div class="container mt-5 mb-5" id="best-selling-courses">
-    <div class="row">
-        <div class="col-12">
+    <!-- دوره ها -->
 
-            <div class="card shadow">
-                <div class="card-body">
-                    <h1 class="mt-3 ml-4 mobile-font">
-                        <img class="mobile-img" src="{% static "home/images/home-page/icons/price.svg" %}"
-                             width="50" alt="full discount course">
-                        پر فروش ترین دوره ها
-                    </h1>
-                    <hr>
+    <hr class="hr">
 
-                    <div class="container">
-                        <div id="bestSellersCourse" class="owl-carousel owl-theme">
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-
+    <div class="container justify-content-center">
+        <div class="row justify-content-center">
+            <h1 class="course">دوره های ما</h1>
         </div>
     </div>
-</div>
-<!-- سرچ دوره ها -->
-<div class="container mt-5 mb-5" id="search-course">
-    <div class="row">
-        <div class="col-12">
 
-            <div class="card shadow">
-                <div class="card-body">
-                    <label class="h1 text-secondary mt-3 ml-4 mobile-font" for="searchInput">
-                        <img class="mobile-img" src="{% static "home/images/home-page/icons/search.svg" %}"
-                             width="50" alt="search icon">
-                        اگه پیداش نکردی جستجوش کن
-                    </label>
-                    <div
-                            class="px-3 my-4 input-group d-flex flex-nowrap border border-dark shadow bg-white badge-pill px-3 py-2">
-                        <div class="w-100 p-2">
-                            <input id="searchInput" type="text" class="form-control"
-                                   placeholder="اسم دوره ی مورد نظر را در این مکان بنویسید. به طور مثال : ریاضی نهم"
-                                   name="search">
-                        </div>
-                        <button id="searchButton" data-toggle="tooltip" data-placement="top" title="بزن بریم"
-                                class="btn btn-primary btn-submit">
-                            <img src="{% static "home/images/home-page/icons/black-search.svg" %}" width="30"
-                                 alt="search button">
-                        </button>
-                    </div>
-                    <hr>
-                    <div class="container text-center">
-                        <div id="searchCourse">
-                            <!-- پیدا نشدن سرچ -->
-                            <h5 id="searchNotFound" class="text-center" style="display: none">
-                                <img src="{% static "home/images/home-page/icons/error.svg" %}" width="38"
-                                     alt="error icon">
-                                نتیجه ای یافت نشد!
-                            </h5>
-                            <div class="owl-carousel owl-theme">
+    <!-- جدید ترین دوره ها -->
+    <div class="container mt-5 mb-5">
+        <div class="row">
+            <div class="col-12">
+                <div class="card shadow">
+                    <div class="card-body">
+                        <h1 class="mt-3 ml-4 mobile-font">
+                            <img class="mobile-img" src="{% static "home/images/home-page/icons/new-course.svg" %}"
+                                 width="50" alt="new course icon">
+                            جدید ترین دوره ها
+                        </h1>
+                        <hr>
+                        <div class="container">
+                            <div id="newCourse" class="owl-carousel owl-theme">
                             </div>
                         </div>
                     </div>
-
                 </div>
             </div>
-
         </div>
     </div>
-</div>
 
-<hr class="hr" id="supports">
+    <!-- پرتخفیف ترین ها -->
+    <div class="container mt-5 mb-5" id="full-discount-courses">
+        <div class="row">
+            <div class="col-12">
+                <div class="card shadow">
+                    <div class="card-body">
+                        <h1>
+                            <img class=" mobile-img" src="{% static "home/images/home-page/icons/sale.svg" %}"
+                                 width="50" alt="discount course icon">
+                            با تخفیف بخر ✌
+                        </h1>
+                        <hr>
+                        <div class="container">
+                            <div id="fullDiscountCourse" class="owl-carousel owl-theme">
+                            </div>
+                        </div>
 
-<!-- پشتیبانی -->
-<div class="container mt-5 mb-5 justify-content-center">
-    <div class="row align-items-center">
-        <div class="col-12 text-center">
-            <h1>
-                پشتیبانی
-                <img src="{% static "home/images/home-page/icons/smile.svg" %}" width="40" alt="smile icon">
-            </h1>
-
-            <h3 class="mt-4">
-                آپلود شده با
-                <img src="{% static "home/images/home-page/icons/heart.svg" %}" width="30" alt="heart icon">
-                برای شما
-            </h3>
-
-            <!-- لینک های آپارات -->
-
-            <div class="container pt-3">
-                <div id="supportList" class="owl-carousel owl-theme">
+                    </div>
                 </div>
+
             </div>
-
-
         </div>
     </div>
-</div>
 
-<!-- نظرات کاربران -->
-<div class="container-fluid" style="background-color: #daeaf6" id="comments">
+    <!-- پر فروش ترین ها -->
+    <div class="container mt-5 mb-5" id="best-selling-courses">
+        <div class="row">
+            <div class="col-12">
+
+                <div class="card shadow">
+                    <div class="card-body">
+                        <h1 class="mt-3 ml-4 mobile-font">
+                            <img class="mobile-img" src="{% static "home/images/home-page/icons/price.svg" %}"
+                                 width="50" alt="full discount course">
+                            پر فروش ترین دوره ها
+                        </h1>
+                        <hr>
+
+                        <div class="container">
+                            <div id="bestSellersCourse" class="owl-carousel owl-theme">
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <!-- سرچ دوره ها -->
+    <div class="container mt-5 mb-5" id="search-course">
+        <div class="row">
+            <div class="col-12">
+
+                <div class="card shadow">
+                    <div class="card-body">
+                        <label class="h1 text-secondary mt-3 ml-4 mobile-font" for="searchInput">
+                            <img class="mobile-img" src="{% static "home/images/home-page/icons/search.svg" %}"
+                                 width="50" alt="search icon">
+                            اگه پیداش نکردی جستجوش کن
+                        </label>
+                        <div
+                                class="px-3 my-4 input-group d-flex flex-nowrap border border-dark shadow bg-white badge-pill px-3 py-2">
+                            <div class="w-100 p-2">
+                                <input id="searchInput" type="text" class="form-control"
+                                       placeholder="اسم دوره ی مورد نظر را در این مکان بنویسید. به طور مثال : ریاضی نهم"
+                                       name="search">
+                            </div>
+                            <button id="searchButton" data-toggle="tooltip" data-placement="top" title="بزن بریم"
+                                    class="btn btn-primary btn-submit">
+                                <img src="{% static "home/images/home-page/icons/black-search.svg" %}" width="30"
+                                     alt="search button">
+                            </button>
+                        </div>
+                        <hr>
+                        <div class="container text-center">
+                            <div id="searchCourse">
+                                <!-- پیدا نشدن سرچ -->
+                                <h5 id="searchNotFound" class="text-center" style="display: none">
+                                    <img src="{% static "home/images/home-page/icons/error.svg" %}" width="38"
+                                         alt="error icon">
+                                    نتیجه ای یافت نشد!
+                                </h5>
+                                <div class="owl-carousel owl-theme">
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <hr class="hr" id="supports">
+
+    <!-- پشتیبانی -->
+    <div class="container mt-5 mb-5 justify-content-center">
+        <div class="row align-items-center">
+            <div class="col-12 text-center">
+                <h1>
+                    پشتیبانی
+                    <img src="{% static "home/images/home-page/icons/smile.svg" %}" width="40" alt="smile icon">
+                </h1>
+
+                <h3 class="mt-4">
+                    آپلود شده با
+                    <img src="{% static "home/images/home-page/icons/heart.svg" %}" width="30" alt="heart icon">
+                    برای شما
+                </h3>
+
+                <!-- لینک های آپارات -->
+
+                <div class="container pt-3">
+                    <div id="supportList" class="owl-carousel owl-theme">
+                    </div>
+                </div>
 
 
-    <!-- comment header -->
-    <div class="row">
-        <div class="col-12 text-center">
-            <h2 class="mt-4">
+            </div>
+        </div>
+    </div>
+
+    <!-- نظرات کاربران -->
+    <div class="container-fluid" style="background-color: #daeaf6" id="comments">
+
+
+        <!-- comment header -->
+        <div class="row">
+            <div class="col-12 text-center">
+                <h2 class="mt-4">
                     <span><img class="mobile-img" src="{% static "home/images/home-page/icons/comment.svg" %}"
                                width="60" alt="comment icon"></span>
-                <span class="mobile-font">نظرات همراهان تابشی ما</span>
-            </h2>
-        </div>
+                    <span class="mobile-font">نظرات همراهان تابشی ما</span>
+                </h2>
+            </div>
 
-        <!-- carousel items -->
-        <div id="commentsList" class="owl-carousel owl-theme px-5">
-            <!-- first comment -->
-            <div class="container blockquote">
-                <div class="row justify-content-center">
-                    <img src="{% static "home/images/home-page/icons/default_profile.svg" %}"
-                         style="width: 80px!important;display: inline" alt="commenter profile">
-                </div>
-                <div class="row justify-content-center">
-                    <h5 class="mt-3">مهدی قاسمی</h5>
-                </div>
-                <div class="row justify-content-center">
-                    <p>پایه ششم</p>
-                </div>
-                <div class="row d-flex justify-content-center">
-                    <p class="mx-md-5 position-relative comment-sm-size">
-                        <img class="comment-icon"
-                             src="{% static "home/images/home-page/icons/quotation-heart.svg" %}"
-                             style="width: 50px!important;display: inline" alt="heart icon">
+            <!-- carousel items -->
+            <div id="commentsList" class="owl-carousel owl-theme px-5">
+                <!-- first comment -->
+                <div class="container blockquote">
+                    <div class="row justify-content-center">
+                        <img src="{% static "home/images/home-page/icons/default_profile.svg" %}"
+                             style="width: 80px!important;display: inline" alt="commenter profile">
+                    </div>
+                    <div class="row justify-content-center">
+                        <h5 class="mt-3">مهدی قاسمی</h5>
+                    </div>
+                    <div class="row justify-content-center">
+                        <p>پایه ششم</p>
+                    </div>
+                    <div class="row d-flex justify-content-center">
+                        <p class="mx-md-5 position-relative comment-sm-size">
+                            <img class="comment-icon"
+                                 src="{% static "home/images/home-page/icons/quotation-heart.svg" %}"
+                             style="width: 50px!important;display: inline">
                         با سلام خدمت استاد صابر دلاوری
                         خواستم بابت کلاسهای آنلاین تون تقدیر و تشکر کنم وبابت انگیزه ایی که به پسرم میدادین و روش
                         تدریس
@@ -455,118 +434,51 @@
                         نتیجه قبولی پسرم تو آزمون تیز هوشان را فقط مدیون شما می دونم .
                         واینکه خدارو شاکرم که دوستان شمارو به بنده معرفی کردن .
                         ان شاءالله هر جا که هستین پایدار و موفق باشید. 🌷
-                    </p>
+                        </p>
+                    </div>
+                </div>
+
+                <!-- second comment -->
+                <div class="container blockquote">
+                    <div class="row justify-content-center">
+                        <img src="{% static "home/images/home-page/icons/default_profile.svg" %}"
+                             style="width: 80px!important;display: inline" alt="commenter profile">
+                    </div>
+                    <div class="row justify-content-center">
+                        <h5 class="mt-3">سید طاها ابیضی</h5>
+                    </div>
+                    <div class="row justify-content-center">
+                        <p>پایه هشتم</p>
+                    </div>
+                    <div class="row d-flex justify-content-center">
+                        <p class="mx-md-5 position-relative comment-sm-size">
+                            <img class="comment-icon"
+                                 src="{% static "home/images/home-page/icons/quotation-heart.svg" %}"
+                                 style="width: 50px!important;display: inline" alt="heart icon">
+                            سلام و عرض ادب
+                            محاسبات سریع مقطع نمیشناسه در همه مقاطع میتونه به آدم کمک کنه من از کلاس های محاسبات سریع
+                            مجموعه
+                            تابش خیلی راضی هستم و کمال تشکر ازشون دارم.
+                        </p>
+                    </div>
                 </div>
             </div>
 
-            <!-- second comment -->
-            <div class="container blockquote">
-                <div class="row justify-content-center">
-                    <img src="{% static "home/images/home-page/icons/default_profile.svg" %}"
-                         style="width: 80px!important;display: inline" alt="commenter profile">
-                </div>
-                <div class="row justify-content-center">
-                    <h5 class="mt-3">سید طاها ابیضی</h5>
-                </div>
-                <div class="row justify-content-center">
-                    <p>پایه هشتم</p>
-                </div>
-                <div class="row d-flex justify-content-center">
-                    <p class="mx-md-5 position-relative comment-sm-size">
-                        <img class="comment-icon"
-                             src="{% static "home/images/home-page/icons/quotation-heart.svg" %}"
-                             style="width: 50px!important;display: inline" alt="heart icon">
-                        سلام و عرض ادب
-                        محاسبات سریع مقطع نمیشناسه در همه مقاطع میتونه به آدم کمک کنه من از کلاس های محاسبات سریع
-                        مجموعه
-                        تابش خیلی راضی هستم و کمال تشکر ازشون دارم.
-                    </p>
-                </div>
-            </div>
-        </div>
 
-
-    </div>
-</div>
-
-<!-- footer -->
-<footer class="footer" style="background-color:#001a4d " id="contact-us">
-    <hr class="hr-footer">
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-md-3 footer-items">
-                <h3 class="h3">راه های ارتباطی با ما</h3>
-                <p class="p mt-3">شماره تلفن پشتیبان فنی : 09391811412 </p>
-                <p class="p text-nowrap">شماره تلفن پشتیبان آموزشی : 09374789830</p>
-                {#                <p class="p mt-3">#}
-                {#                    <img src="{% static "home/images/home-page/icons/mail.svg" %}" width="30">#}
-                {#                    something@email.com#}
-                {#                </p>#}
-                <div class="ul d-flex list-unstyled mx-2">
-                    <a href="https://eitaa.com/taabbesh">
-                        <img src="{% static "home/images/home-page/icons/Eitaa.svg" %}" width="30" alt="eitaa logo">
-                    </a>
-                    <a href="https://t.me/taabbesh">
-                        <img class="mr-2" src="{% static "home/images/home-page/icons/telegram.svg" %}" width="30"
-                             alt="telegram logo">
-                    </a>
-                    <a href="https://www.instagram.com/tabbeshclass/">
-                        <img class="mr-2" src="{% static "home/images/home-page/icons/instagram.svg" %}" width="30"
-                             alt="instagram logo">
-                    </a>
-                </div>
-
-            </div>
-
-            <div class="col-md-4 footer-logo text-center text-wrap ">
-                <img class="bg-white rounded" src="{% static "home/images/favicon.ico" %}" width="100" height="100"
-                     alt="tabbesh logo">
-                <p class="p mt-4">
-                    ساخته شده با
-                    <img src="{% static "home/images/home-page/icons/heart2.svg" %}" width="20" alt="footer heart">
-                    در تابش
-                </p>
-                <p class="p mt-2">
-                    <span><img src="{% static "home/images/home-page/icons/license.svg" %}" width="18"
-                               alt="licence icon"></span>
-                    <span>تمامی حقوق متعلق به آموزشگاه آنلاین تابش می باشد</span>
-                </p>
-                <p class="p">
-                    <span><img src="{% static "home/images/home-page/icons/theta.svg" %}" width="16"
-                               alt="theta logo"></span>
-                    <span>طراحی و توسعه توسط تیم تتا</span>
-                </p>
-            </div>
         </div>
     </div>
-</footer>
+{% endblock %}
 
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"
-        integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg=="
-        crossorigin="anonymous">
-</script>
-<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"
-        integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous">
-</script>
+{% block js_files %}
+    <!-- owl carousel js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"
+            integrity="sha512-bPs7Ae6pVvhOSiIcyUClR7/q2OAsRiovw4vAkX+zJbw3ShAeeqezq50RIIcIURq7Oa20rW2n2q+fyXBNcU9lrw=="
+            crossorigin="anonymous"></script>
+    <script src="{% static "home/js/home-page.js" %}"></script>
+    <!-- animation-counter.min -->
+    <script src="{% static "home/js/animation-counter.min.js" %}"></script>
 
-<script src="https://cdn.rtlcss.com/bootstrap/v4.2.1/js/bootstrap.min.js"
-        integrity="sha384-a9xOd0rz8w0J8zqj1qJic7GPFfyMfoiuDjC9rqXlVOcGO/dmRqzMn34gZYDTel8k" crossorigin="anonymous">
-</script>
-
-
-<!-- owl carousel js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"
-        integrity="sha512-bPs7Ae6pVvhOSiIcyUClR7/q2OAsRiovw4vAkX+zJbw3ShAeeqezq50RIIcIURq7Oa20rW2n2q+fyXBNcU9lrw=="
-        crossorigin="anonymous"></script>
-<script src="{% static "home/js/home-page.js" %}"></script>
-
-<!-- animation-counter.min -->
-<script src="{% static "home/js/animation-counter.min.js" %}"></script>
-
-<!-- ray chat -->
-<script src="{% static 'home/js/raychat.js' %}"></script>
-
-</body>
-
-</html>
+    <!-- ray chat -->
+    <script src="{% static 'home/js/raychat.js' %}"></script>
+{% endblock %}

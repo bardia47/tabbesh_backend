@@ -38,7 +38,7 @@ function renderCourseInstallments(instalments, courseId, disocunt) {
     $.each(instalments, function (index, installment) {
         instalmentsRowsTemplate += `
         <tr>
-            <td scope="row">${installment.title === null ? "تمام شهریه" : installment.title}</td>
+            <td scope="row">${installment.title}</td>
             <td>${installmentAmountRender(installment.amount, disocunt)}</td>
             <td>${installment.message}</td>
             <td>${installmentCheckBox(courseId, installment, firstInstallment)}</td>

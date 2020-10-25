@@ -10,10 +10,18 @@ from .forms import *
 from .validators import AdminValidator
 
 
-class CourseCalendarInline(TabularInlineJalaliMixin, admin.TabularInline):
+class CourseCalendarInline(TabularInlineJalaliMixin, admin.StackedInline):
     # formset = CourseCalendarFormSetInline
     model = Course_Calendar
     max_num = 3
+
+class CourseInline(admin.StackedInline):
+    # formset = CourseCalendarFormSetInline
+    model = Course
+    fields = ('title',)
+    readonly_fields = ('title',)
+    extra = 0
+    can_delete = False
 
 
 class LessonAdmin(admin.ModelAdmin):

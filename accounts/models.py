@@ -2,6 +2,8 @@ from django.db import models
 from django.core.mail import send_mail
 from django.contrib.auth.base_user import AbstractBaseUser
 from django.contrib.auth.models import PermissionsMixin
+from django.utils.text import slugify
+
 from accounts.enums import RoleCodes
 import datetime
 import jdatetime
@@ -23,6 +25,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField('ایمیل', unique=True, null=True, blank=True)
     first_name = models.CharField('نام', max_length=30, blank=True)
     last_name = models.CharField('نام خانوادگی', max_length=30, blank=True)
+    description = tinymce_models.HTMLField('توضیحات معلم', null=True, blank=True)
     date_joined = models.DateTimeField('تاریخ عضویت', auto_now_add=True)
     is_active = models.BooleanField('فعال', default=True)
     avatar = models.ImageField(upload_to='avatars/', null=True, blank=True)
@@ -110,6 +113,12 @@ class TeacherUser(User):
         proxy = True
         verbose_name = 'اساتید'
         verbose_name_plural = 'اساتید'
+
+    # get courses of teacher showing in shopping
+    def get_shopping_courses(self):
+        now = datetime.datetime.now()
+        return Course.objects.filter(teacher=self.id, is_active=True, end_date__gt=now + datetime.timedelta(
+            days=InstallmentModelEnum.installmentDateBefore.value))
 
 
 # Roles Model
@@ -503,3 +512,71 @@ class Installment(models.Model):
         if discount:
             return self.amount * (100 - discount.percent) / 100
         return self.amount
+
+
+class Message(models.Model):
+    name = models.CharField('اسم', max_length=50)
+    message = tinymce_models.HTMLField('پیام')
+    grade = models.ForeignKey('Grade', verbose_name='پایه', on_delete=models.SET_NULL, null=True, blank=True)
+
+    class Meta:
+        ordering = ['-id']
+        verbose_name_plural = 'پیام ها'
+        verbose_name = 'پیام'
+
+    def __str__(self):
+        return self.name
+
+
+class Slide(models.Model):
+    url = models.URLField('لینک')
+    image = models.ImageField('عکس', upload_to='slides/')
+
+    class Meta:
+        ordering = ['-id']
+        verbose_name_plural = 'اسلاید ها'
+        verbose_name = 'اسلاید'
+
+    def __str__(self):
+        return self.url
+
+
+# class Package(models.Model):
+#     title = models.CharField('موضوع', max_length=40)
+#     courses = models.ManyToManyField('Course', blank=True, verbose_name='دوره های این پکیج')
+#
+#     class Meta:
+#         ordering = ['-id']
+#         verbose_name_plural = 'پکیج ها'
+#         verbose_name = 'پکیج'
+#
+#     def __str__(self):
+#         return self.title
+
+
+class Weblog(models.Model):
+    title = models.CharField("عنوان", max_length=40)
+    image = models.ImageField('عکس', upload_to='weblog/')
+    text = tinymce_models.HTMLField('متن')
+    pub_date = models.DateTimeField("تاریخ", auto_now_add=True)
+    slug = models.SlugField('لینک', allow_unicode=True, unique=True, blank=True,
+                            help_text='نحوه نمایش آدرس پست در صورت خالی ماندن از عنوان پست برای ساخت لینک استفاده می شود.')
+    sender = models.ForeignKey(
+        User, on_delete=models.DO_NOTHING, verbose_name="فرد بارگذار")
+
+    class Meta:
+        ordering = ['-pub_date']
+        verbose_name_plural = 'پست ها'
+        verbose_name = 'پست'
+
+    def __str__(self):
+        return self.title
+
+    def clean(self):
+        if self.slug is '':
+            self.slug = slugify(self.title, allow_unicode=True)
+
+    def update_date_decorated(self):
+        return jdatetime.datetime.fromgregorian(datetime=self.pub_date).strftime('%a, %d %b %Y %H:%M:%S')
+
+    update_date_decorated.short_description = 'تاریخ انتشار پست'

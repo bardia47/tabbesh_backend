@@ -254,7 +254,7 @@ def shopping_cart(request):
     return render(request, 'dashboard/shopping-cart.html')
 
 
-class GetInstallmentViewSet(viewsets.ModelViewSet):
+class InstallmentViewSet(viewsets.ReadOnlyModelViewSet):
     """
                 add list of installmentIds to params
           """
@@ -263,12 +263,11 @@ class GetInstallmentViewSet(viewsets.ModelViewSet):
     filter_backends = [ListFilter]
     search_fields = ['id']
     SEARCH_PARAM = 'id'
-    http_method_names = ['get', ]
     pagination_class = None
 
     def get_queryset(self):
         if (self.request.GET.get(self.SEARCH_PARAM) not in (None, '')):
-            return super(GetInstallmentViewSet, self).get_queryset()
+            return super(InstallmentViewSet, self).get_queryset()
         now = datetime.datetime.now()
         installments = Installment.objects.filter(Q(start_date__gt=now) | Q(
             end_date__gt=now + datetime.timedelta(

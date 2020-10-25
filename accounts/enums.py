@@ -16,6 +16,7 @@ class InstallmentModelEnum(Enum):
     installmentIsBought = 'پرداخت شده'
     installmentIsExpired = 'از دست داده اید'
     installmentIsNotBought = 'پرداخت نشده'
+    installmentAll = "تمام شهریه"
 
 
 class Sms(Enum):

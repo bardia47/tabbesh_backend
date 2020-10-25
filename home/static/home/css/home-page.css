@@ -382,3 +382,59 @@ hr {
     position: absolute;
     top: -50px;
 }
+
+/* tabbesh packages */
+.first-class-card {
+    height: 400px !important;
+    width: 85%;
+    margin: 20px 20px;
+    border: 2px solid black;
+    border-radius: 10px !important;
+    box-shadow: 10px 10px 0px #1982BF;
+}
+
+.first-class-h {
+    color: #1982BF;
+    font-family: 'IRANSans';
+    text-align: center;
+}
+
+.btn-first-class {
+    background-color: #1982BF;
+    color: white;
+}
+
+.gold-card {
+    height: 400px !important;
+    width: 85%;
+    margin: 20px 20px;
+    border: 2px solid black;
+    border-radius: 10px !important;
+    box-shadow: 10px 10px 0px #FFC20E;
+}
+
+.gold-h {
+    color: #FFC20E;
+    font-family: 'IRANSans';
+    text-align: center;
+}
+
+.silver-card {
+    height: 400px !important;
+    width: 85%;
+    margin: 20px 20px;
+    border: 2px solid black;
+    border-radius: 10px !important;
+    box-shadow: 10px 10px 0px #6C757D;
+}
+
+.silver-h {
+    color: #A6A6A4;
+    font-family: 'IRANSans';
+    text-align: center;
+}
+
+.btn-silver {
+    background-color: #A6A6A4;
+    color: white;
+}

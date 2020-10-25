@@ -6,6 +6,7 @@ $(function () {
     bestSellerAjax();
     fullDiscountAjax();
     supportAjax();
+    commentsAjax();
     $("#searchButton").on("click", function () {
         if ($("#searchInput").val().length != 0) searchAjax($("#searchInput").val());
     });
@@ -18,7 +19,6 @@ $(function () {
     });
     $('[data-toggle="tooltip"]').tooltip();
 
-    commentsCarousel()
 });
 
 
@@ -70,7 +70,7 @@ function homeCounter() {
 
 function teacherListAjax() {
     $.ajax({
-        url: "/all-teacher/",
+        url: "/teachers/",
         type: "GET",
         dataType: "json",
         headers: {
@@ -95,7 +95,7 @@ function teacherListRender(teachersList) {
                 <div class="card-body text-center">
                     <h4 class="text-nowrap">${teacher.get_full_name}</h4>
                     <h5 class="vazir-medium">${teacher.grade_choice}</h5>
-                    <a href="/dashboard/shopping/?teacher=${teacher.id}" class="btn btn-secondary vazir-bold mt-2">مشاهده دروس</a>
+                    <a href="${teacher.url}" class="btn btn-secondary vazir-bold mt-2">مشاهده رزومه</a>
                 </div>
             </div>
         </div>
@@ -111,8 +111,8 @@ function newCourseAjax() {
         url: "/new-course-home/",
         type: "GET",
         dataType: "json",
-        headers:{
-            "Cache-Control" : "max-age=0"
+        headers: {
+            "Cache-Control": "max-age=0"
         },
         success: function (newCourses) {
             newCourseRender(newCourses)
@@ -294,7 +294,7 @@ function supportAjax() {
         url: "/support/",
         type: "GET",
         dataType: "json",
-        headers :{
+        headers: {
             "Cache-Control": "max-age=0"
         },
         success: function (supports) {
@@ -322,6 +322,52 @@ function supportRender(supports) {
 }
 
 
+function commentsAjax() {
+    $.ajax({
+        url: "/message/",
+        type: "GET",
+        dataType: "json",
+        headers: {
+            "Cache-Control": "max-age=0"
+        },
+        success: function (comments) {
+            commentsRender(comments)
+        },
+        error: function () {
+            console.log("بارگذاری نظرات به مشکل خورده است! دوباره امتحان کنید.")
+        },
+    });
+}
+
+//for support
+function commentsRender(messages) {
+    let commentsTemplate = ``;
+    $.each(messages, function (index, comment) {
+        commentsTemplate += `
+                <div class="container blockquote">
+                    <div class="row justify-content-center">
+                        <img src="/static/home/images/home-page/icons/default_profile.svg"
+                             style="width: 80px!important;display: inline" alt="commenter profile">
+                    </div>
+                    <div class="row justify-content-center">
+                        <h5 class="mt-3">${comment.name}</h5>
+                    </div>
+                    <div class="row justify-content-center">
+                        <p>${comment.grade}</p>
+                    </div>
+                    <div class="position-relative comment-sm-size vazir-light">
+                        <img class="comment-icon" src="/static/home/images/home-page/icons/quotation-heart.svg" 
+                        style="width: 50px!important;display: inline" alt="heart icon">
+                        ${comment.message}
+                    </div>
+                </div>      
+            `;
+    });
+    $("#commentsList").empty().append(commentsTemplate);
+    commentsCarousel();
+}
+
+
 function owlCarouselInitial(carouselId) {
     //initial changes for carousels
     $(carouselId).owlCarousel({
@@ -331,7 +377,7 @@ function owlCarouselInitial(carouselId) {
         responsive: {
             0: {
                 items: 1,
-                dots:false,
+                dots: false,
             },
             720: {
                 items: 3,

@@ -1,11 +1,13 @@
 from django.shortcuts import render, redirect
 from django.db.models import Count
-from rest_framework import status, generics
+from django.db.models import Value
+from django.views.decorators.cache import cache_page
+from django.utils.decorators import method_decorator
+from rest_framework import status, generics, viewsets
 from rest_framework.permissions import AllowAny
 from rest_framework.renderers import BrowsableAPIRenderer, JSONRenderer, TemplateHTMLRenderer
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from django.db.models import F
 from accounts.enums import *
 from home.serializers import *
 
@@ -51,16 +53,37 @@ class Counter(APIView):
         return Response(data)
 
 
-class AllTeacher(generics.ListAPIView):
+class TeacherViewset(viewsets.ReadOnlyModelViewSet):
     renderer_classes = [BrowsableAPIRenderer, JSONRenderer]
     permission_classes = (AllowAny,)
-    serializer_class = TeacherSerializer
     pagination_class = None
+    lookup_field = 'username'
+    queryset = User.objects.filter(role__code=RoleCodes.TEACHER.value)
 
     # return those users that are teacher
+    # http_method_names = ['get', ]
+
     def get_queryset(self):
-        queryset = User.objects.filter(role__code=RoleCodes.TEACHER.value)
-        return queryset
+        teachers = TeacherUser.objects.filter(role__code=RoleCodes.TEACHER.value).annotate(member=Count('course__installment__user'))
+        teachers.order_by('-member')
+        return teachers
+
+    def get_serializer_class(self):
+        if self.action == 'list':
+            return TeacherSerializer
+        else:
+            return TeacherDetailSerializer
+
+    @method_decorator(cache_page(60 * 60 * 2))
+    def list(self, request, *args, **kwargs):
+        return super(TeacherViewset, self).list(request)
+
+    def retrieve(self, request, *args, **kwargs):
+        if request.accepted_renderer.format == 'json':
+            return super(TeacherViewset, self).retrieve(request, *args, **kwargs)
+        # add template !
+        return render(request, 'home/teacher-resume.html')
+        # return super(TeacherViewset, self).retrieve(request, *args, **kwargs)
 
 
 class BestSellingCourses(generics.ListAPIView):
@@ -101,13 +124,13 @@ class MostDiscountedCourses(generics.ListAPIView):
         query &= (Q(end_date__gte=time_now) | Q(end_date=None))
         query &= ~(Q(courses=None))
         # this is forbidden code
-       # query &= (~Q(courses__lesson__code=PrivateCourse.MEMBERSHIP.value))
+        # query &= (~Q(courses__lesson__code=PrivateCourse.MEMBERSHIP.value))
         discounts = Discount.objects.filter(query)
         # get those courses that have discounts now
         # this is forbidden code
         course = Course.objects.filter(discount__in=discounts).exclude(
             lesson__code=PrivateCourse.MEMBERSHIP.value).order_by('-discount__percent',
-                                                                        F('discount__end_date').asc(nulls_last=True))
+                                                                  F('discount__end_date').asc(nulls_last=True))
         if not course.exists():
             try:
                 query = Q(start_date__lte=time_now)
@@ -117,7 +140,7 @@ class MostDiscountedCourses(generics.ListAPIView):
                 Discount.objects.get(query)
                 # this is forbidden code
                 return Course.objects.filter(end_date__gt=time_now).exclude(
-            lesson__code=PrivateCourse.MEMBERSHIP.value).order_by('-end_date')[:12]
+                    lesson__code=PrivateCourse.MEMBERSHIP.value).order_by('-end_date')[:12]
             except:
                 return None
         return course
@@ -166,3 +189,28 @@ class Support(generics.ListAPIView):
     permission_classes = (AllowAny,)
     serializer_class = SupportSerializer
     pagination_class = None
+
+
+class Messages(generics.ListAPIView):
+    queryset = Message.objects.all()
+    renderer_classes = [JSONRenderer, BrowsableAPIRenderer]
+    permission_classes = (AllowAny,)
+    serializer_class = MessageSerializer
+    pagination_class = None
+
+class WeblogViewSet(viewsets.ReadOnlyModelViewSet):
+    renderer_classes = [BrowsableAPIRenderer, JSONRenderer]
+    queryset = Weblog.objects.all()
+    pagination_class = None
+    lookup_field = 'slug'
+
+    def get_serializer_class(self):
+        if self.action == 'list':
+            return WeblogSerializer
+        else:
+            return WeblogDetailSerializer
+
+    def retrieve(self, request, *args, **kwargs):
+        instance = self.get_object()
+        serializer = self.get_serializer(instance)
+        return render(request, 'home/blog.html',serializer.data )

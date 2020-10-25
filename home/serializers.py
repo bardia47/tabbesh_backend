@@ -1,18 +1,42 @@
+from dashboard.serializers import *
 from accounts.models import *
 from rest_framework import serializers
+from core.fields import SearchHyperlinkField
 
 
-class TeacherSerializer(serializers.ModelSerializer):
+class TeacherSerializer(serializers.HyperlinkedModelSerializer):
     grade_choice = serializers.SerializerMethodField('get_choices')
 
     class Meta:
         model = User
-        fields = ('id', 'avatar', 'get_full_name', 'grade_choice')
+        fields = ('id', 'avatar', 'get_full_name', 'grade_choice', 'url')
+        extra_kwargs = {
+            'url': {'lookup_field': 'username'},
+        }
 
     def get_choices(self, instance):
         all_grades = instance.grades.all()
         grades = set()
         for grade in all_grades:
+            grades.add(grade.get_grade_choice_display())
+        return grades
+
+
+class TeacherDetailSerializer(serializers.HyperlinkedModelSerializer):
+    grade_choice = serializers.SerializerMethodField('get_choices')
+    courses = serializers.SerializerMethodField('get_courses')
+    url = SearchHyperlinkField(view_name='shopping', read_only=True, search_field='id', param_name='teacher')
+
+    class Meta:
+        model = TeacherUser
+        fields = ('avatar', 'get_full_name', 'grade_choice', 'description', 'courses', 'url')
+
+    def get_courses(self, instance):
+        return ShoppingCourseSerializer(TeacherUser(instance).get_shopping_courses(), read_only=True, many=True).data
+
+    def get_choices(self, instance):
+        grades = set()
+        for grade in instance.grades.all():
             grades.add(grade.get_grade_choice_display())
         return grades
 
@@ -53,3 +77,28 @@ class SupportSerializer(serializers.ModelSerializer):
     class Meta:
         model = Support
         fields = ('description',)
+
+
+class MessageSerializer(serializers.ModelSerializer):
+    grade = serializers.ReadOnlyField(source='grade.title')
+
+    class Meta:
+        model = Message
+        fields = ('name', 'grade', 'message',)
+
+
+class WeblogDetailSerializer(serializers.ModelSerializer):
+    sender = StudentBriefSerializer(read_only=True)
+    update_date = serializers.ReadOnlyField(source='update_date_decorated')
+    class Meta:
+        model = Weblog
+        fields = '__all__'
+
+
+class WeblogSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = Weblog
+        fields = ['title', 'image', 'pub_date', 'slug', 'url']
+        extra_kwargs = {
+            'url': {'lookup_field': 'slug'},
+        }

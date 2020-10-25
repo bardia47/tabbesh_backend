@@ -7,7 +7,7 @@ if (firstParameter) {
     searchParameter = new URLSearchParams("?page=1")
 }
 
-let getShoppingURL = "/dashboard/get-shopping/?";
+let getShoppingURL = "/dashboard/shopping-courses/?";
 // first pagination when user request https://127.0.0.1:8000/dashboard/shopping/
 // initial shopping page
 $(function () {
@@ -298,7 +298,7 @@ function addToCartHandler(event) {
 
 // get shopping cart information
 function getShoppingCart(courseId) {
-    $.get(`/payment/get-installment/?id=${courseId}`, function (data) {
+    $.get(`/payment/installments/?id=${courseId}`, function (data) {
         renderShoppingCarts(data, false);
         animatedToCardList();
     });

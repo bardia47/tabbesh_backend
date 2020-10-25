@@ -1,0 +1,38 @@
+/* header backgrounds */
+.background {
+    background-image: url("../images/teacher-resume/background.svg");
+    background-size: cover;
+    background-position: center;
+    height: 150px;
+}
+
+
+/* teacher course cards */
+.card-teacher {
+    background-color: white;
+    border-radius: 15px;
+    margin: 0 0 50px 0 !important;
+}
+
+.card {
+    border: 1px solid #00204E !important;
+    border-radius: 10px !important;
+}
+
+.img-card {
+    border-radius: 10px 10px 0 0;
+    margin: auto;
+    width: 100%;
+}
+
+.timer {
+
+}
+
+
+@media (max-width: 576px) {
+    .background {
+            background-color: #b9daf3;
+        background-image: unset;
+    }
+}
