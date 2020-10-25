@@ -199,6 +199,7 @@ class Messages(generics.ListAPIView):
     pagination_class = None
 
 class WeblogViewSet(viewsets.ReadOnlyModelViewSet):
+    permission_classes = (AllowAny,)
     renderer_classes = [BrowsableAPIRenderer, JSONRenderer]
     queryset = Weblog.objects.all()
     pagination_class = None
