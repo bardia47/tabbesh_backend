@@ -28,14 +28,14 @@ function renderTeacherResume(teacherResume) {
         </div>
         <div class="container mt-2">
             <div class="row align-items-center px-2">
-                <img src="${teacherResume.avatar}" width="120" height="120">
+                <img class="rounded-circle" src="${teacherResume.avatar}" width="120" height="120">
                 <div class="mr-2">
                     <p class="vazir-bold m-0">${"استاد " + teacherResume.get_full_name}</p>
                     <p class="m-0">${teacherResume.grade_choice}</p>
                 </div>
             </div>
             <hr class="w-100 bg-secondary" style="height: 2px">
-            <div class="row px-5">
+            <div class="px-5">
                 ${teacherResume.description === null ? "رزومه‌ای برای مشاهده موجود نیست " : teacherResume.description}
             </div>
         </div>
