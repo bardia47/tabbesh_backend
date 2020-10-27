@@ -151,6 +151,7 @@ DATABASES = {
         'PASSWORD': 'Tabesh1399Pishgam',
         'HOST': 'localhost',
         'PORT': '3306',
+        'OPTIONS': {'charset': 'utf8mb4'},
     }
 }
 
