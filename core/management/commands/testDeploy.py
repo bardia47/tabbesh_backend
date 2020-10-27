@@ -1,5 +1,7 @@
 from django.core.management.base import BaseCommand
 from django.core import management
+import os
+from django.conf import settings
 
 
 class Command(BaseCommand):
@@ -18,11 +20,13 @@ class Command(BaseCommand):
 
     def handle(self, *args, **kwargs):
         try:
+            # shellCommand = 'import subprocess;import sys;subprocess.run("pip install -r ' + settings.BASE_DIR.replace(
+            #     '\\', '/') + '/requirements.txt");'
+            # management.call_command('shell',
+            #                         command=shellCommand)
             # management.call_command('dbbackup')
             management.call_command('makemigrations')
             management.call_command('migrate')
-            management.call_command('shell',
-                                    command='import subprocess;import sys;subprocess.run("pip install -r requirements.txt");')
             # management.call_command('collectstatic')
             # management.call_command('check','--deploy')
             # management.call_command('test')
