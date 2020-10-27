@@ -83,6 +83,8 @@ INSTALLED_APPS = [
     'django_jalali',
     'tinymce',
     'drf_yasg',
+    'core',
+    'dbbackup',  # django-dbbackup
 ]
 
 # MEMCACHE_HOSTS = ['192.168.101.1:11211']
@@ -230,6 +232,9 @@ TINYMCE_DEFAULT_CONFIG = {
                     "Times New Roman;",
     'toolbar': "undo redo | styleselect | fontsizeselect | bold italic underline forecolor backcolor | alignleft aligncenter alignright alignjustify | link",
 }
+
+DBBACKUP_STORAGE = 'dbbackup.storage.filesystem_storage'
+DBBACKUP_STORAGE_OPTIONS = {'location': '/backups'}
 
 # Internationalization
 # https://docs.djangoproject.com/en/2.2/topics/i18n/
