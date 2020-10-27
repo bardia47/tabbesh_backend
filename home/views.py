@@ -58,7 +58,7 @@ class TeacherViewset(viewsets.ReadOnlyModelViewSet):
     permission_classes = (AllowAny,)
     pagination_class = None
     lookup_field = 'username'
-    queryset = User.objects.filter(role__code=RoleCodes.TEACHER.value)
+    queryset = TeacherUser.objects.filter(role__code=RoleCodes.TEACHER.value)
 
     # return those users that are teacher
     # http_method_names = ['get', ]
