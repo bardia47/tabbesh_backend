@@ -17,6 +17,10 @@ class Command(BaseCommand):
             'ip', nargs='?',
             help='ip and port',
         )
+# django-admin makemessages --locale=fa
+    # or
+# django-admin makemessages --locale=fa --ignore=venv/*
+# django-admin compilemessages
 
     def handle(self, *args, **kwargs):
         try:
