@@ -65,7 +65,8 @@ class TeacherViewset(viewsets.ReadOnlyModelViewSet):
 
     def get_queryset(self):
         teachers = TeacherUser.objects.filter(role__code=RoleCodes.TEACHER.value).annotate(member=Count('course__installment__user'))
-        teachers.order_by('-member')
+        #this is wrong! :(((
+        teachers.order_by('member')
         return teachers
 
     def get_serializer_class(self):
@@ -98,7 +99,7 @@ class BestSellingCourses(generics.ListAPIView):
         count = Course.objects.all().count()
         # if courses are few return all of them
         # this is forbidden code
-        course_order = Course.objects.filter(end_date__gt=time_now).exclude(
+        course_order = Course.objects.filter(end_date__gt=time_now,is_active=True).exclude(
             lesson__code=PrivateCourse.MEMBERSHIP.value).annotate(number=Count('installment__user')).order_by('-number')
         # sorted courses by number of students
         if count > 100:
@@ -128,7 +129,7 @@ class MostDiscountedCourses(generics.ListAPIView):
         discounts = Discount.objects.filter(query)
         # get those courses that have discounts now
         # this is forbidden code
-        course = Course.objects.filter(discount__in=discounts).exclude(
+        course = Course.objects.filter(is_active=True,discount__in=discounts).exclude(
             lesson__code=PrivateCourse.MEMBERSHIP.value).order_by('-discount__percent',
                                                                   F('discount__end_date').asc(nulls_last=True))
         if not course.exists():
@@ -139,7 +140,7 @@ class MostDiscountedCourses(generics.ListAPIView):
                 query &= (Q(courses=None))
                 Discount.objects.get(query)
                 # this is forbidden code
-                return Course.objects.filter(end_date__gt=time_now).exclude(
+                return Course.objects.filter(is_active=True,end_date__gt=time_now).exclude(
                     lesson__code=PrivateCourse.MEMBERSHIP.value).order_by('-end_date')[:12]
             except:
                 return None
@@ -155,7 +156,7 @@ class NewCourseHome(generics.ListAPIView):
     def get_queryset(self):
         time_now = datetime.datetime.now()
         # this is forbidden code
-        return Course.objects.filter(end_date__gte=time_now).exclude(
+        return Course.objects.filter(is_active=True,end_date__gte=time_now).exclude(
             lesson__code=PrivateCourse.MEMBERSHIP.value).order_by('-id')[:12]
 
 
@@ -174,7 +175,7 @@ class SearchHome(APIView):
         query &= (Q(title__icontains=title) | Q(teacher__last_name__icontains=title))
         # this is forbidden code
         query &= (~Q(lesson__code=PrivateCourse.MEMBERSHIP.value))
-        course = Course.objects.filter(query).order_by('-end_date')[:3]
+        course = Course.objects.filter(query,is_active=True).order_by('-end_date')[:3]
         return course
 
     def get(self, request):
