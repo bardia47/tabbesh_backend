@@ -233,8 +233,8 @@ TINYMCE_DEFAULT_CONFIG = {
     'toolbar': "undo redo | styleselect | fontsizeselect | bold italic underline forecolor backcolor | alignleft aligncenter alignright alignjustify | link",
 }
 
-DBBACKUP_STORAGE = 'dbbackup.storage.filesystem_storage'
-DBBACKUP_STORAGE_OPTIONS = {'location': '/backups'}
+DBBACKUP_STORAGE = 'django.core.files.storage.FileSystemStorage'
+DBBACKUP_STORAGE_OPTIONS = {'location': os.path.join(BASE_DIR, 'backups'),}
 
 # Internationalization
 # https://docs.djangoproject.com/en/2.2/topics/i18n/

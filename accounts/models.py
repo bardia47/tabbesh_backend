@@ -573,7 +573,7 @@ class Weblog(models.Model):
         return self.title
 
     def clean(self):
-        if self.slug is '':
+        if self.slug == '':
             self.slug = slugify(self.title, allow_unicode=True)
 
     def update_date_decorated(self):

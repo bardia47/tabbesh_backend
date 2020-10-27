@@ -12,6 +12,8 @@ db.sqlite3
 db.sqlite3-journal
 media
 /static/
+/backups/
+*.dump
 /accounts/migrations
 # If your build process includes running collectstatic, then you probably don't need or want to include staticfiles/
 # in your Git repository. Update and uncomment the following line accordingly.
@@ -234,4 +236,3 @@ pip-selfcheck.json
 # Ignore all local history of files
 .history
 
-# End of https://www.gitignore.io/api/django,pycharm,virtualenv,visualstudiocode
