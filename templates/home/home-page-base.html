@@ -16,6 +16,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css">
     <link rel="stylesheet" href="{% static "home/css/tabbesh-bootstrap-theme.css" %}">
     <link rel="stylesheet" href="{% static "home/css/home-page-base.css" %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
     {% block css_files %}
     {% endblock %}
 </head>
@@ -24,10 +25,10 @@
 {% csrf_token %}
 <!-- Navbar -->
 <nav class="navbar sticky-top navbar-expand-lg navbar-light bg-white">
-    <a class="navbar-brand text-secondary vazir-bold" href="/home/">
-        <img src="{% static "home/images/home-page/tabesh_logo.png" %}" width="70" height="70"
+    <a class="navbar-brand vazir-bold" href="/home/">
+        <img src="{% static "home/images/home-page/tabesh_logo.png" %}" width="30" height="30"
              class="d-inline-block" alt="tabbesh logo">
-        مدرسه آنلاین تابش
+        <span style="font-size: 18px">مدرسه آنلاین تابش</span>
     </a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
             aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -35,28 +36,35 @@
     </button>
 
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav mr-auto float">
+        <ul class="navbar-nav float">
+            <li class="nav-item">
+                <a data-scroll="#teachers" class="nav-link text-dark vazir-bold nav-scroll"
+                   href="/home/#teachers">اساتید</a>
+            </li>
+            <li class="nav-item">
+                <a data-scroll="#packages" class="nav-link text-dark vazir-bold nav-scroll"
+                   href="/home/#packages">پک‌ها</a>
+            </li>
             <li class="nav-item">
                 <a data-scroll="#why-choose-us" class="nav-link text-dark vazir-bold nav-scroll"
                    href="/home/#why-choose-us">چرا
                     ما؟</a>
             </li>
-            <li id="teachersItem" class="nav-item">
-                <a data-scroll="#teachers" class="nav-link text-dark vazir-bold nav-scroll"
-                   href="/home/#teachers">اساتید</a>
-            </li>
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle text-dark vazir-bold" id="navbarDropdown" role="button"
                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    دوره ها
+                    دوره‌ها
                 </a>
                 <div class="dropdown-menu vazir-medium" aria-labelledby="navbarDropdown">
+                    <a data-scroll="#new-courses" class="dropdown-item nav-scroll"
+                       href="/home/#new-courses">جدید
+                        ترین ‌ها</a>
                     <a data-scroll="#full-discount-courses" class="dropdown-item nav-scroll"
                        href="/home/#full-discount-courses">پر تخفیف
-                        ترین ها</a>
+                        ترین ‌ها</a>
                     <a data-scroll="#best-selling-courses" class="dropdown-item nav-scroll"
                        href="/home/#best-selling-courses">پر فروش
-                        ترین ها</a>
+                        ترین‌ ها</a>
                     <div class="dropdown-divider"></div>
                     <a data-scroll="#search-course" class="dropdown-item nav-scroll" href="/home/#search-course">جستجو
                         دوره</a>
@@ -77,10 +85,11 @@
             </li>
         </ul>
 
-        <div class="mr-auto">
-            <a class="btn btn-secondary ml-1" href="{% url "signin" %}">ورود</a>
-            <a class="btn btn-primary" href="{% url "signup" %}">ثبت نام</a>
-        </div>
+    </div>
+
+    <div class="mr-auto">
+        <a class="btn btn-secondary ml-1" href="{% url "signin" %}">ورود</a>
+        <a class="btn btn-primary" href="{% url "signup" %}">ثبت نام</a>
     </div>
 </nav>
 
