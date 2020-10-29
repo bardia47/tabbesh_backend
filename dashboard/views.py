@@ -9,9 +9,8 @@ from rest_framework import viewsets
 from .serializers import *
 from rest_framework import status
 from rest_framework import generics
-from core.utils import Utils
+from core.utils import ImageUtils,CacheUtils,TextUtils
 from rest_framework.decorators import permission_classes
-from core.utils import TextUtils
 # for load or dump jsons
 from django.db.models import Case, Value, When, IntegerField
 from .permission import EditDocumentPermission
@@ -98,7 +97,7 @@ class Profile(APIView):
                 newdict = {'errors': serializer.errors}
                 newdict.update(showSer.data)
                 return Response(newdict, status=status.HTTP_406_NOT_ACCEPTABLE)
-            Utils.cleanMenuCache(request)
+            CacheUtils.cleanMenuCache(request)
             return Response(showSer.data)
 
         if method == 'changePassword':
@@ -128,7 +127,7 @@ class Profile(APIView):
             #     ext = format.split('/')[-1]
             #     avatar = ContentFile(base64.b64decode(imgstr), name=file_name + "." + ext)
             # except:
-            avatar = Utils.compressImage(request.FILES.get("file"), width=200)
+            avatar = ImageUtils.compressImage(request.FILES.get("file"), width=200)
 
             if avatar:
                 if not request.user.avatar.url.startswith("/media/defaults"):
@@ -136,7 +135,7 @@ class Profile(APIView):
                 request.user.avatar = avatar
                 request.user.save()
                 showSer = UserProfileShowSerializer(instance={'grades': grades, 'cities': cities, "user": request.user})
-                Utils.cleanMenuCache(request)
+                CacheUtils.cleanMenuCache(request)
                 return Response(showSer.data)
 
 
