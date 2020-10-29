@@ -8,8 +8,7 @@ import smtplib
 import ssl
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
-import jdatetime
-import jdatetime
+import re
 
 
 class ImageUtils:
@@ -32,6 +31,15 @@ class ImageUtils:
         uploadedImage = InMemoryUploadedFile(outputIoStream, 'ImageField', "%s.jpg" % uploadedImage.name.split('.')[0],
                                              'image/jpeg', sys.getsizeof(outputIoStream), None)
         return uploadedImage
+
+    def renameImage(uploadedImage, name):
+        uploadedImage.name = re.sub('.+?(?=\.)', name, uploadedImage.name)
+        return uploadedImage
+
+    def renameAndCompressImage(uploadedImage, name, **extra_fields):
+        image = ImageUtils.renameImage(uploadedImage, name)
+        return ImageUtils.compressImage(image, **extra_fields)
+
 
 class CacheUtils:
     # clean cache used for menu

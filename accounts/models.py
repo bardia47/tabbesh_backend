@@ -14,11 +14,43 @@ from django.db.models import Q, Max, IntegerField, F, Sum
 from django.db.models import Value as V
 from django.db.models.functions import Concat
 from .enums import InstallmentModelEnum
-
+from django.utils.translation import gettext_lazy as _
 
 # Create your models here.
 
-
+#this is not work :/
+# class User(AbstractBaseUser, PermissionsMixin):
+#     username = models.CharField(_('username'), max_length=30, unique=True)
+#     password = models.CharField(_('password'), max_length=128)
+#     email = models.EmailField(_('email'), unique=True, null=True, blank=True)
+#     first_name = models.CharField(_('first name'), max_length=30, blank=True)
+#     last_name = models.CharField(_('last name'), max_length=30, blank=True)
+#     description = tinymce_models.HTMLField(_('teacher description'), null=True, blank=True)
+#     date_joined = models.DateTimeField(_('date joined'), auto_now_add=True)
+#     is_active = models.BooleanField(_('active'), default=True)
+#     avatar = models.ImageField(upload_to='avatars/', null=True, blank=True)
+#     gender = models.BooleanField(default=True)
+#     role = models.ForeignKey(
+#         'Role', on_delete=models.DO_NOTHING, verbose_name=_('role'))
+#     national_code = models.CharField(
+#         _('national code'), max_length=10, null=True, blank=True)
+#     city = models.ForeignKey(
+#         'City', blank=True, null=True, on_delete=models.DO_NOTHING, verbose_name=_('city'))
+#     address = models.CharField(_('address'), max_length=255, null=True, blank=True)
+#     phone_number = models.CharField(_('phone number'), max_length=12, unique=True)
+#     grades = models.ManyToManyField('Grade', blank=True, verbose_name=_('grade'))
+#     # courses = models.ManyToManyField('Course', blank=True )
+#     installments = models.ManyToManyField('Installment', blank=True)
+#     is_superuser = models.BooleanField(default=False)
+#     is_staff = models.BooleanField(default=True)
+#     credit = models.FloatField(_('credit'), default=float(0),
+#                                validators=[MinValueValidator(0)]
+#                                )
+#
+#     class Meta:
+#         ordering = ['-id']
+#         verbose_name_plural = _('user')
+#         verbose_name = _('user')
 class User(AbstractBaseUser, PermissionsMixin):
     username = models.CharField("نام کاربری", max_length=30, unique=True)
     password = models.CharField("رمز", max_length=128)
@@ -69,7 +101,7 @@ class User(AbstractBaseUser, PermissionsMixin):
         full_name = '%s %s' % (self.first_name, self.last_name)
         return full_name.strip()
 
-    get_full_name.short_description = 'نام'
+    get_full_name.short_description = _('first name')
 
     def get_short_name(self):
         return self.first_name
@@ -80,7 +112,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     def date_joined_decorated(self):
         return jdatetime.datetime.fromgregorian(datetime=self.date_joined).strftime("%a, %d %b %Y %H:%M:%S")
 
-    date_joined_decorated.short_description = 'تاریخ عضویت'
+    date_joined_decorated.short_description = _('date joined')
 
     def set_default_avatar(self):
         if not self.avatar:

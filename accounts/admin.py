@@ -99,7 +99,10 @@ class TeacherAdmin(UserAdmin):
     def get_fieldsets(self, request, obj=None):
         fieldsets = list((super(UserAdmin, self).get_fieldsets(request, obj)))
         fieldsets.remove((None, {'fields': ('username', 'email', 'date_joined_decorated')}), )
-        fieldsets.remove(        ('قسط ها ', {'fields': ('installments',)}), )
+        try:
+            fieldsets.remove(        ('قسط ها ', {'fields': ('installments',)}), )
+        except:
+            pass
 
         fieldsets.insert(0, (None, {'fields': ('username', 'email', 'date_joined_decorated', 'description')}))
 

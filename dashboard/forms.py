@@ -21,7 +21,7 @@ class CourseForm(forms.ModelForm):
         data = self.cleaned_data['image']
         try:
             if self.files['image']:
-                data = ImageUtils.compressImage(data, width=500)
+                data = ImageUtils.renameAndCompressImage(data, self.cleaned_data['title'], width=500)
                 if not self.instance.image.url.startswith("/media/defaults"):
                     self.instance.image.delete()
         except:

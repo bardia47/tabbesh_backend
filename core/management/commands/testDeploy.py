@@ -2,6 +2,7 @@ from django.core.management.base import BaseCommand
 from django.core import management
 import os
 from django.conf import settings
+from django.core.management.commands import makemessages
 
 
 class Command(BaseCommand):
@@ -17,10 +18,11 @@ class Command(BaseCommand):
             'ip', nargs='?',
             help='ip and port',
         )
-# django-admin makemessages --locale=fa
+
+    # django-admin makemessages --locale=fa
     # or
-# django-admin makemessages --locale=fa --ignore=venv/*
-# django-admin compilemessages
+    # django-admin makemessages --locale=fa --ignore=venv/*
+    # django-admin compilemessages
 
     def handle(self, *args, **kwargs):
         try:
@@ -29,6 +31,8 @@ class Command(BaseCommand):
             # management.call_command('shell',
             #                         command=shellCommand)
             # management.call_command('dbbackup')
+            management.call_command('makemessages', locale=['fa', ], ignore=['venv/*', ])
+            management.call_command('compilemessages', locale=['fa', ], ignore=['venv/*', ])
             management.call_command('makemigrations')
             management.call_command('migrate')
             # management.call_command('collectstatic')
