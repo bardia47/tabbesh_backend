@@ -13,7 +13,7 @@ add this to your database**
 
 **if using windows:**
 
- download the precompiled binary installer. Download the "static" flavor of your Operating System (32bit or 64bit) and copy to C:\Program Files\gettext-iconv\
+ download the precompiled binary installer. Download the "static" flavor of your Operating System (32bit or 64bit) and simple run the installer.
 https://mlocati.github.io/articles/gettext-iconv-windows.html
 
 Update the system PATH:
