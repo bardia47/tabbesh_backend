@@ -1,6 +1,6 @@
 $(function () {
     scrollAnimations();
-    slidesListAjax();
+    // slidesListAjax();
     teacherListAjax();
     homeCounter();
     newCourseAjax();
