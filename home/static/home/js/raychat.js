@@ -8,4 +8,10 @@
 
     let e = document, a = window, o = "ce734f53-a0ca-4300-9bd8-436ac0acd84d";
     "complete" == e.readyState ? t() : a.attachEvent ? a.attachEvent("onload", t) : a.addEventListener("load", t, !1)
+
 }();
+
+window.addEventListener('raychat_ready', function (ets) {
+    if (window.Raychat.isWidgetOpen() === true) $("#raychatBtn").hide()
+});
+

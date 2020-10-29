@@ -1,5 +1,6 @@
 $(function () {
     scrollAnimations();
+    // slidesListAjax();
     teacherListAjax();
     homeCounter();
     newCourseAjax();
@@ -105,6 +106,50 @@ function teacherListRender(teachersList) {
     $("#teacherList").empty().append(teachersTemplate);
     owlCarouselInitial("#teacherList");
 }
+
+function slidesListAjax() {
+    $.ajax({
+        url: "/slides/",
+        type: "GET",
+        dataType: "json",
+        headers: {
+            "Cache-Control": "max-age=0"
+        },
+        success: function (slides) {
+            slidesListRender(slides)
+        },
+        error: function () {
+            console.log("بارگذاری اسلاید‌ ها به مشکل خورده است! دوباره امتحان کنید.")
+        },
+    });
+}
+
+function slidesListRender(slides) {
+    let slideTemplate = ``;
+    $.each(slides, function (index, slide) {
+        slideTemplate += `
+            <div class="home-slide w-100">
+                <a href="${slide.url}"><img class="rounded w-100"
+                     src="${slide.image}"
+                     alt="First slide"></a>
+            </div>
+        `;
+    });
+    $("#slideList").empty().append(slideTemplate);
+    $("#slideList").owlCarousel({
+        margin: 10,
+        loop: true,
+        autoplay: true,
+        autoplaySpeed: 1000,
+        autoplayTimeout: 4000,
+        rtl: true,
+        nav: true,
+        items: 1,
+    });
+    $("#slideList").find(".owl-prev").css("right", "0px").empty().append(`<img src="/static/home/images/home-page/icons/owl-prev.svg" width="40" height="40">`);
+    $("#slideList").find(".owl-next").css("left", "0px").empty().append(`<img src="/static/home/images/home-page/icons/owl-next.svg" width="40" height="40">`);
+}
+
 
 function newCourseAjax() {
     $.ajax({
@@ -318,7 +363,20 @@ function supportRender(supports) {
         supportsTemplate += supportTemplate;
     });
     $("#supportList").empty().append(supportsTemplate);
-    owlCarouselInitial("#supportList");
+    $(supportList).owlCarousel({
+        rtl: true,
+        nav: true,
+        responsiveClass: true,
+        responsive: {
+            0: {
+                items: 1,
+                dots: false,
+            },
+            720: {
+                items: 3,
+            }
+        }
+    });
 }
 
 
@@ -373,6 +431,11 @@ function owlCarouselInitial(carouselId) {
     $(carouselId).owlCarousel({
         rtl: true,
         nav: true,
+        loop: true,
+        autoplay: true,
+        autoplayTimeout: 3500,
+        autoplaySpeed: 700,
+        autoplayHoverPause: true,
         responsiveClass: true,
         responsive: {
             0: {
@@ -425,3 +488,13 @@ function scrollAnimations() {
 
 // set default tooltip to hover
 $.fn.tooltip.Constructor.Default.trigger = 'hover';
+
+$(".animate__animated").on('animationend', function () {
+    console.log($(this)[0])
+    $(this).removeClass(`animate__${$(this).data("animate")}`)
+});
+
+$(".animate__animated").hover(function () {
+    console.log("hi")
+    $(this).addClass(`animate__${$(this).data("animate")}`)
+});

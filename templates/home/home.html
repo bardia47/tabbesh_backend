@@ -51,11 +51,14 @@
             <a class="btn btn-primary btn-header mt-4" href="{% url 'signup' %}">ثبت نام</a>
         </div>
     </div>
-
+    <!-- اسلاید‌ها -->
+{#    <div class="mt-5 mt-sm-0 px-3 px-sm-0 rounded-md" id="slides">#}
+{#        <div id="slideList" class="owl-carousel owl-theme">#}
+{#        </div>#}
+{#    </div>#}
     <!-- اساتید -->
-    <div class="container-fluid mt-5 justify-content-center" id="teachers">
-        <div class="row align-items-center img-circle p-5">
-
+    <div class="container-fluid mt-sm-5 justify-content-center" id="teachers">
+        <div class="row align-items-center img-circle p-sm-5">
             <div class="col-12 text-center">
                 <h1 class="mt-5 mb-5">اساتید</h1>
             </div>
@@ -71,16 +74,18 @@
     </div>
 
 
-    <!-- بسته های آموزشی تابش -->
-    <div class="container-fluid text-center">
-        <h1 class="pt-4">بسته های آموزشی تابش</h1>
+    <!-- پک های آموزشی تابش -->
+    <div id="packages" class="container-fluid text-center">
+        <h1 class="pt-4">پک‌های آموزشی تابش</h1>
         <hr class="hr">
         <div class="row px-1">
             <!-- بسته های فرست کلس -->
             <div class="col-md-4">
                 <div class="first-class-card">
                     <div class="card-body">
-                        <img src="{% static 'home/images/home-page/icons/first-class-package.svg' %}" alt="first-class-tabbesh" width="80px">
+                        <img class="animate__animated animate__slow" data-animate="fadeOutRight"
+                             src="{% static 'home/images/home-page/icons/first-class-package.svg' %}"
+                             alt="first-class-tabbesh" width="80px">
                         <h1 class="first-class-h mt-3">فرست کلس</h1>
                         <p class="mt-5 font-weight-bold">بسته‌ی کلاس خصوصی</p>
                         <a href="/blog/first-class-package/" class="btn btn-first-class mt-5"
@@ -93,8 +98,10 @@
             <div class="col-md-4">
                 <div class="gold-card">
                     <div class="card-body">
-                        <img src="{% static 'home/images/home-page/icons/gold-package.svg' %}" alt="gold tabbesh" width="80px">
-                        <h1 class="text-primary gold-h mt-3">طلایی</h1>
+                        <img class="animate__animated animate__slow" data-animate="pulse"
+                             src="{% static 'home/images/home-page/icons/gold-package.svg' %}" alt="gold tabbesh"
+                             width="80px">
+                        <h1 class="text-primary gold-h mt-3">گلد کلس</h1>
                         <p class="mt-5 font-weight-bold">بسته‌ی کامل دروس + مشاوره و آزمون</p>
                         <a href="/blog/gold-package/" class="btn btn-primary mt-5"
                            style="font-size: 25px;">مشاهده</a>
@@ -106,8 +113,10 @@
             <div class="col-md-4">
                 <div class="silver-card">
                     <div class="card-body">
-                        <img src="{% static 'home/images/home-page/icons/silver-package.svg' %}" alt="silver tabbesh" width="80px">
-                        <h1 class="silver-h mt-3">نقره ای</h1>
+                        <img class="animate__animated animate__slow" data-animate="pulse"
+                             src="{% static 'home/images/home-page/icons/silver-package.svg' %}" alt="silver tabbesh"
+                             width="80px">
+                        <h1 class="silver-h mt-3">سیلور کلس</h1>
                         <p class="mt-5 font-weight-bold">بسته‌ی تک درس</p>
                         <a href="/blog/silver-class-package/" class="btn btn-silver mt-5"
                            style="font-size: 25px;">مشاهده</a>
@@ -249,7 +258,7 @@
     </div>
 
     <!-- جدید ترین دوره ها -->
-    <div class="container mt-5 mb-5">
+    <div class="container mt-5 mb-5" id="new-courses">
         <div class="row">
             <div class="col-12">
                 <div class="card shadow">
@@ -426,14 +435,14 @@
                         <p class="mx-md-5 position-relative comment-sm-size">
                             <img class="comment-icon"
                                  src="{% static "home/images/home-page/icons/quotation-heart.svg" %}"
-                             style="width: 50px!important;display: inline">
-                        با سلام خدمت استاد صابر دلاوری
-                        خواستم بابت کلاسهای آنلاین تون تقدیر و تشکر کنم وبابت انگیزه ایی که به پسرم میدادین و روش
-                        تدریس
-                        تون واقعا عالی بود
-                        نتیجه قبولی پسرم تو آزمون تیز هوشان را فقط مدیون شما می دونم .
-                        واینکه خدارو شاکرم که دوستان شمارو به بنده معرفی کردن .
-                        ان شاءالله هر جا که هستین پایدار و موفق باشید. 🌷
+                                 style="width: 50px!important;display: inline">
+                            با سلام خدمت استاد صابر دلاوری
+                            خواستم بابت کلاسهای آنلاین تون تقدیر و تشکر کنم وبابت انگیزه ایی که به پسرم میدادین و روش
+                            تدریس
+                            تون واقعا عالی بود
+                            نتیجه قبولی پسرم تو آزمون تیز هوشان را فقط مدیون شما می دونم .
+                            واینکه خدارو شاکرم که دوستان شمارو به بنده معرفی کردن .
+                            ان شاءالله هر جا که هستین پایدار و موفق باشید. 🌷
                         </p>
                     </div>
                 </div>
@@ -466,6 +475,10 @@
 
 
         </div>
+    </div>
+
+    <div id="#supportHint">
+    <img src="">
     </div>
 {% endblock %}
 

@@ -369,7 +369,17 @@ hr {
         width: 150px;
     }
 
+    .img-circle{
+        background-image: none;
+    }
 
+    #slideList .owl-prev {
+        display: none;
+    }
+
+    #slideList .owl-next {
+        display: none;
+    }
 }
 
 .owl-carousel {

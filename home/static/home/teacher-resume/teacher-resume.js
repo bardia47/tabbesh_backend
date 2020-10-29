@@ -74,7 +74,7 @@ function renderCourseCards(courses, url) {
     let courseTemplate = ``;
     $.each(courses, function (index, course) {
         courseTemplate += `
-            <div class="col-md-3">
+            <div class="col-md-3 mb-2">
                 <div class="card">
                     <img class="img-card" src="${course.image}" alt="course image">
                     <div class="card-body text-center">
