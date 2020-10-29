@@ -12,7 +12,7 @@ import jdatetime
 import jdatetime
 
 
-class Utils:
+class ImageUtils:
     # compress images
     # if width = height we don't need both
     def compressImage(uploadedImage, **extra_fields):
@@ -33,6 +33,7 @@ class Utils:
                                              'image/jpeg', sys.getsizeof(outputIoStream), None)
         return uploadedImage
 
+class CacheUtils:
     # clean cache used for menu
     def cleanMenuCache(request):
         if request.accepted_renderer.format == 'html':
@@ -43,8 +44,6 @@ class Utils:
 
 class TextUtils:
     def convert_list_to_string(list, seperator=','):
-        """ Convert list to string, by joining all item in list with given separator.
-            Returns the concatenated string """
         return seperator.join(list)
 
     def replacer(old_text, string_list):
@@ -68,17 +67,13 @@ class EmailUtils:
             message["Subject"] = 'subject'
             message["From"] = sender
             message["To"] = receiver
-
             # Create the plain-text (it isn't force to use it) and HTML version of your message
             html = text
-
             # Turn these into plain/html MIMEText objects
             part = MIMEText(html, "html")
-
             # Add HTML/plain-text parts to MIMEMultipart message
             # The email client will try to render the last part first
             message.attach(part)
-
             # Create secure connection with server and send email
             context = ssl.create_default_context()
             with smtplib.SMTP_SSL("smtp.gmail.com", 465, context=context) as server:
@@ -88,15 +83,6 @@ class EmailUtils:
                 )
         except:
             return {'message': 'try again.'}
-
-# use get_field_display for this !
-# get choice name from choice list
-# class ChoiceUtils:
-#     def get_choice_name(key, choice_types):
-#         for choice, value in choice_types:
-#             if choice == key:
-#                 return value
-
 
 # this is not used now
 # class DateUtils:
