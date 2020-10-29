@@ -10,6 +10,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from accounts.enums import *
 from home.serializers import *
+from django.urls import reverse
 
 
 def main_page(request):
@@ -77,7 +78,9 @@ class TeacherViewset(viewsets.ReadOnlyModelViewSet):
 
     @method_decorator(cache_page(60 * 60 * 2))
     def list(self, request, *args, **kwargs):
-        return super(TeacherViewset, self).list(request)
+        if request.accepted_renderer.format == 'json':
+            return super(TeacherViewset, self).list(request)
+        return redirect('{}#teachers'.format(reverse('home')))
 
     def retrieve(self, request, *args, **kwargs):
         if request.accepted_renderer.format == 'json':
@@ -216,3 +219,13 @@ class WeblogViewSet(viewsets.ReadOnlyModelViewSet):
         instance = self.get_object()
         serializer = self.get_serializer(instance)
         return render(request, 'home/blog.html',serializer.data )
+
+class SlideViewSet(viewsets.ReadOnlyModelViewSet):
+    permission_classes = (AllowAny,)
+    renderer_classes = [BrowsableAPIRenderer, JSONRenderer]
+    queryset = Slide.objects.all()
+    serializer_class = SlideSerializer
+# TODO change this to cache
+    # @method_decorator(cache_page(60 * 60 * 2))
+    def list(self, request, *args, **kwargs):
+        return super(SlideViewSet, self).list(request)
