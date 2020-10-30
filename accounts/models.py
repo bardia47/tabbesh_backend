@@ -101,7 +101,7 @@ class User(AbstractBaseUser, PermissionsMixin):
         full_name = '%s %s' % (self.first_name, self.last_name)
         return full_name.strip()
 
-    get_full_name.short_description = _('first name')
+    get_full_name.short_description = 'نام'
 
     def get_short_name(self):
         return self.first_name
@@ -112,7 +112,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     def date_joined_decorated(self):
         return jdatetime.datetime.fromgregorian(datetime=self.date_joined).strftime("%a, %d %b %Y %H:%M:%S")
 
-    date_joined_decorated.short_description = _('date joined')
+    date_joined_decorated.short_description = 'تاریخ عضویت'
 
     def set_default_avatar(self):
         if not self.avatar:
