@@ -242,8 +242,8 @@ DBBACKUP_STORAGE_OPTIONS = {'location': os.path.join(BASE_DIR, 'backups'),}
 LANGUAGE_CODE = 'fa'
 import locale
 locale.setlocale(locale.LC_ALL, "fa_IR.UTF-8")
-LOCALE_PATHS = (
-    BASE_DIR + 'locale/', )
+# LOCALE_PATHS = [os.path.join(BASE_DIR, 'locale')]
+LOCALE_PATHS = (BASE_DIR + 'locale/', )
 TIME_ZONE = 'Asia/Tehran'
 USE_L10N = True
 USE_TZ = False
