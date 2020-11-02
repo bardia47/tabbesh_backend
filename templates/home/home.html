@@ -21,22 +21,22 @@
 
 {% block content %}
     <!-- ورود و ثبت نام نسخه ی دسکتاپ -->
-    <div class="desktop-version">
-        <div class="header-description">
-            <div class="container text-center">
-                <h1 class="h-header-desktop">حس خوب</h1>
-                <h2 class="h-header-desktop">
-                    <span style="color: #ffc109;">آنلاین</span>
-                    <span>بودن</span>
-                </h2>
-                <div class="row justify-content-center">
-                    <a class="btn btn-secondary btn-header mt-4 ml-2" href="{% url 'signin' %}">ورود</a>
-                    <a class="btn btn-primary btn-header mt-4" href="{% url 'signup' %}">ثبت نام</a>
-                </div>
-            </div>
-        </div>
-    </div>
-
+{#    <div class="desktop-version">#}
+{#        <div class="header-description">#}
+{#            <div class="container text-center">#}
+{#                <h1 class="h-header-desktop">حس خوب</h1>#}
+{#                <h2 class="h-header-desktop">#}
+{#                    <span style="color: #ffc109;">آنلاین</span>#}
+{#                    <span>بودن</span>#}
+{#                </h2>#}
+{#                <div class="row justify-content-center">#}
+{#                    <a class="btn btn-secondary btn-header mt-4 ml-2" href="{% url 'signin' %}">ورود</a>#}
+{#                    <a class="btn btn-primary btn-header mt-4" href="{% url 'signup' %}">ثبت نام</a>#}
+{#                </div>#}
+{#            </div>#}
+{#        </div>#}
+{#    </div>#}
+{##}
     <!-- ورود و ثبت نام نسخه ی گوشی -->
     <div class="container text-center mobile-version ">
         <img class="text-center" src="{% static "home/images/home-page/mobile-poster.svg" %}" width="250" height="250"
@@ -52,10 +52,10 @@
         </div>
     </div>
     <!-- اسلاید‌ها -->
-{#    <div class="mt-5 mt-sm-0 px-3 px-sm-0 rounded-md" id="slides">#}
-{#        <div id="slideList" class="owl-carousel owl-theme">#}
-{#        </div>#}
-{#    </div>#}
+    <div class="mt-5 mt-sm-0 px-3 px-sm-0 rounded-md" id="slides">
+        <div id="slideList" class="owl-carousel owl-theme">
+        </div>
+    </div>
     <!-- اساتید -->
     <div class="container-fluid mt-sm-5 justify-content-center" id="teachers">
         <div class="row align-items-center img-circle p-sm-5">

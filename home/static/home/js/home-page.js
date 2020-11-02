@@ -1,6 +1,6 @@
 $(function () {
     scrollAnimations();
-    // slidesListAjax();
+    slidesListAjax();
     teacherListAjax();
     homeCounter();
     newCourseAjax();
@@ -128,10 +128,10 @@ function slidesListRender(slides) {
     let slideTemplate = ``;
     $.each(slides, function (index, slide) {
         slideTemplate += `
-            <div class="home-slide w-100">
+            <div class="w-100">
                 <a href="${slide.url}"><img class="rounded w-100"
                      src="${slide.image}"
-                     alt="First slide"></a>
+                     alt="First slide" style="object-fit: cover"></a>
             </div>
         `;
     });
@@ -142,6 +142,12 @@ function slidesListRender(slides) {
         autoplay: true,
         autoplaySpeed: 1000,
         autoplayTimeout: 4000,
+        responsiveClass: true,
+        responsive: {
+            720: {
+                dots: false,
+            }
+        },
         rtl: true,
         nav: true,
         items: 1,
