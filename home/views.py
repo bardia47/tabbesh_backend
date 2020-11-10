@@ -11,6 +11,7 @@ from rest_framework.views import APIView
 from accounts.enums import *
 from home.serializers import *
 from django.urls import reverse
+from zarinpal import views
 
 
 def main_page(request):
@@ -66,8 +67,7 @@ class TeacherViewset(viewsets.ReadOnlyModelViewSet):
 
     def get_queryset(self):
         teachers = TeacherUser.objects.filter(role__code=RoleCodes.TEACHER.value).annotate(member=Count('course__installment__user'))
-        #this is wrong! :(((
-        teachers.order_by('member')
+        teachers = teachers.order_by('-member')
         return teachers
 
     def get_serializer_class(self):

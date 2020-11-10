@@ -24,3 +24,9 @@ class Events(Enum):
     INING_DISCOUNT = 10
     # this is amount
     INING_AMOUNT = 30000
+
+
+class SkyRoom(Enum):
+    phone_number = '09196782337'
+    url = 'https://www.skyroom.online/skyroom/api/'
+    api_key = 'apikey-274140-84-bf2f699c298a1df542d0198faea6fa6f'

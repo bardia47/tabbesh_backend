@@ -15,6 +15,7 @@ from core.filters import *
 from drf_yasg import openapi
 from drf_yasg.utils import swagger_auto_schema
 
+import requests
 import datetime
 import logging
 import json
@@ -116,12 +117,19 @@ class Verify(APIView):
             if result.Status == 100:
                 installment_id_list = new_pay.installments.split()
                 user = request.user
+                flag = False
+                # check that we need to create a sky room account for this user or not
+                if user.installments.first() is None:
+                    flag = True
                 for installment_id in installment_id_list:
                     user.installments.add(installment_id)
                 user.save()
                 new_pay.is_successful = True
                 new_pay.payment_code = str(result.RefID)
                 new_pay.save()
+                check_sky_room = True
+                if flag:
+                    check_sky_room = create_sky_room_obj(user)
                 # this try is for events
                 try:
                     event = Event.objects.get(user__id=request.user.id, is_active=True)
@@ -140,7 +148,10 @@ class Verify(APIView):
                 except Exception as e:
                     logger.error("this pay don't have event")
                 if request.accepted_renderer.format == 'html':
-                    return render(request, 'dashboard/success_shopping.html', {'RefID': str(result.RefID)})
+                    if check_sky_room:
+                        return render(request, 'dashboard/success_shopping.html', {'RefID': str(result.RefID)})
+                    else:
+                        return render(request, 'dashboard/success_shopping.html', {'RefID': str(result.RefID), 'error': ''})
                 return Response({'RefID': str(result.RefID)})
             elif result.Status == 101:
                 # return HttpResponse('Transaction submitted : ' + str(result.Status))
@@ -266,7 +277,7 @@ class InstallmentViewSet(viewsets.ReadOnlyModelViewSet):
     pagination_class = None
 
     def get_queryset(self):
-        if (self.request.GET.get(self.SEARCH_PARAM) not in (None, '')):
+        if self.request.GET.get(self.SEARCH_PARAM) not in (None, ''):
             return super(InstallmentViewSet, self).get_queryset()
         now = datetime.datetime.now()
         installments = Installment.objects.filter(Q(start_date__gt=now) | Q(
@@ -274,3 +285,35 @@ class InstallmentViewSet(viewsets.ReadOnlyModelViewSet):
                 days=InstallmentModelEnum.installmentDateBefore.value))).exclude(user=self.request.user)
         courses = self.request.user.courses().filter(installment__in=installments).distinct()
         return courses
+
+
+def create_sky_room_obj(obj):
+    flag = False
+    # write request
+    try:
+        data = {"action": "createUser",
+                "params":
+                    {"username": str(obj.phone_number),
+                     "password": "12345678",
+                     "nickname": str(obj.__str__()),
+                     "status": 1,
+                     "is_public": False}}
+        response = requests.post(SkyRoom.url.value + SkyRoom.api_key.value, json=data)
+        response_check = response.json()
+        # error code is related to our system and conflict with another username
+        if 'error_code' in response_check and response_check['error_code'] > 12:
+            flag = True
+        logger.error("creating this user in skyroom has a problem" + str(response_check))
+        # error code is related to sky room web service
+        if 'error_code' in response_check and response_check['error_code'] < 13:
+            sendSms = SmsWebServices.send_sms(SkyRoom.phone_number.value, "skyroom has a problem" + str(response_check), None)
+            if sendSms is not None:
+                logger.error("danger: " + sendSms)
+        if not response_check['ok']:
+            raise Exception
+    except:
+        if flag:
+            return False
+        else:
+            # report to user there is a problem
+            return True
