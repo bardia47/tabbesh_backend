@@ -184,7 +184,7 @@ function newCourseRender(newCourses) {
                 <div class="card-body text-center">
                     <h4 class="text-nowrap">${course.course_title}</h4>
                     <h5 class="vazir-medium">${course.teacher_full_name}</h5>
-                    <a href="/dashboard/shopping/?grade=${course.id}" class="btn btn-secondary vazir-bold mt-2">خرید دوره</a>
+                    <a href="/dashboard/shopping/?teacher=${course.teacher_id}&lesson=${course.lesson_id}" class="btn btn-secondary vazir-bold mt-2">خرید دوره</a>
                 </div>
             </div>
         </div>
@@ -225,7 +225,7 @@ function bestSellerRender(bestSellerCourses) {
                 <div class="card-body text-center">
                     <h4 class="text-nowrap">${course.course_title}</h4>
                     <h5 class="vazir-medium">${course.teacher_full_name}</h5>
-                    <a href="/dashboard/shopping/?grade=${course.id}" class="btn btn-secondary vazir-bold mt-2">خرید دوره</a>
+                    <a href="/dashboard/shopping/?teacher=${course.teacher_id}&lesson=${course.lesson_id}" class="btn btn-secondary vazir-bold mt-2">خرید دوره</a>
                 </div>
             </div>
         </div>
@@ -279,7 +279,7 @@ function fullDiscountRender(fullDiscountCourses) {
                         با تخفیف 
                          ${course.discount_name}
                     </h5>
-                    <a href="/dashboard/shopping/?grade=${course.id}" class="btn btn-secondary vazir-bold mt-2">خرید دوره</a>
+                    <a href="/dashboard/shopping/?teacher=${course.teacher_id}&lesson=${course.lesson_id}" class="btn btn-secondary vazir-bold mt-2">خرید دوره</a>
                 </div>
             </div>
         </div>
@@ -295,7 +295,7 @@ function searchAjax(searchText) {
         url: "/search-home/",
         type: "GET",
         data: {
-            "title": searchText
+            "search": searchText
         },
         dataType: "json",
         cache: false,
@@ -325,7 +325,7 @@ function searchRender(searchCourses) {
                 <div class="card-body text-center">
                     <h4 class="text-nowrap">${course.course_title}</h4>
                     <h5 class="vazir-medium">${course.teacher_full_name}</h5>
-                    <a href="/dashboard/shopping/?grade=${course.id}" class="btn btn-secondary vazir-bold mt-2">خرید دوره</a>
+                    <a href="/dashboard/shopping/?teacher=${course.teacher_id}&lesson=${course.lesson_id}" class="btn btn-secondary vazir-bold mt-2">خرید دوره</a>
                 </div>
             </div>
         </div>

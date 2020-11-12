@@ -241,7 +241,7 @@
                                         {% else %}
 
                                             <a class="btn pt-2 btn-dark"
-                                               href="lessons/teacher_course_panel/{{ klass.course.code }}">
+                                               href="{% url 'teacher_course_panel' klass.course.code %}">
                                                 <img src="{% static 'home/images/icons/document.svg' %}"
                                                      alt="button link to class">
                                                 پنل اساتید

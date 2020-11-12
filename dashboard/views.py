@@ -5,7 +5,9 @@ from rest_framework.views import APIView
 from rest_framework.renderers import TemplateHTMLRenderer, JSONRenderer, \
     BrowsableAPIRenderer
 from rest_framework.response import Response
-from rest_framework import viewsets
+from rest_framework import viewsets, filters
+
+from .filters import ShoppingFilter
 from .serializers import *
 from rest_framework import status
 from rest_framework import generics
@@ -172,10 +174,6 @@ class UserCourseViewSet(viewsets.ReadOnlyModelViewSet):
 
     def get_queryset(self):
         query = Q()
-        # it was for app and now is depricated
-        # if self.request.GET.get("lesson"):
-        #     query &= getAllLessons(self.request.GET.get("lesson"))
-
         if self.request.user.is_student():
             courses = self.request.user.courses().filter(query)
         elif self.request.user.is_teacher():
@@ -185,28 +183,11 @@ class UserCourseViewSet(viewsets.ReadOnlyModelViewSet):
             now = datetime.datetime.now()
             query &= Q(end_date__gt=now)
             courses = Course.objects.filter(query)
-
         courses = courses.order_by('-end_date')
         return courses
 
 
 # get child lessons of parent (using tree)
-def getAllLessons(lesson_id):
-    lessons = Lesson.objects.filter(id=lesson_id)
-    whilelessons = lessons
-    while True:
-        extend_lesson = []
-        query = reduce(or_, (Q(parent__id=lesson.id)
-                             for lesson in whilelessons))
-        extend_lesson = Lesson.objects.filter(query)
-        if len(extend_lesson) == 0:
-            break
-        else:
-            whilelessons = extend_lesson
-            lessons = lessons | whilelessons
-    query = reduce(or_, (Q(lesson__id=lesson.id) for lesson in lessons))
-    return query
-
 
 # Shopping Page
 class Shopping(APIView):
@@ -224,7 +205,7 @@ class ShoppingCourseViewSet(viewsets.ReadOnlyModelViewSet):
     # thats fake :/ because its Mandatory
     queryset = Course.objects.filter(is_active=True)
     serializer_class = ShoppingCourseSerializer
-
+    filterset_class = ShoppingFilter
     # default show all active courses
     def get_queryset(self):
         now = datetime.datetime.now()
@@ -234,20 +215,10 @@ class ShoppingCourseViewSet(viewsets.ReadOnlyModelViewSet):
             queryNot = reduce(or_, (Q(id=course.id)
                                     for course in self.request.user.courses().all()))
             query = query & ~queryNot
-
-        if self.request.GET.get("teacher") or self.request.GET.get("lesson") or self.request.GET.get("grade"):
-            if self.request.GET.get("lesson"):
-                query &= getAllLessons(self.request.GET.get("lesson"))
-            if self.request.GET.get("grade"):
-                query &= (Q(grade__id=self.request.GET.get("grade")) | Q(grade__id=None))
-            if self.request.GET.get("teacher"):
-                query &= Q(teacher__id=self.request.GET.get("teacher"))
-            queryset = queryset.filter(query)
-        else:
-            queryset = queryset.filter(query)
-            if self.request.user.grades.count() > 0:
-                query1 = (Q(grade__id=self.request.user.grades.first().id) | Q(grade__id=None))
-                query2 = ~(Q(grade__id=self.request.user.grades.first().id) | Q(grade__id=None))
+        queryset = queryset.filter(query)
+        if self.request.user.grades.count() > 0:
+                query1 = (Q(grades__id=self.request.user.grades.first().id) | Q(grades__id=None))
+                query2 = ~(Q(grades__id=self.request.user.grades.first().id) | Q(grades__id=None))
                 queryset = (queryset
                             .filter(query1 | query2).annotate(
                     search_type_ordering=Case(
@@ -256,21 +227,7 @@ class ShoppingCourseViewSet(viewsets.ReadOnlyModelViewSet):
                         default=Value(0),
                         output_field=IntegerField()))
                             .order_by('-search_type_ordering'))
-
         return queryset
-
-
-# @api_view(['GET', ])
-# @renderer_classes([TemplateHTMLRenderer, JSONRenderer])
-# def filemanager(request, code):
-#         course = Course.objects.get(code=code)
-#         try:
-#             request.user.courses.get(id=course.id)
-#         except:
-#             if request.accepted_renderer.format == 'html':
-#                 return redirect('/dashboard/shopping/')
-#             return Response(status=status.HTTP_402_PAYMENT_REQUIRED)
-#
 
 
 class FileManager(viewsets.ModelViewSet):

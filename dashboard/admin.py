@@ -38,16 +38,7 @@ class CourseAdmin(ModelAdminJalaliMixin, admin.ModelAdmin):
     list_display = ['code', 'title', 'get_start_date_decorated', 'get_end_date_decorated', 'teacher', 'student_link']
     search_fields = ['code', 'title']
 
-    def get_start_date_decorated(self, obj):
-        return jdatetime.datetime.fromgregorian(datetime=obj.start_date).strftime('%y/%m/%d')
 
-    def get_end_date_decorated(self, obj):
-        return jdatetime.datetime.fromgregorian(datetime=obj.end_date).strftime('%y/%m/%d')
-
-    get_start_date_decorated.short_description = 'تاریخ شروع'
-    get_start_date_decorated.admin_order_field = 'start_date'
-    get_end_date_decorated.short_description = 'تاریخ پایان'
-    get_end_date_decorated.admin_order_field = 'end_date'
 
     def render_change_form(self, request, context, *args, **kwargs):
         context['adminform'].form.fields['teacher'].queryset = User.objects.filter(role__code=RoleCodes.TEACHER.value)
@@ -70,17 +61,6 @@ class CourseAdmin(ModelAdminJalaliMixin, admin.ModelAdmin):
 class CourseCalendarAdmin(ModelAdminJalaliMixin, admin.ModelAdmin):
     list_display = ['course', 'get_start_date_decorated', 'get_end_date_decorated', ]
     search_fields = ['course']
-
-    def get_start_date_decorated(self, obj):
-        return jdatetime.datetime.fromgregorian(datetime=obj.start_date).strftime('%y/%m/%d , %H:%M:%S')
-
-    def get_end_date_decorated(self, obj):
-        return jdatetime.datetime.fromgregorian(datetime=obj.end_date).strftime('%y/%m/%d , %H:%M:%S')
-
-    get_start_date_decorated.short_description = 'تاریخ شروع'
-    get_start_date_decorated.admin_order_field = 'start_date'
-    get_end_date_decorated.short_description = 'تاریخ پایان'
-    get_end_date_decorated.admin_order_field = 'end_date'
 
     def delete_model(self, request, obj):
         if len(obj.course.course_calendar_set.all()) == 1:

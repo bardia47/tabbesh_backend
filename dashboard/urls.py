@@ -24,8 +24,8 @@ urlpatterns = [
     path('lessons/files/<str:code>/<int:document_id>/', UpdateFile.as_view({'post': 'update', 'get': 'destroy'}),
          name='update'),
     path('lessons/list/<str:code>/', ClassList.as_view(), name="student_list"),
-    path('lessons/teacher_course_panel/<str:code>/', teacher_course_panel, name="teacher_course_panel"),
-    path('lessons/student_course_panel/<str:code>/', student_course_panel, name="student_course_panel"),
+    path('lessons/teacher-course-panel/<str:code>/', teacher_course_panel, name="teacher_course_panel"),
+    path('lessons/student-course-panel/<str:code>/', student_course_panel, name="student_course_panel"),
     path('lessons/user-installments/<str:code>/', UserInstallmentsViewSet.as_view(),
          name="user_installments"),
 

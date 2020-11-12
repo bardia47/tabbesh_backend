@@ -9,6 +9,7 @@ from rest_framework.renderers import BrowsableAPIRenderer, JSONRenderer, Templat
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from accounts.enums import *
+from core.pagination import Pagination
 from home.serializers import *
 from django.urls import reverse
 from zarinpal import views
@@ -163,28 +164,24 @@ class NewCourseHome(generics.ListAPIView):
             lesson__code=PrivateCourse.MEMBERSHIP.value).order_by('-id')[:12]
 
 
-class SearchHome(APIView):
+class SearchHomePagination(Pagination):
+    page_size = 3
+
+class SearchHome(generics.ListAPIView):
+
     renderer_classes = [JSONRenderer]
     permission_classes = (AllowAny,)
     serializer_class = CourseSerializer
-    pagination_class = None
+    pagination_class = SearchHomePagination
+    queryset = Course.objects.filter((~Q(lesson__code=PrivateCourse.MEMBERSHIP.value)),Q(is_active=True)).order_by('-end_date')
+    search_fields = ('title' , 'teacher__last_name')
 
     def get_queryset(self):
-        # get three courses that have most similarity with courses in data base
-        title = self.request.GET.get('title')
+        query = super(SearchHome, self).get_queryset()
         time_now = datetime.datetime.now()
-        # get those discounts that the time of them reach
-        query = Q(end_date__gte=time_now)
-        query &= (Q(title__icontains=title) | Q(teacher__last_name__icontains=title))
-        # this is forbidden code
-        query &= (~Q(lesson__code=PrivateCourse.MEMBERSHIP.value))
-        course = Course.objects.filter(query,is_active=True).order_by('-end_date')[:3]
-        return course
+        query = query.filter(Q(end_date__gte=time_now))
+        return query
 
-    def get(self, request):
-        course = self.get_queryset()
-        serialize = CourseSerializer(course, many=True)
-        return Response(serialize.data, status=status.HTTP_200_OK)
 
 
 class Support(generics.ListAPIView):
