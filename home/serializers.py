@@ -90,6 +90,7 @@ class MessageSerializer(serializers.ModelSerializer):
 class WeblogDetailSerializer(serializers.ModelSerializer):
     sender = StudentBriefSerializer(read_only=True)
     update_date = serializers.ReadOnlyField(source='update_date_decorated')
+
     class Meta:
         model = Weblog
         fields = '__all__'
@@ -98,7 +99,7 @@ class WeblogDetailSerializer(serializers.ModelSerializer):
 class WeblogSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Weblog
-        fields = ['title', 'image', 'pub_date', 'slug', 'url']
+        fields = ['title', 'image', 'pub_date', 'slug', 'url', 'first_paragraph', ]
         extra_kwargs = {
             'url': {'lookup_field': 'slug'},
         }

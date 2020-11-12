@@ -158,16 +158,20 @@ class MessageAdmin(admin.ModelAdmin):
 # class PackageAdmin(admin.ModelAdmin):
 #     search_fields = ['title', ]
 
-
 class WeblogAdmin(admin.ModelAdmin):
-    readonly_fields = ('update_date_decorated','sender')
-    list_display = ['title', 'update_date_decorated',]
+    readonly_fields = ('update_date_decorated', 'sender', 'first_p')
+    list_display = ['title', 'update_date_decorated', ]
     search_fields = ['title']
 
     def save_model(self, request, obj, form, change):
         obj.sender = request.user
         # obj.upload_date = datetime.datetime.now()
         super().save_model(request, obj, form, change)
+
+    def first_p(self, obj):
+        return mark_safe(obj.first_paragraph())
+
+    first_p.short_description = 'اولین پاراگراف جهت نمایش در لیست پست ها'
 
 
 admin.site.unregister(Group)
