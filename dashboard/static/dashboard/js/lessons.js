@@ -64,14 +64,14 @@ function renderLessenCards(courseCards) {
         // if user is student --> show file manager otherwise show teacher panel
         if ($("#roleStatus").val() === "False") {
             buttonToClassPanel = `
-            <button onclick="location.href='teacher_course_panel/${courseCard.code}'" class="btn btn-dark ml-2" type="button">
+            <button onclick="location.href='teacher-course-panel/${courseCard.code}'" class="btn btn-dark ml-2" type="button">
                 <img src="/static/home/images/icons/teacher-panel.svg" alt="teacher panel" />
                 پنل کلاس
             </button>
             `
         } else {
             buttonToClassPanel = `
-            <button onclick="location.href='student_course_panel/${courseCard.code}'" class="btn btn-dark ml-2" type="button">
+            <button onclick="location.href='student-course-panel/${courseCard.code}'" class="btn btn-dark ml-2" type="button">
                 <img src="/static/home/images/icons/teacher-panel.svg" alt="student panel" />
                 پنل کلاس
             </button>

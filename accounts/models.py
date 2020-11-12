@@ -224,8 +224,8 @@ class Course(models.Model):
     title = models.CharField("عنوان", max_length=30)
     lesson = models.ForeignKey(
         'Lesson', on_delete=models.DO_NOTHING, verbose_name="درس")
-    grade = models.ForeignKey(
-        'Grade', blank=True, null=True, on_delete=models.DO_NOTHING, verbose_name="پایه")
+    grades = models.ManyToManyField(
+        'Grade', blank=True, verbose_name="پایه")
     teacher = models.ForeignKey(
         User, on_delete=models.DO_NOTHING, verbose_name="مدرس")
     start_date = models.DateTimeField("تاریخ شروع")
@@ -255,6 +255,17 @@ class Course(models.Model):
         super().clean_fields(exclude=exclude)
         if self.end_date and self.start_date and self.end_date < self.start_date:
             raise ValidationError("تاریخ پایان باید پس از تاریخ شروع باشد")
+
+    def get_start_date_decorated(self):
+        return jdatetime.datetime.fromgregorian(datetime=self.start_date).strftime('%y/%m/%d')
+
+    def get_end_date_decorated(self):
+        return jdatetime.datetime.fromgregorian(datetime=self.end_date).strftime('%y/%m/%d')
+
+    get_start_date_decorated.short_description = 'تاریخ شروع'
+    get_start_date_decorated.admin_order_field = 'start_date'
+    get_end_date_decorated.short_description = 'تاریخ پایان'
+    get_end_date_decorated.admin_order_field = 'end_date'
 
     def get_first_class(self, exclude=None):
         if len(self.course_calendar_set.all()) == 0:
@@ -299,7 +310,7 @@ class Course(models.Model):
         return installments
 
     def students(self):
-        return User.objects.filter(installments__in=self.installment_set.all())
+        return User.objects.filter(installments__in=self.installment_set.all()).distinct()
 
     def get_amount(self, exclude=None):
         return self.get_next_installments().aggregate(Sum('amount'))['amount__sum']
@@ -326,6 +337,17 @@ class Course_Calendar(models.Model):
 
     def __str__(self):
         return self.course.title
+
+    def get_start_date_decorated(self):
+        return jdatetime.datetime.fromgregorian(datetime=self.start_date).strftime('%y/%m/%d , %H:%M:%S')
+
+    def get_end_date_decorated(self):
+        return jdatetime.datetime.fromgregorian(datetime=self.end_date).strftime('%y/%m/%d , %H:%M:%S')
+
+    get_start_date_decorated.short_description = 'تاریخ شروع'
+    get_start_date_decorated.admin_order_field = 'start_date'
+    get_end_date_decorated.short_description = 'تاریخ پایان'
+    get_end_date_decorated.admin_order_field = 'end_date'
 
     def is_class_active(self):
         now = datetime.datetime.now()

@@ -44,23 +44,23 @@ class TeacherDetailSerializer(serializers.HyperlinkedModelSerializer):
 class CourseSerializer(serializers.ModelSerializer):
     teacher_full_name = serializers.ReadOnlyField(source='teacher.get_full_name')
     course_title = serializers.ReadOnlyField(source='title')
-    grade_id = serializers.ReadOnlyField(source='grade.id')
+    teacher_id = serializers.ReadOnlyField(source='teacher.id')
+    lesson_id = serializers.ReadOnlyField(source='lesson.id')
+  #  grade_id = serializers.ReadOnlyField(source='grade.id')
 
     class Meta:
         model = Course
-        fields = ('id', 'image', 'teacher_full_name', 'course_title', 'grade_id')
+        fields = ('id', 'image', 'teacher_full_name', 'course_title','teacher_id','lesson_id')
 
 
-class CourseDiscountedSerializer(serializers.ModelSerializer):
-    teacher_full_name = serializers.ReadOnlyField(source='teacher.get_full_name')
-    course_title = serializers.ReadOnlyField(source='title')
-    grade_id = serializers.ReadOnlyField(source='grade.id')
+class CourseDiscountedSerializer(CourseSerializer):
+   # grade_id = serializers.ReadOnlyField(source='grade.id')
     percent = serializers.SerializerMethodField('get_discount_percent')
     discount_name = serializers.SerializerMethodField('get_discount_name')
 
     class Meta:
         model = Course
-        fields = ('id', 'image', 'teacher_full_name', 'course_title', 'grade_id', 'percent', 'discount_name')
+        fields = ('id', 'image', 'teacher_full_name', 'course_title', 'percent', 'discount_name','teacher_id','lesson_id')
 
     def get_discount_name(self, obj):
         return obj.get_discount().title

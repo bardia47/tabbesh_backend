@@ -15,8 +15,6 @@ from .serializers import *
 from core.filters import *
 from drf_yasg import openapi
 from drf_yasg.utils import swagger_auto_schema
-
-import requests
 import datetime
 import logging
 import json
@@ -75,14 +73,13 @@ class SendRequest(APIView):
                 try:
                     url = request.data['url']
                 except:
-                    # url = request.scheme + "://" + request.get_host() + reverse('payment_verify')
                     url = request.build_absolute_uri(reverse('payment_verify'))
                 result = client.service.PaymentRequest(
                     MERCHANT.merchant.value, amount, description, '', '', url)
                 if result.Status == 100:
-                    new_pay = Pay_History.objects.create(purchaser=request.user, amount=amount,
-                                                         installments=TextUtils.convert_list_to_string(
-                                                             installments_id_list, " "))
+                    Pay_History.objects.create(purchaser=request.user, amount=amount,
+                                               installments=TextUtils.convert_list_to_string(
+                                                   installments_id_list, " "))
                     # if request.accepted_renderer.format == 'html':
                     return redirect('https://www.zarinpal.com/pg/StartPay/' + str(result.Authority))
                     # else:
@@ -100,6 +97,25 @@ class SendRequest(APIView):
 
 class Verify(APIView):
     renderer_classes = [TemplateHTMLRenderer, JSONRenderer]
+
+    ##check events of pay
+    def check_event(self, request):
+        try:
+            event = Event.objects.get(user__id=request.user.id, is_active=True)
+            event.is_active = False
+            event.save()
+            related_user = event.related_user
+            related_user.credit += float(Events[event.type + "_AMOUNT"].value)
+            related_user.save()
+            to = "0" + related_user.phone_number
+            text = TextUtils.replacer(Sms.increaseCreditText.value, [str(Events[event.type + "_AMOUNT"].value),
+                                                                     str(int(related_user.credit))])
+            send_sms = SmsWebServices.send_sms(to, text, None)
+            if send_sms is not None:
+                logger.error("danger: " + send_sms)
+            del request.session['event_discount']
+        except:
+            logger.error("this pay don't have event")
 
     def get(self, request):
         try:
@@ -132,29 +148,16 @@ class Verify(APIView):
                 if flag:
                     check_sky_room = webServices.create_sky_room_obj(user)
                 # this try is for events
-                try:
-                    event = Event.objects.get(user__id=request.user.id, is_active=True)
-                    event.is_active = False
-                    event.save()
-                    related_user = event.related_user
-                    related_user.credit += float(Events[event.type + "_AMOUNT"].value)
-                    related_user.save()
-                    to = "0" + related_user.phone_number
-                    text = TextUtils.replacer(Sms.increaseCreditText.value, [str(Events[event.type + "_AMOUNT"].value),
-                                                                             str(int(related_user.credit))])
-                    sendSms = SmsWebServices.send_sms(to, text, None)
-                    if sendSms is not None:
-                        logger.error("danger: " + sendSms)
-                    del request.session['event_discount']
-                except Exception as e:
-                    logger.error("this pay don't have event")
+                self.check_event(request)
                 if request.accepted_renderer.format == 'html':
                     if check_sky_room:
                         return render(request, 'dashboard/success_shopping.html', {'RefID': str(result.RefID)})
                     elif check_sky_room == 'success':
-                        return render(request, 'dashboard/success_shopping.html', {'RefID': str(result.RefID), 'success': SkyRoom.success_message.value})
+                        return render(request, 'dashboard/success_shopping.html',
+                                      {'RefID': str(result.RefID), 'success': SkyRoom.success_message.value})
                     else:
-                        return render(request, 'dashboard/success_shopping.html', {'RefID': str(result.RefID), 'error': ''})
+                        return render(request, 'dashboard/success_shopping.html',
+                                      {'RefID': str(result.RefID), 'error': ''})
                 return Response({'RefID': str(result.RefID)})
             elif result.Status == 101:
                 # return HttpResponse('Transaction submitted : ' + str(result.Status))
@@ -182,6 +185,17 @@ class Verify(APIView):
 class ComputeDiscount(APIView):
     renderer_classes = [TemplateHTMLRenderer, JSONRenderer]
 
+    def get_discount(self,request):
+        code = request.GET.get('code')
+        query = discount_query(code)
+        if request.session.get('event_discount'):
+            discount = Discount()
+            discount.percent = Events[request.session.get('event_discount') + "_DISCOUNT"].value
+        else:
+            discount = Discount.objects.get(query)
+        return discount
+
+
     @swagger_auto_schema(manual_parameters=[
         openapi.Parameter(name='total_id', in_=openapi.IN_QUERY, required=True, type=openapi.TYPE_STRING,
                           description='this is list of installment id', format='[1,2,3,5]'),
@@ -193,15 +207,8 @@ class ComputeDiscount(APIView):
     )
     def get(self, request):
         installments_list = json.loads(request.GET.get("total_id"))
-        code = request.GET.get('code')
-        query = discount_query(code)
-        # query &= (Q(courses__id__in=courses_id_list) | Q(courses=None))
         try:
-            if request.session.get('event_discount'):
-                discount = Discount()
-                discount.percent = Events[request.session.get('event_discount') + "_DISCOUNT"].value
-            else:
-                discount = Discount.objects.get(query)
+            discount = self.get_discount(request)
         except:
             return Response({'message': PaymentMassages.discountErrorMassage.value},
                             status=status.HTTP_406_NOT_ACCEPTABLE)
