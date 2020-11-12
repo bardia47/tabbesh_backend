@@ -6,6 +6,7 @@ from rest_framework.renderers import TemplateHTMLRenderer, JSONRenderer
 from rest_framework.response import Response
 from rest_framework import status, viewsets
 from .enums import *
+from core import webServices
 from core.utils import TextUtils
 from accounts.enums import Sms
 from core.webServices import SmsWebServices
@@ -129,7 +130,7 @@ class Verify(APIView):
                 new_pay.save()
                 check_sky_room = True
                 if flag:
-                    check_sky_room = create_sky_room_obj(user)
+                    check_sky_room = webServices.create_sky_room_obj(user)
                 # this try is for events
                 try:
                     event = Event.objects.get(user__id=request.user.id, is_active=True)
@@ -150,6 +151,8 @@ class Verify(APIView):
                 if request.accepted_renderer.format == 'html':
                     if check_sky_room:
                         return render(request, 'dashboard/success_shopping.html', {'RefID': str(result.RefID)})
+                    elif check_sky_room == 'success':
+                        return render(request, 'dashboard/success_shopping.html', {'RefID': str(result.RefID), 'success': SkyRoom.success_message.value})
                     else:
                         return render(request, 'dashboard/success_shopping.html', {'RefID': str(result.RefID), 'error': ''})
                 return Response({'RefID': str(result.RefID)})
@@ -285,35 +288,3 @@ class InstallmentViewSet(viewsets.ReadOnlyModelViewSet):
                 days=InstallmentModelEnum.installmentDateBefore.value))).exclude(user=self.request.user)
         courses = self.request.user.courses().filter(installment__in=installments).distinct()
         return courses
-
-
-def create_sky_room_obj(obj):
-    flag = False
-    # write request
-    try:
-        data = {"action": "createUser",
-                "params":
-                    {"username": str(obj.phone_number),
-                     "password": "12345678",
-                     "nickname": str(obj.__str__()),
-                     "status": 1,
-                     "is_public": False}}
-        response = requests.post(SkyRoom.url.value + SkyRoom.api_key.value, json=data)
-        response_check = response.json()
-        # error code is related to our system and conflict with another username
-        if 'error_code' in response_check and response_check['error_code'] > 12:
-            flag = True
-        logger.error("creating this user in skyroom has a problem" + str(response_check))
-        # error code is related to sky room web service
-        if 'error_code' in response_check and response_check['error_code'] < 13:
-            sendSms = SmsWebServices.send_sms(SkyRoom.phone_number.value, "skyroom has a problem" + str(response_check), None)
-            if sendSms is not None:
-                logger.error("danger: " + sendSms)
-        if not response_check['ok']:
-            raise Exception
-    except:
-        if flag:
-            return False
-        else:
-            # report to user there is a problem
-            return True
