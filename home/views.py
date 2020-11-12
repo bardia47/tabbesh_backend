@@ -12,7 +12,6 @@ from accounts.enums import *
 from core.pagination import Pagination
 from home.serializers import *
 from django.urls import reverse
-from zarinpal import views
 
 
 def main_page(request):
@@ -167,6 +166,7 @@ class NewCourseHome(generics.ListAPIView):
 class SearchHomePagination(Pagination):
     page_size = 3
 
+
 class SearchHome(generics.ListAPIView):
 
     renderer_classes = [JSONRenderer]
@@ -183,7 +183,6 @@ class SearchHome(generics.ListAPIView):
         return query
 
 
-
 class Support(generics.ListAPIView):
     queryset = Support.objects.filter(type_choice=Support.public)
     renderer_classes = [JSONRenderer]
@@ -198,6 +197,7 @@ class Messages(generics.ListAPIView):
     permission_classes = (AllowAny,)
     serializer_class = MessageSerializer
     pagination_class = None
+
 
 class WeblogViewSet(viewsets.ReadOnlyModelViewSet):
     permission_classes = (AllowAny,)
@@ -217,12 +217,14 @@ class WeblogViewSet(viewsets.ReadOnlyModelViewSet):
         serializer = self.get_serializer(instance)
         return render(request, 'home/blog.html',serializer.data )
 
+
 class SlideViewSet(viewsets.ReadOnlyModelViewSet):
     permission_classes = (AllowAny,)
     renderer_classes = [BrowsableAPIRenderer, JSONRenderer]
     queryset = Slide.objects.all()
     serializer_class = SlideSerializer
 # TODO change this to cache
+
     # @method_decorator(cache_page(60 * 60 * 2))
     def list(self, request, *args, **kwargs):
         return super(SlideViewSet, self).list(request)

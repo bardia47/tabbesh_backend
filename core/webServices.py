@@ -40,19 +40,20 @@ def create_sky_room_obj(obj):
         # error code is related to our system and conflict with another username
         if 'error_code' in response_check and response_check['error_code'] > 12:
             flag = True
-        logger.error("creating this user in skyroom has a problem" + str(response_check))
+            logger.error("creating this user in skyroom has a problem" + str(response_check))
         # error code is related to sky room web service
         if 'error_code' in response_check and response_check['error_code'] < 13:
+            logger.error("Web service have a problem" + str(response_check))
             sendSms = SmsWebServices.send_sms(enums.SkyRoom.phone_number.value, "skyroom has a problem" + str(response_check), None)
             if sendSms is not None:
                 logger.error("danger: " + sendSms)
         if not response_check['ok']:
             raise Exception
         else:
-            return 'success'
+            return enums.SkyRoom.success.value
     except:
         if flag:
-            return False
-        else:
             # report to user there is a problem
-            return True
+            return enums.SkyRoom.have_error.value
+        else:
+            return enums.SkyRoom.no_error.value

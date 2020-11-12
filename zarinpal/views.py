@@ -150,9 +150,9 @@ class Verify(APIView):
                 # this try is for events
                 self.check_event(request)
                 if request.accepted_renderer.format == 'html':
-                    if check_sky_room:
+                    if check_sky_room is SkyRoom.no_error.value:
                         return render(request, 'dashboard/success_shopping.html', {'RefID': str(result.RefID)})
-                    elif check_sky_room == 'success':
+                    elif check_sky_room is SkyRoom.success.value:
                         return render(request, 'dashboard/success_shopping.html',
                                       {'RefID': str(result.RefID), 'success': SkyRoom.success_message.value})
                     else:
