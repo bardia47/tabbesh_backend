@@ -612,3 +612,7 @@ class Weblog(models.Model):
         return jdatetime.datetime.fromgregorian(datetime=self.pub_date).strftime('%a, %d %b %Y %H:%M:%S')
 
     update_date_decorated.short_description = 'تاریخ انتشار پست'
+
+    def first_paragraph(self):
+        return self.text.split('\r\n')[0]
+
