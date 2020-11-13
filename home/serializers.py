@@ -100,10 +100,11 @@ class WeblogDetailSerializer(serializers.ModelSerializer):
 
 class WeblogSerializer(serializers.HyperlinkedModelSerializer):
     sender = StudentBriefSerializer(read_only=True)
+    update_date = serializers.ReadOnlyField(source='update_date_decorated')
 
     class Meta:
         model = Weblog
-        fields = ['sender', 'title', 'image', 'pub_date', 'slug', 'url', 'first_paragraph']
+        fields = ['sender', 'title', 'image', 'update_date', 'slug', 'url', 'first_paragraph']
         extra_kwargs = {
             'url': {'lookup_field': 'slug'},
         }
