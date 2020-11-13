@@ -1,0 +1,86 @@
+{% extends 'home/home-page-base.html' %}
+{% load static %}
+{% load jformat %}
+
+{% block meta_tags %}
+    <meta name="title" content="وبلاگ">
+    <meta name="description" content="وبلاگ آموزشگاه آنلاین تابش">
+    <meta name="keywords" content="وبلاگ تابش، آموزش مجازی، تابش">
+    <meta name="robots" content="index, follow">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+{% endblock %}
+
+{% block css_files %}
+    <style>
+        .card {
+            box-shadow: 3px 3px 5px rgba(120, 162, 210, 0.8);
+        }
+
+        .card .footer {
+            justify-content: flex-end;
+        }
+
+        .heading-poster {
+            background-image: url("/static/home/images/blog/top-circle.svg");
+            background-repeat: no-repeat;
+            background-position: top;
+            background-size: auto;
+            height: 130px;
+        }
+
+        @media (max-width: 768px) {
+            .center-sm {
+                text-align: center !important;
+            }
+
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <div class="row justify-content-center heading-poster">
+            <h1 class="vazir-bold mt-3" style="color: #00204E">وبلاگ تابش</h1>
+        </div>
+        {% for post in posts %}
+            <div class="card mt-4">
+                <div class="card-body">
+                    <div class="row  center-sm">
+                        <div class="col-md-4">
+                            <img class="w-100 h-100 rounded" src="{{ post.image }}"/>
+                        </div>
+                        <div class="col-md-8 d-flex flex-column">
+                            <a href="{{ post.url }}"><h1 class="vazir-bold text-secondary h4 mt-3 mt-sm-0">{{ post.title }}</h1></a>
+                            {% autoescape off %}
+                                <div class="mt-2 px-1">
+                                    {{ post.first_paragraph }}
+                                </div>
+                            {% endautoescape %}
+                            <div class="footer mt-auto p-3">
+                                <div class="row">
+                                    <div class="col-md-8 mb-2 mb-md-0 pt-2">
+                                        <img src="{{ post.sender.avatar }}" width="20" height="20">
+                                        <span>{{ post.sender.first_name }} {{ post.sender.last_name }}</span>
+                                        <span>
+                                            <img src="{% static 'home/images/blog/clock.svg' %}" width="16" height="16">
+                                            {{ post.pub_date }}
+                                        </span>
+                                    </div>
+                                    <div class="col-md-4 text-md-left">
+                                        <a class="btn btn-primary text-left vazir-bold" href="{{ post.url }}">ادامه
+                                            مطلب</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+
+{% endblock %}
+
+
+{% block js_files %}
+{% endblock %}

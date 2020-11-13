@@ -66,7 +66,8 @@ class TeacherViewset(viewsets.ReadOnlyModelViewSet):
     # http_method_names = ['get', ]
 
     def get_queryset(self):
-        teachers = TeacherUser.objects.filter(role__code=RoleCodes.TEACHER.value).annotate(member=Count('course__installment__user'))
+        teachers = TeacherUser.objects.filter(role__code=RoleCodes.TEACHER.value).annotate(
+            member=Count('course__installment__user'))
         teachers = teachers.order_by('-member')
         return teachers
 
@@ -102,7 +103,7 @@ class BestSellingCourses(generics.ListAPIView):
         count = Course.objects.all().count()
         # if courses are few return all of them
         # this is forbidden code
-        course_order = Course.objects.filter(end_date__gt=time_now,is_active=True).exclude(
+        course_order = Course.objects.filter(end_date__gt=time_now, is_active=True).exclude(
             lesson__code=PrivateCourse.MEMBERSHIP.value).annotate(number=Count('installment__user')).order_by('-number')
         # sorted courses by number of students
         if count > 100:
@@ -132,7 +133,7 @@ class MostDiscountedCourses(generics.ListAPIView):
         discounts = Discount.objects.filter(query)
         # get those courses that have discounts now
         # this is forbidden code
-        course = Course.objects.filter(is_active=True,discount__in=discounts).exclude(
+        course = Course.objects.filter(is_active=True, discount__in=discounts).exclude(
             lesson__code=PrivateCourse.MEMBERSHIP.value).order_by('-discount__percent',
                                                                   F('discount__end_date').asc(nulls_last=True))
         if not course.exists():
@@ -143,7 +144,7 @@ class MostDiscountedCourses(generics.ListAPIView):
                 query &= (Q(courses=None))
                 Discount.objects.get(query)
                 # this is forbidden code
-                return Course.objects.filter(is_active=True,end_date__gt=time_now).exclude(
+                return Course.objects.filter(is_active=True, end_date__gt=time_now).exclude(
                     lesson__code=PrivateCourse.MEMBERSHIP.value).order_by('-end_date')[:12]
             except:
                 return None
@@ -159,7 +160,7 @@ class NewCourseHome(generics.ListAPIView):
     def get_queryset(self):
         time_now = datetime.datetime.now()
         # this is forbidden code
-        return Course.objects.filter(is_active=True,end_date__gte=time_now).exclude(
+        return Course.objects.filter(is_active=True, end_date__gte=time_now).exclude(
             lesson__code=PrivateCourse.MEMBERSHIP.value).order_by('-id')[:12]
 
 
@@ -168,13 +169,13 @@ class SearchHomePagination(Pagination):
 
 
 class SearchHome(generics.ListAPIView):
-
     renderer_classes = [JSONRenderer]
     permission_classes = (AllowAny,)
     serializer_class = CourseSerializer
     pagination_class = SearchHomePagination
-    queryset = Course.objects.filter((~Q(lesson__code=PrivateCourse.MEMBERSHIP.value)),Q(is_active=True)).order_by('-end_date')
-    search_fields = ('title' , 'teacher__last_name')
+    queryset = Course.objects.filter((~Q(lesson__code=PrivateCourse.MEMBERSHIP.value)), Q(is_active=True)).order_by(
+        '-end_date')
+    search_fields = ('title', 'teacher__last_name')
 
     def get_queryset(self):
         query = super(SearchHome, self).get_queryset()
@@ -215,13 +216,11 @@ class WeblogViewSet(viewsets.ReadOnlyModelViewSet):
     def retrieve(self, request, *args, **kwargs):
         instance = self.get_object()
         serializer = self.get_serializer(instance)
-        return render(request, 'home/blog.html',serializer.data )
+        return render(request, 'home/blog/post.html', serializer.data)
 
     def list(self, request, *args, **kwargs):
         serializer = self.get_serializer(self.filter_queryset(self.get_queryset()), many=True)
-        return render(request, 'home/blog.html',{list : serializer.data} )
-
-
+        return render(request, 'home/blog/blog.html', {"posts": serializer.data})
 
 
 class SlideViewSet(viewsets.ReadOnlyModelViewSet):
@@ -229,7 +228,8 @@ class SlideViewSet(viewsets.ReadOnlyModelViewSet):
     renderer_classes = [BrowsableAPIRenderer, JSONRenderer]
     queryset = Slide.objects.all()
     serializer_class = SlideSerializer
-# TODO change this to cache
+
+    # TODO change this to cache
 
     # @method_decorator(cache_page(60 * 60 * 2))
     def list(self, request, *args, **kwargs):

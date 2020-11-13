@@ -46,21 +46,23 @@ class CourseSerializer(serializers.ModelSerializer):
     course_title = serializers.ReadOnlyField(source='title')
     teacher_id = serializers.ReadOnlyField(source='teacher.id')
     lesson_id = serializers.ReadOnlyField(source='lesson.id')
-  #  grade_id = serializers.ReadOnlyField(source='grade.id')
+
+    #  grade_id = serializers.ReadOnlyField(source='grade.id')
 
     class Meta:
         model = Course
-        fields = ('id', 'image', 'teacher_full_name', 'course_title','teacher_id','lesson_id')
+        fields = ('id', 'image', 'teacher_full_name', 'course_title', 'teacher_id', 'lesson_id')
 
 
 class CourseDiscountedSerializer(CourseSerializer):
-   # grade_id = serializers.ReadOnlyField(source='grade.id')
+    # grade_id = serializers.ReadOnlyField(source='grade.id')
     percent = serializers.SerializerMethodField('get_discount_percent')
     discount_name = serializers.SerializerMethodField('get_discount_name')
 
     class Meta:
         model = Course
-        fields = ('id', 'image', 'teacher_full_name', 'course_title', 'percent', 'discount_name','teacher_id','lesson_id')
+        fields = (
+        'id', 'image', 'teacher_full_name', 'course_title', 'percent', 'discount_name', 'teacher_id', 'lesson_id')
 
     def get_discount_name(self, obj):
         return obj.get_discount().title
@@ -97,9 +99,11 @@ class WeblogDetailSerializer(serializers.ModelSerializer):
 
 
 class WeblogSerializer(serializers.HyperlinkedModelSerializer):
+    sender = StudentBriefSerializer(read_only=True)
+
     class Meta:
         model = Weblog
-        fields = ['title', 'image', 'pub_date', 'slug', 'url', 'first_paragraph', ]
+        fields = ['sender', 'title', 'image', 'pub_date', 'slug', 'url', 'first_paragraph']
         extra_kwargs = {
             'url': {'lookup_field': 'slug'},
         }
