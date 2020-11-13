@@ -9,6 +9,11 @@ from zarinpal.admin import DiscountWithoutCodeInline, InstallmenCoursetInline
 from .forms import *
 from .validators import AdminValidator
 
+class GradeInline(admin.TabularInline):
+    model = Course.grades.through
+    verbose_name_plural = "پایه ها "
+    verbose_name = "پایه"
+    extra = 0
 
 class CourseCalendarInline(TabularInlineJalaliMixin, admin.StackedInline):
     # formset = CourseCalendarFormSetInline
@@ -31,11 +36,13 @@ class LessonAdmin(admin.ModelAdmin):
 class CourseAdmin(ModelAdminJalaliMixin, admin.ModelAdmin):
     form = CourseForm
     inlines = [
+        GradeInline,
         CourseCalendarInline,
         DiscountWithoutCodeInline,
-        InstallmenCoursetInline
+        InstallmenCoursetInline,
     ]
     list_display = ['code', 'title', 'get_start_date_decorated', 'get_end_date_decorated', 'teacher', 'student_link']
+    exclude = ['grades',]
     search_fields = ['code', 'title']
 
 
