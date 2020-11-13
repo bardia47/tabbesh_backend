@@ -217,6 +217,12 @@ class WeblogViewSet(viewsets.ReadOnlyModelViewSet):
         serializer = self.get_serializer(instance)
         return render(request, 'home/blog.html',serializer.data )
 
+    def list(self, request, *args, **kwargs):
+        serializer = self.get_serializer(self.filter_queryset(self.get_queryset()), many=True)
+        return render(request, 'home/blog.html',{list : serializer.data} )
+
+
+
 
 class SlideViewSet(viewsets.ReadOnlyModelViewSet):
     permission_classes = (AllowAny,)
