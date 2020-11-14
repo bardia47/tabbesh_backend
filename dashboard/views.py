@@ -227,7 +227,7 @@ class ShoppingCourseViewSet(viewsets.ReadOnlyModelViewSet):
                         default=Value(0),
                         output_field=IntegerField()))
                             .order_by('-search_type_ordering'))
-        return queryset
+        return queryset.distinct()
 
 
 class FileManager(viewsets.ModelViewSet):
