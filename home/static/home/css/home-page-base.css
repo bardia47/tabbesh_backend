@@ -51,11 +51,6 @@ body {
     background-color: #ffc109;
 }
 
-/* zarin pal */
-.footer-zarinpal-icon a img {
-    width: 60px !important;
-}
-
 @media (max-width: 576px) {
     .footer-items {
         margin: 50px 0 0 0;
