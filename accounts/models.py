@@ -282,7 +282,8 @@ class Course(models.Model):
         return User.objects.filter(installments__in=self.installment_set.all()).distinct()
 
     def get_amount(self, exclude=None):
-        return self.get_next_installments().aggregate(Sum('amount'))['amount__sum']
+    #    return self.get_next_installments().aggregate(Sum('amount'))['amount__sum']
+        return self.installment_set.aggregate(Sum('amount'))['amount__sum']
 
     def get_amount_payable(self, exclude=None):
         discount = self.get_discount()
