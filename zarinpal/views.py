@@ -287,11 +287,9 @@ class InstallmentViewSet(viewsets.ReadOnlyModelViewSet):
     pagination_class = None
 
     def get_queryset(self):
-        if self.request.GET.get(self.SEARCH_PARAM) not in (None, ''):
+        if self.request.GET.get(self.SEARCH_PARAM) not in (None, '','[]'):
             return super(InstallmentViewSet, self).get_queryset()
         now = datetime.datetime.now()
-        installments = Installment.objects.filter(Q(start_date__gt=now) | Q(
-            end_date__gt=now + datetime.timedelta(
-                days=InstallmentModelEnum.installmentDateBefore.value))).exclude(user=self.request.user)
+        installments = Installment.objects.all().exclude(user=self.request.user)
         courses = self.request.user.courses().filter(installment__in=installments).distinct()
         return courses

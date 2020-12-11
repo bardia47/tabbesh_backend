@@ -15,4 +15,5 @@ class ShoppingCartSerializer(CourseBriefSerializer):
 
 
     def get_installments(self, obj):
-        return CartInstallmentSerializer(obj.get_next_installments(exclude={'user__id': self.context['request'].user.id}),context=self.context, many=True).data
+      #  return CartInstallmentSerializer(obj.get_next_installments(exclude={'user__id': self.context['request'].user.id}),context=self.context, many=True).data
+      return CartInstallmentSerializer(obj.installment_set.exclude(user=self.context['request'].user.id) ,context=self.context, many=True).data
